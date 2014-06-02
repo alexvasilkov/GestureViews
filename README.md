@@ -1,7 +1,11 @@
 GestureViews
 ============
 
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.alexvasilkov/gesture-views/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.alexvasilkov/gesture-views)
+
 Android gesture controlled widgets including ImageView
+
+![GestureViews](https://raw.github.com/alexvasilkov/GestureViews/master/sample/graphics/logo_small.png)
 
 #### Usage ####
 
