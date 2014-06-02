@@ -11,7 +11,7 @@ public class StateController {
     private final Rect mRectContainer = new Rect(), mRectOut = new Rect();
     private final Rect mMovingBounds = new Rect();
 
-    private boolean mIsResetRequired;
+    private boolean mIsResetRequired = true;
 
     /**
      * Values to store calculated values for min / max zoom levels
@@ -194,7 +194,6 @@ public class StateController {
      * @return true if zoom levels was correctly updated (viewport and view size are known), false otherwise
      */
     private boolean adjustZoomLevels() {
-        mMinZoom = 1f;
         mMaxZoom = mSettings.getMaxZoom();
 
         final float w = mSettings.getViewW(), h = mSettings.getViewH();

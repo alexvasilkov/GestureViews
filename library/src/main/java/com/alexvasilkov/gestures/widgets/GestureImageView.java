@@ -7,24 +7,27 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.ImageView;
+import com.alexvasilkov.gestures.GesturesController;
 import com.alexvasilkov.gestures.GesturesControllerPagerFix;
 import com.alexvasilkov.gestures.State;
-import com.alexvasilkov.gestures.GesturesController;
 
-public class GImageView extends ImageView implements GesturesController.OnStateChangedListener {
+/**
+ * Gestures controlled ImageView
+ */
+public class GestureImageView extends ImageView implements GesturesController.OnStateChangedListener {
 
     private final GesturesControllerPagerFix mController;
     private final Matrix mImageMatrix = new Matrix();
 
-    public GImageView(Context context) {
+    public GestureImageView(Context context) {
         this(context, null, 0);
     }
 
-    public GImageView(Context context, AttributeSet attrs) {
+    public GestureImageView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public GImageView(Context context, AttributeSet attrs, int defStyle) {
+    public GestureImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
         mController = new GesturesControllerPagerFix(context, this);
@@ -32,15 +35,21 @@ public class GImageView extends ImageView implements GesturesController.OnStateC
         setScaleType(ImageView.ScaleType.MATRIX);
     }
 
-    public void setOnGestureListener(GesturesController.OnGestureListener listener) {
-        mController.setOnGesturesListener(listener);
-    }
-
+    /**
+     * Makes scrolling between different {@link GestureImageView}
+     * within given {@link android.support.v4.view.ViewPager} smoother.
+     */
     public void fixViewPagerScroll(ViewPager pager) {
         mController.fixViewPagerScroll(pager);
     }
 
-    public GesturesControllerPagerFix getController() {
+    /**
+     * Returns {@link com.alexvasilkov.gestures.GesturesController}
+     * which is a main engine for {@link GestureImageView}.
+     * <p/>
+     * Use it to apply settings, modify view state and so on.
+     */
+    public GesturesController getController() {
         return mController;
     }
 

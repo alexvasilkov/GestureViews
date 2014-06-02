@@ -78,6 +78,9 @@ public class GesturesController extends GesturesAdapter {
         event.recycle();
     }
 
+    /**
+     * Sets listener for basic touch events. See {@link com.alexvasilkov.gestures.GesturesController.OnGestureListener}
+     */
     public void setOnGesturesListener(OnGestureListener listener) {
         mGestureListener = listener;
     }
