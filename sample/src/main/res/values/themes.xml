@@ -5,4 +5,8 @@
         <item name="android:windowBackground">@color/window_background</item>
     </style>
 
+    <style name="AppTheme.Dark">
+        <item name="android:windowBackground">@color/window_background_dark</item>
+    </style>
+
 </resources>

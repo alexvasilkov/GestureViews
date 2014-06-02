@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.alexvasilkov.gestures.widgets.GLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.alexvasilkov.gestures.widgets.GestureLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/painting_g_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <ImageView
+            android:id="@+id/painting_image"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@drawable/view_at_rouelles_le_havre"
-            android:scaleType="fitCenter"
-            android:adjustViewBounds="true" />
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop" />
 
         <TextView
             android:id="@+id/painting_title"
@@ -25,14 +25,14 @@
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
             android:textColor="#fff"
-            android:textSize="16sp"
-            android:text="@string/paintings_author" />
+            android:textSize="16sp" />
 
         <Button
+            android:id="@+id/painting_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Button"/>
+            android:text="WikiArt" />
 
     </FrameLayout>
 
-</com.alexvasilkov.gestures.widgets.GLayout>
+</com.alexvasilkov.gestures.widgets.GestureLayout>

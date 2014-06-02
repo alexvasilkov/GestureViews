@@ -8,7 +8,7 @@
         android:theme="@style/AppTheme"
         android:label="GestureViews">
 
-        <activity android:name=".activities.PagerActivity">
+        <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -16,13 +16,15 @@
             </intent-filter>
         </activity>
 
-        <!--<activity android:name=".activities.LayoutActivity">-->
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
+        <activity
+            android:name=".activities.ImagesPagerActivity"
+            android:label="GestureImageView"
+            android:theme="@style/AppTheme.Dark" />
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
-        <!--</activity>-->
+        <activity
+            android:name=".activities.LayoutPagerActivity"
+            android:label="GestureLayout"
+            android:theme="@style/AppTheme.Dark" />
 
     </application>
 

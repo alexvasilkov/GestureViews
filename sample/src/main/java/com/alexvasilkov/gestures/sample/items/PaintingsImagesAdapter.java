@@ -5,15 +5,15 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
-import com.alexvasilkov.gestures.widgets.GImageView;
+import com.alexvasilkov.gestures.widgets.GestureImageView;
 import com.squareup.picasso.Picasso;
 
-public class PaintingsAdapter extends PagerAdapter {
+public class PaintingsImagesAdapter extends PagerAdapter {
 
     private final ViewPager mViewPager;
     private final Painting[] mPaintings;
 
-    public PaintingsAdapter(ViewPager pager, Painting[] paintings) {
+    public PaintingsImagesAdapter(ViewPager pager, Painting[] paintings) {
         mViewPager = pager;
         mPaintings = paintings;
     }
@@ -27,13 +27,13 @@ public class PaintingsAdapter extends PagerAdapter {
     public View instantiateItem(final ViewGroup container, int position) {
         Context context = container.getContext();
 
-        GImageView viewer = new GImageView(context);
-        container.addView(viewer, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        viewer.fixViewPagerScroll(mViewPager);
+        GestureImageView gImageView = new GestureImageView(context);
+        container.addView(gImageView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        gImageView.fixViewPagerScroll(mViewPager);
 
-        Picasso.with(context).load(mPaintings[position].getImageId()).into(viewer);
+        Picasso.with(context).load(mPaintings[position].getImageId()).into(gImageView);
 
-        return viewer;
+        return gImageView;
     }
 
     @Override

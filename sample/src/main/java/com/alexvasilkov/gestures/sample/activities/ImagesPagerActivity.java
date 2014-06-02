@@ -1,6 +1,5 @@
 package com.alexvasilkov.gestures.sample.activities;
 
-import android.app.Activity;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -9,9 +8,9 @@ import com.alexvasilkov.fluffycommons.texts.SpannableBuilder;
 import com.alexvasilkov.fluffycommons.utils.Views;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.items.Painting;
-import com.alexvasilkov.gestures.sample.items.PaintingsAdapter;
+import com.alexvasilkov.gestures.sample.items.PaintingsImagesAdapter;
 
-public class PagerActivity extends Activity implements ViewPager.OnPageChangeListener {
+public class ImagesPagerActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
 
     private Painting[] mPaintings;
 
@@ -20,14 +19,14 @@ public class PagerActivity extends Activity implements ViewPager.OnPageChangeLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pager);
+        setContentView(R.layout.activity_images_pager);
 
         mPaintings = Painting.getAllPaintings(getResources());
 
         mTitleView = Views.find(this, R.id.painting_title);
 
         ViewPager viewPager = Views.find(this, R.id.paintings_view_pager);
-        viewPager.setAdapter(new PaintingsAdapter(viewPager, mPaintings));
+        viewPager.setAdapter(new PaintingsImagesAdapter(viewPager, mPaintings));
         viewPager.setOnPageChangeListener(this);
         viewPager.setPageMargin(getResources().getDimensionPixelSize(R.dimen.view_pager_margin));
         onPageSelected(0); // Manually calling for first item
