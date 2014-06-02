@@ -1,0 +1,30 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:0.9.+'
+    }
+}
+
+apply plugin: 'android'
+
+android {
+    compileSdkVersion Integer.parseInt(ANDROID_COMPILE_SDK)
+    buildToolsVersion ANDROID_BUILD_TOOLS_VERSION
+
+    defaultConfig {
+        minSdkVersion Integer.parseInt(ANDROID_MIN_SDK)
+        targetSdkVersion Integer.parseInt(ANDROID_TARGET_SDK)
+        versionCode Integer.parseInt(VERSION_CODE)
+        versionName VERSION_NAME
+    }
+}
+
+dependencies {
+    compile project(':library')
+
+    compile 'com.android.support:support-v4:19.1.0'
+    compile 'com.squareup.picasso:picasso:2.3.1'
+    compile 'com.alexvasilkov:fluffy-commons:1.1.1'
+}

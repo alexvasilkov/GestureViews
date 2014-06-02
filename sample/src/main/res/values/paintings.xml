@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="paintings_author">Claude Monet</string>
+
+    <string-array name="paintings_titles">
+        <item>Garden at Sainte-Adresse</item>
+        <item>View At Rouelles Le Havre</item>
+        <item>The Bodmer Oak</item>
+        <item>The Japanese Bridge (The Water-Lily Pond)</item>
+        <item>A Farmyard in Normandy</item>
+    </string-array>
+
+    <array name="paintings_images">
+        <item>@drawable/garden_at_sainte_adresse</item>
+        <item>@drawable/view_at_rouelles_le_havre</item>
+        <item>@drawable/the_bodmer_oak</item>
+        <item>@drawable/japanese_bridge</item>
+        <item>@drawable/farmyard_in_normandy</item>
+    </array>
+
+</resources>
