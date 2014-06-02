@@ -7,6 +7,10 @@ Android gesture controlled widgets including ImageView
 
 ![GestureViews](https://raw.github.com/alexvasilkov/GestureViews/master/sample/graphics/logo_small.png)
 
+#### Sample app ####
+
+[![Get it on Google Play](http://www.android.com/images/brand/get_it_on_play_logo_small.png)](http://play.google.com/store/apps/details?id=com.alexvasilkov.gestures.sample)
+
 #### Usage ####
 
 TODO
