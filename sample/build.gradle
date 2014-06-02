@@ -4,10 +4,12 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:0.9.+'
+        classpath 'com.alexvasilkov:android_sign:0.2'
     }
 }
 
 apply plugin: 'android'
+apply plugin: 'android_sign'
 
 android {
     compileSdkVersion Integer.parseInt(ANDROID_COMPILE_SDK)
@@ -18,6 +20,19 @@ android {
         targetSdkVersion Integer.parseInt(ANDROID_TARGET_SDK)
         versionCode Integer.parseInt(VERSION_CODE)
         versionName VERSION_NAME
+    }
+
+    signingConfigs {
+        release {
+            storeFile file("gesture-views-release-key.keystore")
+            keyAlias "release"
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+        }
     }
 }
 
