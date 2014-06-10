@@ -332,7 +332,7 @@ public class GesturesController extends GesturesAdapter {
         if (!mSettings.isEnabled() || !mStateScroller.isFinished()) return true;
 
         mState.rotateBy(detector.getRotationDegreesDelta(), detector.getFocusX(), detector.getFocusY());
-        mStateController.restrictStateBounds(mState, detector.getFocusX(), detector.getFocusY());
+        mStateController.restrictStateBounds(mState, detector.getFocusX(), detector.getFocusY(), true, true);
 
         return true;
     }

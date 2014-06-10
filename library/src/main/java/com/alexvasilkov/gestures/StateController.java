@@ -12,6 +12,7 @@ public class StateController {
     // Temporary objects
     private final Matrix mMatrix = new Matrix();
     private final RectF mRectF = new RectF();
+    private final float[] mPointF = new float[2];
     private final Rect mRectContainer = new Rect(), mRectOut = new Rect();
     private final Rect mMovingBounds = new Rect();
 
@@ -216,6 +217,18 @@ public class StateController {
             // and restricting view movement in this direction
             mMovingBounds.top = mMovingBounds.bottom = pos.top;
         }
+
+        // We should also take rotation into account
+        state.applyTo(mMatrix);
+
+        mRectF.set(0, 0, mSettings.getViewW(), mSettings.getViewH());
+        mMatrix.mapRect(mRectF);
+
+        mPointF[0] = 0;
+        mPointF[1] = 0;
+        mMatrix.mapPoints(mPointF);
+
+        mMovingBounds.offset((int) (mPointF[0] - mRectF.left + 0.5f), (int) (mPointF[1] - mRectF.top + 0.5f));
 
         return mMovingBounds;
     }
