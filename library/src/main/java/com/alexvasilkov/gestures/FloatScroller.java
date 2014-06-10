@@ -29,7 +29,7 @@ public class FloatScroller {
 
     public FloatScroller(Context context) {
         mInterpolator = new DecelerateInterpolator();
-        mAnimationDuration = context.getResources().getInteger(android.R.integer.config_shortAnimTime);
+        mAnimationDuration = context.getResources().getInteger(R.integer.animation_duration);
     }
 
     /**

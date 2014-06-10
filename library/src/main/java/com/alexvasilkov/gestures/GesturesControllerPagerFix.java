@@ -166,7 +166,8 @@ public class GesturesControllerPagerFix extends GesturesController {
             final float movementX = Math.abs(dX); // always >= 0, no direction info
 
             // available movement distances (always >= 0, no direction info)
-            final float availableViewX = dir < 0 ? state.x - viewMovingBounds.left : viewMovingBounds.right - state.x;
+            final float availableViewX = dir < 0
+                    ? state.getX() - viewMovingBounds.left : viewMovingBounds.right - state.getX();
             final float availablePagerX = dir * mViewPagerX < 0 ? Math.abs(mViewPagerX) : 0;
 
             if (availablePagerX >= movementX) {
@@ -216,7 +217,12 @@ public class GesturesControllerPagerFix extends GesturesController {
         }
 
         if (mIsScrollingViewPager) {
-            mViewPagerX += scrollPagerBy((int) dPagerX);
+            int x = (int) (dPagerX + 0.5f);
+            int actualX = scrollPagerBy(x);
+            mViewPagerX += actualX;
+            dViewX += x - actualX;
+        } else {
+            dViewX += dPagerX;
         }
 
         return dViewX;

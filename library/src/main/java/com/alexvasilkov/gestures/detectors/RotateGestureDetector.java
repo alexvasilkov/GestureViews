@@ -170,11 +170,11 @@ public class RotateGestureDetector extends TwoFingerGestureDetector {
     }
 
     public float getFocusX() {
-        return mCurrFingerDiffX;
+        return (mCurrEvent.getX(0) + mCurrEvent.getX(1)) / 2f;
     }
 
     public float getFocusY() {
-        return mCurrFingerDiffY;
+        return (mCurrEvent.getY(0) + mCurrEvent.getY(1)) / 2f;
     }
 
 }

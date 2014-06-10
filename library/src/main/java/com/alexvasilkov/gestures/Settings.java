@@ -1,5 +1,7 @@
 package com.alexvasilkov.gestures;
 
+import android.content.Context;
+import android.util.TypedValue;
 import android.view.Gravity;
 
 /**
@@ -11,7 +13,11 @@ import android.view.Gravity;
 public class Settings {
 
     public static final float MAX_ZOOM = 2f;
-    public static final float ZOOM_BOUNCING_FACTOR = 1.2f;
+    public static final float OVERZOOM_FACTOR = 1.2f;
+    /**
+     * Overscroll distance in DP
+     */
+    public static final float OVERSCROLL_DISTANCE = 40;
 
     /**
      * Viewport area
@@ -29,9 +35,14 @@ public class Settings {
     private float maxZoom = MAX_ZOOM;
 
     /**
-     * Zoom bouncing factor
+     * Overzoom factor
      */
-    private float zoomBouncingFactor = ZOOM_BOUNCING_FACTOR;
+    private float overzoomFactor = OVERZOOM_FACTOR;
+
+    /**
+     * Overscroll distance
+     */
+    private float overscrollDistance;
 
     /**
      * If isFillViewport = true small view will be scaled to fitMethod entire viewport
@@ -65,6 +76,15 @@ public class Settings {
     private boolean isRotationEnabled = false;
 
     /**
+     * Whether view's transformations should be kept in bounds or not
+     */
+    private boolean isRestrictBounds = true;
+
+    Settings(Context context) {
+        setOverscrollDistance(context, OVERSCROLL_DISTANCE);
+    }
+
+    /**
      * Setting viewport size
      */
     public Settings setViewport(int w, int h) {
@@ -93,14 +113,33 @@ public class Settings {
     }
 
     /**
-     * Setting zoom bouncing factor. User will be able to "over zoom" up to this factor. Cannot be < 1.
+     * Setting overzoom factor. User will be able to "over zoom" up to this factor. Cannot be < 1.
      * <p/>
-     * Default value is {@link #ZOOM_BOUNCING_FACTOR}.
+     * Default value is {@link #OVERZOOM_FACTOR}.
      */
-    public Settings setZoomBouncingFactor(float factor) {
-        if (factor < 1f) throw new IllegalArgumentException("Zoom bouncing factor cannot be < 1");
-        zoomBouncingFactor = factor;
+    public Settings setOverzoomFactor(float factor) {
+        if (factor < 1f) throw new IllegalArgumentException("Overzoom factor cannot be < 1");
+        overzoomFactor = factor;
         return this;
+    }
+
+    /**
+     * Setting overscroll distance in pixels. User will be able to "over scroll" up to this distance. Cannot be < 0.
+     * <p/>
+     * Default value is {@link #OVERSCROLL_DISTANCE} converted to pixels.
+     */
+    public Settings setOverscrollDistance(float distance) {
+        if (distance < 0f) throw new IllegalArgumentException("Overscroll distance cannot be < 0");
+        overscrollDistance = distance;
+        return this;
+    }
+
+    /**
+     * Same as {@link #setOverscrollDistance(float)} but accepts distance in DP
+     */
+    public Settings setOverscrollDistance(Context context, float distanceDp) {
+        return setOverscrollDistance(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, distanceDp,
+                context.getResources().getDisplayMetrics()));
     }
 
     /**
@@ -160,11 +199,21 @@ public class Settings {
      * <p/>
      * Default value is false.
      */
-    // TODO: uncomment when rotation is ready
-//    public Settings setRotationEnabled(boolean enabled) {
-//        isRotationEnabled = enabled;
-//        return this;
-//    }
+    public Settings setRotationEnabled(boolean enabled) {
+        isRotationEnabled = enabled;
+        return this;
+    }
+
+    /**
+     * Sets whether view's transformations should be kept in bounds or not.
+     * <p/>
+     * Default value is true.
+     */
+    public Settings setRestrictBounds(boolean isRestrictBounds) {
+        this.isRestrictBounds = isRestrictBounds;
+        return this;
+    }
+
 
     // --------------
     //  Getters
@@ -190,8 +239,12 @@ public class Settings {
         return maxZoom;
     }
 
-    public float getZoomBouncingFactor() {
-        return zoomBouncingFactor;
+    public float getOverzoomFactor() {
+        return overzoomFactor;
+    }
+
+    public float getOverscrollDistance() {
+        return overscrollDistance;
     }
 
     public boolean isFillViewport() {
@@ -217,6 +270,11 @@ public class Settings {
     public boolean isRotationEnabled() {
         return isRotationEnabled;
     }
+
+    public boolean isRestrictBounds() {
+        return isRestrictBounds;
+    }
+
 
     public static enum Fit {
         /**

@@ -1,6 +1,7 @@
 package com.alexvasilkov.gestures;
 
 import android.content.Context;
+import android.graphics.Rect;
 import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -23,7 +24,7 @@ public class GesturesController extends GesturesAdapter {
 
     // Control constants converted to pixels
     private final float mZoomGestureMinSpan;
-    private final int mTouchSlop, mMaximumVelocity;
+    private final int mTouchSlop, mMinimumVelocity, mMaximumVelocity;
 
     private final OnStateChangedListener mStateListener;
 
@@ -33,23 +34,30 @@ public class GesturesController extends GesturesAdapter {
     private final GestureDetector mGestureDetector;
     private final ScaleGestureDetector mScaleDetector;
     private final RotateGestureDetector mRotateDetector;
+
     private boolean mIsScrollDetected;
+    private boolean mIsFlingDetected;
     private boolean mIsScaleDetected;
+    private float mLastScaleFocusX, mLastScaleFocusY;
 
-    private final OverScroller mScroller;
-    private final FloatScroller mZoomScroller;
+    private final OverScroller mFlingScroller;
+    private final FloatScroller mStateScroller;
 
+    private final Rect mFlingBounds = new Rect();
     private State mStateStart, mStateEnd;
 
-    private final Settings mSettings = new Settings();
+    private final Settings mSettings;
     private final State mState = new State();
-    private final StateController mStateController = new StateController(mSettings);
+    private final StateController mStateController;
 
     private OnGestureListener mGestureListener;
 
     public GesturesController(Context context, OnStateChangedListener listener) {
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         mZoomGestureMinSpan = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, ZOOM_GESTURE_MIN_SPAN_DP, metrics);
+
+        mSettings = new Settings(context);
+        mStateController = new StateController(mSettings);
 
         mStateListener = listener;
 
@@ -59,11 +67,12 @@ public class GesturesController extends GesturesAdapter {
         warmUpScaleDetector();
         mRotateDetector = new RotateGestureDetector(context, this);
 
-        mScroller = new OverScroller(context);
-        mZoomScroller = new FloatScroller(context);
+        mFlingScroller = new OverScroller(context);
+        mStateScroller = new FloatScroller(context);
 
         final ViewConfiguration configuration = ViewConfiguration.get(context);
         mTouchSlop = configuration.getScaledTouchSlop();
+        mMinimumVelocity = configuration.getScaledMinimumFlingVelocity();
         mMaximumVelocity = configuration.getScaledMaximumFlingVelocity();
     }
 
@@ -135,7 +144,22 @@ public class GesturesController extends GesturesAdapter {
         notifyStateUpdated();
     }
 
-    protected void notifyStateUpdated() {
+    /**
+     * Animates current state to provided end state
+     */
+    public void animateTo(State endState) {
+        if (endState == null) return;
+
+        mFlingScroller.forceFinished(true);
+        mStateScroller.forceFinished(true);
+
+        mStateStart = mState.copy();
+        mStateEnd = endState;
+        mStateScroller.startScroll(0f, 1f);
+        mAnimationTick.startAnimation();
+    }
+
+    public void notifyStateUpdated() {
         mStateListener.onStateChanged(mState);
     }
 
@@ -150,6 +174,10 @@ public class GesturesController extends GesturesAdapter {
         result |= mScaleDetector.onTouchEvent(event);
         result |= mRotateDetector.onTouchEvent(event);
 
+        if (event.getActionMasked() == MotionEvent.ACTION_UP || event.getActionMasked() == MotionEvent.ACTION_CANCEL) {
+            onUp(event);
+        }
+
         if (mIsScrollDetected || mScaleDetector.isInProgress() || mRotateDetector.isInProgress())
             notifyStateUpdated();
 
@@ -158,13 +186,25 @@ public class GesturesController extends GesturesAdapter {
 
     @Override
     public boolean onDown(MotionEvent e) {
-        mScroller.forceFinished(true);
+        mFlingScroller.forceFinished(true);
+        mStateScroller.forceFinished(true);
+
         mIsScrollDetected = false;
+        mIsFlingDetected = false;
         mIsScaleDetected = false;
 
-        if (mGestureListener != null && mGestureListener.onDown(e)) return true;
+        if (mGestureListener != null) mGestureListener.onDown(e);
 
-        return mSettings.isEnabled();
+        return mSettings.isEnabled() && mStateScroller.isFinished();
+    }
+
+    protected void onUp(MotionEvent e) {
+        if (mIsFlingDetected) return;
+
+        if (mIsScrollDetected || mIsScaleDetected) {
+            State endState = mStateController.restrictStateBoundsCopy(mState, e.getX(), e.getY(), false, false);
+            animateTo(endState);
+        }
     }
 
     @Override
@@ -179,8 +219,7 @@ public class GesturesController extends GesturesAdapter {
 
     @Override
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-        // Scrolling if panning is enabled and no zoom animation is in place
-        if (!mSettings.isEnabled() || !mZoomScroller.isFinished()) return false;
+        if (!mSettings.isEnabled() || !mStateScroller.isFinished()) return false;
 
         if (!mIsScrollDetected) {
             mIsScrollDetected = Math.abs(e2.getX() - e1.getX()) > mTouchSlop
@@ -191,7 +230,7 @@ public class GesturesController extends GesturesAdapter {
         }
 
         if (mIsScrollDetected) {
-            mStateController.translateBy(mState, -distanceX, -distanceY);
+            mStateController.translateByWithResilience(mState, -distanceX, -distanceY);
         }
 
         return mIsScrollDetected;
@@ -199,27 +238,32 @@ public class GesturesController extends GesturesAdapter {
 
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        // Flinging if panning is enabled and no zoom animation is in place
-        if (!mSettings.isEnabled() || !mZoomScroller.isFinished()) return false;
-        if (!mIsScrollDetected) return false;
+        if (!mSettings.isEnabled() || !mStateScroller.isFinished()) return false;
 
-        mScroller.forceFinished(true);
+        mIsFlingDetected = true;
 
-        mScroller.fling(
-                (int) mState.x,
-                (int) mState.y,
+        int x = (int) (mState.getX() + 0.5f);
+        int y = (int) (mState.getY() + 0.5f);
+
+        // Fling bounds including current position
+        mFlingBounds.set(mStateController.getMovingBounds(mState));
+        mFlingBounds.union(x, y);
+
+        mFlingScroller.forceFinished(true);
+        mFlingScroller.fling(
+                x, y,
                 limitFlingVelocity(velocityX),
                 limitFlingVelocity(velocityY),
                 Integer.MIN_VALUE, Integer.MAX_VALUE,
                 Integer.MIN_VALUE, Integer.MAX_VALUE);
-
         mAnimationTick.startAnimation();
 
         return true;
     }
 
     private int limitFlingVelocity(float velocity) {
-        if (velocity >= mMaximumVelocity) return mMaximumVelocity;
+        if (Math.abs(velocity) < mMinimumVelocity) return 0;
+        if (Math.abs(velocity) >= mMaximumVelocity) return (int) Math.signum(velocity) * mMaximumVelocity;
         return (int) (velocity + 0.5f);
     }
 
@@ -231,72 +275,76 @@ public class GesturesController extends GesturesAdapter {
     @Override
     public boolean onDoubleTapEvent(MotionEvent e) {
         if (e.getActionMasked() != MotionEvent.ACTION_UP) return false;
-        // ScaleGestureDetector can perform zoom by double tap & drag since KITKAT,
+        // ScaleGestureDetector can perform zoom by "double tap & drag" since KITKAT,
         // so we should suppress our double tap in this case
         if (mIsScaleDetected) return false;
 
+        // Let user redefine double tap
         if (mGestureListener != null && mGestureListener.onDoubleTap(e)) return true;
-        if (!mSettings.isDoubleTapEnabled()) return false;
 
-        final float middleZoom = (mStateController.getMaxZoomLevel() + mStateController.getMinZoomLevel()) / 2f;
-        final float targetZoom;
+        if (!mSettings.isEnabled() || !mSettings.isDoubleTapEnabled()) return false;
 
-        if (mState.zoom < middleZoom) { // zooming in
-            targetZoom = mStateController.getMaxZoomLevel();
-        } else { // zooming out
-            targetZoom = mStateController.getMinZoomLevel();
-        }
-
-        animateZoomTo(targetZoom, e.getX(), e.getY());
+        State endState = mStateController.toggleMinMaxZoom(mState, e.getX(), e.getY());
+        mStateController.restrictStateBounds(endState, e.getX(), e.getY());
+        animateTo(endState);
 
         return true;
     }
 
     @Override
     public boolean onScaleBegin(ScaleGestureDetector detector) {
-        mIsScaleDetected = mSettings.isEnabled() && mZoomScroller.isFinished();
+        mIsScaleDetected = mSettings.isEnabled();
         return mIsScaleDetected;
     }
 
     @Override
     public boolean onScale(ScaleGestureDetector detector) {
+        if (!mSettings.isEnabled() || !mStateScroller.isFinished()) return true;
+
         if (detector.getCurrentSpan() > mZoomGestureMinSpan) {
-            mStateController.zoomBy(mState, detector.getScaleFactor(),
-                    detector.getFocusX(), detector.getFocusY(), true);
+            // When scale is end (in onScaleEnd method),
+            // scale detector will return wrong focus point, so we should save it here
+            mLastScaleFocusX = detector.getFocusX();
+            mLastScaleFocusY = detector.getFocusY();
+            mStateController.zoomByWithResilience(mState, detector.getScaleFactor(), mLastScaleFocusX, mLastScaleFocusY);
         }
+
         return true;
     }
 
     @Override
     public void onScaleEnd(ScaleGestureDetector detector) {
-        if (mState.zoom < mStateController.getMinZoomLevel()) {
-            animateZoomTo(mStateController.getMinZoomLevel(), detector.getFocusX(), detector.getFocusY());
-        } else if (mState.zoom > mStateController.getMaxZoomLevel()) {
-            animateZoomTo(mStateController.getMaxZoomLevel(), detector.getFocusX(), detector.getFocusY());
-        }
+        if (!mSettings.isEnabled()) return;
+
+        // Scroll can still be in place, so we should preserver overscroll
+        State endState = mStateController.restrictStateBoundsCopy(
+                mState, mLastScaleFocusX, mLastScaleFocusY, true, false);
+        animateTo(endState);
     }
 
     @Override
     public boolean onRotateBegin(RotateGestureDetector detector) {
-        return mSettings.isEnabled() && mSettings.isRotationEnabled() && mZoomScroller.isFinished();
+        return mSettings.isEnabled() && mSettings.isRotationEnabled();
     }
 
     @Override
     public boolean onRotate(RotateGestureDetector detector) {
-        mStateController.rotateBy(mState, detector.getRotationDegreesDelta(),
-                detector.getFocusX(), detector.getFocusY());
+        if (!mSettings.isEnabled() || !mStateScroller.isFinished()) return true;
+
+        mState.rotateBy(detector.getRotationDegreesDelta(), detector.getFocusX(), detector.getFocusY());
+        mStateController.restrictStateBounds(mState, detector.getFocusX(), detector.getFocusY());
+
         return true;
     }
 
-    private void animateZoomTo(float zoom, float pivotX, float pivotY) {
-        mStateStart = mState.clone();
-        mStateEnd = mState.clone();
-        mStateController.zoomTo(mStateEnd, zoom, pivotX, pivotY, false);
-
-        mZoomScroller.startScroll(0f, 1f);
-        mAnimationTick.startAnimation();
+    protected void onFlingAnimationFinished() {
+        State endState = mStateController.restrictStateBoundsCopy(mState, 0f, 0f, false, false);
+        animateTo(endState);
     }
 
+    protected void onStateAnimationFinished() {
+        // no-op
+    }
 
     /**
      * Runnable implementation to animate state changes
@@ -309,18 +357,42 @@ public class GesturesController extends GesturesAdapter {
         public void run() {
             boolean needsInvalidate = false;
 
-            if (mScroller.computeScrollOffset()) {
-                // The scroller isn't finished, meaning a fling is currently active.
-                mStateController.translateTo(mState, mScroller.getCurrX(), mScroller.getCurrY());
-                needsInvalidate = true;
+            if (!mFlingScroller.isFinished()) {
+                if (mFlingScroller.computeScrollOffset()) {
+                    float x = mFlingScroller.getCurrX();
+                    float y = mFlingScroller.getCurrY();
+
+                    if (mSettings.isRestrictBounds()) {
+                        x = StateController.restrict(x, mFlingBounds.left, mFlingBounds.right);
+                        y = StateController.restrict(y, mFlingBounds.top, mFlingBounds.bottom);
+                    }
+
+                    float lastX = mState.getX(), lastY = mState.getY();
+                    mState.translateTo(x, y);
+
+                    if (lastX == mState.getX() && lastY == mState.getY()) {
+                        mFlingScroller.forceFinished(true);
+                    }
+
+                    needsInvalidate = true;
+                }
+
+                if (mFlingScroller.isFinished()) {
+                    onFlingAnimationFinished();
+                }
             }
 
-            if (mZoomScroller.computeScroll()) {
-                float factor = mZoomScroller.getCurr();
-                mStateController.interpolate(mState, mStateStart, mStateEnd, factor);
-                needsInvalidate = true;
-            } else {
-                mStateStart = mStateEnd = null;
+            if (!mStateScroller.isFinished()) {
+                if (mStateScroller.computeScroll()) {
+                    float factor = mStateScroller.getCurr();
+                    mStateController.interpolate(mState, mStateStart, mStateEnd, factor);
+                    needsInvalidate = true;
+                }
+
+                if (mStateScroller.isFinished()) {
+                    mStateStart = mStateEnd = null;
+                    onStateAnimationFinished();
+                }
             }
 
             if (needsInvalidate) {
@@ -352,7 +424,7 @@ public class GesturesController extends GesturesAdapter {
      * Listener for different touch events
      */
     public interface OnGestureListener {
-        boolean onDown(MotionEvent e);
+        void onDown(MotionEvent e);
 
         boolean onSingleTapUp(MotionEvent e);
 
@@ -368,8 +440,8 @@ public class GesturesController extends GesturesAdapter {
      */
     public static class SimpleOnGestureListener implements OnGestureListener {
         @Override
-        public boolean onDown(MotionEvent e) {
-            return false;
+        public void onDown(MotionEvent e) {
+            // no-op
         }
 
         @Override
