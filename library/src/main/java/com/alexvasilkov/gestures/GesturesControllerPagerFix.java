@@ -16,7 +16,7 @@ public class GesturesControllerPagerFix extends GesturesController {
 
     private static boolean sIsGlobalMotionDetected;
 
-    private final int mPagerSlop;
+    private final int mPagerSlopX, mPagerSlopY;
 
     private ViewPager mViewPager;
 
@@ -25,15 +25,16 @@ public class GesturesControllerPagerFix extends GesturesController {
     private boolean mIsSkipViewPager;
     private float mAccumulateScrollX, mAccumulateScrollY;
     private int mViewPagerX;
+    private boolean mIsFakeDragInProgress;
 
     private boolean mIsLocalMotionDetected;
-    private boolean mSkipNonPrimaryPointers;
-    private boolean mSkipViewPagerDrag;
+    private boolean mIsSkipNonPrimaryPointers;
 
     public GesturesControllerPagerFix(Context context, OnStateChangedListener listener) {
         super(context, listener);
 
-        mPagerSlop = 2 * ViewConfiguration.get(context).getScaledTouchSlop();
+        mPagerSlopX = ViewConfiguration.get(context).getScaledTouchSlop();
+        mPagerSlopY = 2 * ViewConfiguration.get(context).getScaledTouchSlop();
     }
 
     public void fixViewPagerScroll(ViewPager pager) {
@@ -73,10 +74,33 @@ public class GesturesControllerPagerFix extends GesturesController {
         }
     }
 
-    @Override
-    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        // Ignoring fling if view pager was dragged
-        return mViewPagerX == 0 && super.onFling(e1, e2, velocityX, velocityY);
+    private void beginFakeDrag() {
+        if (mIsFakeDragInProgress) return;
+
+        // Initializing view pager fake drag
+        mViewPager.requestDisallowInterceptTouchEvent(true);
+        mViewPager.beginFakeDrag();
+        mViewPagerX = 0;
+        mIsFakeDragInProgress = true;
+    }
+
+    private void endFakeDrag() {
+        if (!mIsFakeDragInProgress) return;
+
+        // Ending view pager fake drag
+        mViewPager.endFakeDrag();
+        mIsFakeDragInProgress = false;
+    }
+
+    /**
+     * Manually scrolls view pager and returns actual distance at which pager was scrolled
+     */
+    private int performFakeDrag(int dX) {
+        if (!mIsFakeDragInProgress) return 0;
+
+        int scrollBegin = mViewPager.getScrollX();
+        mViewPager.fakeDragBy(dX);
+        return scrollBegin - mViewPager.getScrollX();
     }
 
     /**
@@ -88,50 +112,41 @@ public class GesturesControllerPagerFix extends GesturesController {
         switch (event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
                 sIsGlobalMotionDetected = mIsLocalMotionDetected = true;
-
-                // Initializing view pager fake drag
-                mViewPager.requestDisallowInterceptTouchEvent(true);
-                mViewPager.beginFakeDrag();
-                mViewPagerX = 0;
-
+                beginFakeDrag();
                 return event;
 
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
                 sIsGlobalMotionDetected = mIsLocalMotionDetected = false;
-
-                // Ending view pager fake drag
-                mViewPager.endFakeDrag();
-
+                endFakeDrag();
                 return event;
 
             case MotionEvent.ACTION_POINTER_DOWN:
                 if (event.getPointerCount() == 2) { // on first non-primary pointer
                     // Skipping non-primary pointers if we're already dragging view pager
                     // to skip scale/rotation gestures
-                    mSkipNonPrimaryPointers = mViewPagerX != 0;
+                    mIsSkipNonPrimaryPointers = mViewPagerX != 0;
                     // Skipping view pager fake dragging if we're not started dragging yet
                     // to allow scale/rotation gestures
-                    mSkipViewPagerDrag = mViewPagerX == 0;
+                    mIsSkipViewPager = mViewPagerX == 0;
                 }
                 break;
 
             case MotionEvent.ACTION_POINTER_UP:
                 if (event.getPointerCount() == 2) { // only primary pointer left
-                    mSkipNonPrimaryPointers = false;
-                    mSkipViewPagerDrag = false;
+                    mIsSkipNonPrimaryPointers = false;
                 }
                 break;
         }
 
-        if (mSkipViewPagerDrag) return event; // No event adjusting is needed
+        if (mIsSkipViewPager) return event; // No event adjusting is needed
 
         boolean isNonPrimaryPointerEvent = event.getActionMasked() == MotionEvent.ACTION_POINTER_DOWN
                 || event.getActionMasked() == MotionEvent.ACTION_POINTER_UP;
 
-        if (mSkipNonPrimaryPointers && isNonPrimaryPointerEvent) return null; // No event should be passed further
+        if (mIsSkipNonPrimaryPointers && isNonPrimaryPointerEvent) return null; // No event should be passed further
 
-        mTmpEvent = mSkipNonPrimaryPointers ? obtainOnePointerEvent(event) : MotionEvent.obtain(event);
+        mTmpEvent = mIsSkipNonPrimaryPointers ? obtainOnePointerEvent(event) : MotionEvent.obtain(event);
         // Applying offset to the returned event, offset will be calculated in scrollBy method below
         mTmpEvent.offsetLocation(mViewPagerX, 0f);
         return mTmpEvent;
@@ -154,7 +169,7 @@ public class GesturesControllerPagerFix extends GesturesController {
      * Here we will split given distance (dX) into movement of ViewPager and movement of view itself.
      */
     private float scrollBy(float dX, float dY) {
-        if (mSkipViewPagerDrag) return dX;
+        if (mIsSkipViewPager) return dX;
 
         float dViewX, dPagerX;
 
@@ -196,17 +211,17 @@ public class GesturesControllerPagerFix extends GesturesController {
 
         // Checking vertical and horizontal thresholds
         if (!mIsScrollingViewPager && !mIsSkipViewPager) {
-            if (viewMovingBounds.width() < mPagerSlop) {
+            if (viewMovingBounds.width() < mPagerSlopX) {
                 // View have small horizontal movement area, checking if thresholds are passed
                 mAccumulateScrollX += dPagerX;
                 mAccumulateScrollY += dY;
 
-                if (Math.abs(mAccumulateScrollX) > mPagerSlop) {
+                if (Math.abs(mAccumulateScrollX) > mPagerSlopX) {
                     // Scrolling view pager if movement in X axis passed threshold
                     mIsScrollingViewPager = true;
                     // Adjusting pager movement for smoother scrolling
-                    dPagerX = Math.signum(mAccumulateScrollX) * (Math.abs(mAccumulateScrollX) - mPagerSlop);
-                } else if (Math.abs(mAccumulateScrollY) > mPagerSlop) {
+                    dPagerX = Math.signum(mAccumulateScrollX) * (Math.abs(mAccumulateScrollX) - mPagerSlopX);
+                } else if (Math.abs(mAccumulateScrollY) > mPagerSlopY) {
                     // Skipping view pager if movement in Y axis passed threshold
                     mIsSkipViewPager = true;
                 }
@@ -218,7 +233,7 @@ public class GesturesControllerPagerFix extends GesturesController {
 
         if (mIsScrollingViewPager) {
             int x = (int) (dPagerX + 0.5f);
-            int actualX = scrollPagerBy(x);
+            int actualX = performFakeDrag(x);
             mViewPagerX += actualX;
             dViewX += x - actualX;
         } else {
@@ -226,15 +241,6 @@ public class GesturesControllerPagerFix extends GesturesController {
         }
 
         return dViewX;
-    }
-
-    /**
-     * Manually scrolls view pager and returns actual distance at which pager was scrolled
-     */
-    private int scrollPagerBy(int dX) {
-        int scrollBegin = mViewPager.getScrollX();
-        mViewPager.fakeDragBy(dX);
-        return scrollBegin - mViewPager.getScrollX();
     }
 
 }

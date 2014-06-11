@@ -42,7 +42,7 @@ public class Settings {
     /**
      * Overscroll distance
      */
-    private float overscrollDistance;
+    private float overscrollDistanceX, overscrollDistanceY;
 
     /**
      * If isFillViewport = true small view will be scaled to fitMethod entire viewport
@@ -81,7 +81,7 @@ public class Settings {
     private boolean isRestrictBounds = true;
 
     Settings(Context context) {
-        setOverscrollDistance(context, OVERSCROLL_DISTANCE);
+        setOverscrollDistance(context, OVERSCROLL_DISTANCE, OVERSCROLL_DISTANCE);
     }
 
     /**
@@ -128,18 +128,18 @@ public class Settings {
      * <p/>
      * Default value is {@link #OVERSCROLL_DISTANCE} converted to pixels.
      */
-    public Settings setOverscrollDistance(float distance) {
-        if (distance < 0f) throw new IllegalArgumentException("Overscroll distance cannot be < 0");
-        overscrollDistance = distance;
+    public Settings setOverscrollDistance(float distanceX, float distanceY) {
+        if (distanceX < 0f || distanceY < 0f) throw new IllegalArgumentException("Overscroll distance cannot be < 0");
+        overscrollDistanceX = distanceX;
+        overscrollDistanceY = distanceY;
         return this;
     }
 
     /**
-     * Same as {@link #setOverscrollDistance(float)} but accepts distance in DP
+     * Same as {@link #setOverscrollDistance(float, float)} but accepts distance in DP
      */
-    public Settings setOverscrollDistance(Context context, float distanceDp) {
-        return setOverscrollDistance(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, distanceDp,
-                context.getResources().getDisplayMetrics()));
+    public Settings setOverscrollDistance(Context context, float distanceXDp, float distanceYDp) {
+        return setOverscrollDistance(toPixels(context, distanceXDp), toPixels(context, distanceYDp));
     }
 
     /**
@@ -243,8 +243,12 @@ public class Settings {
         return overzoomFactor;
     }
 
-    public float getOverscrollDistance() {
-        return overscrollDistance;
+    public float getOverscrollDistanceX() {
+        return overscrollDistanceX;
+    }
+
+    public float getOverscrollDistanceY() {
+        return overscrollDistanceY;
     }
 
     public boolean isFillViewport() {
@@ -296,6 +300,11 @@ public class Settings {
          * Fit view width or view height inside viewport area, so the entire viewport is filled up
          */
         OUTSIDE
+    }
+
+    private static float toPixels(Context context, float value) {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value,
+                context.getResources().getDisplayMetrics());
     }
 
 }

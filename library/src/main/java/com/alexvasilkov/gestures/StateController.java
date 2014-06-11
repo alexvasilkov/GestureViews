@@ -60,17 +60,21 @@ public class StateController {
 
         if (mSettings.isRestrictBounds()) {
             Rect bounds = getMovingBounds(state);
-            fixedX = applyTranslationResilience(state.getX(), fixedX, bounds.left, bounds.right);
-            fixedY = applyTranslationResilience(state.getY(), fixedY, bounds.top, bounds.bottom);
+            fixedX = applyTranslationResilience(state.getX(), fixedX,
+                    bounds.left, bounds.right, mSettings.getOverscrollDistanceX());
+            fixedY = applyTranslationResilience(state.getY(), fixedY,
+                    bounds.top, bounds.bottom, mSettings.getOverscrollDistanceX());
         }
 
         state.translateBy(fixedX, fixedY);
         restrictStateBounds(state, 0f, 0f, true, true);
     }
 
-    private float applyTranslationResilience(float value, float delta, float boundsMin, float boundsMax) {
-        float overscroll = mSettings.getOverscrollDistance();
-        if (value < boundsMin && delta < 0) {
+    private float applyTranslationResilience(float value, float delta,
+                                             float boundsMin, float boundsMax, float overscroll) {
+        if (overscroll == 0) {
+            return delta;
+        } else if (value < boundsMin && delta < 0) {
             float resilience = (boundsMin - value) / overscroll;
             return delta * (1f - resilience) / 2;
         } else if (value > boundsMax && delta > 0) {
@@ -172,8 +176,8 @@ public class StateController {
         }
 
         Rect bounds = getMovingBounds(state);
-        float overscrollX = allowOverscroll ? mSettings.getOverscrollDistance() : 0f;
-        float overscrollY = allowOverscroll ? mSettings.getOverscrollDistance() : 0f;
+        float overscrollX = allowOverscroll ? mSettings.getOverscrollDistanceX() : 0f;
+        float overscrollY = allowOverscroll ? mSettings.getOverscrollDistanceY() : 0f;
         float x = restrict(state.getX(), bounds.left - overscrollX, bounds.right + overscrollX);
         float y = restrict(state.getY(), bounds.top - overscrollY, bounds.bottom + overscrollY);
 

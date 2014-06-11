@@ -35,6 +35,7 @@ public class GesturesController extends GesturesAdapter {
     private final ScaleGestureDetector mScaleDetector;
     private final RotateGestureDetector mRotateDetector;
 
+    private boolean mIsDoubleTapDetected;
     private boolean mIsScrollDetected;
     private boolean mIsFlingDetected;
     private boolean mIsScaleDetected;
@@ -189,6 +190,7 @@ public class GesturesController extends GesturesAdapter {
         mFlingScroller.forceFinished(true);
         mStateScroller.forceFinished(true);
 
+        mIsDoubleTapDetected = false;
         mIsScrollDetected = false;
         mIsFlingDetected = false;
         mIsScaleDetected = false;
@@ -199,12 +201,10 @@ public class GesturesController extends GesturesAdapter {
     }
 
     protected void onUp(MotionEvent e) {
-        if (mIsFlingDetected) return;
+        if (mIsFlingDetected || mIsDoubleTapDetected) return;
 
-        if (mIsScrollDetected || mIsScaleDetected) {
-            State endState = mStateController.restrictStateBoundsCopy(mState, e.getX(), e.getY(), false, false);
-            animateTo(endState);
-        }
+        State endState = mStateController.restrictStateBoundsCopy(mState, e.getX(), e.getY(), false, false);
+        animateTo(endState);
     }
 
     @Override
@@ -261,6 +261,16 @@ public class GesturesController extends GesturesAdapter {
         return true;
     }
 
+    protected void onFlingScroll(float fromX, float fromY, float toX, float toY) {
+        float x = toX, y = toY;
+        if (mSettings.isRestrictBounds()) {
+            x = StateController.restrict(x, mFlingBounds.left, mFlingBounds.right);
+            y = StateController.restrict(y, mFlingBounds.top, mFlingBounds.bottom);
+        }
+
+        mState.translateTo(x, y);
+    }
+
     private int limitFlingVelocity(float velocity) {
         if (Math.abs(velocity) < mMinimumVelocity) return 0;
         if (Math.abs(velocity) >= mMaximumVelocity) return (int) Math.signum(velocity) * mMaximumVelocity;
@@ -283,6 +293,8 @@ public class GesturesController extends GesturesAdapter {
         if (mGestureListener != null && mGestureListener.onDoubleTap(e)) return true;
 
         if (!mSettings.isEnabled() || !mSettings.isDoubleTapEnabled()) return false;
+
+        mIsDoubleTapDetected = true;
 
         State endState = mStateController.toggleMinMaxZoom(mState, e.getX(), e.getY());
         mStateController.restrictStateBounds(endState, e.getX(), e.getY());
@@ -359,16 +371,12 @@ public class GesturesController extends GesturesAdapter {
 
             if (!mFlingScroller.isFinished()) {
                 if (mFlingScroller.computeScrollOffset()) {
+                    float lastX = mState.getX(), lastY = mState.getY();
+
                     float x = mFlingScroller.getCurrX();
                     float y = mFlingScroller.getCurrY();
 
-                    if (mSettings.isRestrictBounds()) {
-                        x = StateController.restrict(x, mFlingBounds.left, mFlingBounds.right);
-                        y = StateController.restrict(y, mFlingBounds.top, mFlingBounds.bottom);
-                    }
-
-                    float lastX = mState.getX(), lastY = mState.getY();
-                    mState.translateTo(x, y);
+                    onFlingScroll(lastX, lastY, x, y);
 
                     if (lastX == mState.getX() && lastY == mState.getY()) {
                         mFlingScroller.forceFinished(true);
