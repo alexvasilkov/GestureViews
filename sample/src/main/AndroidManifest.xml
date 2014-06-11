@@ -5,10 +5,12 @@
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
-        android:theme="@style/AppTheme"
+        android:theme="@style/AppTheme.Dark"
         android:label="GestureViews">
 
-        <activity android:name=".activities.MainActivity">
+        <activity
+            android:name=".activities.MainActivity"
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -18,13 +20,15 @@
 
         <activity
             android:name=".activities.ImagesPagerActivity"
-            android:label="GestureImageView"
-            android:theme="@style/AppTheme.Dark" />
+            android:label="View pager" />
+
+        <activity
+            android:name=".activities.ImageRotationActivity"
+            android:label="Image rotation" />
 
         <activity
             android:name=".activities.LayoutPagerActivity"
-            android:label="GestureLayout"
-            android:theme="@style/AppTheme.Dark" />
+            android:label="Custom layout" />
 
     </application>
 

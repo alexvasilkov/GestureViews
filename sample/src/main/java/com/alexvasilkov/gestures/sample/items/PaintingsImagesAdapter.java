@@ -5,6 +5,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
+import com.alexvasilkov.gestures.Settings;
 import com.alexvasilkov.gestures.widgets.GestureImageView;
 import com.squareup.picasso.Picasso;
 
@@ -30,6 +31,7 @@ public class PaintingsImagesAdapter extends PagerAdapter {
         GestureImageView gImageView = new GestureImageView(context);
         container.addView(gImageView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         gImageView.fixViewPagerScroll(mViewPager);
+        gImageView.getController().getSettings().setOverscrollDistance(context, Settings.OVERSCROLL_DISTANCE, 0);
 
         Picasso.with(context).load(mPaintings[position].getImageId()).into(gImageView);
 
