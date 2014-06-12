@@ -17,7 +17,7 @@ public class Settings {
     /**
      * Overscroll distance in DP
      */
-    public static final float OVERSCROLL_DISTANCE = 40;
+    public static final float OVERSCROLL_DISTANCE = 0;
 
     /**
      * Viewport area

@@ -111,7 +111,7 @@ public class GestureLayout extends FrameLayout implements GesturesController.OnS
 
     @Override
     public void onStateChanged(State state) {
-        state.applyTo(mMatrix);
+        state.get(mMatrix);
         mMatrix.invert(mMatrixInverse);
         invalidate();
     }
@@ -143,8 +143,8 @@ public class GestureLayout extends FrameLayout implements GesturesController.OnS
     private void applyMatrix(Rect rect, Matrix matrix) {
         mTmpFloatRect.set(rect.left, rect.top, rect.right, rect.bottom);
         matrix.mapRect(mTmpFloatRect);
-        rect.set((int) (mTmpFloatRect.left + 0.5f), (int) (mTmpFloatRect.top + 0.5f),
-                (int) (mTmpFloatRect.right + 0.5f), (int) (mTmpFloatRect.bottom + 0.5f));
+        rect.set(Math.round(mTmpFloatRect.left), Math.round(mTmpFloatRect.top),
+                Math.round(mTmpFloatRect.right), Math.round(mTmpFloatRect.bottom));
     }
 
 }

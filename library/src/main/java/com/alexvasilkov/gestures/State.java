@@ -7,6 +7,8 @@ import android.graphics.Matrix;
  */
 public class State {
 
+    private static final float COMPARISON_EPSILON = 0.0001f;
+
     private final Matrix matrix = new Matrix();
     private final float[] tmp = new float[9];
 
@@ -30,34 +32,41 @@ public class State {
         return rotation;
     }
 
+    /**
+     * Applying state to provided matrix. Matrix will contain translation, scale and rotation.
+     */
+    public void get(Matrix matrix) {
+        matrix.set(this.matrix);
+    }
+
     public void translateBy(float dx, float dy) {
         matrix.postTranslate(dx, dy);
-        updateFrom(matrix, false, false); // only translation is changed
+        updateFromMatrix(false, false); // only translation is changed
     }
 
     public void translateTo(float x, float y) {
         matrix.postTranslate(-this.x + x, -this.y + y);
-        updateFrom(matrix, false, false); // only translation is changed
+        updateFromMatrix(false, false); // only translation is changed
     }
 
     public void zoomBy(float factor, float pivotX, float pivotY) {
         matrix.postScale(factor, factor, pivotX, pivotY);
-        updateFrom(matrix, true, false); // zoom & translation are changed
+        updateFromMatrix(true, false); // zoom & translation are changed
     }
 
     public void zoomTo(float zoom, float pivotX, float pivotY) {
         matrix.postScale(zoom / this.zoom, zoom / this.zoom, pivotX, pivotY);
-        updateFrom(matrix, true, false); // zoom & translation are changed
+        updateFromMatrix(true, false); // zoom & translation are changed
     }
 
     public void rotateBy(float angle, float pivotX, float pivotY) {
         matrix.postRotate(angle, pivotX, pivotY);
-        updateFrom(matrix, false, true); // rotation & translation are changed
+        updateFromMatrix(false, true); // rotation & translation are changed
     }
 
     public void rotateTo(float angle, float pivotX, float pivotY) {
         matrix.postRotate(-rotation + angle, pivotX, pivotY);
-        updateFrom(matrix, false, true); // rotation & translation are changed
+        updateFromMatrix(false, true); // rotation & translation are changed
     }
 
     public void set(float x, float y, float zoom, float rotation) {
@@ -74,22 +83,29 @@ public class State {
     }
 
     /**
-     * Applying state to provided matrix. Matrix will contain translation, scale and rotation.
+     * Applying state from given matrix. Matrix should contain correct translation / scale / rotation.
      */
-    public void applyTo(Matrix matrix) {
-        matrix.set(this.matrix);
-    }
-
-    /**
-     * Applying state from given matrix.
-     */
-    public void updateFrom(Matrix matrix) {
-        updateFrom(matrix, true, true);
+    public void set(Matrix matrix) {
         this.matrix.set(matrix);
+        updateFromMatrix(true, true);
+    }
+
+    public void set(State other) {
+        x = other.x;
+        y = other.y;
+        zoom = other.zoom;
+        rotation = other.rotation;
+        matrix.set(other.matrix);
+    }
+
+    public State copy() {
+        State copy = new State();
+        copy.set(this);
+        return copy;
     }
 
     /**
-     * Applying state from given matrix.
+     * Applying state from current matrix.
      * <p/>
      * Having matrix:
      * <pre>
@@ -104,7 +120,7 @@ public class State {
      * </pre>
      * See <a href="http://stackoverflow.com/questions/4361242/extract-rotation-scale-values-from-2d-transformation-matrix">here</a>.
      */
-    private void updateFrom(Matrix matrix, boolean updateZoom, boolean updateRotation) {
+    private void updateFromMatrix(boolean updateZoom, boolean updateRotation) {
         matrix.getValues(tmp);
         x = tmp[2];
         y = tmp[5];
@@ -112,14 +128,27 @@ public class State {
         if (updateRotation) rotation = (float) Math.toDegrees(Math.atan2(tmp[3], tmp[4]));
     }
 
-    public State copy() {
-        State copy = new State();
-        copy.x = x;
-        copy.y = y;
-        copy.zoom = zoom;
-        copy.rotation = rotation;
-        copy.matrix.set(matrix);
-        return copy;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        State state = (State) o;
+
+        return equals(state.x, x) && equals(state.y, y) && equals(state.zoom, zoom) && equals(state.rotation, rotation);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (x != +0.0f ? Float.floatToIntBits(x) : 0);
+        result = 31 * result + (y != +0.0f ? Float.floatToIntBits(y) : 0);
+        result = 31 * result + (zoom != +0.0f ? Float.floatToIntBits(zoom) : 0);
+        result = 31 * result + (rotation != +0.0f ? Float.floatToIntBits(rotation) : 0);
+        return result;
+    }
+
+    public static boolean equals(float v1, float v2) {
+        return Math.abs(v1 - v2) < COMPARISON_EPSILON;
     }
 
 }

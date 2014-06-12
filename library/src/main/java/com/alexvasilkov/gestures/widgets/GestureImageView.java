@@ -67,7 +67,7 @@ public class GestureImageView extends ImageView implements GesturesController.On
 
     @Override
     public void onStateChanged(State state) {
-        state.applyTo(mImageMatrix);
+        state.get(mImageMatrix);
         setImageMatrix(mImageMatrix);
     }
 

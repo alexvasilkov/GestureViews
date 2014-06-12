@@ -21,6 +21,7 @@ import com.alexvasilkov.gestures.detectors.RotateGestureDetector;
 public class GesturesController extends GesturesAdapter {
 
     private static final float ZOOM_GESTURE_MIN_SPAN_DP = 20f;
+    private static final float FLING_COEFFICIENT = 0.75f;
 
     // Control constants converted to pixels
     private final float mZoomGestureMinSpan;
@@ -39,13 +40,13 @@ public class GesturesController extends GesturesAdapter {
     private boolean mIsScrollDetected;
     private boolean mIsFlingDetected;
     private boolean mIsScaleDetected;
-    private float mLastScaleFocusX, mLastScaleFocusY;
+    private float mPivotX, mPivotY;
 
     private final OverScroller mFlingScroller;
     private final FloatScroller mStateScroller;
 
     private final Rect mFlingBounds = new Rect();
-    private State mStateStart, mStateEnd;
+    private final State mPrevState = new State(), mStateStart = new State(), mStateEnd = new State();
 
     private final Settings mSettings;
     private final State mState = new State();
@@ -148,19 +149,24 @@ public class GesturesController extends GesturesAdapter {
     /**
      * Animates current state to provided end state
      */
-    public void animateTo(State endState) {
+    public void animateStateTo(State endState) {
         if (endState == null) return;
 
-        mFlingScroller.forceFinished(true);
-        mStateScroller.forceFinished(true);
+        stopFlingAnimation();
+        stopStateAnimation();
 
-        mStateStart = mState.copy();
-        mStateEnd = endState;
+        mStateStart.set(mState);
+        mStateEnd.set(endState);
         mStateScroller.startScroll(0f, 1f);
         mAnimationTick.startAnimation();
     }
 
+    public void stopStateAnimation() {
+        mStateScroller.forceFinished(true);
+    }
+
     public void notifyStateUpdated() {
+        mPrevState.set(mState);
         mStateListener.onStateChanged(mState);
     }
 
@@ -179,16 +185,20 @@ public class GesturesController extends GesturesAdapter {
             onUp(event);
         }
 
-        if (mIsScrollDetected || mScaleDetector.isInProgress() || mRotateDetector.isInProgress())
+        mStateController.restrictStateBounds(mState, mPrevState, mPivotX, mPivotY, true, true);
+
+        if (!mState.equals(mPrevState)) {
+            mPrevState.set(mState);
             notifyStateUpdated();
+        }
 
         return result;
     }
 
     @Override
     public boolean onDown(MotionEvent e) {
-        mFlingScroller.forceFinished(true);
-        mStateScroller.forceFinished(true);
+        stopFlingAnimation();
+        stopStateAnimation();
 
         mIsDoubleTapDetected = false;
         mIsScrollDetected = false;
@@ -204,7 +214,7 @@ public class GesturesController extends GesturesAdapter {
         if (mIsFlingDetected || mIsDoubleTapDetected) return;
 
         State endState = mStateController.restrictStateBoundsCopy(mState, e.getX(), e.getY(), false, false);
-        animateTo(endState);
+        animateStateTo(endState);
     }
 
     @Override
@@ -229,9 +239,7 @@ public class GesturesController extends GesturesAdapter {
             if (mIsScrollDetected) return true;
         }
 
-        if (mIsScrollDetected) {
-            mStateController.translateByWithResilience(mState, -distanceX, -distanceY);
-        }
+        if (mIsScrollDetected) mState.translateBy(-distanceX, -distanceY);
 
         return mIsScrollDetected;
     }
@@ -242,23 +250,29 @@ public class GesturesController extends GesturesAdapter {
 
         mIsFlingDetected = true;
 
-        int x = (int) (mState.getX() + 0.5f);
-        int y = (int) (mState.getY() + 0.5f);
+        int x = Math.round(mState.getX());
+        int y = Math.round(mState.getY());
 
         // Fling bounds including current position
         mFlingBounds.set(mStateController.getMovingBounds(mState));
         mFlingBounds.union(x, y);
 
-        mFlingScroller.forceFinished(true);
+        stopFlingAnimation();
         mFlingScroller.fling(
                 x, y,
-                limitFlingVelocity(velocityX),
-                limitFlingVelocity(velocityY),
+                limitFlingVelocity(velocityX * FLING_COEFFICIENT),
+                limitFlingVelocity(velocityY * FLING_COEFFICIENT),
                 Integer.MIN_VALUE, Integer.MAX_VALUE,
                 Integer.MIN_VALUE, Integer.MAX_VALUE);
         mAnimationTick.startAnimation();
 
         return true;
+    }
+
+    private int limitFlingVelocity(float velocity) {
+        if (Math.abs(velocity) < mMinimumVelocity) return 0;
+        if (Math.abs(velocity) >= mMaximumVelocity) return (int) Math.signum(velocity) * mMaximumVelocity;
+        return Math.round(velocity);
     }
 
     protected void onFlingScroll(float fromX, float fromY, float toX, float toY) {
@@ -271,10 +285,8 @@ public class GesturesController extends GesturesAdapter {
         mState.translateTo(x, y);
     }
 
-    private int limitFlingVelocity(float velocity) {
-        if (Math.abs(velocity) < mMinimumVelocity) return 0;
-        if (Math.abs(velocity) >= mMaximumVelocity) return (int) Math.signum(velocity) * mMaximumVelocity;
-        return (int) (velocity + 0.5f);
+    protected void stopFlingAnimation() {
+        mFlingScroller.forceFinished(true);
     }
 
     @Override
@@ -297,8 +309,8 @@ public class GesturesController extends GesturesAdapter {
         mIsDoubleTapDetected = true;
 
         State endState = mStateController.toggleMinMaxZoom(mState, e.getX(), e.getY());
-        mStateController.restrictStateBounds(endState, e.getX(), e.getY());
-        animateTo(endState);
+        mStateController.restrictStateBounds(endState, null, e.getX(), e.getY(), false, false);
+        animateStateTo(endState);
 
         return true;
     }
@@ -316,9 +328,9 @@ public class GesturesController extends GesturesAdapter {
         if (detector.getCurrentSpan() > mZoomGestureMinSpan) {
             // When scale is end (in onScaleEnd method),
             // scale detector will return wrong focus point, so we should save it here
-            mLastScaleFocusX = detector.getFocusX();
-            mLastScaleFocusY = detector.getFocusY();
-            mStateController.zoomByWithResilience(mState, detector.getScaleFactor(), mLastScaleFocusX, mLastScaleFocusY);
+            mPivotX = detector.getFocusX();
+            mPivotY = detector.getFocusY();
+            mState.zoomBy(detector.getScaleFactor(), mPivotX, mPivotY);
         }
 
         return true;
@@ -326,12 +338,15 @@ public class GesturesController extends GesturesAdapter {
 
     @Override
     public void onScaleEnd(ScaleGestureDetector detector) {
+        mIsScaleDetected = false;
+
         if (!mSettings.isEnabled()) return;
 
         // Scroll can still be in place, so we should preserver overscroll
-        State endState = mStateController.restrictStateBoundsCopy(
-                mState, mLastScaleFocusX, mLastScaleFocusY, true, false);
-        animateTo(endState);
+        State endState = mStateController.restrictStateBoundsCopy(mState, mPivotX, mPivotY, true, false);
+        animateStateTo(endState);
+
+        mPivotX = mPivotY = 0f;
     }
 
     @Override
@@ -344,14 +359,13 @@ public class GesturesController extends GesturesAdapter {
         if (!mSettings.isEnabled() || !mStateScroller.isFinished()) return true;
 
         mState.rotateBy(detector.getRotationDegreesDelta(), detector.getFocusX(), detector.getFocusY());
-        mStateController.restrictStateBounds(mState, detector.getFocusX(), detector.getFocusY(), true, true);
 
         return true;
     }
 
     protected void onFlingAnimationFinished() {
         State endState = mStateController.restrictStateBoundsCopy(mState, 0f, 0f, false, false);
-        animateTo(endState);
+        animateStateTo(endState);
     }
 
     protected void onStateAnimationFinished() {
@@ -378,8 +392,8 @@ public class GesturesController extends GesturesAdapter {
 
                     onFlingScroll(lastX, lastY, x, y);
 
-                    if (lastX == mState.getX() && lastY == mState.getY()) {
-                        mFlingScroller.forceFinished(true);
+                    if (State.equals(lastX, mState.getX()) && State.equals(lastY, mState.getY())) {
+                        stopFlingAnimation();
                     }
 
                     needsInvalidate = true;
@@ -393,12 +407,11 @@ public class GesturesController extends GesturesAdapter {
             if (!mStateScroller.isFinished()) {
                 if (mStateScroller.computeScroll()) {
                     float factor = mStateScroller.getCurr();
-                    mStateController.interpolate(mState, mStateStart, mStateEnd, factor);
+                    StateController.interpolate(mState, mStateStart, mStateEnd, factor);
                     needsInvalidate = true;
                 }
 
                 if (mStateScroller.isFinished()) {
-                    mStateStart = mStateEnd = null;
                     onStateAnimationFinished();
                 }
             }
@@ -411,7 +424,7 @@ public class GesturesController extends GesturesAdapter {
 
         void startAnimation() {
             mHandler.removeCallbacks(this);
-            mHandler.post(this);
+            mHandler.postDelayed(this, 10);
         }
 
     }

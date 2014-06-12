@@ -10,6 +10,7 @@ public class StateController {
     private final Settings mSettings;
 
     // Temporary objects
+    private final State mTmpState = new State();
     private final Matrix mMatrix = new Matrix();
     private final RectF mRectF = new RectF();
     private final float[] mPointF = new float[2];
@@ -39,7 +40,7 @@ public class StateController {
         if (mIsResetRequired) {
             // We can correctly reset state only when we have both view size and viewport size
             // but there can be a delay before we have all values properly set
-            // (waiting for layout, waiting for image to be loaded)
+            // (waiting for layout or waiting for image to be loaded)
             boolean updated = adjustZoomLevels();
             applyInitialState(state);
             mIsResetRequired = !updated;
@@ -52,63 +53,6 @@ public class StateController {
         state.set(0f, 0f, mMinZoom, 0f);
         Rect pos = getPositionWithGravity(state);
         state.translateTo(pos.left, pos.top);
-    }
-
-    public void translateByWithResilience(State state, float dx, float dy) {
-        float fixedX = dx;
-        float fixedY = dy;
-
-        if (mSettings.isRestrictBounds()) {
-            Rect bounds = getMovingBounds(state);
-            fixedX = applyTranslationResilience(state.getX(), fixedX,
-                    bounds.left, bounds.right, mSettings.getOverscrollDistanceX());
-            fixedY = applyTranslationResilience(state.getY(), fixedY,
-                    bounds.top, bounds.bottom, mSettings.getOverscrollDistanceX());
-        }
-
-        state.translateBy(fixedX, fixedY);
-        restrictStateBounds(state, 0f, 0f, true, true);
-    }
-
-    private float applyTranslationResilience(float value, float delta,
-                                             float boundsMin, float boundsMax, float overscroll) {
-        if (overscroll == 0) {
-            return delta;
-        } else if (value < boundsMin && delta < 0) {
-            float resilience = (boundsMin - value) / overscroll;
-            return delta * (1f - resilience) / 2;
-        } else if (value > boundsMax && delta > 0) {
-            float resilience = (value - boundsMax) / overscroll;
-            return delta * (1f - resilience) / 2;
-        } else {
-            return delta;
-        }
-    }
-
-    /**
-     * Correctly applying zoom factor to state object
-     */
-    public void zoomByWithResilience(State state, float factor, float pivotX, float pivotY) {
-        float fixedFactor = factor;
-
-        if (mSettings.isRestrictBounds()) {
-            // adding overzoom viscosity
-            float zoom = state.getZoom();
-            float overZoomFactor = mSettings.getOverzoomFactor();
-            float minZoom = mMinZoom / overZoomFactor;
-            float maxZoom = mMaxZoom * overZoomFactor;
-
-            if (zoom < mMinZoom && fixedFactor < 1) {
-                float resilience = (mMinZoom - zoom) / (mMinZoom - minZoom);
-                fixedFactor += resilience * (1f - fixedFactor);
-            } else if (zoom > mMaxZoom && fixedFactor > 1) {
-                float resilience = (zoom - mMaxZoom) / (maxZoom - mMaxZoom);
-                fixedFactor += resilience * (1f - fixedFactor);
-            }
-        }
-
-        state.zoomBy(fixedFactor, pivotX, pivotY);
-        restrictStateBounds(state, pivotX, pivotY, true, true);
     }
 
     /**
@@ -126,19 +70,10 @@ public class StateController {
     }
 
     /**
-     * Restricts state's translation and zoom bounds.
+     * Restricts state's translation and zoom bounds, disallowing overscroll / overzoom.
      */
-    public void restrictStateBounds(State state) {
-        if (!mSettings.isRestrictBounds()) return;
-        restrictStateBounds(state, 0f, 0f, false, false);
-    }
-
-    /**
-     * Restricts state's translation and zoom bounds.
-     */
-    public void restrictStateBounds(State state, float pivotX, float pivotY) {
-        if (!mSettings.isRestrictBounds()) return;
-        restrictStateBounds(state, pivotX, pivotY, false, false);
+    public boolean restrictStateBounds(State state) {
+        return restrictStateBounds(state, null, 0f, 0f, false, false);
     }
 
     /**
@@ -148,20 +83,19 @@ public class StateController {
      */
     public State restrictStateBoundsCopy(State state, float pivotX, float pivotY,
                                          boolean allowOverscroll, boolean allowOverzoom) {
-
-        if (!mSettings.isRestrictBounds()) return null;
-
-        State out = state.copy();
-        boolean changed = restrictStateBounds(out, pivotX, pivotY, allowOverscroll, allowOverzoom);
-        return changed ? out : null;
+        mTmpState.set(state);
+        boolean changed = restrictStateBounds(mTmpState, null, pivotX, pivotY, allowOverscroll, allowOverzoom);
+        return changed ? mTmpState.copy() : null;
     }
 
     /**
-     * Restricts state's translation and zoom bounds.
+     * Restricts state's translation and zoom bounds. If {@code prevState} is not null and
+     * {@code allowOverscroll (allowOverzoom)} parameter is true than resilience will be applied to translation (zoom)
+     * changes.
      *
      * @return true if state was changed, false otherwise
      */
-    public boolean restrictStateBounds(State state, float pivotX, float pivotY,
+    public boolean restrictStateBounds(State state, State prevState, float pivotX, float pivotY,
                                        boolean allowOverscroll, boolean allowOverzoom) {
 
         if (!mSettings.isRestrictBounds()) return false;
@@ -169,8 +103,15 @@ public class StateController {
         boolean isStateChanged = false;
 
         float overzoom = allowOverzoom ? mSettings.getOverzoomFactor() : 1f;
+
         float zoom = restrict(state.getZoom(), mMinZoom / overzoom, mMaxZoom * overzoom);
-        if (zoom != state.getZoom()) {
+
+        // Applying elastic overzoom
+        if (prevState != null) {
+            zoom = applyZoomResilience(zoom, prevState.getZoom(), overzoom);
+        }
+
+        if (!State.equals(zoom, state.getZoom())) {
             state.zoomTo(zoom, pivotX, pivotY);
             isStateChanged = true;
         }
@@ -178,16 +119,75 @@ public class StateController {
         Rect bounds = getMovingBounds(state);
         float overscrollX = allowOverscroll ? mSettings.getOverscrollDistanceX() : 0f;
         float overscrollY = allowOverscroll ? mSettings.getOverscrollDistanceY() : 0f;
+
+        if (zoom < mMinZoom) {
+            float minZoom = mMinZoom / overzoom;
+            float factor = (zoom - minZoom) / (mMinZoom - minZoom);
+            factor *= factor;
+            overscrollX *= factor;
+            overscrollY *= factor;
+        }
+
         float x = restrict(state.getX(), bounds.left - overscrollX, bounds.right + overscrollX);
         float y = restrict(state.getY(), bounds.top - overscrollY, bounds.bottom + overscrollY);
 
-        if (x != state.getX() || y != state.getY()) {
+        if (prevState != null) {
+            x = applyTranslationResilience(x, prevState.getX(), bounds.left, bounds.right, overscrollX);
+            y = applyTranslationResilience(y, prevState.getY(), bounds.top, bounds.bottom, overscrollY);
+        }
+
+        if (!State.equals(x, state.getX()) || !State.equals(y, state.getY())) {
             state.translateTo(x, y);
             isStateChanged = true;
         }
 
         return isStateChanged;
     }
+
+    private float applyZoomResilience(float zoom, float prevZoom, float overzoom) {
+        if (overzoom == 1f) return zoom;
+
+        float minZoom = mMinZoom / overzoom;
+        float maxZoom = mMaxZoom * overzoom;
+
+        float resilience = 0f;
+
+        if (zoom < mMinZoom/* && zoom < prevZoom*/) {
+            resilience = (mMinZoom - zoom) / (mMinZoom - minZoom);
+        } else if (zoom > mMaxZoom/* && zoom > prevZoom*/) {
+            resilience = (zoom - mMaxZoom) / (maxZoom - mMaxZoom);
+        }
+
+        if (resilience == 0f) {
+            return zoom;
+        } else {
+            float factor = zoom / prevZoom;
+            factor += (float) Math.sqrt(resilience) * (1f - factor);
+            return prevZoom * factor;
+        }
+    }
+
+    private float applyTranslationResilience(float value, float prevValue,
+                                             float boundsMin, float boundsMax, float overscroll) {
+        if (overscroll == 0) return value;
+
+        float resilience = 0f;
+
+        if (value < boundsMin && value < prevValue) {
+            resilience = (boundsMin - value) / overscroll;
+        } else if (value > boundsMax && value > prevValue) {
+            resilience = (value - boundsMax) / overscroll;
+        }
+
+        if (resilience == 0f) {
+            return value;
+        } else {
+            float delta = value - prevValue;
+            delta *= (1f - (float) Math.sqrt(resilience));
+            return prevValue + delta;
+        }
+    }
+
 
     /**
      * Calculating bounds for {@link State#x} & {@link State#y} values to keep view inside viewport
@@ -223,7 +223,7 @@ public class StateController {
         }
 
         // We should also take rotation into account
-        state.applyTo(mMatrix);
+        state.get(mMatrix);
 
         mRectF.set(0, 0, mSettings.getViewW(), mSettings.getViewH());
         mMatrix.mapRect(mRectF);
@@ -232,7 +232,7 @@ public class StateController {
         mPointF[1] = 0;
         mMatrix.mapPoints(mPointF);
 
-        mMovingBounds.offset((int) (mPointF[0] - mRectF.left + 0.5f), (int) (mPointF[1] - mRectF.top + 0.5f));
+        mMovingBounds.offset(Math.round(mPointF[0] - mRectF.left), Math.round(mPointF[1] - mRectF.top));
 
         return mMovingBounds;
     }
@@ -244,7 +244,7 @@ public class StateController {
      * Do note store returned rectangle, since it will be reused next time this method is called.
      */
     private Rect getPositionWithGravity(State state) {
-        state.applyTo(mMatrix);
+        state.get(mMatrix);
         mRectF.set(0, 0, mSettings.getViewW(), mSettings.getViewH());
         mMatrix.mapRect(mRectF);
         final int w = (int) (mRectF.width() + 0.5);
@@ -255,17 +255,6 @@ public class StateController {
         Gravity.apply(mSettings.getGravity(), w, h, mRectContainer, mRectOut);
 
         return mRectOut;
-    }
-
-    /**
-     * Interpolates from start state to end state by given factor (from 0 to 1), storing result into out state.
-     */
-    public void interpolate(State out, State start, State end, float factor) {
-        float x = interpolate(start.getX(), end.getX(), factor);
-        float y = interpolate(start.getY(), end.getY(), factor);
-        float zoom = interpolate(start.getZoom(), end.getZoom(), factor);
-        float rotation = interpolate(start.getRotation(), end.getRotation(), factor);
-        out.set(x, y, zoom, rotation);
     }
 
     /**
@@ -318,6 +307,17 @@ public class StateController {
 
     public static float restrict(float value, float minValue, float maxValue) {
         return Math.max(minValue, Math.min(value, maxValue));
+    }
+
+    /**
+     * Interpolates from start state to end state by given factor (from 0 to 1), storing result into out state.
+     */
+    public static void interpolate(State out, State start, State end, float factor) {
+        float x = interpolate(start.getX(), end.getX(), factor);
+        float y = interpolate(start.getY(), end.getY(), factor);
+        float zoom = interpolate(start.getZoom(), end.getZoom(), factor);
+        float rotation = interpolate(start.getRotation(), end.getRotation(), factor);
+        out.set(x, y, zoom, rotation);
     }
 
     private static float interpolate(float start, float end, float factor) {

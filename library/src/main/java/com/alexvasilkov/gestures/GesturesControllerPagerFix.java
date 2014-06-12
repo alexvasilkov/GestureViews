@@ -74,6 +74,11 @@ public class GesturesControllerPagerFix extends GesturesController {
         }
     }
 
+    @Override
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        return mViewPagerX == 0 && super.onFling(e1, e2, velocityX, velocityY);
+    }
+
     private void beginFakeDrag() {
         if (mIsFakeDragInProgress) return;
 
@@ -232,7 +237,7 @@ public class GesturesControllerPagerFix extends GesturesController {
         }
 
         if (mIsScrollingViewPager) {
-            int x = (int) (dPagerX + 0.5f);
+            int x = Math.round(dPagerX);
             int actualX = performFakeDrag(x);
             mViewPagerX += actualX;
             dViewX += x - actualX;
