@@ -7,7 +7,7 @@ import android.graphics.Matrix;
  */
 public class State {
 
-    private static final float COMPARISON_EPSILON = 0.0001f;
+    public static final float COMPARISON_EPSILON = 0.0001f;
 
     private final Matrix matrix = new Matrix();
     private final float[] tmp = new float[9];

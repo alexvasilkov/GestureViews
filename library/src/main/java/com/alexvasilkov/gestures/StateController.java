@@ -49,6 +49,14 @@ public class StateController {
         }
     }
 
+    public float getMinZoom() {
+        return mMinZoom;
+    }
+
+    public float getMaxZoom() {
+        return mMaxZoom;
+    }
+
     private void applyInitialState(State state) {
         state.set(0f, 0f, mMinZoom, 0f);
         Rect pos = getPositionWithGravity(state);
@@ -91,7 +99,7 @@ public class StateController {
     /**
      * Restricts state's translation and zoom bounds. If {@code prevState} is not null and
      * {@code allowOverscroll (allowOverzoom)} parameter is true than resilience will be applied to translation (zoom)
-     * changes.
+     * changes if they are out of bounds.
      *
      * @return true if state was changed, false otherwise
      */
@@ -121,6 +129,7 @@ public class StateController {
         float overscrollY = allowOverscroll ? mSettings.getOverscrollDistanceY() : 0f;
 
         if (zoom < mMinZoom) {
+            // Decreasing overscroll if zooming less than minimum zoom
             float minZoom = mMinZoom / overzoom;
             float factor = (zoom - minZoom) / (mMinZoom - minZoom);
             factor *= factor;

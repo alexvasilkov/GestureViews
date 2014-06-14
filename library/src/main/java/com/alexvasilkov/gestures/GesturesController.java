@@ -213,7 +213,7 @@ public class GesturesController extends GesturesAdapter {
     protected void onUp(MotionEvent e) {
         if (mIsFlingDetected || mIsDoubleTapDetected) return;
 
-        State endState = mStateController.restrictStateBoundsCopy(mState, e.getX(), e.getY(), false, false);
+        State endState = mStateController.restrictStateBoundsCopy(mState, mPivotX, mPivotY, false, false);
         animateStateTo(endState);
     }
 
@@ -345,8 +345,6 @@ public class GesturesController extends GesturesAdapter {
         // Scroll can still be in place, so we should preserver overscroll
         State endState = mStateController.restrictStateBoundsCopy(mState, mPivotX, mPivotY, true, false);
         animateStateTo(endState);
-
-        mPivotX = mPivotY = 0f;
     }
 
     @Override
@@ -405,11 +403,10 @@ public class GesturesController extends GesturesAdapter {
             }
 
             if (!mStateScroller.isFinished()) {
-                if (mStateScroller.computeScroll()) {
-                    float factor = mStateScroller.getCurr();
-                    StateController.interpolate(mState, mStateStart, mStateEnd, factor);
-                    needsInvalidate = true;
-                }
+                mStateScroller.computeScroll();
+                float factor = mStateScroller.getCurr();
+                StateController.interpolate(mState, mStateStart, mStateEnd, factor);
+                needsInvalidate = true;
 
                 if (mStateScroller.isFinished()) {
                     onStateAnimationFinished();
