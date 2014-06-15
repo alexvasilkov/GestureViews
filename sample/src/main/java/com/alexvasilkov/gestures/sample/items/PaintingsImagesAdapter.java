@@ -30,7 +30,7 @@ public class PaintingsImagesAdapter extends PagerAdapter {
         GestureImageView gImageView = new GestureImageView(context);
         container.addView(gImageView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         gImageView.fixViewPagerScroll(mViewPager);
-        gImageView.getController().getSettings().setOverscrollDistance(context, 40, 0);
+        gImageView.getController().getSettings().setOverscrollDistance(context, 32, 0);
 
         Picasso.with(context).load(mPaintings[position].getImageId()).into(gImageView);
 

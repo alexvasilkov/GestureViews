@@ -128,17 +128,21 @@ public class StateController {
         float overscrollX = allowOverscroll ? mSettings.getOverscrollDistanceX() : 0f;
         float overscrollY = allowOverscroll ? mSettings.getOverscrollDistanceY() : 0f;
 
+        float x = restrict(state.getX(), bounds.left - overscrollX, bounds.right + overscrollX);
+        float y = restrict(state.getY(), bounds.top - overscrollY, bounds.bottom + overscrollY);
+
         if (zoom < mMinZoom) {
             // Decreasing overscroll if zooming less than minimum zoom
             float minZoom = mMinZoom / overzoom;
             float factor = (zoom - minZoom) / (mMinZoom - minZoom);
-            factor *= factor;
-            overscrollX *= factor;
-            overscrollY *= factor;
-        }
+            factor = (float) Math.sqrt(factor);
 
-        float x = restrict(state.getX(), bounds.left - overscrollX, bounds.right + overscrollX);
-        float y = restrict(state.getY(), bounds.top - overscrollY, bounds.bottom + overscrollY);
+            float strictX = restrict(x, bounds.left, bounds.right);
+            float strictY = restrict(y, bounds.top, bounds.bottom);
+
+            x = strictX + factor * (x - strictX);
+            y = strictY + factor * (y - strictY);
+        }
 
         if (prevState != null) {
             x = applyTranslationResilience(x, prevState.getX(), bounds.left, bounds.right, overscrollX);
@@ -161,9 +165,9 @@ public class StateController {
 
         float resilience = 0f;
 
-        if (zoom < mMinZoom/* && zoom < prevZoom*/) {
+        if (zoom < mMinZoom && zoom < prevZoom) {
             resilience = (mMinZoom - zoom) / (mMinZoom - minZoom);
-        } else if (zoom > mMaxZoom/* && zoom > prevZoom*/) {
+        } else if (zoom > mMaxZoom && zoom > prevZoom) {
             resilience = (zoom - mMaxZoom) / (maxZoom - mMaxZoom);
         }
 
@@ -182,15 +186,18 @@ public class StateController {
 
         float resilience = 0f;
 
-        if (value < boundsMin && value < prevValue) {
-            resilience = (boundsMin - value) / overscroll;
-        } else if (value > boundsMax && value > prevValue) {
-            resilience = (value - boundsMax) / overscroll;
+        float avg = (value + prevValue) * 0.5f;
+
+        if (avg < boundsMin && value < prevValue) {
+            resilience = (boundsMin - avg) / overscroll;
+        } else if (avg > boundsMax && value > prevValue) {
+            resilience = (avg - boundsMax) / overscroll;
         }
 
         if (resilience == 0f) {
             return value;
         } else {
+            if (resilience > 1f) resilience = 1f;
             float delta = value - prevValue;
             delta *= (1f - (float) Math.sqrt(resilience));
             return prevValue + delta;

@@ -8,6 +8,7 @@ import android.util.TypedValue;
 import android.view.*;
 import android.widget.OverScroller;
 import com.alexvasilkov.gestures.detectors.RotateGestureDetector;
+import com.alexvasilkov.gestures.detectors.ScaleGestureDetectorFixed;
 
 /**
  * Main logic to update view state ({@link State}) basing on screen touches.
@@ -65,8 +66,8 @@ public class GesturesController extends GesturesAdapter {
 
         mAnimationTick = new AnimationTick();
         mGestureDetector = new GestureDetector(context, this);
-        mScaleDetector = new ScaleGestureDetector(context, this);
-        warmUpScaleDetector();
+        mGestureDetector.setIsLongpressEnabled(false);
+        mScaleDetector = new ScaleGestureDetectorFixed(context, this);
         mRotateDetector = new RotateGestureDetector(context, this);
 
         mFlingScroller = new OverScroller(context);
@@ -78,22 +79,21 @@ public class GesturesController extends GesturesAdapter {
         mMaximumVelocity = configuration.getScaledMaximumFlingVelocity();
     }
 
-    /**
-     * Scale detector is a little buggy when first time scale is occurred.
-     * So we will feed it with fake motion event to warm it up.
-     */
-    private void warmUpScaleDetector() {
-        long time = System.currentTimeMillis();
-        MotionEvent event = MotionEvent.obtain(time, time, MotionEvent.ACTION_CANCEL, 0f, 0f, 0);
-        mScaleDetector.onTouchEvent(event);
-        event.recycle();
-    }
 
     /**
      * Sets listener for basic touch events. See {@link com.alexvasilkov.gestures.GesturesController.OnGestureListener}
      */
     public void setOnGesturesListener(OnGestureListener listener) {
         mGestureListener = listener;
+    }
+
+    /**
+     * Sets whether long press is enabled or not. Long press is disabled by default.
+     * <p/>
+     * See also {@link com.alexvasilkov.gestures.GesturesController.OnGestureListener#onLongPress(android.view.MotionEvent)}
+     */
+    public void setLongPressEnabled(boolean enabled) {
+        mGestureDetector.setIsLongpressEnabled(enabled);
     }
 
     /**
@@ -147,7 +147,8 @@ public class GesturesController extends GesturesAdapter {
     }
 
     /**
-     * Animates current state to provided end state
+     * Animates current state to provided end state. Note, that no state restrictions will be applied during animation,
+     * so you should ensure end state is within bounds.
      */
     public void animateStateTo(State endState) {
         if (endState == null) return;
@@ -185,7 +186,9 @@ public class GesturesController extends GesturesAdapter {
             onUp(event);
         }
 
-        mStateController.restrictStateBounds(mState, mPrevState, mPivotX, mPivotY, true, true);
+        if (mStateScroller.isFinished()) {
+            mStateController.restrictStateBounds(mState, mPrevState, mPivotX, mPivotY, true, true);
+        }
 
         if (!mState.equals(mPrevState)) {
             mPrevState.set(mState);
@@ -198,7 +201,6 @@ public class GesturesController extends GesturesAdapter {
     @Override
     public boolean onDown(MotionEvent e) {
         stopFlingAnimation();
-        stopStateAnimation();
 
         mIsDoubleTapDetected = false;
         mIsScrollDetected = false;
@@ -207,7 +209,12 @@ public class GesturesController extends GesturesAdapter {
 
         if (mGestureListener != null) mGestureListener.onDown(e);
 
-        return mSettings.isEnabled() && mStateScroller.isFinished();
+        if (mSettings.isEnabled()) {
+            stopStateAnimation();
+            return true;
+        } else {
+            return false;
+        }
     }
 
     protected void onUp(MotionEvent e) {
@@ -421,7 +428,7 @@ public class GesturesController extends GesturesAdapter {
 
         void startAnimation() {
             mHandler.removeCallbacks(this);
-            mHandler.postDelayed(this, 10);
+            mHandler.postDelayed(this, 10); // small delay is required (sometimes runnable can be called immediately)
         }
 
     }
