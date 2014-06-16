@@ -7,7 +7,7 @@ import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.*;
 import android.widget.OverScroller;
-import com.alexvasilkov.gestures.detectors.RotateGestureDetector;
+import com.alexvasilkov.gestures.detectors.RotationGestureDetector;
 import com.alexvasilkov.gestures.detectors.ScaleGestureDetectorFixed;
 
 /**
@@ -35,7 +35,7 @@ public class GesturesController extends GesturesAdapter {
     // Various gesture detectors
     private final GestureDetector mGestureDetector;
     private final ScaleGestureDetector mScaleDetector;
-    private final RotateGestureDetector mRotateDetector;
+    private final RotationGestureDetector mRotateDetector;
 
     private boolean mIsDoubleTapDetected;
     private boolean mIsScrollDetected;
@@ -68,7 +68,7 @@ public class GesturesController extends GesturesAdapter {
         mGestureDetector = new GestureDetector(context, this);
         mGestureDetector.setIsLongpressEnabled(false);
         mScaleDetector = new ScaleGestureDetectorFixed(context, this);
-        mRotateDetector = new RotateGestureDetector(context, this);
+        mRotateDetector = new RotationGestureDetector(context, this);
 
         mFlingScroller = new OverScroller(context);
         mStateScroller = new FloatScroller(context);
@@ -333,7 +333,7 @@ public class GesturesController extends GesturesAdapter {
         if (!mSettings.isEnabled() || !mStateScroller.isFinished()) return true;
 
         if (detector.getCurrentSpan() > mZoomGestureMinSpan) {
-            // When scale is end (in onScaleEnd method),
+            // When scale is end (in onRotationEnd method),
             // scale detector will return wrong focus point, so we should save it here
             mPivotX = detector.getFocusX();
             mPivotY = detector.getFocusY();
@@ -355,15 +355,15 @@ public class GesturesController extends GesturesAdapter {
     }
 
     @Override
-    public boolean onRotateBegin(RotateGestureDetector detector) {
+    public boolean onRotationBegin(RotationGestureDetector detector) {
         return mSettings.isEnabled() && mSettings.isRotationEnabled();
     }
 
     @Override
-    public boolean onRotate(RotateGestureDetector detector) {
+    public boolean onRotate(RotationGestureDetector detector) {
         if (!mSettings.isEnabled() || !mStateScroller.isFinished()) return true;
 
-        mState.rotateBy(detector.getRotationDegreesDelta(), detector.getFocusX(), detector.getFocusY());
+        mState.rotateBy(detector.getRotationDelta(), detector.getFocusX(), detector.getFocusY());
 
         return true;
     }

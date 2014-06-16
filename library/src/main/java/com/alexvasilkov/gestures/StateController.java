@@ -41,7 +41,7 @@ public class StateController {
             // We can correctly reset state only when we have both view size and viewport size
             // but there can be a delay before we have all values properly set
             // (waiting for layout or waiting for image to be loaded)
-            boolean updated = adjustZoomLevels();
+            boolean updated = adjustZoomLevels(state);
             applyInitialState(state);
             mIsResetRequired = !updated;
         } else {
@@ -107,6 +107,11 @@ public class StateController {
                                        boolean allowOverscroll, boolean allowOverzoom) {
 
         if (!mSettings.isRestrictBounds()) return false;
+
+        if (prevState != null && !State.equals(state.getZoom(), prevState.getZoom())) {
+            // Rotation will change view bounds, so we should adjust zoom levels
+            adjustZoomLevels(state);
+        }
 
         boolean isStateChanged = false;
 
@@ -263,8 +268,8 @@ public class StateController {
         state.get(mMatrix);
         mRectF.set(0, 0, mSettings.getViewW(), mSettings.getViewH());
         mMatrix.mapRect(mRectF);
-        final int w = (int) (mRectF.width() + 0.5);
-        final int h = (int) (mRectF.height() + 0.5);
+        final int w = Math.round(mRectF.width());
+        final int h = Math.round(mRectF.height());
 
         // Calculating view position basing on gravity
         mRectContainer.set(0, 0, mSettings.getViewportW(), mSettings.getViewportH());
@@ -278,10 +283,16 @@ public class StateController {
      *
      * @return true if zoom levels was correctly updated (viewport and view size are known), false otherwise
      */
-    private boolean adjustZoomLevels() {
+    private boolean adjustZoomLevels(State state) {
         mMaxZoom = mSettings.getMaxZoom();
 
-        final float w = mSettings.getViewW(), h = mSettings.getViewH();
+        // Computing bounds taking rotation into account
+        mMatrix.reset();
+        mMatrix.postRotate(state.getRotation());
+        mRectF.set(0, 0, mSettings.getViewW(), mSettings.getViewH());
+        mMatrix.mapRect(mRectF);
+
+        final float w = mRectF.width(), h = mRectF.height();
         final float vpW = mSettings.getViewportW(), vpH = mSettings.getViewportH();
         boolean isCorrectSize = w != 0 && h != 0 && vpW != 0 && vpH != 0;
 

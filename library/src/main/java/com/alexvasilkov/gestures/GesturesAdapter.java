@@ -4,14 +4,14 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
-import com.alexvasilkov.gestures.detectors.RotateGestureDetector;
+import com.alexvasilkov.gestures.detectors.RotationGestureDetector;
 
 /**
  * Simple implementation of several gestures related listeners
  */
 public class GesturesAdapter implements View.OnTouchListener,
         GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener,
-        ScaleGestureDetector.OnScaleGestureListener, RotateGestureDetector.OnRotateGestureListener {
+        ScaleGestureDetector.OnScaleGestureListener, RotationGestureDetector.OnRotationGestureListener {
 
     @Override
     public boolean onTouch(View view, MotionEvent e) {
@@ -79,17 +79,17 @@ public class GesturesAdapter implements View.OnTouchListener,
     }
 
     @Override
-    public boolean onRotate(RotateGestureDetector detector) {
+    public boolean onRotate(RotationGestureDetector detector) {
         return false;
     }
 
     @Override
-    public boolean onRotateBegin(RotateGestureDetector detector) {
+    public boolean onRotationBegin(RotationGestureDetector detector) {
         return false;
     }
 
     @Override
-    public void onRotateEnd(RotateGestureDetector detector) {
+    public void onRotationEnd(RotationGestureDetector detector) {
         // no-op
     }
 
