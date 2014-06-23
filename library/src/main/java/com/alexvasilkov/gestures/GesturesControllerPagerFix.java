@@ -7,6 +7,7 @@ import android.support.v4.view.ViewPager;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
+import com.alexvasilkov.gestures.utils.SmoothViewPagerScroller;
 
 /**
  * Allows cross movement between view controlled by this {@link GesturesController}
@@ -44,6 +45,7 @@ public class GesturesControllerPagerFix extends GesturesController {
     private final int mTouchSlop;
 
     private ViewPager mViewPager;
+    private SmoothViewPagerScroller mViewPagerScroller;
 
     private MotionEvent mTmpEvent;
     private boolean mIsScrollGestureDetected;
@@ -64,11 +66,38 @@ public class GesturesControllerPagerFix extends GesturesController {
         mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
     }
 
+    /**
+     * Simply calls {@link #fixViewPagerScroll(android.support.v4.view.ViewPager, boolean) fixViewPagerScroll(pager, true)}
+     */
     public void fixViewPagerScroll(ViewPager pager) {
+        fixViewPagerScroll(pager, true);
+    }
+
+    /**
+     * Sets parent ViewPager to enable smooth cross movement between ViewPager and it's child view.
+     * <p/>
+     * Note: once this method is called with {@code allowSmoothScroll} parameter set to true there will be no way back,
+     * provided ViewPager will use custom scroller forever.
+     *
+     * @param allowSmoothScroll Whether to allow custom scroller to be applied to ViewPager for smoother animation
+     */
+    public void fixViewPagerScroll(ViewPager pager, boolean allowSmoothScroll) {
         mViewPager = pager;
-        mViewPager.setOnTouchListener(PAGER_TOUCH_LISTENER);
+        pager.setOnTouchListener(PAGER_TOUCH_LISTENER);
+
+        // Disabling motion event splitting
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            mViewPager.setMotionEventSplittingEnabled(false);
+            pager.setMotionEventSplittingEnabled(false);
+        }
+
+        // Initializing viewpager helper
+        Object helper = pager.getTag(R.id.gv_view_pager_scroller);
+        if (helper instanceof SmoothViewPagerScroller) {
+            mViewPagerScroller = (SmoothViewPagerScroller) helper;
+        } else if (allowSmoothScroll) {
+            int duration = pager.getResources().getInteger(R.integer.gv_animation_duration);
+            mViewPagerScroller = SmoothViewPagerScroller.applySmoothScroller(mViewPager, duration);
+            pager.setTag(R.id.gv_view_pager_scroller, mViewPagerScroller);
         }
     }
 
@@ -277,8 +306,6 @@ public class GesturesControllerPagerFix extends GesturesController {
         MotionEvent fixedEvent = obtainOnePointerEvent(e);
         fixedEvent.setLocation(mLastViewPagerEventX, mLastViewPagerEventY);
 
-        // Note: end event should always pass to onTouchEvent method for viewpager to correctly settling
-
         if (mIsViewPagerInterceptedScroll) {
             mViewPager.onTouchEvent(fixedEvent);
         } else {
@@ -290,8 +317,10 @@ public class GesturesControllerPagerFix extends GesturesController {
 
         if (isEndEvent && !mIsViewPagerInterceptedScroll) {
             // If viewpager is not settled we should force it to do so, fake drag will help here
+            mViewPagerScroller.setFixedDuration(true);
             mViewPager.beginFakeDrag();
             mViewPager.endFakeDrag();
+            mViewPagerScroller.setFixedDuration(false);
         }
 
         fixedEvent.recycle();

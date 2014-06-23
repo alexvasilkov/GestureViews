@@ -1,9 +1,10 @@
-package com.alexvasilkov.gestures;
+package com.alexvasilkov.gestures.utils;
 
 import android.content.Context;
 import android.os.SystemClock;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
+import com.alexvasilkov.gestures.R;
 
 /**
  * A simple class that animates float values. Functionally similar to a {@link android.widget.Scroller}.
@@ -29,7 +30,7 @@ public class FloatScroller {
 
     public FloatScroller(Context context) {
         mInterpolator = new DecelerateInterpolator();
-        mAnimationDuration = context.getResources().getInteger(R.integer.animation_duration);
+        mAnimationDuration = context.getResources().getInteger(R.integer.gv_animation_duration);
     }
 
     /**

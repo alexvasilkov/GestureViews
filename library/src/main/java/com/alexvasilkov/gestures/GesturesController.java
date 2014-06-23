@@ -9,6 +9,7 @@ import android.view.*;
 import android.widget.OverScroller;
 import com.alexvasilkov.gestures.detectors.RotationGestureDetector;
 import com.alexvasilkov.gestures.detectors.ScaleGestureDetectorFixed;
+import com.alexvasilkov.gestures.utils.FloatScroller;
 
 /**
  * Main logic to update view state ({@link State}) basing on screen touches.
