@@ -38,9 +38,21 @@ public class GestureImageView extends ImageView implements GesturesController.On
     /**
      * Makes scrolling between different {@link GestureImageView}
      * within given {@link android.support.v4.view.ViewPager} smoother.
+     *
+     * @see com.alexvasilkov.gestures.GesturesControllerPagerFix#fixViewPagerScroll(android.support.v4.view.ViewPager)
      */
     public void fixViewPagerScroll(ViewPager pager) {
         mController.fixViewPagerScroll(pager);
+    }
+
+    /**
+     * Makes scrolling between different {@link GestureImageView}
+     * within given {@link android.support.v4.view.ViewPager} smoother.
+     *
+     * @see com.alexvasilkov.gestures.GesturesControllerPagerFix#fixViewPagerScroll(android.support.v4.view.ViewPager, boolean)
+     */
+    public void fixViewPagerScroll(ViewPager pager, boolean allowSmoothScroll) {
+        mController.fixViewPagerScroll(pager, allowSmoothScroll);
     }
 
     /**
