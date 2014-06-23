@@ -9,10 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.alexvasilkov.fluffycommons.texts.SpannableBuilder;
-import com.alexvasilkov.fluffycommons.utils.UsefulIntents;
-import com.alexvasilkov.fluffycommons.utils.Views;
+import com.alexvasilkov.android.commons.texts.SpannableBuilder;
+import com.alexvasilkov.android.commons.utils.Intents;
+import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.gestures.sample.R;
+import com.alexvasilkov.gestures.sample.utils.PicassoHelper;
 import com.alexvasilkov.gestures.widgets.GestureLayout;
 
 public class PaintingsLayoutsAdapter extends PagerAdapter implements View.OnClickListener {
@@ -40,7 +41,7 @@ public class PaintingsLayoutsAdapter extends PagerAdapter implements View.OnClic
         gLayout.fixViewPagerScroll(mViewPager);
 
         ImageView image = Views.find(layout, R.id.painting_image);
-        image.setImageResource(mPaintings[position].getImageId());
+        PicassoHelper.get(context).load(mPaintings[position].getImageId()).into(image);
 
         TextView title = Views.find(layout, R.id.painting_title);
         CharSequence titleText = new SpannableBuilder(context)
@@ -70,7 +71,7 @@ public class PaintingsLayoutsAdapter extends PagerAdapter implements View.OnClic
 
     @Override
     public void onClick(View view) {
-        UsefulIntents.get(view.getContext()).openWebBrowser((String) view.getTag());
+        Intents.get(view.getContext()).openWebBrowser((String) view.getTag());
     }
 
 }

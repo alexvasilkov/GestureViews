@@ -2,7 +2,7 @@ package com.alexvasilkov.gestures.sample.activities;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import com.alexvasilkov.fluffycommons.utils.Views;
+import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.items.Painting;
 import com.alexvasilkov.gestures.sample.items.PaintingsLayoutsAdapter;

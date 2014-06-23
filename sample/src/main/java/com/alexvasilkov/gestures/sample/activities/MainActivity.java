@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import com.alexvasilkov.fluffycommons.adapters.ItemsAdapter;
+import com.alexvasilkov.android.commons.adapters.ItemsAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

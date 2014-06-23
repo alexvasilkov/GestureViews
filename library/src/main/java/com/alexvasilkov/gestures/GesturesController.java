@@ -183,7 +183,7 @@ public class GesturesController extends GesturesAdapter {
         result |= mRotateDetector.onTouchEvent(event);
 
         if (event.getActionMasked() == MotionEvent.ACTION_UP || event.getActionMasked() == MotionEvent.ACTION_CANCEL) {
-            onUp(event);
+            onUpOrCancel(event);
         }
 
         if (mStateScroller.isFinished()) {
@@ -217,7 +217,7 @@ public class GesturesController extends GesturesAdapter {
         }
     }
 
-    protected void onUp(MotionEvent e) {
+    protected void onUpOrCancel(MotionEvent e) {
         if (mIsFlingDetected || mIsDoubleTapDetected) return;
 
         State endState = mStateController.restrictStateBoundsCopy(mState, mPivotX, mPivotY, false, false);
