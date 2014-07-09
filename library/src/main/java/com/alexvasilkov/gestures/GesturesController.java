@@ -154,6 +154,11 @@ public class GesturesController extends GesturesAdapter {
     public void animateStateTo(State endState) {
         if (endState == null) return;
 
+        // Ensuring we always starts in correct state
+        if (mStateScroller.isFinished()) {
+            mStateController.restrictStateBounds(mState, mPrevState, mPivotX, mPivotY, true, true);
+        }
+
         stopFlingAnimation();
         stopStateAnimation();
 

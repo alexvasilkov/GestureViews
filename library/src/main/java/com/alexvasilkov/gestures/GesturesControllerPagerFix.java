@@ -5,8 +5,10 @@ import android.graphics.Rect;
 import android.os.Build;
 import android.support.v4.view.ViewPager;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.ViewConfiguration;
+import com.alexvasilkov.gestures.detectors.RotationGestureDetector;
 import com.alexvasilkov.gestures.utils.SmoothViewPagerScroller;
 
 /**
@@ -34,9 +36,13 @@ public class GesturesControllerPagerFix extends GesturesController {
                 view.dispatchTouchEvent(e);
                 mIsTouchInProgress = false;
                 return true;
-            } else {
-                return false;
             }
+
+            // User can touch outside of child view, so we will not have a chance to settle view pager,
+            // if so, this listener should be called and we can settle viewpager manually here
+            settleViewPagerIfFinished((ViewPager) view, e);
+
+            return false;
         }
     };
 
@@ -45,7 +51,6 @@ public class GesturesControllerPagerFix extends GesturesController {
     private final int mTouchSlop;
 
     private ViewPager mViewPager;
-    private SmoothViewPagerScroller mViewPagerScroller;
 
     private MotionEvent mTmpEvent;
     private boolean mIsScrollGestureDetected;
@@ -56,9 +61,6 @@ public class GesturesControllerPagerFix extends GesturesController {
     private boolean mIsViewPagerInterceptedScroll;
     private boolean mIsAllowViewPagerScrollY;
     private float mLastViewPagerEventX, mLastViewPagerEventY;
-    private float mLastEventX, mLastEventY;
-
-    private boolean mIsSkipNonPrimaryPointers;
 
     public GesturesControllerPagerFix(Context context, OnStateChangedListener listener) {
         super(context, listener);
@@ -90,14 +92,9 @@ public class GesturesControllerPagerFix extends GesturesController {
             pager.setMotionEventSplittingEnabled(false);
         }
 
-        // Initializing viewpager helper
-        Object helper = pager.getTag(R.id.gv_view_pager_scroller);
-        if (helper instanceof SmoothViewPagerScroller) {
-            mViewPagerScroller = (SmoothViewPagerScroller) helper;
-        } else if (allowSmoothScroll) {
+        if (allowSmoothScroll) {
             int duration = pager.getResources().getInteger(R.integer.gv_animation_duration);
-            mViewPagerScroller = SmoothViewPagerScroller.applySmoothScroller(mViewPager, duration);
-            pager.setTag(R.id.gv_view_pager_scroller, mViewPagerScroller);
+            initSmoothScroller(pager, duration);
         }
     }
 
@@ -125,46 +122,24 @@ public class GesturesControllerPagerFix extends GesturesController {
 
                 mViewPagerX = computeInitialViewPagerX(view, event);
                 mIsScrollingViewPager = mViewPagerX != 0;
+
+                mLastViewPagerEventX = event.getX();
+                mLastViewPagerEventY = event.getY();
                 break;
 
             case MotionEvent.ACTION_POINTER_DOWN:
                 if (event.getPointerCount() == 2) { // on first non-primary pointer
-                    // Skipping non-primary pointers if we're already dragging view pager
-                    // to skip scale/rotation gestures
-                    mIsSkipNonPrimaryPointers = mViewPagerX != 0;
                     // Skipping view pager fake dragging if we're not started dragging yet
                     // to allow scale/rotation gestures
                     mIsSkipViewPager = mViewPagerX == 0;
                 }
-
-                // Fixing event location in case active pointer was changed
-                mLastViewPagerEventX += mLastEventX - event.getX();
-                mLastViewPagerEventY += mLastEventY - event.getY();
-                break;
-
-            case MotionEvent.ACTION_POINTER_UP:
-                if (event.getPointerCount() == 2) { // only primary pointer left
-                    mIsSkipNonPrimaryPointers = false;
-                }
-
-                // Fixing event location in case active pointer was changed
-                mLastViewPagerEventX += mLastEventX - event.getX();
-                mLastViewPagerEventY += mLastEventY - event.getY();
                 break;
         }
 
-        mLastEventX = event.getX();
-        mLastEventY = event.getY();
+        if (mIsSkipViewPager) return event; // No event adjustments are needed
 
-        if (mIsSkipViewPager) return event; // No event adjusting is needed
-
-        boolean isNonPrimaryPointerEvent = event.getActionMasked() == MotionEvent.ACTION_POINTER_DOWN
-                || event.getActionMasked() == MotionEvent.ACTION_POINTER_UP;
-
-        if (mIsSkipNonPrimaryPointers && isNonPrimaryPointerEvent) return null; // No event should be passed further
-
-        mTmpEvent = mIsSkipNonPrimaryPointers ? obtainOnePointerEvent(event) : MotionEvent.obtain(event);
         // Applying offset to the returned event, offset will be calculated in scrollBy method below
+        mTmpEvent = MotionEvent.obtain(event);
         mTmpEvent.offsetLocation(mViewPagerX, 0f);
         return mTmpEvent;
     }
@@ -178,8 +153,6 @@ public class GesturesControllerPagerFix extends GesturesController {
 
     @Override
     public boolean onDown(MotionEvent e) {
-        mLastViewPagerEventX = e.getX();
-        mLastViewPagerEventY = e.getY();
         mIsViewPagerInterceptedScroll = false;
         mIsAllowViewPagerScrollY = true;
         mIsScrollGestureDetected = false;
@@ -215,6 +188,21 @@ public class GesturesControllerPagerFix extends GesturesController {
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
         return mViewPagerX == 0 && super.onFling(e1, e2, velocityX, velocityY);
+    }
+
+    @Override
+    public boolean onScaleBegin(ScaleGestureDetector detector) {
+        return mViewPagerX == 0 && super.onScaleBegin(detector);
+    }
+
+    @Override
+    public boolean onRotationBegin(RotationGestureDetector detector) {
+        return mViewPagerX == 0 && super.onRotationBegin(detector);
+    }
+
+    @Override
+    public boolean onDoubleTapEvent(MotionEvent e) {
+        return mViewPagerX == 0 && super.onDoubleTapEvent(e);
     }
 
     /**
@@ -273,7 +261,7 @@ public class GesturesControllerPagerFix extends GesturesController {
             mIsAllowViewPagerScrollY = viewMovingBounds.width() < mTouchSlop;
         }
 
-        boolean shouldFixViewX = mIsViewPagerInterceptedScroll;
+        boolean shouldFixViewX = mIsViewPagerInterceptedScroll && mViewPagerX == 0;
         int actualX = performViewPagerScroll(e, dPagerX, dY);
         mViewPagerX += actualX;
         // Adding back scroll not handled by viewpager
@@ -312,16 +300,9 @@ public class GesturesControllerPagerFix extends GesturesController {
             mIsViewPagerInterceptedScroll = mViewPager.onInterceptTouchEvent(fixedEvent);
         }
 
-        boolean isEndEvent = e.getActionMasked() == MotionEvent.ACTION_UP
-                || e.getActionMasked() == MotionEvent.ACTION_CANCEL;
-
-        if (isEndEvent && !mIsViewPagerInterceptedScroll) {
-            // If viewpager is not settled we should force it to do so, fake drag will help here
-            mViewPagerScroller.setFixedDuration(true);
-            mViewPager.beginFakeDrag();
-            mViewPager.endFakeDrag();
-            mViewPagerScroller.setFixedDuration(false);
-        }
+        // If view pager intercepted touch it will settle itself automatically,
+        // but if touch was not intercepted we should settle it manually
+        if (!mIsViewPagerInterceptedScroll) settleViewPagerIfFinished(mViewPager, e);
 
         fixedEvent.recycle();
     }
@@ -337,10 +318,33 @@ public class GesturesControllerPagerFix extends GesturesController {
         return scrollBegin - mViewPager.getScrollX();
     }
 
-
     private static MotionEvent obtainOnePointerEvent(MotionEvent e) {
         return MotionEvent.obtain(e.getDownTime(), e.getEventTime(), e.getAction(),
                 e.getX(), e.getY(), e.getMetaState());
+    }
+
+    private static void initSmoothScroller(ViewPager pager, int duration) {
+        Object helper = pager.getTag(R.id.gv_view_pager_scroller);
+        if (!(helper instanceof SmoothViewPagerScroller)) {
+            SmoothViewPagerScroller scroller = SmoothViewPagerScroller.applySmoothScroller(pager, duration);
+            pager.setTag(R.id.gv_view_pager_scroller, scroller);
+        }
+    }
+
+    private static SmoothViewPagerScroller getViewPagerScroller(ViewPager pager) {
+        Object helper = pager.getTag(R.id.gv_view_pager_scroller);
+        return helper instanceof SmoothViewPagerScroller ? (SmoothViewPagerScroller) helper : null;
+    }
+
+    private static void settleViewPagerIfFinished(ViewPager pager, MotionEvent e) {
+        if (e.getActionMasked() != MotionEvent.ACTION_UP && e.getActionMasked() != MotionEvent.ACTION_CANCEL) return;
+
+        SmoothViewPagerScroller scroller = getViewPagerScroller(pager);
+        // If viewpager is not settled we should force it to do so, fake drag will help here
+        if (scroller != null) scroller.setFixedDuration(true);
+        pager.beginFakeDrag();
+        if (pager.isFakeDragging()) pager.endFakeDrag();
+        if (scroller != null) scroller.setFixedDuration(false);
     }
 
 }

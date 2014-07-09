@@ -108,7 +108,7 @@ public class StateController {
 
         if (!mSettings.isRestrictBounds()) return false;
 
-        if (prevState != null && !State.equals(state.getZoom(), prevState.getZoom())) {
+        if (prevState != null && !State.equals(state.getRotation(), prevState.getRotation())) {
             // Rotation will change view bounds, so we should adjust zoom levels
             adjustZoomLevels(state);
         }
