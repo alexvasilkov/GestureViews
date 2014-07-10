@@ -242,7 +242,7 @@ public class GesturesController extends GesturesAdapter {
 
     @Override
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-        if (!mSettings.isEnabled() || !mStateScroller.isFinished()) return false;
+        if (!mSettings.isPanEnabled() || !mStateScroller.isFinished()) return false;
 
         if (!mIsScrollDetected) {
             mIsScrollDetected = Math.abs(e2.getX() - e1.getX()) > mTouchSlop
@@ -259,7 +259,7 @@ public class GesturesController extends GesturesAdapter {
 
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        if (!mSettings.isEnabled() || !mStateScroller.isFinished()) return false;
+        if (!mSettings.isPanEnabled() || !mStateScroller.isFinished()) return false;
 
         mIsFlingDetected = true;
 
@@ -317,7 +317,7 @@ public class GesturesController extends GesturesAdapter {
         // Let user redefine double tap
         if (mGestureListener != null && mGestureListener.onDoubleTap(e)) return true;
 
-        if (!mSettings.isEnabled() || !mSettings.isDoubleTapEnabled()) return false;
+        if (!mSettings.isDoubleTapEnabled()) return false;
 
         mIsDoubleTapDetected = true;
 
@@ -330,13 +330,13 @@ public class GesturesController extends GesturesAdapter {
 
     @Override
     public boolean onScaleBegin(ScaleGestureDetector detector) {
-        mIsScaleDetected = mSettings.isEnabled();
+        mIsScaleDetected = mSettings.isZoomEnabled();
         return mIsScaleDetected;
     }
 
     @Override
     public boolean onScale(ScaleGestureDetector detector) {
-        if (!mSettings.isEnabled() || !mStateScroller.isFinished()) return true;
+        if (!mSettings.isZoomEnabled() || !mStateScroller.isFinished()) return true;
 
         if (detector.getCurrentSpan() > mZoomGestureMinSpan) {
             // When scale is end (in onRotationEnd method),
@@ -353,7 +353,7 @@ public class GesturesController extends GesturesAdapter {
     public void onScaleEnd(ScaleGestureDetector detector) {
         mIsScaleDetected = false;
 
-        if (!mSettings.isEnabled()) return;
+        if (!mSettings.isZoomEnabled()) return;
 
         // Scroll can still be in place, so we should preserver overscroll
         State endState = mStateController.restrictStateBoundsCopy(mState, mPivotX, mPivotY, true, false);
@@ -362,12 +362,12 @@ public class GesturesController extends GesturesAdapter {
 
     @Override
     public boolean onRotationBegin(RotationGestureDetector detector) {
-        return mSettings.isEnabled() && mSettings.isRotationEnabled();
+        return mSettings.isRotationEnabled() && mSettings.isRotationEnabled();
     }
 
     @Override
     public boolean onRotate(RotationGestureDetector detector) {
-        if (!mSettings.isEnabled() || !mStateScroller.isFinished()) return true;
+        if (!mSettings.isRotationEnabled() || !mStateScroller.isFinished()) return true;
 
         mState.rotateBy(detector.getRotationDelta(), detector.getFocusX(), detector.getFocusY());
 

@@ -30,6 +30,10 @@
             android:name=".activities.LayoutPagerActivity"
             android:label="Custom layout" />
 
+        <activity
+            android:name=".activities.TextViewActivity"
+            android:label="Text" />
+
     </application>
 
 </manifest>

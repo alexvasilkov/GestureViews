@@ -61,19 +61,24 @@ public class Settings {
     private Fit fitMethod = Fit.INSIDE;
 
     /**
-     * Whether panning & zooming is enabled or not
+     * Whether panning is enabled or not
      */
-    private boolean isEnabled = true;
+    private boolean isPanEnabled = true;
 
     /**
-     * Whether zooming by double tap is enabled or not
+     * Whether zooming is enabled or not
      */
-    private boolean isDoubleTapEnabled = true;
+    private boolean isZoomEnabled = true;
 
     /**
      * Whether rotation gesture is enabled or not
      */
     private boolean isRotationEnabled = false;
+
+    /**
+     * Whether zooming by double tap is enabled or not
+     */
+    private boolean isDoubleTapEnabled = true;
 
     /**
      * Whether view's transformations should be kept in bounds or not
@@ -175,22 +180,22 @@ public class Settings {
     }
 
     /**
-     * Sets whether panning & zooming is enabled or not.
+     * Sets whether panning is enabled or not.
      * <p/>
      * Default value is true.
      */
-    public Settings setEnabled(boolean enabled) {
-        isEnabled = enabled;
+    public Settings setPanEnabled(boolean enabled) {
+        isPanEnabled = enabled;
         return this;
     }
 
     /**
-     * Sets whether zooming by double tap is enabled or not.
+     * Sets whether zooming is enabled or not.
      * <p/>
      * Default value is true.
      */
-    public Settings setDoubleTapEnabled(boolean enabled) {
-        isDoubleTapEnabled = enabled;
+    public Settings setZoomEnabled(boolean enabled) {
+        isZoomEnabled = enabled;
         return this;
     }
 
@@ -201,6 +206,16 @@ public class Settings {
      */
     public Settings setRotationEnabled(boolean enabled) {
         isRotationEnabled = enabled;
+        return this;
+    }
+
+    /**
+     * Sets whether zooming by double tap is enabled or not.
+     * <p/>
+     * Default value is true.
+     */
+    public Settings setDoubleTapEnabled(boolean enabled) {
+        isDoubleTapEnabled = enabled;
         return this;
     }
 
@@ -263,20 +278,31 @@ public class Settings {
         return fitMethod;
     }
 
-    public boolean isEnabled() {
-        return isEnabled;
+    public boolean isPanEnabled() {
+        return isPanEnabled;
     }
 
-    public boolean isDoubleTapEnabled() {
-        return isDoubleTapEnabled;
+    public boolean isZoomEnabled() {
+        return isZoomEnabled;
     }
 
     public boolean isRotationEnabled() {
         return isRotationEnabled;
     }
 
+    public boolean isDoubleTapEnabled() {
+        return isDoubleTapEnabled;
+    }
+
     public boolean isRestrictBounds() {
         return isRestrictBounds;
+    }
+
+    /**
+     * Whether at least one of pan, zoom, rotation or double tap are enabled or not
+     */
+    public boolean isEnabled() {
+        return isPanEnabled || isZoomEnabled || isRotationEnabled || isDoubleTapEnabled;
     }
 
 

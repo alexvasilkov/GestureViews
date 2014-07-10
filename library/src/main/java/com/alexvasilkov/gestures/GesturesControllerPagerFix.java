@@ -218,7 +218,7 @@ public class GesturesControllerPagerFix extends GesturesController {
         final Rect viewMovingBounds = getStateController().getMovingBounds(state);
 
         // Splitting x scroll between viewpager and view
-        if (getSettings().isEnabled()) {
+        if (getSettings().isPanEnabled()) {
             final float dir = Math.signum(dX);
             final float movementX = Math.abs(dX); // always >= 0, no direction info
 
