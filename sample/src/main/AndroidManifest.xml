@@ -20,19 +20,19 @@
 
         <activity
             android:name=".activities.ImagesPagerActivity"
-            android:label="View pager" />
+            android:label="GestureImageView" />
 
         <activity
             android:name=".activities.ImageRotationActivity"
-            android:label="Image rotation" />
+            android:label="GestureImageView (rotation)" />
 
         <activity
             android:name=".activities.LayoutPagerActivity"
-            android:label="Custom layout" />
+            android:label="GestureLayout" />
 
         <activity
             android:name=".activities.TextViewActivity"
-            android:label="Text" />
+            android:label="GestureTextView" />
 
     </application>
 
