@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.10.+'
+        classpath 'com.android.tools.build:gradle:0.12.+'
         classpath 'com.alexvasilkov:android-sign-release:0.3.6'
     }
 }
@@ -16,7 +16,7 @@ android {
     buildToolsVersion ANDROID_BUILD_TOOLS_VERSION
 
     defaultConfig {
-        minSdkVersion Integer.parseInt(ANDROID_MIN_SDK)
+        minSdkVersion 14
         targetSdkVersion Integer.parseInt(ANDROID_TARGET_SDK)
         versionCode Integer.parseInt(VERSION_CODE)
         versionName VERSION_NAME

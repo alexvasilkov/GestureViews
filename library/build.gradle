@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.10.+'
+        classpath 'com.android.tools.build:gradle:0.12.+'
     }
 }
 
@@ -14,7 +14,7 @@ android {
     buildToolsVersion ANDROID_BUILD_TOOLS_VERSION
 
     defaultConfig {
-        minSdkVersion Integer.parseInt(ANDROID_MIN_SDK)
+        minSdkVersion 9
         targetSdkVersion Integer.parseInt(ANDROID_TARGET_SDK)
         versionCode Integer.parseInt(VERSION_CODE)
         versionName VERSION_NAME
@@ -25,4 +25,4 @@ dependencies {
     provided 'com.android.support:support-v4:20.0.0'
 }
 
-apply from: 'https://raw.githubusercontent.com/chrisbanes/gradle-mvn-push/master/gradle-mvn-push.gradle'
+apply from: 'gradle-mvn-push.gradle'
