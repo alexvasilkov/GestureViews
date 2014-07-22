@@ -5,7 +5,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -35,21 +35,24 @@ public class MainActivity extends ListActivity {
         startActivity(intent);
     }
 
-    private BaseAdapter getSampleAdapter() {
-        List<ActivityInfo> items = new ArrayList<ActivityInfo>();
+    private List<ActivityInfo> getInfosList() {
+        List<ActivityInfo> list = new ArrayList<ActivityInfo>();
 
-        try {
-            ActivityInfo[] activitiesInfo = getPackageManager().getPackageInfo(getPackageName(),
-                    PackageManager.GET_ACTIVITIES).activities;
+        Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+        mainIntent.addCategory(Intent.CATEGORY_SAMPLE_CODE);
 
-            for (ActivityInfo info : activitiesInfo) {
-                if (!getClass().getName().equals(info.name)) items.add(info);
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+        List<ResolveInfo> resolveList = getPackageManager().queryIntentActivities(mainIntent, 0);
+        if (resolveList == null) return list;
+
+        for (ResolveInfo info : resolveList) {
+            list.add(info.activityInfo);
         }
 
-        return new SampleAdapter(this, items);
+        return list;
+    }
+
+    private BaseAdapter getSampleAdapter() {
+        return new SampleAdapter(this, getInfosList());
     }
 
     private static class SampleAdapter extends ItemsAdapter<ActivityInfo> {

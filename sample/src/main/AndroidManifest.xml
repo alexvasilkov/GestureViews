@@ -20,19 +20,43 @@
 
         <activity
             android:name=".activities.ImagesPagerActivity"
-            android:label="GestureImageView" />
+            android:label="ImageView">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
 
         <activity
-            android:name=".activities.ImageRotationActivity"
-            android:label="GestureImageView (rotation)" />
+            android:name=".activities.ImageCroppingActivity"
+            android:label="ImageView (rotate &amp; crop)">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".activities.ImageSnapshotActivity"
+            android:label="Cropped image" />
 
         <activity
             android:name=".activities.LayoutPagerActivity"
-            android:label="GestureLayout" />
+            android:label="Layout">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
 
         <activity
             android:name=".activities.TextViewActivity"
-            android:label="GestureTextView" />
+            android:label="TextView">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
 
     </application>
 

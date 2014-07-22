@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.alexvasilkov.gestures.widgets.GestureImageView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/painting_image"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+    android:layout_height="match_parent">
+
+    <com.alexvasilkov.gestures.widgets.GestureImageView
+        android:id="@+id/painting_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/image_frame_overlay" />
+</FrameLayout>

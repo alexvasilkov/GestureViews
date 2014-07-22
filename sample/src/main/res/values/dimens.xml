@@ -3,4 +3,7 @@
 
     <dimen name="view_pager_margin">12dp</dimen>
 
+    <dimen name="image_frame_width">304dp</dimen>
+    <dimen name="image_frame_height">144dp</dimen>
+
 </resources>
