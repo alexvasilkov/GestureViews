@@ -1,9 +1,9 @@
 package com.alexvasilkov.gestures;
 
 import android.graphics.Matrix;
-import android.graphics.Rect;
+import android.graphics.PointF;
 import android.graphics.RectF;
-import android.view.Gravity;
+import com.alexvasilkov.gestures.utils.MovementBounds;
 
 public class StateController {
 
@@ -13,9 +13,7 @@ public class StateController {
     private final State mTmpState = new State();
     private final Matrix mMatrix = new Matrix();
     private final RectF mRectF = new RectF();
-    private final float[] mPointF = new float[2];
-    private final Rect mRectContainer = new Rect(), mRectOut = new Rect();
-    private final Rect mMovingBounds = new Rect();
+    private final MovementBounds mMovementBounds = new MovementBounds();
 
     private boolean mIsResetRequired = true;
 
@@ -42,7 +40,10 @@ public class StateController {
             // but there can be a delay before we have all values properly set
             // (waiting for layout or waiting for image to be loaded)
             boolean updated = adjustZoomLevels(state);
-            applyInitialState(state);
+
+            state.set(0f, 0f, mMinZoom, 0f);
+            MovementBounds.setupInitialMovement(state, mSettings);
+
             mIsResetRequired = !updated;
         } else {
             restrictStateBounds(state);
@@ -55,12 +56,6 @@ public class StateController {
 
     public float getMaxZoom() {
         return mMaxZoom;
-    }
-
-    private void applyInitialState(State state) {
-        state.set(0f, 0f, mMinZoom, 0f);
-        Rect pos = getPositionWithGravity(state);
-        state.translateTo(pos.left, pos.top);
     }
 
     /**
@@ -129,12 +124,13 @@ public class StateController {
             isStateChanged = true;
         }
 
-        Rect bounds = getMovingBounds(state);
+        MovementBounds bounds = getMovementBounds(state);
         float overscrollX = allowOverscroll ? mSettings.getOverscrollDistanceX() : 0f;
         float overscrollY = allowOverscroll ? mSettings.getOverscrollDistanceY() : 0f;
 
-        float x = restrict(state.getX(), bounds.left - overscrollX, bounds.right + overscrollX);
-        float y = restrict(state.getY(), bounds.top - overscrollY, bounds.bottom + overscrollY);
+        PointF tmpPos = bounds.restrict(state.getX(), state.getY(), overscrollX, overscrollY);
+        float x = tmpPos.x;
+        float y = tmpPos.y;
 
         if (zoom < mMinZoom) {
             // Decreasing overscroll if zooming less than minimum zoom
@@ -142,16 +138,18 @@ public class StateController {
             float factor = (zoom - minZoom) / (mMinZoom - minZoom);
             factor = (float) Math.sqrt(factor);
 
-            float strictX = restrict(x, bounds.left, bounds.right);
-            float strictY = restrict(y, bounds.top, bounds.bottom);
+            tmpPos = bounds.restrict(x, y);
+            float strictX = tmpPos.x;
+            float strictY = tmpPos.y;
 
             x = strictX + factor * (x - strictX);
             y = strictY + factor * (y - strictY);
         }
 
         if (prevState != null) {
-            x = applyTranslationResilience(x, prevState.getX(), bounds.left, bounds.right, overscrollX);
-            y = applyTranslationResilience(y, prevState.getY(), bounds.top, bounds.bottom, overscrollY);
+            RectF extBounds = bounds.getExternalBounds();
+            x = applyTranslationResilience(x, prevState.getX(), extBounds.left, extBounds.right, overscrollX);
+            y = applyTranslationResilience(y, prevState.getY(), extBounds.top, extBounds.bottom, overscrollY);
         }
 
         if (!State.equals(x, state.getX()) || !State.equals(y, state.getY())) {
@@ -211,71 +209,11 @@ public class StateController {
 
 
     /**
-     * Calculating bounds for {@link State#x} & {@link State#y} values to keep view inside viewport
-     * and taking into account view's gravity (see {@link Settings#setGravity(int)})
-     * <p/>
-     * Do note store returned rectangle, since it will be reused next time this method is called.
+     * Do note store returned object, since it will be reused next time this method is called.
      */
-    public Rect getMovingBounds(State state) {
-        final Rect pos = getPositionWithGravity(state);
-
-        // Calculating moving bounds for top-left corner of the scaled view
-
-        // horizontal bounds
-        if (mSettings.getViewportW() < pos.width()) {
-            // view is bigger that viewport -> restricting view movement with viewport bounds
-            mMovingBounds.left = mSettings.getViewportW() - pos.width();
-            mMovingBounds.right = 0;
-        } else {
-            // view is smaller than viewport -> positioning view according to calculated gravity
-            // and restricting view movement in this direction
-            mMovingBounds.left = mMovingBounds.right = pos.left;
-        }
-
-        // vertical bounds
-        if (mSettings.getViewportH() < pos.height()) {
-            // view is bigger that viewport -> restricting view movement with viewport bounds
-            mMovingBounds.top = mSettings.getViewportH() - pos.height();
-            mMovingBounds.bottom = 0;
-        } else {
-            // view is smaller than viewport -> positioning view according to calculated gravity
-            // and restricting view movement in this direction
-            mMovingBounds.top = mMovingBounds.bottom = pos.top;
-        }
-
-        // We should also take rotation into account
-        state.get(mMatrix);
-
-        mRectF.set(0, 0, mSettings.getViewW(), mSettings.getViewH());
-        mMatrix.mapRect(mRectF);
-
-        mPointF[0] = 0;
-        mPointF[1] = 0;
-        mMatrix.mapPoints(mPointF);
-
-        mMovingBounds.offset(Math.round(mPointF[0] - mRectF.left), Math.round(mPointF[1] - mRectF.top));
-
-        return mMovingBounds;
-    }
-
-    /**
-     * Returns view position within the viewport area with gravity applied, not taking into account view position
-     * (specified with {@link com.alexvasilkov.gestures.State#x} & {@link com.alexvasilkov.gestures.State#y}).
-     * <p/>
-     * Do note store returned rectangle, since it will be reused next time this method is called.
-     */
-    private Rect getPositionWithGravity(State state) {
-        state.get(mMatrix);
-        mRectF.set(0, 0, mSettings.getViewW(), mSettings.getViewH());
-        mMatrix.mapRect(mRectF);
-        final int w = Math.round(mRectF.width());
-        final int h = Math.round(mRectF.height());
-
-        // Calculating view position basing on gravity
-        mRectContainer.set(0, 0, mSettings.getViewportW(), mSettings.getViewportH());
-        Gravity.apply(mSettings.getGravity(), w, h, mRectContainer, mRectOut);
-
-        return mRectOut;
+    public MovementBounds getMovementBounds(State state) {
+        mMovementBounds.setup(state, mSettings);
+        return mMovementBounds;
     }
 
     /**
@@ -286,35 +224,46 @@ public class StateController {
     private boolean adjustZoomLevels(State state) {
         mMaxZoom = mSettings.getMaxZoom();
 
-        // Computing bounds taking rotation into account
-        mMatrix.reset();
-        mMatrix.postRotate(state.getRotation());
-        mRectF.set(0, 0, mSettings.getViewW(), mSettings.getViewH());
-        mMatrix.mapRect(mRectF);
+        float fittingZoom = 1f;
 
-        final float w = mRectF.width(), h = mRectF.height();
-        final float vpW = mSettings.getViewportW(), vpH = mSettings.getViewportH();
-        boolean isCorrectSize = w != 0 && h != 0 && vpW != 0 && vpH != 0;
+        boolean isCorrectSize = mSettings.hasViewSize() && mSettings.hasViewportSize();
 
-        float fittingZoom;
         if (isCorrectSize) {
+            float w = mSettings.getViewW(), h = mSettings.getViewH();
+            float areaW = mSettings.getMovementAreaW(), areaH = mSettings.getMovementAreaH();
+
+            if (mSettings.getFitMethod() == Settings.Fit.OUTSIDE) {
+                // Computing movement area size taking rotation into account.
+                // We will inverse rotation, since it will be applied to area, not to view itself.
+                mMatrix.setRotate(-state.getRotation());
+                mRectF.set(0, 0, areaW, areaH);
+                mMatrix.mapRect(mRectF);
+                areaW = mRectF.width();
+                areaH = mRectF.height();
+            } else {
+                // Computing view size taking rotation into account.
+                mMatrix.setRotate(state.getRotation());
+                mRectF.set(0, 0, w, h);
+                mMatrix.mapRect(mRectF);
+                w = mRectF.width();
+                h = mRectF.height();
+            }
+
             switch (mSettings.getFitMethod()) {
                 case HORIZONTAL:
-                    fittingZoom = vpW / w;
+                    fittingZoom = areaW / w;
                     break;
                 case VERTICAL:
-                    fittingZoom = vpH / h;
+                    fittingZoom = areaH / h;
                     break;
                 case OUTSIDE:
-                    fittingZoom = Math.max(vpW / w, vpH / h);
+                    fittingZoom = Math.max(areaW / w, areaH / h);
                     break;
                 case INSIDE:
                 default:
-                    fittingZoom = Math.min(vpW / w, vpH / h);
+                    fittingZoom = Math.min(areaW / w, areaH / h);
                     break;
             }
-        } else {
-            fittingZoom = 1f;
         }
 
         if (fittingZoom > mMaxZoom) {

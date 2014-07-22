@@ -1,9 +1,10 @@
 package com.alexvasilkov.gestures;
 
 import android.content.Context;
-import android.graphics.Rect;
+import android.graphics.RectF;
 import android.os.Build;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
@@ -121,6 +122,7 @@ public class GesturesControllerPagerFix extends GesturesController {
                 mIsSkipViewPager = false;
 
                 mViewPagerX = computeInitialViewPagerX(view, event);
+                Log.d("TEST", "INITIAL VP X = " + mViewPagerX);
                 mIsScrollingViewPager = mViewPagerX != 0;
 
                 mLastViewPagerEventX = event.getX();
@@ -215,7 +217,7 @@ public class GesturesControllerPagerFix extends GesturesController {
         float dViewX, dPagerX;
 
         final State state = getState();
-        final Rect viewMovingBounds = getStateController().getMovingBounds(state);
+        final RectF movementBounds = getStateController().getMovementBounds(state).getExternalBounds();
 
         // Splitting x scroll between viewpager and view
         if (getSettings().isPanEnabled()) {
@@ -224,7 +226,7 @@ public class GesturesControllerPagerFix extends GesturesController {
 
             final float viewX = state.getX();
             // available movement distances (always >= 0, no direction info)
-            float availableViewX = dir < 0 ? viewX - viewMovingBounds.left : viewMovingBounds.right - viewX;
+            float availableViewX = dir < 0 ? viewX - movementBounds.left : movementBounds.right - viewX;
             float availablePagerX = dir * mViewPagerX < 0 ? Math.abs(mViewPagerX) : 0;
 
             // Not available if already overscrolled in same direction
@@ -258,7 +260,7 @@ public class GesturesControllerPagerFix extends GesturesController {
             // We want viewpager to stop scrolling horizontally only if view has a small movement area and a vertical
             // scroll is detected.
             // We will allow passing dY to viewpager so it will be able to stop self if vertical scroll is detected.
-            mIsAllowViewPagerScrollY = viewMovingBounds.width() < mTouchSlop;
+            mIsAllowViewPagerScrollY = movementBounds.width() < mTouchSlop;
         }
 
         boolean shouldFixViewX = mIsViewPagerInterceptedScroll && mViewPagerX == 0;
@@ -284,6 +286,8 @@ public class GesturesControllerPagerFix extends GesturesController {
         viewPagerTouchX -= TMP_LOCATION[0];
 
         int touchedItem = (int) ((scroll + viewPagerTouchX) / widthWithMargin);
+
+        Log.d("TEST", "computeInitialViewPagerX: item = " + touchedItem + " / scroll = " + scroll + " / width = " + widthWithMargin + " / child x = " + event.getX() + " / parent x = " + viewPagerTouchX);
 
         return widthWithMargin * touchedItem - scroll;
     }

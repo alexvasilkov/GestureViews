@@ -106,7 +106,8 @@ public class GestureLayout extends FrameLayout implements GesturesController.OnS
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
 
-        mController.getSettings().setViewport(w, h);
+        mController.getSettings().setViewport(w - getPaddingLeft() - getPaddingRight(),
+                h - getPaddingTop() - getPaddingBottom());
         mController.updateState();
     }
 

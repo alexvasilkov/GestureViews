@@ -25,6 +25,13 @@ public class Settings {
     private int viewportW, viewportH;
 
     /**
+     * Moving area
+     */
+    private int movementAreaW, movementAreaH;
+
+    private boolean isMovementAreaSpecified;
+
+    /**
      * View size
      */
     private int viewW, viewH;
@@ -99,6 +106,16 @@ public class Settings {
     }
 
     /**
+     * Setting movement area size
+     */
+    public Settings setMovementArea(int w, int h) {
+        isMovementAreaSpecified = true;
+        movementAreaW = w;
+        movementAreaH = h;
+        return this;
+    }
+
+    /**
      * Setting full view size
      */
     public Settings setSize(int w, int h) {
@@ -148,8 +165,8 @@ public class Settings {
     }
 
     /**
-     * If set to true small view will be scaled to fitMethod entire viewport even if this will require zoom level
-     * above max zoom level.
+     * If set to true small view will be scaled to fit entire viewport (or entire movement area if it was set)
+     * even if this will require zoom level above max zoom level.
      * <p/>
      * Default value is false.
      */
@@ -242,6 +259,14 @@ public class Settings {
         return viewportH;
     }
 
+    public int getMovementAreaW() {
+        return isMovementAreaSpecified ? movementAreaW : viewportW;
+    }
+
+    public int getMovementAreaH() {
+        return isMovementAreaSpecified ? movementAreaH : viewportH;
+    }
+
     public int getViewW() {
         return viewW;
     }
@@ -303,6 +328,15 @@ public class Settings {
      */
     public boolean isEnabled() {
         return isPanEnabled || isZoomEnabled || isRotationEnabled || isDoubleTapEnabled;
+    }
+
+
+    boolean hasViewSize() {
+        return viewW != 0 && viewH != 0;
+    }
+
+    boolean hasViewportSize() {
+        return viewportW != 0 && viewportH != 0;
     }
 
 

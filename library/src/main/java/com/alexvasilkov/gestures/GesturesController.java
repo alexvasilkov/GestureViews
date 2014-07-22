@@ -1,7 +1,7 @@
 package com.alexvasilkov.gestures;
 
 import android.content.Context;
-import android.graphics.Rect;
+import android.graphics.PointF;
 import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -10,6 +10,7 @@ import android.widget.OverScroller;
 import com.alexvasilkov.gestures.detectors.RotationGestureDetector;
 import com.alexvasilkov.gestures.detectors.ScaleGestureDetectorFixed;
 import com.alexvasilkov.gestures.utils.FloatScroller;
+import com.alexvasilkov.gestures.utils.MovementBounds;
 
 /**
  * Main logic to update view state ({@link State}) basing on screen touches.
@@ -47,7 +48,7 @@ public class GesturesController extends GesturesAdapter {
     private final OverScroller mFlingScroller;
     private final FloatScroller mStateScroller;
 
-    private final Rect mFlingBounds = new Rect();
+    private final MovementBounds mFlingBounds = new MovementBounds();
     private final State mPrevState = new State(), mStateStart = new State(), mStateEnd = new State();
 
     private final Settings mSettings;
@@ -267,7 +268,7 @@ public class GesturesController extends GesturesAdapter {
         int y = Math.round(mState.getY());
 
         // Fling bounds including current position
-        mFlingBounds.set(mStateController.getMovingBounds(mState));
+        mFlingBounds.set(mStateController.getMovementBounds(mState));
         mFlingBounds.union(x, y);
 
         stopFlingAnimation();
@@ -291,8 +292,9 @@ public class GesturesController extends GesturesAdapter {
     protected void onFlingScroll(float fromX, float fromY, float toX, float toY) {
         float x = toX, y = toY;
         if (mSettings.isRestrictBounds()) {
-            x = StateController.restrict(x, mFlingBounds.left, mFlingBounds.right);
-            y = StateController.restrict(y, mFlingBounds.top, mFlingBounds.bottom);
+            PointF pos = mFlingBounds.restrict(x, y);
+            x = pos.x;
+            y = pos.y;
         }
 
         mState.translateTo(x, y);
@@ -362,7 +364,7 @@ public class GesturesController extends GesturesAdapter {
 
     @Override
     public boolean onRotationBegin(RotationGestureDetector detector) {
-        return mSettings.isRotationEnabled() && mSettings.isRotationEnabled();
+        return mSettings.isRotationEnabled();
     }
 
     @Override
