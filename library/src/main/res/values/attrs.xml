@@ -2,8 +2,8 @@
 <resources>
 
     <declare-styleable name="GestureTextView">
-        <attr name="minTextSize" format="dimension" />
-        <attr name="maxTextSize" format="dimension" />
+        <attr name="gvMinTextSize" format="dimension" />
+        <attr name="gvMaxTextSize" format="dimension" />
     </declare-styleable>
 
 </resources>

@@ -32,8 +32,8 @@ public class GestureTextView extends TextView implements GesturesController.OnSt
 
         if (attrs != null) {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.GestureTextView);
-            mMinTextSize = a.getDimension(R.styleable.GestureTextView_minTextSize, 0f);
-            mMaxTextSize = a.getDimension(R.styleable.GestureTextView_maxTextSize, 0f);
+            mMinTextSize = a.getDimension(R.styleable.GestureTextView_gvMinTextSize, 0f);
+            mMaxTextSize = a.getDimension(R.styleable.GestureTextView_gvMaxTextSize, 0f);
             a.recycle();
         }
 

@@ -9,8 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="16dp"
-        app:minTextSize="12sp"
-        app:maxTextSize="24sp"
+        app:gvMinTextSize="12sp"
+        app:gvMaxTextSize="24sp"
         android:textColor="#FFF"
         android:text="@string/text_example" />
 
