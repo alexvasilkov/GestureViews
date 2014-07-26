@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.RectF;
 import android.os.Build;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
@@ -122,7 +121,6 @@ public class GesturesControllerPagerFix extends GesturesController {
                 mIsSkipViewPager = false;
 
                 mViewPagerX = computeInitialViewPagerX(view, event);
-                Log.d("TEST", "INITIAL VP X = " + mViewPagerX);
                 mIsScrollingViewPager = mViewPagerX != 0;
 
                 mLastViewPagerEventX = event.getX();
@@ -277,6 +275,8 @@ public class GesturesControllerPagerFix extends GesturesController {
         // ViewPager can be in intermediate position, so we should recompute correct mViewPagerX value
         int scroll = mViewPager.getScrollX();
         int widthWithMargin = mViewPager.getWidth() + mViewPager.getPageMargin();
+        // After state restore ViewPager can return negative scroll, let's fix it
+        while (scroll < 0) scroll += widthWithMargin;
 
         // Child's event will be in local coordinates, but we want it in ViewPager's coordinates
         float viewPagerTouchX = event.getX();
@@ -286,8 +286,6 @@ public class GesturesControllerPagerFix extends GesturesController {
         viewPagerTouchX -= TMP_LOCATION[0];
 
         int touchedItem = (int) ((scroll + viewPagerTouchX) / widthWithMargin);
-
-        Log.d("TEST", "computeInitialViewPagerX: item = " + touchedItem + " / scroll = " + scroll + " / width = " + widthWithMargin + " / child x = " + event.getX() + " / parent x = " + viewPagerTouchX);
 
         return widthWithMargin * touchedItem - scroll;
     }
