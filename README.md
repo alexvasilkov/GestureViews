@@ -17,7 +17,7 @@ TODO
 
 Add dependency to your build.gradle file:
 
-    compile 'com.alexvasilkov:gesture-views:1.0.1'
+    compile 'com.alexvasilkov:gesture-views:x.x.x'
 
 
 #### License ####
