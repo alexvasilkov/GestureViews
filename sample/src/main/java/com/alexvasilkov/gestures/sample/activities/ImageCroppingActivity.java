@@ -36,19 +36,25 @@ public class ImageCroppingActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        menu.add(R.string.button_crop).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        menu.add(Menu.NONE, R.string.button_crop, 0, R.string.button_crop)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        mImageView.getSnapshot(new GestureImageView.OnSnapshotLoadedListener() {
-            @Override
-            public void onSnapshotLoaded(Bitmap bitmap) {
-                ImageSnapshotActivity.show(ImageCroppingActivity.this, bitmap);
-            }
-        });
-        return true;
+        switch (item.getItemId()) {
+            case R.string.button_crop:
+                mImageView.getSnapshot(new GestureImageView.OnSnapshotLoadedListener() {
+                    @Override
+                    public void onSnapshotLoaded(Bitmap bitmap) {
+                        ImageSnapshotActivity.show(ImageCroppingActivity.this, bitmap);
+                    }
+                });
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
 }
