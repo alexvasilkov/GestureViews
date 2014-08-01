@@ -3,8 +3,8 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.12.+'
-        classpath 'com.alexvasilkov:android-sign-release:0.3.6'
+        classpath 'com.android.tools.build:gradle:0.10.+'
+        classpath 'com.alexvasilkov:android-sign-release:0.3.7'
     }
 }
 
@@ -42,5 +42,5 @@ dependencies {
     compile 'com.android.support:support-v4:20.0.0'
     compile 'com.android.support:gridlayout-v7:20.0.0'
     compile 'com.squareup.picasso:picasso:2.3.1'
-    compile 'com.alexvasilkov:android-commons:1.2.0'
+    compile 'com.alexvasilkov:android-commons:1.2.2'
 }
