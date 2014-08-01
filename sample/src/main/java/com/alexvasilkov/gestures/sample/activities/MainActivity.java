@@ -5,9 +5,9 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,30 +35,34 @@ public class MainActivity extends ListActivity {
         startActivity(intent);
     }
 
-    private List<ActivityInfo> getInfosList() {
+    private List<ActivityInfo> getActivitiesList() {
         List<ActivityInfo> list = new ArrayList<ActivityInfo>();
 
         Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
         mainIntent.addCategory(Intent.CATEGORY_SAMPLE_CODE);
 
+        String packageName = getApplicationInfo().packageName;
         List<ResolveInfo> resolveList = getPackageManager().queryIntentActivities(mainIntent, 0);
         if (resolveList == null) return list;
 
         for (ResolveInfo info : resolveList) {
-            list.add(info.activityInfo);
+            if (packageName.equals(info.activityInfo.packageName)) list.add(info.activityInfo);
         }
 
         return list;
     }
 
     private BaseAdapter getSampleAdapter() {
-        return new SampleAdapter(this, getInfosList());
+        return new SampleAdapter(this, getActivitiesList());
     }
 
     private static class SampleAdapter extends ItemsAdapter<ActivityInfo> {
 
+        private PackageManager mPackageManager;
+
         public SampleAdapter(Context context, List<ActivityInfo> list) {
             super(context);
+            mPackageManager = context.getPackageManager();
             setItemsList(list);
         }
 
@@ -69,12 +73,7 @@ public class MainActivity extends ListActivity {
 
         @Override
         protected void bindView(ActivityInfo item, int pos, View convertView) {
-            TextView tv = (TextView) convertView;
-            if (TextUtils.isEmpty(item.nonLocalizedLabel)) {
-                tv.setText(item.labelRes);
-            } else {
-                tv.setText(item.nonLocalizedLabel);
-            }
+            ((TextView) convertView).setText(item.loadLabel(mPackageManager));
         }
 
     }
