@@ -9,12 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.alexvasilkov.android.commons.texts.SpannableBuilder;
 import com.alexvasilkov.android.commons.utils.Intents;
 import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.gestures.sample.R;
-import com.alexvasilkov.gestures.sample.utils.PicassoHelper;
 import com.alexvasilkov.gestures.widgets.GestureLayout;
+import com.bumptech.glide.Glide;
 
 public class PaintingsLayoutsAdapter extends PagerAdapter implements View.OnClickListener {
 
@@ -34,14 +35,14 @@ public class PaintingsLayoutsAdapter extends PagerAdapter implements View.OnClic
     @Override
     public View instantiateItem(final ViewGroup container, int position) {
         Context context = container.getContext();
-        View layout = LayoutInflater.from(context).inflate(R.layout.activity_layout_item, container, false);
+        View layout = LayoutInflater.from(context).inflate(R.layout.item_layout_with_image, container, false);
         container.addView(layout, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
         GestureLayout gLayout = Views.find(layout, R.id.painting_g_layout);
         gLayout.fixViewPagerScroll(mViewPager);
 
         ImageView image = Views.find(layout, R.id.painting_image);
-        PicassoHelper.get(context).load(mPaintings[position].getImageId()).into(image);
+        Glide.with(context).load(mPaintings[position].getImageId()).into(image);
 
         TextView title = Views.find(layout, R.id.painting_title);
         CharSequence titleText = new SpannableBuilder(context)

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.alexvasilkov.gestures.sample.widgets.PaginatedListView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/flickr_list"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:listSelector="@android:color/transparent"
+    android:cacheColorHint="@android:color/transparent"
+    android:divider="@android:color/transparent"
+    android:dividerHeight="0dp"
+    android:fadeScrollbars="true"
+    android:scrollingCache="false"
+    android:clipToPadding="false"
+    android:scrollbarStyle="outsideOverlay"
+    android:paddingTop="2dp"
+    android:paddingBottom="2dp"/>

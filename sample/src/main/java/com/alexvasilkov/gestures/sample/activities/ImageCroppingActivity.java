@@ -4,12 +4,13 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
 import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.gestures.Settings;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.items.Painting;
-import com.alexvasilkov.gestures.sample.utils.PicassoHelper;
 import com.alexvasilkov.gestures.widgets.GestureImageView;
+import com.bumptech.glide.Glide;
 
 public class ImageCroppingActivity extends BaseActivity {
 
@@ -31,7 +32,7 @@ public class ImageCroppingActivity extends BaseActivity {
                 .setRotationEnabled(true);
 
         Painting painting = Painting.getAllPaintings(getResources())[0];
-        PicassoHelper.get(this).load(painting.getImageId()).into(mImageView);
+        Glide.with(this).load(painting.getImageId()).into(mImageView);
     }
 
     @Override

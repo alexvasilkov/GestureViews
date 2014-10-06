@@ -4,4 +4,9 @@
     <color name="window_background">#fff</color>
     <color name="window_background_dark">#333</color>
 
+    <color name="error_color_default">#C32</color>
+    <color name="error_color_pressed">#A21</color>
+
+    <color name="image_background">#444</color>
+
 </resources>
