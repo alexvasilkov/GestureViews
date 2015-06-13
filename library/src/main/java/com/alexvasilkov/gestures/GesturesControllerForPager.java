@@ -70,9 +70,9 @@ public class GesturesControllerForPager extends GesturesController {
     }
 
     /**
-     * Sets parent ViewPager to enable cross movement between ViewPager and it's child view.
+     * Enables cross movement between ViewPager and it's child view.
      */
-    public void fixViewPagerScroll(ViewPager pager) {
+    public void enableScrollInViewPager(ViewPager pager) {
         mViewPager = pager;
         pager.setOnTouchListener(PAGER_TOUCH_LISTENER);
 

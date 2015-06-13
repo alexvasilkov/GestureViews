@@ -41,7 +41,7 @@ public class PaintingsLayoutsAdapter extends PagerAdapter implements View.OnClic
 
         GestureLayout gLayout = Views.find(layout, R.id.painting_g_layout);
         gLayout.getController().getSettings().setOverscrollDistance(context, 32, 0);
-        gLayout.fixViewPagerScroll(mViewPager);
+        gLayout.enableScrollInViewPager(mViewPager);
 
         ImageView image = Views.find(layout, R.id.painting_image);
         Glide.with(context).load(mPaintings[position].getImageId()).into(image);

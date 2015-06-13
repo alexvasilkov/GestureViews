@@ -51,13 +51,11 @@ public class GestureLayout extends FrameLayout
     }
 
     /**
-     * Makes scrolling between different {@link GestureLayout}
-     * within given {@link android.support.v4.view.ViewPager} smoother.
-     *
-     * @see GesturesControllerForPager#fixViewPagerScroll(android.support.v4.view.ViewPager)
+     * Enables scroll inside {@link android.support.v4.view.ViewPager}.
+     * Makes scrolling within ViewPager smoother.
      */
-    public void fixViewPagerScroll(ViewPager pager) {
-        mController.fixViewPagerScroll(pager);
+    public void enableScrollInViewPager(ViewPager pager) {
+        mController.enableScrollInViewPager(pager);
     }
 
     /**
