@@ -3,6 +3,7 @@ package com.alexvasilkov.gestures;
 import android.content.Context;
 import android.graphics.RectF;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -12,34 +13,34 @@ import android.view.ViewConfiguration;
 import com.alexvasilkov.gestures.detectors.RotationGestureDetector;
 
 /**
- * Allows cross movement between view controlled by this {@link GesturesController}
- * and it's parent {@link android.support.v4.view.ViewPager} by splitting scroll movement
- * between view and view pager
+ * Allows cross movement between view controlled by this {@link GesturesController} and it's parent
+ * {@link android.support.v4.view.ViewPager} by splitting scroll movement between them.
  */
 public class GesturesControllerForPager extends GesturesController {
 
     /**
-     * Because viewpager will immediately return true from onInterceptTouchEvent() method during settling
-     * animation we will have no chance to prevent it from doing this.
-     * But this listener will be called if viewpager intercepted touch event, so we can try fix this behavior here.
+     * Because ViewPager will immediately return true from onInterceptTouchEvent() method during
+     * settling animation, we will have no chance to prevent it from doing this.
+     * But this listener will be called if ViewPager intercepted touch event,
+     * so we can try fix this behavior here.
      */
     private static final View.OnTouchListener PAGER_TOUCH_LISTENER = new View.OnTouchListener() {
         private boolean mIsTouchInProgress;
 
         @Override
-        public boolean onTouch(View view, MotionEvent e) {
-            // ViewPager will steal touch events during settling regardless of requestDisallowInterceptTouchEvent,
-            // so we will prevent it here
+        public boolean onTouch(View view, @NonNull MotionEvent e) {
+            // ViewPager will steal touch events during settling regardless of
+            // requestDisallowInterceptTouchEvent. We will prevent it here.
             if (!mIsTouchInProgress && e.getActionMasked() == MotionEvent.ACTION_DOWN) {
                 mIsTouchInProgress = true;
-                // Now viewpager is in drag mode, so it should not intercept DOWN event
+                // Now ViewPager is in drag mode, so it should not intercept DOWN event
                 view.dispatchTouchEvent(e);
                 mIsTouchInProgress = false;
                 return true;
             }
 
-            // User can touch outside of child view, so we will not have a chance to settle view pager,
-            // if so, this listener should be called and we can settle viewpager manually here
+            // User can touch outside of child view, so we will not have a chance to settle ViewPager.
+            // If so, this listener should be called and we will be able to settle ViewPager manually.
             settleViewPagerIfFinished((ViewPager) view, e);
 
             return false;
@@ -69,10 +70,7 @@ public class GesturesControllerForPager extends GesturesController {
     }
 
     /**
-     * Sets parent ViewPager to enable smooth cross movement between ViewPager and it's child view.
-     * <p/>
-     * Note: once this method is called with {@code allowSmoothScroll} parameter set to true there will be no way back,
-     * provided ViewPager will use custom scroller forever.
+     * Sets parent ViewPager to enable cross movement between ViewPager and it's child view.
      */
     public void fixViewPagerScroll(ViewPager pager) {
         mViewPager = pager;
@@ -85,7 +83,7 @@ public class GesturesControllerForPager extends GesturesController {
     }
 
     @Override
-    public boolean onTouch(View view, MotionEvent event) {
+    public boolean onTouch(@NonNull View view, @NonNull MotionEvent event) {
         if (mViewPager == null) {
             return super.onTouch(view, event);
         } else {
@@ -95,7 +93,8 @@ public class GesturesControllerForPager extends GesturesController {
     }
 
     /**
-     * Handles touch event and returns altered event to pass further or null if event should not propagate
+     * Handles touch event and returns altered event to pass further
+     * or null if event should not propagate
      */
     private MotionEvent handleTouch(View view, MotionEvent event) {
         recycleTmpEvent();
@@ -115,7 +114,7 @@ public class GesturesControllerForPager extends GesturesController {
 
             case MotionEvent.ACTION_POINTER_DOWN:
                 if (event.getPointerCount() == 2) { // on first non-primary pointer
-                    // Skipping view pager fake dragging if we're not started dragging yet
+                    // Skipping ViewPager fake dragging if we're not started dragging yet
                     // to allow scale/rotation gestures
                     mIsSkipViewPager = mViewPagerX == 0;
                 }
@@ -138,7 +137,7 @@ public class GesturesControllerForPager extends GesturesController {
     }
 
     @Override
-    public boolean onDown(MotionEvent e) {
+    public boolean onDown(@NonNull MotionEvent e) {
         mIsViewPagerInterceptedScroll = false;
         mIsAllowViewPagerScrollY = true;
         mIsScrollGestureDetected = false;
@@ -153,9 +152,9 @@ public class GesturesControllerForPager extends GesturesController {
     }
 
     @Override
-    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+    public boolean onScroll(@NonNull MotionEvent e1, @NonNull MotionEvent e2, float dX, float dY) {
         if (mViewPager == null) {
-            return super.onScroll(e1, e2, distanceX, distanceY);
+            return super.onScroll(e1, e2, dX, dY);
         } else {
             if (!mIsScrollGestureDetected) {
                 mIsScrollGestureDetected = true;
@@ -163,36 +162,36 @@ public class GesturesControllerForPager extends GesturesController {
                 return true;
             }
 
-            float fixedDistanceX = -scrollBy(e2, -distanceX, -distanceY);
-            // Skipping vertical movement if view pager is dragged
-            float fixedDistanceY = mViewPagerX == 0 ? distanceY : 0f;
+            float fixedDistanceX = -scrollBy(e2, -dX, -dY);
+            // Skipping vertical movement if ViewPager is dragged
+            float fixedDistanceY = mViewPagerX == 0 ? dY : 0f;
 
             return super.onScroll(e1, e2, fixedDistanceX, fixedDistanceY);
         }
     }
 
     @Override
-    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        return mViewPagerX == 0 && super.onFling(e1, e2, velocityX, velocityY);
+    public boolean onFling(@NonNull MotionEvent e1, @NonNull MotionEvent e2, float vX, float vY) {
+        return mViewPagerX == 0 && super.onFling(e1, e2, vX, vY);
     }
 
     @Override
-    public boolean onScaleBegin(ScaleGestureDetector detector) {
+    public boolean onScaleBegin(@NonNull ScaleGestureDetector detector) {
         return mViewPagerX == 0 && super.onScaleBegin(detector);
     }
 
     @Override
-    public boolean onRotationBegin(RotationGestureDetector detector) {
+    public boolean onRotationBegin(@NonNull RotationGestureDetector detector) {
         return mViewPagerX == 0 && super.onRotationBegin(detector);
     }
 
     @Override
-    public boolean onDoubleTapEvent(MotionEvent e) {
+    public boolean onDoubleTapEvent(@NonNull MotionEvent e) {
         return mViewPagerX == 0 && super.onDoubleTapEvent(e);
     }
 
     /**
-     * Scrolls view pager when view reached it's bounds. Returns distance (<= dX) at which view can be scrolled.
+     * Scrolls ViewPager if view reached bounds. Returns distance at which view can be actually scrolled.
      * Here we will split given distance (dX) into movement of ViewPager and movement of view itself.
      */
     private float scrollBy(MotionEvent e, float dX, float dY) {
@@ -201,7 +200,7 @@ public class GesturesControllerForPager extends GesturesController {
         float dViewX, dPagerX;
 
         final State state = getState();
-        final RectF movementBounds = getStateController().getMovementBounds(state).getExternalBounds();
+        final RectF movBounds = getStateController().getMovementBounds(state).getExternalBounds();
 
         // Splitting x scroll between viewpager and view
         if (getSettings().isPanEnabled()) {
@@ -210,14 +209,14 @@ public class GesturesControllerForPager extends GesturesController {
 
             final float viewX = state.getX();
             // available movement distances (always >= 0, no direction info)
-            float availableViewX = dir < 0 ? viewX - movementBounds.left : movementBounds.right - viewX;
+            float availableViewX = dir < 0 ? viewX - movBounds.left : movBounds.right - viewX;
             float availablePagerX = dir * mViewPagerX < 0 ? Math.abs(mViewPagerX) : 0;
 
             // Not available if already overscrolled in same direction
             if (availableViewX < 0) availableViewX = 0;
 
             if (availablePagerX >= movementX) {
-                // Only view pager is moved
+                // Only ViewPager is moved
                 dViewX = 0;
                 dPagerX = movementX;
             } else if (availableViewX + availablePagerX >= movementX) {
@@ -241,16 +240,17 @@ public class GesturesControllerForPager extends GesturesController {
         // Checking vertical and horizontal thresholds
         if (!mIsScrollingViewPager) {
             mIsScrollingViewPager = true;
-            // We want viewpager to stop scrolling horizontally only if view has a small movement area and a vertical
-            // scroll is detected.
-            // We will allow passing dY to viewpager so it will be able to stop self if vertical scroll is detected.
-            mIsAllowViewPagerScrollY = movementBounds.width() < mTouchSlop;
+            // We want ViewPager to stop scrolling horizontally only if view has a small
+            // movement area and a vertical scroll is detected.
+            // We will allow passing dY to ViewPager so it will be able to stop itself
+            // if vertical scroll is detected.
+            mIsAllowViewPagerScrollY = movBounds.width() < mTouchSlop;
         }
 
         boolean shouldFixViewX = mIsViewPagerInterceptedScroll && mViewPagerX == 0;
         int actualX = performViewPagerScroll(e, dPagerX, dY);
         mViewPagerX += actualX;
-        // Adding back scroll not handled by viewpager
+        // Adding back scroll not handled by ViewPager
         if (shouldFixViewX) dViewX += Math.round(dPagerX) - actualX;
 
         return dViewX;
@@ -288,7 +288,7 @@ public class GesturesControllerForPager extends GesturesController {
             mIsViewPagerInterceptedScroll = mViewPager.onInterceptTouchEvent(fixedEvent);
         }
 
-        // If view pager intercepted touch it will settle itself automatically,
+        // If ViewPager intercepted touch it will settle itself automatically,
         // but if touch was not intercepted we should settle it manually
         if (!mIsViewPagerInterceptedScroll) settleViewPagerIfFinished(mViewPager, e);
 
@@ -296,7 +296,7 @@ public class GesturesControllerForPager extends GesturesController {
     }
 
     /**
-     * Manually scrolls view pager and returns actual distance at which pager was scrolled
+     * Manually scrolls ViewPager and returns actual distance at which pager was scrolled
      */
     private int performViewPagerScroll(MotionEvent e, float dPagerX, float dY) {
         int scrollBegin = mViewPager.getScrollX();
@@ -315,7 +315,7 @@ public class GesturesControllerForPager extends GesturesController {
         if (e.getActionMasked() != MotionEvent.ACTION_UP && e.getActionMasked() != MotionEvent.ACTION_CANCEL)
             return;
 
-        // If viewpager is not settled we should force it to do so, fake drag will help here
+        // If ViewPager is not settled we should force it to do so, fake drag will help here
         pager.beginFakeDrag();
         if (pager.isFakeDragging()) pager.endFakeDrag();
     }

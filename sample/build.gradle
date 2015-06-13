@@ -42,9 +42,12 @@ dependencies {
     compile project(':library')
 
     compile 'com.android.support:support-v4:22.2.0'
+    compile 'com.android.support:appcompat-v7:22.2.0'
+
+    compile 'com.github.bumptech.glide:glide:3.6.0'
+
     compile 'com.alexvasilkov:android-commons:1.2.4'
     compile 'com.alexvasilkov:events:0.4.0'
-    compile 'com.github.bumptech.glide:glide:3.6.0'
 
     compile 'com.googlecode.flickrj-android:flickrj-android:2.1.0'
     compile 'org.slf4j:slf4j-android:1.7.7' // Required by Flickr library

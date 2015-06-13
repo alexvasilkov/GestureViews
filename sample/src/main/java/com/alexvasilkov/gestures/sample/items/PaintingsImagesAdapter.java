@@ -29,7 +29,8 @@ public class PaintingsImagesAdapter extends PagerAdapter {
         Context context = container.getContext();
 
         GestureImageView gImageView = new GestureImageView(context);
-        container.addView(gImageView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        final int match = ViewGroup.LayoutParams.MATCH_PARENT;
+        container.addView(gImageView, match, match);
         gImageView.fixViewPagerScroll(mViewPager);
         gImageView.getController().getSettings().setOverscrollDistance(context, 32, 0);
 

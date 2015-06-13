@@ -2,6 +2,9 @@
 <resources>
 
     <string name="button_crop">Crop</string>
+    <string name="button_wiki_art">WikiArt</string>
+
+    <string name="image_content_description">Image</string>
 
     <string name="text_example">Lorem ipsum dolor sit amet, graeco tritani te mei, facilisis prodesset id est. Magna labore quo ne. Ne noster mentitum delicatissimi his. Id nam summo munere luptatum, an dicunt cotidieque per. Aeque conceptam ea eos, an wisi ancillae deserunt vim, reque virtute fastidii cu sed. Sumo deleniti iracundia cum eu, vel iudico sententiae suscipiantur ad. Id iudico albucius voluptatibus duo.\n\nIn per sale delenit torquatos, id has mundi iudicabit intellegam, vim quis eros brute eu. In modo tempor duo, an ius electram honestatis, est case nominati accommodare ea. Ad sint atqui definitiones has, cum insolens oportere id, has no inani veniam. Scripta verterem no nec, ex qui putant facilisis.</string>
 

@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:paddingBottom="2dp"
     android:paddingLeft="4dp"
     android:paddingRight="4dp"
-    android:paddingTop="2dp"
-    android:paddingBottom="2dp">
+    android:paddingTop="2dp">
 
     <RelativeLayout
         android:id="@+id/footer_error"
@@ -19,17 +18,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:textSize="16sp"
-            android:textColor="#FFF"/>
+            android:textColor="#FFF"
+            android:textSize="16sp" />
 
         <ImageView
             android:id="@+id/error_reload"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_refresh"
-            android:layout_marginRight="12dp"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"/>
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="12dp"
+            android:layout_marginRight="12dp"
+            android:contentDescription="@string/image_content_description"
+            android:src="@drawable/ic_refresh" />
 
     </RelativeLayout>
 
@@ -43,14 +45,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textSize="16sp"
-            android:textColor="#FFF"/>
+            android:textColor="#FFF"
+            android:textSize="16sp" />
 
         <ProgressBar
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_gravity="right|center_vertical"
-            android:layout_marginRight="16dp"/>
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp" />
     </FrameLayout>
 
 </FrameLayout>

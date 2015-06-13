@@ -2,9 +2,9 @@ package com.alexvasilkov.gestures.sample.items;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -35,8 +35,9 @@ public class PaintingsLayoutsAdapter extends PagerAdapter implements View.OnClic
     @Override
     public View instantiateItem(final ViewGroup container, int position) {
         Context context = container.getContext();
-        View layout = LayoutInflater.from(context).inflate(R.layout.activity_layout_item, container, false);
-        container.addView(layout, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        View layout = Views.inflate(container, R.layout.activity_layout_item);
+        final int match = ViewGroup.LayoutParams.MATCH_PARENT;
+        container.addView(layout, match, match);
 
         GestureLayout gLayout = Views.find(layout, R.id.painting_g_layout);
         gLayout.fixViewPagerScroll(mViewPager);
@@ -71,7 +72,7 @@ public class PaintingsLayoutsAdapter extends PagerAdapter implements View.OnClic
     }
 
     @Override
-    public void onClick(View view) {
+    public void onClick(@NonNull View view) {
         Intents.get(view.getContext()).openWebBrowser((String) view.getTag());
     }
 

@@ -12,6 +12,7 @@
             android:id="@+id/painting_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:contentDescription="@string/image_content_description"
             android:scaleType="centerCrop" />
 
         <TextView
@@ -20,10 +21,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:background="@drawable/image_text_shadow"
-            android:paddingTop="20dp"
             android:paddingBottom="8dp"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
+            android:paddingTop="20dp"
             android:textColor="#fff"
             android:textSize="16sp" />
 
@@ -31,7 +32,7 @@
             android:id="@+id/painting_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="WikiArt" />
+            android:text="@string/button_wiki_art" />
 
     </FrameLayout>
 

@@ -142,7 +142,8 @@ public class State {
 
         State state = (State) o;
 
-        return equals(state.x, x) && equals(state.y, y) && equals(state.zoom, zoom) && equals(state.rotation, rotation);
+        return equals(state.x, x) && equals(state.y, y)
+                && equals(state.zoom, zoom) && equals(state.rotation, rotation);
     }
 
     @Override
@@ -159,6 +160,9 @@ public class State {
         return "{x=" + x + ",y=" + y + ",zoom=" + zoom + ",rotation=" + rotation + "}";
     }
 
+    /**
+     * Compares two float values, allowing small difference (see {@link #COMPARISON_EPSILON})
+     */
     public static boolean equals(float v1, float v2) {
         return Math.abs(v1 - v2) < COMPARISON_EPSILON;
     }

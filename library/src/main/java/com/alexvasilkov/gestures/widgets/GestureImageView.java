@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -14,12 +15,14 @@ import android.widget.ImageView;
 import com.alexvasilkov.gestures.GesturesController;
 import com.alexvasilkov.gestures.GesturesControllerForPager;
 import com.alexvasilkov.gestures.State;
+import com.alexvasilkov.gestures.utils.Compat;
 import com.alexvasilkov.gestures.utils.Snapshot;
 
 /**
  * Gestures controlled ImageView
  */
-public class GestureImageView extends ImageView implements GesturesController.OnStateChangedListener {
+public class GestureImageView extends ImageView
+        implements GesturesController.OnStateChangedListener {
 
     private final GesturesControllerForPager mController;
     private final Matrix mImageMatrix = new Matrix();
@@ -45,7 +48,7 @@ public class GestureImageView extends ImageView implements GesturesController.On
     }
 
     @Override
-    public void draw(Canvas canvas) {
+    public void draw(@NonNull Canvas canvas) {
         if (mIsClipping) {
             canvas.save();
             canvas.clipRect(mClipRect);
@@ -123,7 +126,7 @@ public class GestureImageView extends ImageView implements GesturesController.On
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
+    public boolean onTouchEvent(@NonNull MotionEvent event) {
         return mController.onTouch(this, event);
     }
 
@@ -137,7 +140,7 @@ public class GestureImageView extends ImageView implements GesturesController.On
 
     @Override
     public void setImageResource(int resId) {
-        setImageDrawable(getContext().getResources().getDrawable(resId));
+        setImageDrawable(Compat.getDrawable(getContext(), resId));
     }
 
     @Override
@@ -146,7 +149,8 @@ public class GestureImageView extends ImageView implements GesturesController.On
         if (drawable == null) {
             mController.getSettings().setSize(0, 0);
         } else {
-            mController.getSettings().setSize(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+            mController.getSettings().setSize(
+                    drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
         }
         mController.resetState();
     }

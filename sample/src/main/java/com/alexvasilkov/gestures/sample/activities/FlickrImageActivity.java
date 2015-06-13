@@ -2,6 +2,7 @@ package com.alexvasilkov.gestures.sample.activities;
 
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
@@ -21,7 +22,6 @@ public class FlickrImageActivity extends BaseActivity {
     private Helper mHelper;
 
 
-    @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,10 +33,10 @@ public class FlickrImageActivity extends BaseActivity {
                 .setMaxZoom(3f)
                 .disableGestures(); // Temporary disabling touch controls
 
-        final View layout = Views.find(this, R.id.flickr_image_layout);
+        final View layout = (View) imageView.getParent();
         int color = getResources().getColor(R.color.window_background_dark);
         final Drawable background = new ColorDrawable(color);
-        layout.setBackgroundDrawable(background);
+        setBackground(layout, background);
 
         mHelper = new Helper(this, imageView);
         mHelper.setAnimationUpdateListener(new Helper.AnimationUpdateListener() {
@@ -86,6 +86,16 @@ public class FlickrImageActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         mHelper.exit();
+    }
+
+
+    @SuppressWarnings("deprecation")
+    private static void setBackground(View view, Drawable drawable) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+            view.setBackgroundDrawable(drawable);
+        } else {
+            view.setBackground(drawable);
+        }
     }
 
 }

@@ -4,6 +4,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.widget.TextView;
+
 import com.alexvasilkov.android.commons.texts.SpannableBuilder;
 import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.gestures.sample.R;
@@ -27,7 +28,7 @@ public class ImagesPagerActivity extends BaseActivity implements ViewPager.OnPag
 
         ViewPager viewPager = Views.find(this, R.id.paintings_view_pager);
         viewPager.setAdapter(new PaintingsImagesAdapter(viewPager, mPaintings));
-        viewPager.setOnPageChangeListener(this);
+        viewPager.addOnPageChangeListener(this);
         viewPager.setPageMargin(getResources().getDimensionPixelSize(R.dimen.view_pager_margin));
         onPageSelected(0); // Manually calling for first item
     }

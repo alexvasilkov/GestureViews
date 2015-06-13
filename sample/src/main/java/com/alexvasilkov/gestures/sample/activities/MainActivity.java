@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import com.alexvasilkov.android.commons.adapters.ItemsAdapter;
 
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public class MainActivity extends ListActivity {
     }
 
     private List<ActivityInfo> getActivitiesList() {
-        List<ActivityInfo> list = new ArrayList<ActivityInfo>();
+        List<ActivityInfo> list = new ArrayList<>();
 
         Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
         mainIntent.addCategory(Intent.CATEGORY_SAMPLE_CODE);
@@ -58,7 +59,7 @@ public class MainActivity extends ListActivity {
 
     private static class SampleAdapter extends ItemsAdapter<ActivityInfo> {
 
-        private PackageManager mPackageManager;
+        private final PackageManager mPackageManager;
 
         public SampleAdapter(Context context, List<ActivityInfo> list) {
             super(context);
@@ -67,7 +68,8 @@ public class MainActivity extends ListActivity {
         }
 
         @Override
-        protected View createView(ActivityInfo item, int pos, ViewGroup parent, LayoutInflater inflater) {
+        protected View createView(ActivityInfo item, int pos,
+                                  ViewGroup parent, LayoutInflater inflater) {
             return inflater.inflate(android.R.layout.simple_list_item_1, parent, false);
         }
 

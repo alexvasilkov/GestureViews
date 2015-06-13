@@ -4,15 +4,16 @@ import android.content.Context;
 import android.os.SystemClock;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
+
 import com.alexvasilkov.gestures.R;
 
 /**
- * A simple class that animates float values. Functionally similar to a {@link android.widget.Scroller}.
+ * A simple class that animates float values.Functionally similar to a {@link android.widget.Scroller}.
  */
 public class FloatScroller {
 
-    private Interpolator mInterpolator;
-    private int mAnimationDuration;
+    private final Interpolator mInterpolator;
+    private final int mAnimationDuration;
 
     private boolean mFinished = true;
 
@@ -39,8 +40,8 @@ public class FloatScroller {
      *
      * @see android.widget.Scroller#forceFinished(boolean)
      */
-    public void forceFinished(boolean finished) {
-        mFinished = finished;
+    public void forceFinished() {
+        mFinished = true;
     }
 
     /**

@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.alexvasilkov.gestures.sample">
+    package="com.alexvasilkov.gestures.sample">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="18"/>
+        android:maxSdkVersion="18" />
 
     <application
-        android:allowBackup="true"
         android:name=".SampleApplication"
+        android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
-        android:theme="@style/AppTheme.Dark"
-        android:label="GestureViews">
+        android:label="GestureViews"
+        android:theme="@style/AppTheme.Dark">
 
         <activity
             android:name=".activities.MainActivity"
             android:theme="@style/AppTheme">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
@@ -28,8 +28,8 @@
             android:name=".activities.ImagesPagerActivity"
             android:label="ImageView">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.SAMPLE_CODE"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
 
@@ -37,21 +37,21 @@
             android:name=".activities.ImageCroppingActivity"
             android:label="ImageView (rotate &amp; crop)">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.SAMPLE_CODE"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
 
         <activity
             android:name=".activities.ImageSnapshotActivity"
-            android:label="Cropped image"/>
+            android:label="Cropped image" />
 
         <activity
             android:name=".activities.LayoutPagerActivity"
             android:label="Layout">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.SAMPLE_CODE"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
 
@@ -59,8 +59,8 @@
             android:name=".activities.TextViewActivity"
             android:label="TextView">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.SAMPLE_CODE"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
 
@@ -68,15 +68,15 @@
             android:name=".activities.FlickrListActivity"
             android:label="Flickr">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.SAMPLE_CODE"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
 
         <activity
             android:name=".activities.FlickrImageActivity"
             android:label="Photo"
-            android:theme="@style/AppTheme.Transparent"/>
+            android:theme="@style/AppTheme.Transparent" />
 
     </application>
 

@@ -245,7 +245,7 @@ public class Settings {
 
     /**
      * Disable all gestures.<br/>
-     * Calls to this method are counted, so if you called {@link #disableGestures()} N times
+     * Calls to this method are counted, so if you called it N times
      * you should call {@link #enableGestures()} N times to re-enable all gestures.
      * <p/>
      * Useful to temporary disable touch gestures during animation or image loading.
@@ -260,7 +260,7 @@ public class Settings {
     /**
      * Re-enable all gestures disabled by {@link #disableGestures()} method.<br/>
      * Calls to this method are counted, so if you called {@link #disableGestures()} N times
-     * you should call {@link #enableGestures()} N times to re-enable all gestures.
+     * you should call this method N times to re-enable all gestures.
      * <p/>
      * Useful to temporary disable touch gestures during animation or image loading.
      * <p/>

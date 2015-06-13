@@ -7,11 +7,11 @@
 
     <com.alexvasilkov.gestures.widgets.GestureTextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:padding="16dp"
-        app:gvMinTextSize="12sp"
-        app:gvMaxTextSize="24sp"
+        android:text="@string/text_example"
         android:textColor="#FFF"
-        android:text="@string/text_example" />
+        app:gvMaxTextSize="24sp"
+        app:gvMinTextSize="12sp" />
 
 </ScrollView>

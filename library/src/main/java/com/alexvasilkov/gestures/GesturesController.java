@@ -3,6 +3,7 @@ package com.alexvasilkov.gestures;
 import android.content.Context;
 import android.graphics.PointF;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.GestureDetector;
@@ -26,7 +27,7 @@ import java.util.List;
  * This class implements {@link android.view.View.OnTouchListener} and provides
  * {@link GesturesController.OnStateChangedListener} to listen for state changes.
  * <p/>
- * Settings can be provided through {@link #getSettings()}. Note, that some settings are required,
+ * Settings can be obtained through {@link #getSettings()}. Note, that some settings are required,
  * see {@link Settings}.
  */
 public class GesturesController extends GesturesAdapter {
@@ -38,8 +39,7 @@ public class GesturesController extends GesturesAdapter {
     private final float mZoomGestureMinSpan;
     private final int mTouchSlop, mMinimumVelocity, mMaximumVelocity;
 
-    private final List<OnStateChangedListener> mStateListeners =
-            new LinkedList<OnStateChangedListener>();
+    private final List<OnStateChangedListener> mStateListeners = new LinkedList<>();
 
     private final AnimationTick mAnimationTick;
 
@@ -97,7 +97,7 @@ public class GesturesController extends GesturesAdapter {
     /**
      * Sets listener for basic touch events.
      * <p/>
-     * See also {@link com.alexvasilkov.gestures.GesturesController.OnGestureListener}
+     * See also {@link GesturesController.OnGestureListener}
      */
     public void setOnGesturesListener(OnGestureListener listener) {
         mGestureListener = listener;
@@ -106,7 +106,7 @@ public class GesturesController extends GesturesAdapter {
     /**
      * Adds listener for state changes.
      * <p/>
-     * See also {@link com.alexvasilkov.gestures.GesturesController.OnStateChangedListener}
+     * See also {@link GesturesController.OnStateChangedListener}
      */
     public void addOnStateChangedListener(OnStateChangedListener listener) {
         mStateListeners.add(listener);
@@ -115,7 +115,7 @@ public class GesturesController extends GesturesAdapter {
     /**
      * Removes listener for state changes.
      * <p/>
-     * See also {@link #addOnStateChangedListener(com.alexvasilkov.gestures.GesturesController.OnStateChangedListener)}
+     * See also {@link #addOnStateChangedListener(GesturesController.OnStateChangedListener)}
      */
     public void removeOnStateChangedListener(OnStateChangedListener listener) {
         mStateListeners.remove(listener);
@@ -124,7 +124,7 @@ public class GesturesController extends GesturesAdapter {
     /**
      * Sets whether long press is enabled or not. Long press is disabled by default.
      * <p/>
-     * See also {@link com.alexvasilkov.gestures.GesturesController.OnGestureListener#onLongPress(android.view.MotionEvent)}
+     * See also {@link GesturesController.OnGestureListener#onLongPress(android.view.MotionEvent)}
      */
     public void setLongPressEnabled(boolean enabled) {
         mGestureDetector.setIsLongpressEnabled(enabled);
@@ -142,9 +142,9 @@ public class GesturesController extends GesturesAdapter {
 
     /**
      * Returns current state. In most cases you should not modify state directly,
-     * use one of the methods provided in {@link com.alexvasilkov.gestures.StateController} instead.
+     * use one of the methods provided in {@link StateController} instead.
      * <p/>
-     * If current state was changed outside {@link com.alexvasilkov.gestures.GesturesController}
+     * If current state was changed outside {@link GesturesController}
      * you should call {@link GesturesController#updateState()} to properly apply changes.
      */
     public State getState() {
@@ -160,7 +160,7 @@ public class GesturesController extends GesturesAdapter {
 
     /**
      * Applies state restrictions and notifies
-     * {@link com.alexvasilkov.gestures.GesturesController.OnStateChangedListener} listeners.
+     * {@link GesturesController.OnStateChangedListener} listeners.
      */
     public void updateState() {
         mStateController.updateState(mState);
@@ -169,11 +169,11 @@ public class GesturesController extends GesturesAdapter {
 
     /**
      * Resets to initial state (default position, min zoom level) and notifies
-     * {@link com.alexvasilkov.gestures.GesturesController.OnStateChangedListener} listeners.
+     * {@link GesturesController.OnStateChangedListener} listeners.
      * <p/>
      * Should be called after view size is changed.
      * <p/>
-     * See {@link com.alexvasilkov.gestures.Settings#setSize(int, int)}.
+     * See {@link Settings#setSize(int, int)}.
      */
     public void resetState() {
         mStateController.resetState(mState);
@@ -202,7 +202,7 @@ public class GesturesController extends GesturesAdapter {
     }
 
     public void stopStateAnimation() {
-        mStateScroller.forceFinished(true);
+        mStateScroller.forceFinished();
     }
 
     protected void notifyStateUpdated() {
@@ -225,7 +225,7 @@ public class GesturesController extends GesturesAdapter {
     // -------------------
 
     @Override
-    public boolean onTouch(View view, MotionEvent event) {
+    public boolean onTouch(@NonNull View view, @NonNull MotionEvent event) {
         boolean result = mGestureDetector.onTouchEvent(event);
         result |= mScaleDetector.onTouchEvent(event);
         result |= mRotateDetector.onTouchEvent(event);
@@ -248,7 +248,7 @@ public class GesturesController extends GesturesAdapter {
     }
 
     @Override
-    public boolean onDown(MotionEvent e) {
+    public boolean onDown(@NonNull MotionEvent e) {
         stopFlingAnimation();
 
         mIsDoubleTapDetected = false;
@@ -274,17 +274,17 @@ public class GesturesController extends GesturesAdapter {
     }
 
     @Override
-    public boolean onSingleTapUp(MotionEvent e) {
+    public boolean onSingleTapUp(@NonNull MotionEvent e) {
         return mGestureListener != null && mGestureListener.onSingleTapUp(e);
     }
 
     @Override
-    public void onLongPress(MotionEvent e) {
+    public void onLongPress(@NonNull MotionEvent e) {
         if (mGestureListener != null) mGestureListener.onLongPress(e);
     }
 
     @Override
-    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+    public boolean onScroll(@NonNull MotionEvent e1, @NonNull MotionEvent e2, float dX, float dY) {
         if (!mSettings.isPanEnabled() || !mStateScroller.isFinished()) return false;
 
         if (!mIsScrollDetected) {
@@ -295,13 +295,13 @@ public class GesturesController extends GesturesAdapter {
             if (mIsScrollDetected) return true;
         }
 
-        if (mIsScrollDetected) mState.translateBy(-distanceX, -distanceY);
+        if (mIsScrollDetected) mState.translateBy(-dX, -dY);
 
         return mIsScrollDetected;
     }
 
     @Override
-    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+    public boolean onFling(@NonNull MotionEvent e1, @NonNull MotionEvent e2, float vX, float vY) {
         if (!mSettings.isPanEnabled() || !mStateScroller.isFinished()) return false;
 
         mIsFlingDetected = true;
@@ -316,8 +316,8 @@ public class GesturesController extends GesturesAdapter {
         stopFlingAnimation();
         mFlingScroller.fling(
                 x, y,
-                limitFlingVelocity(velocityX * FLING_COEFFICIENT),
-                limitFlingVelocity(velocityY * FLING_COEFFICIENT),
+                limitFlingVelocity(vX * FLING_COEFFICIENT),
+                limitFlingVelocity(vY * FLING_COEFFICIENT),
                 Integer.MIN_VALUE, Integer.MAX_VALUE,
                 Integer.MIN_VALUE, Integer.MAX_VALUE);
         mAnimationTick.startAnimation();
@@ -335,6 +335,7 @@ public class GesturesController extends GesturesAdapter {
         }
     }
 
+    @SuppressWarnings("UnusedParameters")
     protected void onFlingScroll(float fromX, float fromY, float toX, float toY) {
         float x = toX, y = toY;
         if (mSettings.isRestrictBounds()) {
@@ -351,12 +352,12 @@ public class GesturesController extends GesturesAdapter {
     }
 
     @Override
-    public boolean onSingleTapConfirmed(MotionEvent e) {
+    public boolean onSingleTapConfirmed(@NonNull MotionEvent e) {
         return mGestureListener != null && mGestureListener.onSingleTapConfirmed(e);
     }
 
     @Override
-    public boolean onDoubleTapEvent(MotionEvent e) {
+    public boolean onDoubleTapEvent(@NonNull MotionEvent e) {
         if (e.getActionMasked() != MotionEvent.ACTION_UP) return false;
         // ScaleGestureDetector can perform zoom by "double tap & drag" since KITKAT,
         // so we should suppress our double tap in this case
@@ -377,13 +378,13 @@ public class GesturesController extends GesturesAdapter {
     }
 
     @Override
-    public boolean onScaleBegin(ScaleGestureDetector detector) {
+    public boolean onScaleBegin(@NonNull ScaleGestureDetector detector) {
         mIsScaleDetected = mSettings.isZoomEnabled();
         return mIsScaleDetected;
     }
 
     @Override
-    public boolean onScale(ScaleGestureDetector detector) {
+    public boolean onScale(@NonNull ScaleGestureDetector detector) {
         if (!mSettings.isZoomEnabled() || !mStateScroller.isFinished()) return true;
 
         if (detector.getCurrentSpan() > mZoomGestureMinSpan) {
@@ -398,7 +399,7 @@ public class GesturesController extends GesturesAdapter {
     }
 
     @Override
-    public void onScaleEnd(ScaleGestureDetector detector) {
+    public void onScaleEnd(@NonNull ScaleGestureDetector detector) {
         mIsScaleDetected = false;
 
         if (!mSettings.isZoomEnabled()) return;
@@ -409,12 +410,12 @@ public class GesturesController extends GesturesAdapter {
     }
 
     @Override
-    public boolean onRotationBegin(RotationGestureDetector detector) {
+    public boolean onRotationBegin(@NonNull RotationGestureDetector detector) {
         return mSettings.isRotationEnabled();
     }
 
     @Override
-    public boolean onRotate(RotationGestureDetector detector) {
+    public boolean onRotate(@NonNull RotationGestureDetector detector) {
         if (!mSettings.isRotationEnabled() || !mStateScroller.isFinished()) return true;
 
         mState.rotateBy(detector.getRotationDelta(), detector.getFocusX(), detector.getFocusY());
@@ -518,7 +519,7 @@ public class GesturesController extends GesturesAdapter {
     }
 
     /**
-     * Simple implementation of {@link com.alexvasilkov.gestures.GesturesController.OnGestureListener}
+     * Simple implementation of {@link GesturesController.OnGestureListener}
      */
     public static class SimpleOnGestureListener implements OnGestureListener {
         @Override

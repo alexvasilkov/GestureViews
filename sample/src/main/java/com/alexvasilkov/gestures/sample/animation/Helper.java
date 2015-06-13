@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.RectF;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 
@@ -23,7 +24,7 @@ public class Helper {
     private static final String EXTRA_INFO = "com.alexvasilkov.gestures.INFO";
     private static final long DEFAULT_DURATION = 250L;
 
-    private Activity mActivity;
+    private final Activity mActivity;
     private final Info mInfo;
     private final GestureImageView mView;
     private ViewInfo mViewInfo;
@@ -154,7 +155,7 @@ public class Helper {
 
         mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+            public void onAnimationUpdate(@NonNull ValueAnimator valueAnimator) {
                 mAnimationState = (Float) valueAnimator.getAnimatedValue();
                 applyAnimationState();
             }
@@ -162,7 +163,7 @@ public class Helper {
 
         mAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
-            public void onAnimationStart(Animator animation) {
+            public void onAnimationStart(@NonNull Animator animation) {
                 Settings settings = mView.getController().getSettings();
                 // Saving settings states
                 mStateRestrictBounds = settings.isRestrictBounds();
@@ -171,7 +172,7 @@ public class Helper {
             }
 
             @Override
-            public void onAnimationEnd(Animator animation) {
+            public void onAnimationEnd(@NonNull Animator animation) {
                 if (isEnter) {
                     // Restoring original settings
                     mView.getController().getSettings()
@@ -204,7 +205,7 @@ public class Helper {
      * Interpolates from start rect to the end rect by given factor (from 0 to 1),
      * storing result into out rect.
      */
-    public static void interpolate(RectF out, RectF start, RectF end, float factor) {
+    private static void interpolate(RectF out, RectF start, RectF end, float factor) {
         float left = StateController.interpolate(start.left, end.left, factor);
         float top = StateController.interpolate(start.top, end.top, factor);
         float right = StateController.interpolate(start.right, end.right, factor);

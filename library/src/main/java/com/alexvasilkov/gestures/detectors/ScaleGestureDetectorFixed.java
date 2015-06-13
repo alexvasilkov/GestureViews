@@ -3,6 +3,7 @@ package com.alexvasilkov.gestures.detectors;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 
@@ -31,7 +32,7 @@ public class ScaleGestureDetectorFixed extends ScaleGestureDetector {
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
+    public boolean onTouchEvent(@NonNull MotionEvent event) {
         boolean result = super.onTouchEvent(event);
 
         mPrevY = mCurrY;
@@ -59,7 +60,8 @@ public class ScaleGestureDetectorFixed extends ScaleGestureDetector {
         mLastScaleFactor = factor;
 
         if (isInDoubleTapMode()) {
-            return (mCurrY > mPrevY && factor > 1f) || (mCurrY < mPrevY && factor < 1f) ? factor : lastFactor;
+            return (mCurrY > mPrevY && factor > 1f) || (mCurrY < mPrevY && factor < 1f)
+                    ? factor : lastFactor;
         }
 
         return factor;

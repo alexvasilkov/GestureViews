@@ -2,11 +2,13 @@ package com.alexvasilkov.gestures.widgets;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.ViewParent;
 import android.widget.TextView;
+
 import com.alexvasilkov.gestures.GesturesController;
 import com.alexvasilkov.gestures.R;
 import com.alexvasilkov.gestures.State;
@@ -30,6 +32,7 @@ public class GestureTextView extends TextView implements GesturesController.OnSt
         super(context, attrs, defStyle);
         mController = new GesturesController(context, this);
 
+        //noinspection ConstantConditions
         if (attrs != null) {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.GestureTextView);
             mMinTextSize = a.getDimension(R.styleable.GestureTextView_gvMinTextSize, 0f);
@@ -39,14 +42,15 @@ public class GestureTextView extends TextView implements GesturesController.OnSt
 
         if (mMinTextSize != 0f) {
             applySize(mMinTextSize);
-            if (mMaxTextSize != 0f) mController.getSettings().setMaxZoom(mMaxTextSize / mMinTextSize);
+            if (mMaxTextSize != 0f)
+                mController.getSettings().setMaxZoom(mMaxTextSize / mMinTextSize);
         }
 
         mController.getSettings().setOverzoomFactor(1f).setPanEnabled(false);
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
+    public boolean onTouchEvent(@NonNull MotionEvent event) {
         if (event.getActionMasked() == MotionEvent.ACTION_POINTER_DOWN) {
             ViewParent parent = getParent();
             if (parent != null) parent.requestDisallowInterceptTouchEvent(true);
@@ -59,7 +63,8 @@ public class GestureTextView extends TextView implements GesturesController.OnSt
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
         mController.getSettings()
-                .setViewport(w - getPaddingLeft() - getPaddingRight(), h - getPaddingTop() - getPaddingBottom())
+                .setViewport(w - getPaddingLeft() - getPaddingRight(),
+                        h - getPaddingTop() - getPaddingBottom())
                 .setSize(w, h);
         mController.updateState();
     }

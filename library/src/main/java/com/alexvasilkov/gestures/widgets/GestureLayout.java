@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -22,7 +23,8 @@ import com.alexvasilkov.gestures.State;
  * <p/>
  * Note: only one children is eligible here.
  */
-public class GestureLayout extends FrameLayout implements GesturesController.OnStateChangedListener {
+public class GestureLayout extends FrameLayout
+        implements GesturesController.OnStateChangedListener {
 
     private final GesturesControllerForPager mController;
 
@@ -69,9 +71,10 @@ public class GestureLayout extends FrameLayout implements GesturesController.OnS
     }
 
     @Override
-    public boolean dispatchTouchEvent(MotionEvent event) {
+    public boolean dispatchTouchEvent(@NonNull MotionEvent event) {
         mCurrentMotionEvent = event;
-        // We should remap given event back to original coordinates so children can correctly respond to it
+        // We should remap given event back to original coordinates
+        // so children can correctly respond to it
         MotionEvent invertedEvent = applyMatrix(event, mMatrixInverse);
         try {
             return super.dispatchTouchEvent(invertedEvent);
@@ -81,14 +84,14 @@ public class GestureLayout extends FrameLayout implements GesturesController.OnS
     }
 
     @Override
-    public ViewParent invalidateChildInParent(int[] location, Rect dirty) {
+    public ViewParent invalidateChildInParent(int[] location, @NonNull Rect dirty) {
         // Invalidating correct rectangle
         applyMatrix(dirty, mMatrix);
         return super.invalidateChildInParent(location, dirty);
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
+    public boolean onTouchEvent(@NonNull MotionEvent event) {
         // Passing original event to controller
         return mController.onTouch(this, mCurrentMotionEvent);
     }
@@ -126,7 +129,7 @@ public class GestureLayout extends FrameLayout implements GesturesController.OnS
     }
 
     @Override
-    protected void dispatchDraw(Canvas canvas) {
+    protected void dispatchDraw(@NonNull Canvas canvas) {
         canvas.save();
         canvas.concat(mMatrix);
         super.dispatchDraw(canvas);
@@ -134,7 +137,7 @@ public class GestureLayout extends FrameLayout implements GesturesController.OnS
     }
 
     @Override
-    public void addView(View child, int index, ViewGroup.LayoutParams params) {
+    public void addView(@NonNull View child, int index, @NonNull ViewGroup.LayoutParams params) {
         if (getChildCount() != 0)
             throw new IllegalArgumentException("GestureLayout can contain only one child");
         super.addView(child, index, params);

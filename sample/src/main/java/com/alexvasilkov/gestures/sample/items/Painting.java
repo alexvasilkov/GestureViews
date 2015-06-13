@@ -2,6 +2,7 @@ package com.alexvasilkov.gestures.sample.items;
 
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+
 import com.alexvasilkov.gestures.sample.R;
 
 public class Painting {
@@ -39,6 +40,8 @@ public class Painting {
         for (int i = 0; i < size; i++) {
             paintings[i] = new Painting(images.getResourceId(i, -1), titles[i], links[i]);
         }
+
+        images.recycle();
 
         return paintings;
     }

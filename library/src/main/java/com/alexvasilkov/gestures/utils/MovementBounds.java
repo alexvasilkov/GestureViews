@@ -5,17 +5,18 @@ import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.view.Gravity;
+
 import com.alexvasilkov.gestures.Settings;
 import com.alexvasilkov.gestures.State;
 import com.alexvasilkov.gestures.StateController;
 
 /**
- * Class that encapsulates logic related to movement bounds restriction. It will also apply view's gravity provided
- * by {@link com.alexvasilkov.gestures.Settings#getGravity()} method.
- * Movement bounds can be represented using regular rectangle most of the time. But if fit method set to
- * {@link com.alexvasilkov.gestures.Settings.Fit#OUTSIDE} and view have rotation != 0 than movement bounds
- * will be a rotated rectangle, and that will complicate restrictions logic a bit, since {@link android.graphics.Rect}
- * sides can only be parallel to coordinates axis.
+ * Encapsulates logic related to movement bounds restriction. It will also apply view's gravity
+ * provided by {@link Settings#getGravity()} method.
+ * <p/>
+ * Movement bounds can be represented using regular rectangle most of the time. But if fit method
+ * is set to {@link Settings.Fit#OUTSIDE} and view has rotation != 0 than movement bounds will be
+ * a rotated rectangle. That will complicate restrictions logic a bit.
  */
 public class MovementBounds {
 
@@ -39,7 +40,7 @@ public class MovementBounds {
 
 
     /**
-     * Restricts x & y coordinates to current bounds (see {@link #setup(com.alexvasilkov.gestures.State, com.alexvasilkov.gestures.Settings)}).
+     * Restricts x & y coordinates to current bounds (see {@link #setup(State, Settings)}).
      */
     public PointF restrict(float x, float y, float overscrollX, float overscrollY) {
         POINT_ARR[0] = x;
@@ -52,8 +53,10 @@ public class MovementBounds {
         }
 
         // Applying restrictions
-        POINT_ARR[0] = StateController.restrict(POINT_ARR[0], mBounds.left - overscrollX, mBounds.right + overscrollX);
-        POINT_ARR[1] = StateController.restrict(POINT_ARR[1], mBounds.top - overscrollY, mBounds.bottom + overscrollY);
+        POINT_ARR[0] = StateController.restrict(POINT_ARR[0],
+                mBounds.left - overscrollX, mBounds.right + overscrollX);
+        POINT_ARR[1] = StateController.restrict(POINT_ARR[1],
+                mBounds.top - overscrollY, mBounds.bottom + overscrollY);
 
         if (mRotation != 0f) {
             // Rotating restricted point back to original coordinates
@@ -148,9 +151,10 @@ public class MovementBounds {
             mBounds.top = mBounds.bottom = pos.top;
         }
 
-        // We should also adjust bounds position, since top-left corner of rotated view's rectangle will be somewhere
-        // on the edge.
-        // Note: for OUTSIDE fit method view's rotation was skipped above, so we will not need to adjust bounds here.
+        // We should also adjust bounds position, since top-left corner of rotated view's rectangle
+        // will be somewhere on the edge of non-rotated bounding rectangle.
+        // Note: for OUTSIDE fit method view's rotation was skipped above, so we will not need
+        // to adjust bounds here.
         if (settings.getFitMethod() != Settings.Fit.OUTSIDE) {
             state.get(MATRIX);
 
@@ -179,8 +183,8 @@ public class MovementBounds {
     }
 
     /**
-     * Returns view position within the viewport area with gravity applied, not taking into account view's position
-     * specified by matrix.
+     * Returns view position within the viewport area with gravity applied,
+     * not taking into account view's position specified by matrix.
      */
     private static Rect getPositionWithGravity(Matrix matrix, Settings settings) {
         RECT_TMP_F.set(0, 0, settings.getViewW(), settings.getViewH());
@@ -198,8 +202,8 @@ public class MovementBounds {
     public static Rect getMovementAreaWithGravity(Settings settings) {
         // Calculating movement area position basing on gravity
         RECT_TMP.set(0, 0, settings.getViewportW(), settings.getViewportH());
-        Gravity.apply(settings.getGravity(), settings.getMovementAreaW(), settings.getMovementAreaH(),
-                RECT_TMP, RECT_MOV_AREA);
+        Gravity.apply(settings.getGravity(),
+                settings.getMovementAreaW(), settings.getMovementAreaH(), RECT_TMP, RECT_MOV_AREA);
         return RECT_MOV_AREA;
     }
 

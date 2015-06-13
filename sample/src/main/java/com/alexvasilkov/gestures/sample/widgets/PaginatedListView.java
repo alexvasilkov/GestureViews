@@ -1,9 +1,11 @@
 package com.alexvasilkov.gestures.sample.widgets;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
+
 import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.gestures.sample.R;
 
@@ -20,10 +22,10 @@ public class PaginatedListView extends EndlessListView {
         }
     };
 
-    private View mFooterProgress;
-    private View mFooterError;
-    private TextView mLoadingText;
-    private TextView mErrorText;
+    private final View mFooterProgress;
+    private final View mFooterError;
+    private final TextView mLoadingText;
+    private final TextView mErrorText;
 
     public PaginatedListView(Context context) {
         this(context, null, 0);
@@ -46,7 +48,7 @@ public class PaginatedListView extends EndlessListView {
 
         mFooterError.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(@NonNull View view) {
                 // Reloading page with small delay, for smoother pressed state animation
                 removeCallbacks(mErrorClickAction);
                 postDelayed(mErrorClickAction, ERROR_CLICK_DELAY);

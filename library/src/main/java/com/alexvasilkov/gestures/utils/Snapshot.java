@@ -3,12 +3,13 @@ package com.alexvasilkov.gestures.utils;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+
 import com.alexvasilkov.gestures.Settings;
 
 public class Snapshot {
 
-    private Bitmap mBitmap;
-    private Canvas mCanvas;
+    private final Bitmap mBitmap;
+    private final Canvas mCanvas;
 
     public Snapshot(Settings settings) {
         mBitmap = Bitmap.createBitmap(settings.getMovementAreaW(), settings.getMovementAreaH(),

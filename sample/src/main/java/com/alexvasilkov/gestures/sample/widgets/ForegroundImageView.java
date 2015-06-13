@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.DrawableRes;
+import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
@@ -38,8 +41,8 @@ public class ForegroundImageView extends ImageView {
      *
      * @param drawableResId The drawable resource to be drawn on top of the children.
      */
-    public void setForegroundResource(int drawableResId) {
-        setForeground(getContext().getResources().getDrawable(drawableResId));
+    public void setForegroundResource(@DrawableRes int drawableResId) {
+        setForeground(ContextCompat.getDrawable(getContext(), drawableResId));
     }
 
     /**
@@ -107,7 +110,7 @@ public class ForegroundImageView extends ImageView {
     }
 
     @Override
-    public void draw(Canvas canvas) {
+    public void draw(@NonNull Canvas canvas) {
         super.draw(canvas);
 
         if (foreground != null) {
