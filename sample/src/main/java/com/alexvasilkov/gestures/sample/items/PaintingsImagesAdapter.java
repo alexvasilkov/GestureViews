@@ -32,7 +32,6 @@ public class PaintingsImagesAdapter extends PagerAdapter {
         final int match = ViewGroup.LayoutParams.MATCH_PARENT;
         container.addView(gImageView, match, match);
         gImageView.fixViewPagerScroll(mViewPager);
-        gImageView.getController().getSettings().setOverscrollDistance(context, 32, 0);
 
         Glide.with(context).load(mPaintings[position].getImageId()).into(gImageView);
 
