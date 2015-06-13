@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.FrameLayout;
+
 import com.alexvasilkov.gestures.GesturesController;
 import com.alexvasilkov.gestures.GesturesControllerPagerFix;
 import com.alexvasilkov.gestures.State;
@@ -55,16 +56,6 @@ public class GestureLayout extends FrameLayout implements GesturesController.OnS
      */
     public void fixViewPagerScroll(ViewPager pager) {
         mController.fixViewPagerScroll(pager);
-    }
-
-    /**
-     * Makes scrolling between different {@link GestureLayout}
-     * within given {@link android.support.v4.view.ViewPager} smoother.
-     *
-     * @see com.alexvasilkov.gestures.GesturesControllerPagerFix#fixViewPagerScroll(android.support.v4.view.ViewPager, boolean)
-     */
-    public void fixViewPagerScroll(ViewPager pager, boolean allowSmoothScroll) {
-        mController.fixViewPagerScroll(pager, allowSmoothScroll);
     }
 
     /**
@@ -144,7 +135,8 @@ public class GestureLayout extends FrameLayout implements GesturesController.OnS
 
     @Override
     public void addView(View child, int index, ViewGroup.LayoutParams params) {
-        if (getChildCount() != 0) throw new IllegalArgumentException("GestureLayout can contain only one child");
+        if (getChildCount() != 0)
+            throw new IllegalArgumentException("GestureLayout can contain only one child");
         super.addView(child, index, params);
     }
 

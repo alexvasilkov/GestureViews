@@ -3,6 +3,4 @@
 
     <integer name="gv_animation_duration">300</integer>
 
-    <item type="id" name="gv_view_pager_scroller" />
-
 </resources>

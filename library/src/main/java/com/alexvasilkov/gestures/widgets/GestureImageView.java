@@ -44,16 +44,6 @@ public class GestureImageView extends ImageView implements GesturesController.On
         setScaleType(ImageView.ScaleType.MATRIX);
     }
 
-    /**
-     * Makes scrolling between different {@link GestureImageView}
-     * within given {@link android.support.v4.view.ViewPager} smoother.
-     *
-     * @see com.alexvasilkov.gestures.GesturesControllerPagerFix#fixViewPagerScroll(android.support.v4.view.ViewPager)
-     */
-    public void fixViewPagerScroll(ViewPager pager) {
-        mController.fixViewPagerScroll(pager);
-    }
-
     @Override
     public void draw(Canvas canvas) {
         if (mIsClipping) {
@@ -79,10 +69,10 @@ public class GestureImageView extends ImageView implements GesturesController.On
      * Makes scrolling between different {@link GestureImageView}
      * within given {@link android.support.v4.view.ViewPager} smoother.
      *
-     * @see com.alexvasilkov.gestures.GesturesControllerPagerFix#fixViewPagerScroll(android.support.v4.view.ViewPager, boolean)
+     * @see com.alexvasilkov.gestures.GesturesControllerPagerFix#fixViewPagerScroll(android.support.v4.view.ViewPager)
      */
-    public void fixViewPagerScroll(ViewPager pager, boolean allowSmoothScroll) {
-        mController.fixViewPagerScroll(pager, allowSmoothScroll);
+    public void fixViewPagerScroll(ViewPager pager) {
+        mController.fixViewPagerScroll(pager);
     }
 
     /**

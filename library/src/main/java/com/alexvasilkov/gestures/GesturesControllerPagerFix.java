@@ -8,8 +8,8 @@ import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.ViewConfiguration;
+
 import com.alexvasilkov.gestures.detectors.RotationGestureDetector;
-import com.alexvasilkov.gestures.utils.SmoothViewPagerScroller;
 
 /**
  * Allows cross movement between view controlled by this {@link GesturesController}
@@ -69,32 +69,18 @@ public class GesturesControllerPagerFix extends GesturesController {
     }
 
     /**
-     * Simply calls {@link #fixViewPagerScroll(android.support.v4.view.ViewPager, boolean) fixViewPagerScroll(pager, true)}
-     */
-    public void fixViewPagerScroll(ViewPager pager) {
-        fixViewPagerScroll(pager, true);
-    }
-
-    /**
      * Sets parent ViewPager to enable smooth cross movement between ViewPager and it's child view.
      * <p/>
      * Note: once this method is called with {@code allowSmoothScroll} parameter set to true there will be no way back,
      * provided ViewPager will use custom scroller forever.
-     *
-     * @param allowSmoothScroll Whether to allow custom scroller to be applied to ViewPager for smoother animation
      */
-    public void fixViewPagerScroll(ViewPager pager, boolean allowSmoothScroll) {
+    public void fixViewPagerScroll(ViewPager pager) {
         mViewPager = pager;
         pager.setOnTouchListener(PAGER_TOUCH_LISTENER);
 
         // Disabling motion event splitting
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             pager.setMotionEventSplittingEnabled(false);
-        }
-
-        if (allowSmoothScroll) {
-            int duration = pager.getResources().getInteger(R.integer.gv_animation_duration);
-            initSmoothScroller(pager, duration);
         }
     }
 
@@ -325,28 +311,13 @@ public class GesturesControllerPagerFix extends GesturesController {
                 e.getX(), e.getY(), e.getMetaState());
     }
 
-    private static void initSmoothScroller(ViewPager pager, int duration) {
-        Object helper = pager.getTag(R.id.gv_view_pager_scroller);
-        if (!(helper instanceof SmoothViewPagerScroller)) {
-            SmoothViewPagerScroller scroller = SmoothViewPagerScroller.applySmoothScroller(pager, duration);
-            pager.setTag(R.id.gv_view_pager_scroller, scroller);
-        }
-    }
-
-    private static SmoothViewPagerScroller getViewPagerScroller(ViewPager pager) {
-        Object helper = pager.getTag(R.id.gv_view_pager_scroller);
-        return helper instanceof SmoothViewPagerScroller ? (SmoothViewPagerScroller) helper : null;
-    }
-
     private static void settleViewPagerIfFinished(ViewPager pager, MotionEvent e) {
-        if (e.getActionMasked() != MotionEvent.ACTION_UP && e.getActionMasked() != MotionEvent.ACTION_CANCEL) return;
+        if (e.getActionMasked() != MotionEvent.ACTION_UP && e.getActionMasked() != MotionEvent.ACTION_CANCEL)
+            return;
 
-        SmoothViewPagerScroller scroller = getViewPagerScroller(pager);
         // If viewpager is not settled we should force it to do so, fake drag will help here
-        if (scroller != null) scroller.setFixedDuration(true);
         pager.beginFakeDrag();
         if (pager.isFakeDragging()) pager.endFakeDrag();
-        if (scroller != null) scroller.setFixedDuration(false);
     }
 
 }
