@@ -6,6 +6,8 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
@@ -15,7 +17,6 @@ import android.widget.ImageView;
 import com.alexvasilkov.gestures.GesturesController;
 import com.alexvasilkov.gestures.GesturesControllerForPager;
 import com.alexvasilkov.gestures.State;
-import com.alexvasilkov.gestures.utils.Compat;
 import com.alexvasilkov.gestures.utils.Snapshot;
 
 /**
@@ -140,7 +141,7 @@ public class GestureImageView extends ImageView
 
     @Override
     public void setImageResource(int resId) {
-        setImageDrawable(Compat.getDrawable(getContext(), resId));
+        setImageDrawable(getDrawable(getContext(), resId));
     }
 
     @Override
@@ -165,6 +166,17 @@ public class GestureImageView extends ImageView
     public void onStateReset(State oldState, State newState) {
         // No-op
     }
+
+
+    @SuppressWarnings("deprecation")
+    public static Drawable getDrawable(Context context, @DrawableRes int id) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            return context.getDrawable(id);
+        } else {
+            return context.getResources().getDrawable(id);
+        }
+    }
+
 
     public interface OnSnapshotLoadedListener {
         void onSnapshotLoaded(Bitmap bitmap);
