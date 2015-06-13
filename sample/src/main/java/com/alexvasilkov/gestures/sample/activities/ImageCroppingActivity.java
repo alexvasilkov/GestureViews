@@ -9,7 +9,7 @@ import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.gestures.Settings;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.items.Painting;
-import com.alexvasilkov.gestures.widgets.GestureImageView;
+import com.alexvasilkov.gestures.views.GestureImageView;
 import com.bumptech.glide.Glide;
 
 public class ImageCroppingActivity extends BaseActivity {

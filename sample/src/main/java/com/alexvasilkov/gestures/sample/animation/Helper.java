@@ -15,7 +15,7 @@ import com.alexvasilkov.gestures.GesturesController;
 import com.alexvasilkov.gestures.Settings;
 import com.alexvasilkov.gestures.State;
 import com.alexvasilkov.gestures.StateController;
-import com.alexvasilkov.gestures.widgets.GestureImageView;
+import com.alexvasilkov.gestures.views.GestureImageView;
 
 import java.io.Serializable;
 

@@ -14,7 +14,7 @@ import com.alexvasilkov.android.commons.texts.SpannableBuilder;
 import com.alexvasilkov.android.commons.utils.Intents;
 import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.gestures.sample.R;
-import com.alexvasilkov.gestures.widgets.GestureLayout;
+import com.alexvasilkov.gestures.views.GestureLayout;
 import com.bumptech.glide.Glide;
 
 public class PaintingsLayoutsAdapter extends PagerAdapter implements View.OnClickListener {

@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.widgets;
+package com.alexvasilkov.gestures.views;
 
 import android.content.Context;
 import android.graphics.Bitmap;

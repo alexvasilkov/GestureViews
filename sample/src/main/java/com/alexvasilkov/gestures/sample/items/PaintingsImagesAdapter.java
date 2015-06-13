@@ -6,7 +6,7 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.alexvasilkov.gestures.widgets.GestureImageView;
+import com.alexvasilkov.gestures.views.GestureImageView;
 import com.bumptech.glide.Glide;
 
 public class PaintingsImagesAdapter extends PagerAdapter {

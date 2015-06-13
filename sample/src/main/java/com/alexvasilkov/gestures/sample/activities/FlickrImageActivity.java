@@ -9,7 +9,7 @@ import android.view.View;
 import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.animation.Helper;
-import com.alexvasilkov.gestures.widgets.GestureImageView;
+import com.alexvasilkov.gestures.views.GestureImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;

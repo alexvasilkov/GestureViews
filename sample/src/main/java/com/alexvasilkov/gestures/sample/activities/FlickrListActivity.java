@@ -9,8 +9,8 @@ import com.alexvasilkov.events.Events.Result;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.items.FlickrListAdapter;
 import com.alexvasilkov.gestures.sample.logic.FlickrApi;
-import com.alexvasilkov.gestures.sample.widgets.EndlessListView;
-import com.alexvasilkov.gestures.sample.widgets.PaginatedListView;
+import com.alexvasilkov.gestures.sample.views.EndlessListView;
+import com.alexvasilkov.gestures.sample.views.PaginatedListView;
 import com.googlecode.flickrjandroid.photos.PhotoList;
 
 public class FlickrListActivity extends BaseActivity {

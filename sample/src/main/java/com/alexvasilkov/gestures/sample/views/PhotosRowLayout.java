@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.widgets;
+package com.alexvasilkov.gestures.sample.views;
 
 import android.content.Context;
 import android.util.AttributeSet;

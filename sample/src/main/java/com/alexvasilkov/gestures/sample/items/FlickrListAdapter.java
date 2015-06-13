@@ -13,7 +13,7 @@ import com.alexvasilkov.android.commons.adapters.ItemsAdapter;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.activities.FlickrImageActivity;
 import com.alexvasilkov.gestures.sample.animation.Helper;
-import com.alexvasilkov.gestures.sample.widgets.PhotosRowLayout;
+import com.alexvasilkov.gestures.sample.views.PhotosRowLayout;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.googlecode.flickrjandroid.photos.Photo;
