@@ -5,12 +5,20 @@ import android.graphics.PointF;
 import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
-import android.view.*;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
+import android.view.View;
+import android.view.ViewConfiguration;
 import android.widget.OverScroller;
+
 import com.alexvasilkov.gestures.detectors.RotationGestureDetector;
 import com.alexvasilkov.gestures.detectors.ScaleGestureDetectorFixed;
 import com.alexvasilkov.gestures.utils.FloatScroller;
 import com.alexvasilkov.gestures.utils.MovementBounds;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Main logic to update view state ({@link State}) basing on screen touches.
@@ -30,7 +38,8 @@ public class GesturesController extends GesturesAdapter {
     private final float mZoomGestureMinSpan;
     private final int mTouchSlop, mMinimumVelocity, mMaximumVelocity;
 
-    private final OnStateChangedListener mStateListener;
+    private final List<OnStateChangedListener> mStateListeners =
+            new LinkedList<OnStateChangedListener>();
 
     private final AnimationTick mAnimationTick;
 
@@ -49,7 +58,9 @@ public class GesturesController extends GesturesAdapter {
     private final FloatScroller mStateScroller;
 
     private final MovementBounds mFlingBounds = new MovementBounds();
-    private final State mPrevState = new State(), mStateStart = new State(), mStateEnd = new State();
+    private final State mPrevState = new State();
+    private final State mStateStart = new State();
+    private final State mStateEnd = new State();
 
     private final Settings mSettings;
     private final State mState = new State();
@@ -59,12 +70,13 @@ public class GesturesController extends GesturesAdapter {
 
     public GesturesController(Context context, OnStateChangedListener listener) {
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-        mZoomGestureMinSpan = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, ZOOM_GESTURE_MIN_SPAN_DP, metrics);
+        mZoomGestureMinSpan = TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, ZOOM_GESTURE_MIN_SPAN_DP, metrics);
 
         mSettings = new Settings(context);
         mStateController = new StateController(mSettings);
 
-        mStateListener = listener;
+        mStateListeners.add(listener);
 
         mAnimationTick = new AnimationTick();
         mGestureDetector = new GestureDetector(context, this);
@@ -83,10 +95,30 @@ public class GesturesController extends GesturesAdapter {
 
 
     /**
-     * Sets listener for basic touch events. See {@link com.alexvasilkov.gestures.GesturesController.OnGestureListener}
+     * Sets listener for basic touch events.
+     * <p/>
+     * See also {@link com.alexvasilkov.gestures.GesturesController.OnGestureListener}
      */
     public void setOnGesturesListener(OnGestureListener listener) {
         mGestureListener = listener;
+    }
+
+    /**
+     * Adds listener for state changes.
+     * <p/>
+     * See also {@link com.alexvasilkov.gestures.GesturesController.OnStateChangedListener}
+     */
+    public void addOnStateChangedListener(OnStateChangedListener listener) {
+        mStateListeners.add(listener);
+    }
+
+    /**
+     * Removes listener for state changes.
+     * <p/>
+     * See also {@link #addOnStateChangedListener(com.alexvasilkov.gestures.GesturesController.OnStateChangedListener)}
+     */
+    public void removeOnStateChangedListener(OnStateChangedListener listener) {
+        mStateListeners.remove(listener);
     }
 
     /**
@@ -112,8 +144,8 @@ public class GesturesController extends GesturesAdapter {
      * Returns current state. In most cases you should not modify state directly,
      * use one of the methods provided in {@link com.alexvasilkov.gestures.StateController} instead.
      * <p/>
-     * If current state was changed outside {@link com.alexvasilkov.gestures.GesturesController} you should
-     * call {@link GesturesController#updateState()} to properly apply changes.
+     * If current state was changed outside {@link com.alexvasilkov.gestures.GesturesController}
+     * you should call {@link GesturesController#updateState()} to properly apply changes.
      */
     public State getState() {
         return mState;
@@ -127,8 +159,8 @@ public class GesturesController extends GesturesAdapter {
     }
 
     /**
-     * Applies state restrictions and notifies {@link com.alexvasilkov.gestures.GesturesController.OnStateChangedListener}
-     * listener.
+     * Applies state restrictions and notifies
+     * {@link com.alexvasilkov.gestures.GesturesController.OnStateChangedListener} listeners.
      */
     public void updateState() {
         mStateController.updateState(mState);
@@ -137,7 +169,7 @@ public class GesturesController extends GesturesAdapter {
 
     /**
      * Resets to initial state (default position, min zoom level) and notifies
-     * {@link com.alexvasilkov.gestures.GesturesController.OnStateChangedListener} listener.
+     * {@link com.alexvasilkov.gestures.GesturesController.OnStateChangedListener} listeners.
      * <p/>
      * Should be called after view size is changed.
      * <p/>
@@ -145,12 +177,12 @@ public class GesturesController extends GesturesAdapter {
      */
     public void resetState() {
         mStateController.resetState(mState);
-        notifyStateUpdated();
+        notifyStateReset();
     }
 
     /**
-     * Animates current state to provided end state. Note, that no state restrictions will be applied during animation,
-     * so you should ensure end state is within bounds.
+     * Animates current state to provided end state. Note, that no state restrictions
+     * will be applied during animation, so you should ensure end state is within bounds.
      */
     public void animateStateTo(State endState) {
         if (endState == null) return;
@@ -173,9 +205,18 @@ public class GesturesController extends GesturesAdapter {
         mStateScroller.forceFinished(true);
     }
 
-    public void notifyStateUpdated() {
+    protected void notifyStateUpdated() {
         mPrevState.set(mState);
-        mStateListener.onStateChanged(mState);
+        for (OnStateChangedListener listener : mStateListeners) {
+            listener.onStateChanged(mState);
+        }
+    }
+
+    protected void notifyStateReset() {
+        for (OnStateChangedListener listener : mStateListeners) {
+            listener.onStateReset(mPrevState, mState);
+        }
+        notifyStateUpdated();
     }
 
 
@@ -189,7 +230,8 @@ public class GesturesController extends GesturesAdapter {
         result |= mScaleDetector.onTouchEvent(event);
         result |= mRotateDetector.onTouchEvent(event);
 
-        if (event.getActionMasked() == MotionEvent.ACTION_UP || event.getActionMasked() == MotionEvent.ACTION_CANCEL) {
+        if (event.getActionMasked() == MotionEvent.ACTION_UP
+                || event.getActionMasked() == MotionEvent.ACTION_CANCEL) {
             onUpOrCancel(event);
         }
 
@@ -227,8 +269,8 @@ public class GesturesController extends GesturesAdapter {
     protected void onUpOrCancel(MotionEvent e) {
         if (mIsFlingDetected || mIsDoubleTapDetected) return;
 
-        State endState = mStateController.restrictStateBoundsCopy(mState, mPivotX, mPivotY, false, false);
-        animateStateTo(endState);
+        State s = mStateController.restrictStateBoundsCopy(mState, mPivotX, mPivotY, false, false);
+        animateStateTo(s);
     }
 
     @Override
@@ -284,9 +326,13 @@ public class GesturesController extends GesturesAdapter {
     }
 
     private int limitFlingVelocity(float velocity) {
-        if (Math.abs(velocity) < mMinimumVelocity) return 0;
-        if (Math.abs(velocity) >= mMaximumVelocity) return (int) Math.signum(velocity) * mMaximumVelocity;
-        return Math.round(velocity);
+        if (Math.abs(velocity) < mMinimumVelocity) {
+            return 0;
+        } else if (Math.abs(velocity) >= mMaximumVelocity) {
+            return (int) Math.signum(velocity) * mMaximumVelocity;
+        } else {
+            return Math.round(velocity);
+        }
     }
 
     protected void onFlingScroll(float fromX, float fromY, float toX, float toY) {
@@ -358,8 +404,8 @@ public class GesturesController extends GesturesAdapter {
         if (!mSettings.isZoomEnabled()) return;
 
         // Scroll can still be in place, so we should preserver overscroll
-        State endState = mStateController.restrictStateBoundsCopy(mState, mPivotX, mPivotY, true, false);
-        animateStateTo(endState);
+        State s = mStateController.restrictStateBoundsCopy(mState, mPivotX, mPivotY, true, false);
+        animateStateTo(s);
     }
 
     @Override
@@ -436,7 +482,8 @@ public class GesturesController extends GesturesAdapter {
 
         void startAnimation() {
             mHandler.removeCallbacks(this);
-            mHandler.postDelayed(this, 10); // small delay is required (sometimes runnable can be called immediately)
+            // Small delay is required (sometimes runnable can be called immediately)
+            mHandler.postDelayed(this, 10);
         }
 
     }
@@ -451,6 +498,8 @@ public class GesturesController extends GesturesAdapter {
      */
     public interface OnStateChangedListener {
         void onStateChanged(State state);
+
+        void onStateReset(State oldState, State newState);
     }
 
     /**

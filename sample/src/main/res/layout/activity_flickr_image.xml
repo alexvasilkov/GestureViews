@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.alexvasilkov.gestures.widgets.GestureImageView
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/flickr_image"
+    android:id="@+id/flickr_image_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"/>
+    android:layout_height="match_parent">
+
+    <com.alexvasilkov.gestures.widgets.GestureImageView
+        android:id="@+id/flickr_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</FrameLayout>

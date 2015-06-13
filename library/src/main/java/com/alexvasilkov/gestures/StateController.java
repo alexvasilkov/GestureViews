@@ -3,6 +3,7 @@ package com.alexvasilkov.gestures;
 import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.graphics.RectF;
+
 import com.alexvasilkov.gestures.utils.MovementBounds;
 
 public class StateController {
@@ -29,12 +30,12 @@ public class StateController {
     /**
      * Resets to initial state (min zoom, position according to gravity)
      */
-    public void resetState(State state) {
+    void resetState(State state) {
         mIsResetRequired = true;
         updateState(state);
     }
 
-    public void updateState(State state) {
+    void updateState(State state) {
         if (mIsResetRequired) {
             // We can correctly reset state only when we have both view size and viewport size
             // but there can be a delay before we have all values properly set
@@ -87,14 +88,15 @@ public class StateController {
     public State restrictStateBoundsCopy(State state, float pivotX, float pivotY,
                                          boolean allowOverscroll, boolean allowOverzoom) {
         mTmpState.set(state);
-        boolean changed = restrictStateBounds(mTmpState, null, pivotX, pivotY, allowOverscroll, allowOverzoom);
+        boolean changed = restrictStateBounds(mTmpState, null, pivotX, pivotY,
+                allowOverscroll, allowOverzoom);
         return changed ? mTmpState.copy() : null;
     }
 
     /**
      * Restricts state's translation and zoom bounds. If {@code prevState} is not null and
-     * {@code allowOverscroll (allowOverzoom)} parameter is true than resilience will be applied to translation (zoom)
-     * changes if they are out of bounds.
+     * {@code allowOverscroll (allowOverzoom)} parameter is true than resilience
+     * will be applied to translation (zoom) changes if they are out of bounds.
      *
      * @return true if state was changed, false otherwise
      */
@@ -148,8 +150,10 @@ public class StateController {
 
         if (prevState != null) {
             RectF extBounds = bounds.getExternalBounds();
-            x = applyTranslationResilience(x, prevState.getX(), extBounds.left, extBounds.right, overscrollX);
-            y = applyTranslationResilience(y, prevState.getY(), extBounds.top, extBounds.bottom, overscrollY);
+            x = applyTranslationResilience(x, prevState.getX(),
+                    extBounds.left, extBounds.right, overscrollX);
+            y = applyTranslationResilience(y, prevState.getY(),
+                    extBounds.top, extBounds.bottom, overscrollY);
         }
 
         if (!State.equals(x, state.getX()) || !State.equals(y, state.getY())) {
@@ -219,7 +223,8 @@ public class StateController {
     /**
      * Adjusting min and max zoom levels.
      *
-     * @return true if zoom levels was correctly updated (viewport and view size are known), false otherwise
+     * @return true if zoom levels was correctly updated (viewport and view size are known),
+     * false otherwise
      */
     private boolean adjustZoomLevels(State state) {
         mMaxZoom = mSettings.getMaxZoom();
@@ -286,7 +291,8 @@ public class StateController {
     }
 
     /**
-     * Interpolates from start state to end state by given factor (from 0 to 1), storing result into out state.
+     * Interpolates from start state to end state by given factor (from 0 to 1),
+     * storing result into out state.
      */
     public static void interpolate(State out, State start, State end, float factor) {
         float x = interpolate(start.getX(), end.getX(), factor);
@@ -296,7 +302,7 @@ public class StateController {
         out.set(x, y, zoom, rotation);
     }
 
-    private static float interpolate(float start, float end, float factor) {
+    public static float interpolate(float start, float end, float factor) {
         return start + (end - start) * factor;
     }
 

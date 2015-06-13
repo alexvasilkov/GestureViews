@@ -1,11 +1,13 @@
 package com.alexvasilkov.gestures.sample.activities;
 
-import android.content.Context;
-import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.View;
 
 import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.gestures.sample.R;
+import com.alexvasilkov.gestures.sample.animation.Helper;
 import com.alexvasilkov.gestures.widgets.GestureImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -16,32 +18,36 @@ import com.googlecode.flickrjandroid.photos.Photo;
 
 public class FlickrImageActivity extends BaseActivity {
 
-    private static final String EXTRA_PHOTO = "photo";
+    private Helper mHelper;
 
-    public static void start(Context context, Photo photo) {
-        Intent intent = new Intent(context, FlickrImageActivity.class);
-        intent.putExtra(EXTRA_PHOTO, photo);
-        context.startActivity(intent);
-    }
 
+    @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_flickr_image);
 
         final GestureImageView imageView = Views.find(this, R.id.flickr_image);
-
         imageView.getController().getSettings()
                 .setFillViewport(true)
-                .setMaxZoom(3f);
+                .setMaxZoom(3f)
+                .disableGestures(); // Temporary disabling touch controls
 
-        // Disabling touch controls
-        imageView.getController().getSettings()
-                .setPanEnabled(false)
-                .setZoomEnabled(false)
-                .setDoubleTapEnabled(false);
+        final View layout = Views.find(this, R.id.flickr_image_layout);
+        int color = getResources().getColor(R.color.window_background_dark);
+        final Drawable background = new ColorDrawable(color);
+        layout.setBackgroundDrawable(background);
 
-        final Photo photo = (Photo) getIntent().getSerializableExtra(EXTRA_PHOTO);
+        mHelper = new Helper(this, imageView);
+        mHelper.setAnimationUpdateListener(new Helper.AnimationUpdateListener() {
+            @Override
+            public void onAnimationUpdate(float animationState) {
+                background.setAlpha((int) (255 * animationState));
+            }
+        });
+        mHelper.enter(savedInstanceState);
+
+        final Photo photo = mHelper.getItem();
         final String photoUrl = photo.getLargeSize() == null
                 ? photo.getMediumUrl() : photo.getLargeUrl();
 
@@ -49,7 +55,9 @@ public class FlickrImageActivity extends BaseActivity {
                 .load(photoUrl)
                 .thumbnail(Glide.with(this)
                         .load(photo.getThumbnailUrl())
+                        .dontTransform()
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE))
+                .dontAnimate()
                 .dontTransform()
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .listener(new RequestListener<String, GlideDrawable>() {
@@ -66,16 +74,18 @@ public class FlickrImageActivity extends BaseActivity {
                                                    boolean isFromMemoryCache,
                                                    boolean isFirstResource) {
                         if (url.equals(photoUrl)) {
-                            // Enabling touch controls
-                            imageView.getController().getSettings()
-                                    .setPanEnabled(true)
-                                    .setZoomEnabled(true)
-                                    .setDoubleTapEnabled(true);
+                            // Re-enabling touch controls
+                            imageView.getController().getSettings().enableGestures();
                         }
                         return false;
                     }
                 })
                 .into(imageView);
+    }
+
+    @Override
+    public void onBackPressed() {
+        mHelper.exit();
     }
 
 }

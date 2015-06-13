@@ -130,6 +130,11 @@ public class GestureLayout extends FrameLayout implements GesturesController.OnS
     }
 
     @Override
+    public void onStateReset(State oldState, State newState) {
+        // No-op
+    }
+
+    @Override
     protected void dispatchDraw(Canvas canvas) {
         canvas.save();
         canvas.concat(mMatrix);

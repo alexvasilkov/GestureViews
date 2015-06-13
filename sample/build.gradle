@@ -1,28 +1,27 @@
 buildscript {
-    repositories {
-        mavenCentral()
-    }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.12.2'
-        classpath 'com.alexvasilkov:android-sign-release:0.4'
+        classpath 'com.alexvasilkov:android-sign-release:0.8.1'
     }
 }
 
 apply plugin: 'com.android.application'
-apply plugin: 'android-sign-release'
+apply plugin: 'com.alexvasilkov.sign'
 
 android {
-    compileSdkVersion Integer.parseInt(ANDROID_COMPILE_SDK)
-    buildToolsVersion ANDROID_BUILD_TOOLS_VERSION
+    compileSdkVersion 22
+    buildToolsVersion '22.0.1'
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion Integer.parseInt(ANDROID_TARGET_SDK)
-        versionCode Integer.parseInt(VERSION_CODE)
-        versionName VERSION_NAME
+        targetSdkVersion 22
+        versionCode 3
+        versionName '1.0.3'
     }
 
     signingConfigs {
+        debug {
+            storeFile file('debug.keystore')
+        }
         release {
             storeFile file("gesture-views-release-key.keystore")
             keyAlias "release"
@@ -30,6 +29,9 @@ android {
     }
 
     buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+        }
         release {
             signingConfig signingConfigs.release
         }
@@ -39,10 +41,10 @@ android {
 dependencies {
     compile project(':library')
 
-    compile 'com.android.support:support-v4:20.0.0'
-    compile 'com.alexvasilkov:android-commons:1.2.3'
-    compile 'com.alexvasilkov:events:0.1'
-    compile 'com.github.bumptech.glide:glide:3.3.1'
+    compile 'com.android.support:support-v4:22.2.0'
+    compile 'com.alexvasilkov:android-commons:1.2.4'
+    compile 'com.alexvasilkov:events:0.4.0'
+    compile 'com.github.bumptech.glide:glide:3.6.0'
 
     compile 'com.googlecode.flickrj-android:flickrj-android:2.1.0'
     compile 'org.slf4j:slf4j-android:1.7.7' // Required by Flickr library

@@ -73,6 +73,11 @@ public class GestureTextView extends TextView implements GesturesController.OnSt
         applySize(Math.round(size));
     }
 
+    @Override
+    public void onStateReset(State oldState, State newState) {
+        // No-op
+    }
+
     private void applySize(float size) {
         if (mSize != size) {
             mSize = size;

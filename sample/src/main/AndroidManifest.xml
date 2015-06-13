@@ -75,7 +75,8 @@
 
         <activity
             android:name=".activities.FlickrImageActivity"
-            android:label="Photo"/>
+            android:label="Photo"
+            android:theme="@style/AppTheme.Transparent"/>
 
     </application>
 

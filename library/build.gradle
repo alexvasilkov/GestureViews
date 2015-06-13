@@ -1,28 +1,19 @@
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:0.12.2'
-    }
-}
-
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion Integer.parseInt(ANDROID_COMPILE_SDK)
-    buildToolsVersion ANDROID_BUILD_TOOLS_VERSION
+    compileSdkVersion 22
+    buildToolsVersion '22.0.1'
 
     defaultConfig {
         minSdkVersion 9
-        targetSdkVersion Integer.parseInt(ANDROID_TARGET_SDK)
-        versionCode Integer.parseInt(VERSION_CODE)
+        targetSdkVersion 22
+        versionCode VERSION_CODE.toInteger()
         versionName VERSION_NAME
     }
 }
 
 dependencies {
-    provided 'com.android.support:support-v4:20.0.0'
+    compile 'com.android.support:support-v4:22.2.0'
 }
 
 apply from: 'gradle-mvn-push.gradle'

@@ -5,10 +5,10 @@ import android.util.TypedValue;
 import android.view.Gravity;
 
 /**
- * Various settings needed for {@link GesturesController}
- * and for {@link StateController}.
+ * Various settings needed for {@link GesturesController} and for {@link StateController}.
  * <p/>
- * Required settings are viewport size ({@link #setViewport(int, int)}) and view size {@link #setSize(int, int)}
+ * Required settings are viewport size ({@link #setViewport(int, int)})
+ * and view size {@link #setSize(int, int)}
  */
 public class Settings {
 
@@ -88,6 +88,11 @@ public class Settings {
     private boolean isDoubleTapEnabled = true;
 
     /**
+     * Counter for gestures disable calls
+     */
+    private int gesturesDisableCount;
+
+    /**
      * Whether view's transformations should be kept in bounds or not
      */
     private boolean isRestrictBounds = true;
@@ -146,12 +151,14 @@ public class Settings {
     }
 
     /**
-     * Setting overscroll distance in pixels. User will be able to "over scroll" up to this distance. Cannot be < 0.
+     * Setting overscroll distance in pixels. User will be able to "over scroll"
+     * up to this distance. Cannot be < 0.
      * <p/>
      * Default value is {@link #OVERSCROLL_DISTANCE} converted to pixels.
      */
     public Settings setOverscrollDistance(float distanceX, float distanceY) {
-        if (distanceX < 0f || distanceY < 0f) throw new IllegalArgumentException("Overscroll distance cannot be < 0");
+        if (distanceX < 0f || distanceY < 0f)
+            throw new IllegalArgumentException("Overscroll distance cannot be < 0");
         overscrollDistanceX = distanceX;
         overscrollDistanceY = distanceY;
         return this;
@@ -165,8 +172,8 @@ public class Settings {
     }
 
     /**
-     * If set to true small view will be scaled to fit entire viewport (or entire movement area if it was set)
-     * even if this will require zoom level above max zoom level.
+     * If set to true small view will be scaled to fit entire viewport (or entire movement area
+     * if it was set) even if this will require zoom level above max zoom level.
      * <p/>
      * Default value is false.
      */
@@ -233,6 +240,34 @@ public class Settings {
      */
     public Settings setDoubleTapEnabled(boolean enabled) {
         isDoubleTapEnabled = enabled;
+        return this;
+    }
+
+    /**
+     * Disable all gestures.<br/>
+     * Calls to this method are counted, so if you called {@link #disableGestures()} N times
+     * you should call {@link #enableGestures()} N times to re-enable all gestures.
+     * <p/>
+     * Useful to temporary disable touch gestures during animation or image loading.
+     * <p/>
+     * See also {@link #enableGestures()}
+     */
+    public Settings disableGestures() {
+        gesturesDisableCount++;
+        return this;
+    }
+
+    /**
+     * Re-enable all gestures disabled by {@link #disableGestures()} method.<br/>
+     * Calls to this method are counted, so if you called {@link #disableGestures()} N times
+     * you should call {@link #enableGestures()} N times to re-enable all gestures.
+     * <p/>
+     * Useful to temporary disable touch gestures during animation or image loading.
+     * <p/>
+     * See also {@link #disableGestures()}
+     */
+    public Settings enableGestures() {
+        gesturesDisableCount--;
         return this;
     }
 
@@ -304,19 +339,23 @@ public class Settings {
     }
 
     public boolean isPanEnabled() {
-        return isPanEnabled;
+        return isGesturesEnabled() && isPanEnabled;
     }
 
     public boolean isZoomEnabled() {
-        return isZoomEnabled;
+        return isGesturesEnabled() && isZoomEnabled;
     }
 
     public boolean isRotationEnabled() {
-        return isRotationEnabled;
+        return isGesturesEnabled() && isRotationEnabled;
     }
 
     public boolean isDoubleTapEnabled() {
-        return isDoubleTapEnabled;
+        return isGesturesEnabled() && isDoubleTapEnabled;
+    }
+
+    public boolean isGesturesEnabled() {
+        return gesturesDisableCount <= 0;
     }
 
     public boolean isRestrictBounds() {
@@ -327,7 +366,8 @@ public class Settings {
      * Whether at least one of pan, zoom, rotation or double tap are enabled or not
      */
     public boolean isEnabled() {
-        return isPanEnabled || isZoomEnabled || isRotationEnabled || isDoubleTapEnabled;
+        return isGesturesEnabled() &&
+                (isPanEnabled || isZoomEnabled || isRotationEnabled || isDoubleTapEnabled);
     }
 
 

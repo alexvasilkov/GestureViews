@@ -16,8 +16,8 @@ public class SampleApplication extends Application {
 
         sAppContext = getApplicationContext();
 
-        Events.setAppContext(this);
-        Events.register(new FlickrApi());
+        Events.init(this);
+        Events.register(FlickrApi.class);
     }
 
     public static Context getContext() {

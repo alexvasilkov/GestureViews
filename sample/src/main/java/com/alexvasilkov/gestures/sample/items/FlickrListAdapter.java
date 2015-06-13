@@ -1,6 +1,9 @@
 package com.alexvasilkov.gestures.sample.items;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +12,7 @@ import android.widget.ImageView;
 import com.alexvasilkov.android.commons.adapters.ItemsAdapter;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.activities.FlickrImageActivity;
+import com.alexvasilkov.gestures.sample.animation.Helper;
 import com.alexvasilkov.gestures.sample.widgets.PhotosRowLayout;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -21,8 +25,8 @@ import java.util.List;
 public class FlickrListAdapter extends ItemsAdapter<FlickrListAdapter.PhotoRow>
         implements View.OnClickListener {
 
-    private final List<PhotoList> mPages = new ArrayList<PhotoList>();
-    private final List<Photo> mPhotos = new ArrayList<Photo>();
+    private final List<PhotoList> mPages = new ArrayList<>();
+    private final List<Photo> mPhotos = new ArrayList<>();
     private final int mColumns;
 
     public FlickrListAdapter(Context context) {
@@ -36,7 +40,7 @@ public class FlickrListAdapter extends ItemsAdapter<FlickrListAdapter.PhotoRow>
 
         // Combine photos into rows
         final int size = mPhotos.size();
-        List<PhotoRow> rows = new ArrayList<PhotoRow>(size / mColumns + 1);
+        List<PhotoRow> rows = new ArrayList<>(size / mColumns + 1);
 
         for (int i = 0; i < size; i += mColumns) {
             PhotoRow row = new PhotoRow(mColumns);
@@ -95,6 +99,7 @@ public class FlickrListAdapter extends ItemsAdapter<FlickrListAdapter.PhotoRow>
                 .load(photo == null ? null : photo.getMediumUrl())
                 .placeholder(R.color.image_background)
                 .dontAnimate()
+                .dontTransform()
                 .thumbnail(Glide.with(image.getContext())
                         .load(photo == null ? null : photo.getThumbnailUrl())
                         .dontTransform()
@@ -103,9 +108,12 @@ public class FlickrListAdapter extends ItemsAdapter<FlickrListAdapter.PhotoRow>
     }
 
     @Override
-    public void onClick(View view) {
+    public void onClick(@NonNull View view) {
         Photo photo = (Photo) view.getTag(R.id.tag_item);
-        FlickrImageActivity.start(view.getContext(), photo);
+        Activity activity = (Activity) view.getContext();
+        Intent intent = new Intent(activity, FlickrImageActivity.class);
+
+        new Helper.Starter().from((ImageView) view, photo).start(activity, intent);
     }
 
 
@@ -114,7 +122,7 @@ public class FlickrListAdapter extends ItemsAdapter<FlickrListAdapter.PhotoRow>
         final List<Photo> photos;
 
         PhotoRow(int size) {
-            this.photos = new ArrayList<Photo>(size);
+            this.photos = new ArrayList<>(size);
         }
 
         void add(Photo photo) {

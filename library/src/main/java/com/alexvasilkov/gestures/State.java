@@ -33,6 +33,13 @@ public class State {
     }
 
     /**
+     * @return {@code true} if {@code x == 0f && y == 0f && zoom == 1f && rotation == 0f}
+     */
+    public boolean isEmpty() {
+        return x == 0f && y == 0f && zoom == 1f && rotation == 0f;
+    }
+
+    /**
      * Applying state to provided matrix. Matrix will contain translation, scale and rotation.
      */
     public void get(Matrix matrix) {
@@ -145,6 +152,11 @@ public class State {
         result = 31 * result + (zoom != +0.0f ? Float.floatToIntBits(zoom) : 0);
         result = 31 * result + (rotation != +0.0f ? Float.floatToIntBits(rotation) : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "{x=" + x + ",y=" + y + ",zoom=" + zoom + ",rotation=" + rotation + "}";
     }
 
     public static boolean equals(float v1, float v2) {

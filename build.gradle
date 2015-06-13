@@ -1,9 +1,20 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
-allprojects {
+buildscript {
     repositories {
-        mavenCentral()
-        maven {
-            url "http://oss.sonatype.org/content/groups/staging"
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:1.2.3'
+    }
+}
+
+allprojects {
+    buildscript {
+        repositories {
+            jcenter()
         }
+    }
+    repositories {
+        jcenter()
     }
 }

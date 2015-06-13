@@ -3,10 +3,12 @@ package com.alexvasilkov.gestures.sample.activities;
 import android.os.Bundle;
 
 import com.alexvasilkov.android.commons.utils.Views;
-import com.alexvasilkov.events.EventCallback;
 import com.alexvasilkov.events.Events;
+import com.alexvasilkov.events.Events.Failure;
+import com.alexvasilkov.events.Events.Result;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.items.FlickrListAdapter;
+import com.alexvasilkov.gestures.sample.logic.FlickrApi;
 import com.alexvasilkov.gestures.sample.widgets.EndlessListView;
 import com.alexvasilkov.gestures.sample.widgets.PaginatedListView;
 import com.googlecode.flickrjandroid.photos.PhotoList;
@@ -35,28 +37,25 @@ public class FlickrListActivity extends BaseActivity {
 
             @Override
             public void onLoadNextPage() {
-                Events.create(R.id.event_load_images)
-                        .data(mAdapter.getNextPageIndex(), PaginatedListView.PAGE_SIZE).post();
+                Events.create(FlickrApi.LOAD_IMAGES_EVENT)
+                        .param(mAdapter.getNextPageIndex(), PaginatedListView.PAGE_SIZE)
+                        .post();
             }
         });
 
-        // Adapter
         mAdapter = new FlickrListAdapter(this);
         mListView.setAdapter(mAdapter);
     }
 
-    @Events.Callback(R.id.event_load_images)
-    private void onPhotosLoaded(EventCallback callback) {
-        switch (callback.getStatus()) {
-            case RESULT:
-                PhotoList page = callback.getResult();
-                mAdapter.setNextPage(page);
-                mListView.onNextPageLoaded();
-                break;
-            case ERROR:
-                mListView.onNextPageFail();
-                break;
-        }
+    @Result(FlickrApi.LOAD_IMAGES_EVENT)
+    private void onPhotosLoaded(PhotoList page) {
+        mAdapter.setNextPage(page);
+        mListView.onNextPageLoaded();
+    }
+
+    @Failure(FlickrApi.LOAD_IMAGES_EVENT)
+    private void onPhotosLoadFail() {
+        mListView.onNextPageFail();
     }
 
 }

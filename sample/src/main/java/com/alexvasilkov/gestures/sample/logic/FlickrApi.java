@@ -1,10 +1,11 @@
 package com.alexvasilkov.gestures.sample.logic;
 
-import com.alexvasilkov.events.Event;
-import com.alexvasilkov.events.EventCallback;
-import com.alexvasilkov.events.Events;
+import com.alexvasilkov.events.EventResult;
+import com.alexvasilkov.events.Events.Background;
+import com.alexvasilkov.events.Events.Cache;
+import com.alexvasilkov.events.Events.Result;
+import com.alexvasilkov.events.Events.Subscribe;
 import com.alexvasilkov.events.cache.MemoryCache;
-import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.SampleApplication;
 import com.bumptech.glide.Glide;
 import com.googlecode.flickrjandroid.Flickr;
@@ -16,17 +17,17 @@ import java.util.Set;
 
 public class FlickrApi {
 
+    public static final String LOAD_IMAGES_EVENT = "LOAD_IMAGES_EVENT";
+
     private static final String API_KEY = "7f6035774a01a39f9056d6d7bde60002";
     private static final String USER_ID = "99771506@N00";
     private static final int THUMB_SIZE = 100;
 
-    @Events.AsyncMethod(R.id.event_load_images)
-    @Events.Cache(MemoryCache.class)
-    private PhotoList loadImages(Event event) throws Exception {
-        int page = event.getData(0);
-        int perPage = event.getData(1);
-
-        Set<String> extra = new HashSet<String>();
+    @Background
+    @Cache(MemoryCache.class)
+    @Subscribe(LOAD_IMAGES_EVENT)
+    private static PhotoList loadImages(int page, int perPage) throws Exception {
+        Set<String> extra = new HashSet<>();
         extra.add("url_m");
         extra.add("url_l");
 
@@ -34,17 +35,13 @@ public class FlickrApi {
                 .getPublicPhotos(USER_ID, extra, perPage, page);
     }
 
-    @Events.Callback(R.id.event_load_images)
-    private void onImagesLoaded(EventCallback callback) {
-        switch (callback.getStatus()) {
-            case RESULT:
-                PhotoList page = callback.getResult();
-                // Pre-loading thumbnails
-                for (Photo photo : page) {
-                    Glide.with(SampleApplication.getContext())
-                            .load(photo.getThumbnailUrl()).downloadOnly(THUMB_SIZE, THUMB_SIZE);
-                }
-                break;
+    @Result(LOAD_IMAGES_EVENT)
+    private static void onImagesLoaded(EventResult result) {
+        PhotoList page = result.getResult(0);
+        // Pre-loading thumbnails
+        for (Photo photo : page) {
+            Glide.with(SampleApplication.getContext())
+                    .load(photo.getThumbnailUrl()).downloadOnly(THUMB_SIZE, THUMB_SIZE);
         }
     }
 
