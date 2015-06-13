@@ -12,7 +12,7 @@ import android.view.MotionEvent;
 import android.widget.ImageView;
 
 import com.alexvasilkov.gestures.GesturesController;
-import com.alexvasilkov.gestures.GesturesControllerPagerFix;
+import com.alexvasilkov.gestures.GesturesControllerForPager;
 import com.alexvasilkov.gestures.State;
 import com.alexvasilkov.gestures.utils.Snapshot;
 
@@ -21,7 +21,7 @@ import com.alexvasilkov.gestures.utils.Snapshot;
  */
 public class GestureImageView extends ImageView implements GesturesController.OnStateChangedListener {
 
-    private final GesturesControllerPagerFix mController;
+    private final GesturesControllerForPager mController;
     private final Matrix mImageMatrix = new Matrix();
     private OnSnapshotLoadedListener mSnapshotListener;
 
@@ -39,7 +39,7 @@ public class GestureImageView extends ImageView implements GesturesController.On
     public GestureImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
-        mController = new GesturesControllerPagerFix(context, this);
+        mController = new GesturesControllerForPager(context, this);
 
         setScaleType(ImageView.ScaleType.MATRIX);
     }
@@ -69,7 +69,7 @@ public class GestureImageView extends ImageView implements GesturesController.On
      * Makes scrolling between different {@link GestureImageView}
      * within given {@link android.support.v4.view.ViewPager} smoother.
      *
-     * @see com.alexvasilkov.gestures.GesturesControllerPagerFix#fixViewPagerScroll(android.support.v4.view.ViewPager)
+     * @see GesturesControllerForPager#fixViewPagerScroll(android.support.v4.view.ViewPager)
      */
     public void fixViewPagerScroll(ViewPager pager) {
         mController.fixViewPagerScroll(pager);

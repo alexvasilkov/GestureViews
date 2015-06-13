@@ -14,7 +14,7 @@ import android.view.ViewParent;
 import android.widget.FrameLayout;
 
 import com.alexvasilkov.gestures.GesturesController;
-import com.alexvasilkov.gestures.GesturesControllerPagerFix;
+import com.alexvasilkov.gestures.GesturesControllerForPager;
 import com.alexvasilkov.gestures.State;
 
 /**
@@ -24,7 +24,7 @@ import com.alexvasilkov.gestures.State;
  */
 public class GestureLayout extends FrameLayout implements GesturesController.OnStateChangedListener {
 
-    private final GesturesControllerPagerFix mController;
+    private final GesturesControllerForPager mController;
 
     private final Matrix mMatrix = new Matrix();
     private final Matrix mMatrixInverse = new Matrix();
@@ -45,14 +45,14 @@ public class GestureLayout extends FrameLayout implements GesturesController.OnS
     public GestureLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
-        mController = new GesturesControllerPagerFix(context, this);
+        mController = new GesturesControllerForPager(context, this);
     }
 
     /**
      * Makes scrolling between different {@link GestureLayout}
      * within given {@link android.support.v4.view.ViewPager} smoother.
      *
-     * @see com.alexvasilkov.gestures.GesturesControllerPagerFix#fixViewPagerScroll(android.support.v4.view.ViewPager)
+     * @see GesturesControllerForPager#fixViewPagerScroll(android.support.v4.view.ViewPager)
      */
     public void fixViewPagerScroll(ViewPager pager) {
         mController.fixViewPagerScroll(pager);

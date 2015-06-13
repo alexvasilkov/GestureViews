@@ -46,7 +46,7 @@ public class RotationGestureDetector {
          * only wants to update rotation angle if the change is
          * greater than 0.01.
          */
-        public boolean onRotate(RotationGestureDetector detector);
+        boolean onRotate(RotationGestureDetector detector);
 
         /**
          * Responds to the beginning of a rotation gesture. Reported by
@@ -60,7 +60,7 @@ public class RotationGestureDetector {
          * sense, onRotationBegin() may return false to ignore the
          * rest of the gesture.
          */
-        public boolean onRotationBegin(RotationGestureDetector detector);
+        boolean onRotationBegin(RotationGestureDetector detector);
 
         /**
          * Responds to the end of a rotation gesture. Reported by existing
@@ -73,7 +73,7 @@ public class RotationGestureDetector {
          * @param detector The detector reporting the event - use this to
          *                 retrieve extended info about event state.
          */
-        public void onRotationEnd(RotationGestureDetector detector);
+        void onRotationEnd(RotationGestureDetector detector);
     }
 
     /**

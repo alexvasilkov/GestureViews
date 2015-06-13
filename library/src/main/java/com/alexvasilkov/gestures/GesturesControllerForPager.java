@@ -16,7 +16,7 @@ import com.alexvasilkov.gestures.detectors.RotationGestureDetector;
  * and it's parent {@link android.support.v4.view.ViewPager} by splitting scroll movement
  * between view and view pager
  */
-public class GesturesControllerPagerFix extends GesturesController {
+public class GesturesControllerForPager extends GesturesController {
 
     /**
      * Because viewpager will immediately return true from onInterceptTouchEvent() method during settling
@@ -62,7 +62,7 @@ public class GesturesControllerPagerFix extends GesturesController {
     private boolean mIsAllowViewPagerScrollY;
     private float mLastViewPagerEventX, mLastViewPagerEventY;
 
-    public GesturesControllerPagerFix(Context context, OnStateChangedListener listener) {
+    public GesturesControllerForPager(Context context, OnStateChangedListener listener) {
         super(context, listener);
 
         mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();

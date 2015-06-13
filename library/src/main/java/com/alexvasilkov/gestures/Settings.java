@@ -380,7 +380,7 @@ public class Settings {
     }
 
 
-    public static enum Fit {
+    public enum Fit {
         /**
          * Fit view width inside viewport area
          */
