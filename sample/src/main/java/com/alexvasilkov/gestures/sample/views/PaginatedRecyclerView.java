@@ -8,8 +8,9 @@ import android.widget.TextView;
 
 import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.gestures.sample.R;
+import com.alexvasilkov.gestures.sample.items.ExtendedAdapter;
 
-public class PaginatedListView extends EndlessListView {
+public class PaginatedRecyclerView extends EndlessRecyclerView {
 
     public static final int PAGE_SIZE = 30;
 
@@ -22,29 +23,33 @@ public class PaginatedListView extends EndlessListView {
         }
     };
 
-    private final View mFooterProgress;
-    private final View mFooterError;
-    private final TextView mLoadingText;
-    private final TextView mErrorText;
+    private View mFooter;
+    private View mFooterProgress;
+    private TextView mLoadingText;
+    private TextView mFooterError;
 
-    public PaginatedListView(Context context) {
+    public PaginatedRecyclerView(Context context) {
         this(context, null, 0);
     }
 
-    public PaginatedListView(Context context, AttributeSet attrs) {
+    public PaginatedRecyclerView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public PaginatedListView(Context context, AttributeSet attrs, int defStyle) {
+    public PaginatedRecyclerView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        setLoadingOffset(PAGE_SIZE / 2);
+    }
 
-        View footer = Views.inflate(this, R.layout.item_footer);
-        addFooterView(footer);
+    @Override
+    public void setLayoutManager(LayoutManager layout) {
+        super.setLayoutManager(layout);
 
-        mFooterProgress = Views.find(footer, R.id.footer_progress);
-        mFooterError = Views.find(footer, R.id.footer_error);
-        mLoadingText = Views.find(footer, R.id.loading_text);
-        mErrorText = Views.find(footer, R.id.error_text);
+        mFooter = Views.inflate(this, R.layout.item_footer);
+
+        mFooterProgress = Views.find(mFooter, R.id.footer_progress);
+        mLoadingText = Views.find(mFooter, R.id.loading_text);
+        mFooterError = Views.find(mFooter, R.id.footer_error);
 
         mFooterError.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,8 +59,14 @@ public class PaginatedListView extends EndlessListView {
                 postDelayed(mErrorClickAction, ERROR_CLICK_DELAY);
             }
         });
+    }
 
-        setLoadingOffset(PAGE_SIZE / 2);
+    @SuppressWarnings("unchecked")
+    @Override
+    public void setAdapter(Adapter adapter) {
+        ExtendedAdapter<?> extended = new ExtendedAdapter<>(adapter);
+        extended.addFooter(mFooter);
+        super.setAdapter(extended);
     }
 
     public void setLoadingText(String text) {
@@ -63,11 +74,11 @@ public class PaginatedListView extends EndlessListView {
     }
 
     public void setErrorText(String text) {
-        mErrorText.setText(text);
+        mFooterError.setText(text);
     }
 
     @Override
-    protected void onUpdateFooter(boolean isLoading, boolean isError) {
+    protected void onStateChanged(boolean isLoading, boolean isError) {
         mFooterProgress.setVisibility(isLoading ? View.VISIBLE : View.GONE);
         mFooterError.setVisibility(isError ? View.VISIBLE : View.GONE);
     }

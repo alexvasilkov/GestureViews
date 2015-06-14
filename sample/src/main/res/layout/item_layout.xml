@@ -20,18 +20,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:background="@drawable/image_text_shadow"
-            android:paddingBottom="8dp"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:paddingTop="20dp"
-            android:textColor="#fff"
+            android:layout_margin="@dimen/margin"
+            android:shadowColor="#000000"
+            android:shadowRadius="4"
+            android:textColor="#FFFFFF"
             android:textSize="16sp" />
 
         <Button
             android:id="@+id/painting_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_margin="@dimen/margin"
             android:text="@string/button_wiki_art" />
 
     </FrameLayout>

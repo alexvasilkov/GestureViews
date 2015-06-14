@@ -1,16 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:windowBackground">@color/window_background</item>
+
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
     </style>
 
-    <style name="AppTheme.Dark">
+    <style name="AppTheme.FullDarkBase" />
+
+    <style name="AppTheme.FullDark" parent="AppTheme.FullDarkBase">
         <item name="android:windowBackground">@color/window_background_dark</item>
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
     </style>
 
-    <style name="AppTheme.Transparent">
-        <item name="android:windowNoTitle">true</item>
+    <style name="AppTheme.FullDark.Crop">
+        <item name="android:windowBackground">@color/window_background_dark_crop</item>
+    </style>
+
+    <style name="AppTheme.FullDark.Transparent">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>

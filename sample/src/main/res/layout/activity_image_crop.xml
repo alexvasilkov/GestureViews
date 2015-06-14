@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".activities.ImageCropActivity">
 
     <com.alexvasilkov.gestures.views.GestureImageView
         android:id="@+id/painting_image"
@@ -12,4 +14,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/image_frame_overlay" />
+
+    <android.support.v7.widget.Toolbar
+        style="@style/App.Toolbar.Transparent"
+        android:fitsSystemWindows="true" />
+
 </merge>

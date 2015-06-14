@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="App" />
+
+    <style name="App.Toolbar">
+        <item name="android:id">@id/toolbar</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">?attr/colorPrimary</item>
+        <item name="android:minHeight">?attr/actionBarSize</item>
+        <item name="theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+    </style>
+
+    <style name="App.Toolbar.Transparent">
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <style name="App.Button" />
+
+    <style name="App.Button.Error" parent="Widget.AppCompat.Button">
+        <item name="colorButtonNormal">@color/error_color</item>
+    </style>
+
+</resources>

@@ -2,58 +2,45 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="2dp"
     android:paddingLeft="4dp"
-    android:paddingRight="4dp"
-    android:paddingTop="2dp">
+    android:paddingRight="4dp">
 
-    <RelativeLayout
+    <Button
         android:id="@+id/footer_error"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:background="@drawable/error_item_background">
-
-        <TextView
-            android:id="@+id/error_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:textColor="#FFF"
-            android:textSize="16sp" />
-
-        <ImageView
-            android:id="@+id/error_reload"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="12dp"
-            android:layout_marginRight="12dp"
-            android:contentDescription="@string/image_content_description"
-            android:src="@drawable/ic_refresh" />
-
-    </RelativeLayout>
+        android:layout_height="?actionBarSize"
+        android:drawableEnd="@drawable/ic_refresh_white_24dp"
+        android:drawableRight="@drawable/ic_refresh_white_24dp"
+        android:gravity="center"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="@dimen/flickr_list_margin"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        android:theme="@style/App.Button.Error" />
 
     <FrameLayout
         android:id="@+id/footer_progress"
         android:layout_width="match_parent"
-        android:layout_height="56dp">
+        android:layout_height="?actionBarSize"
+        android:paddingBottom="@dimen/flickr_list_margin"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="@dimen/flickr_list_margin">
 
         <TextView
             android:id="@+id/loading_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textColor="#FFF"
+            android:textColor="#000000"
             android:textSize="16sp" />
 
         <ProgressBar
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_gravity="end|center_vertical"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp" />
+            android:layout_gravity="end|center_vertical" />
+
     </FrameLayout>
 
 </FrameLayout>

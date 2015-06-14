@@ -1,14 +1,11 @@
 package com.alexvasilkov.gestures.sample.views;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import android.widget.AbsListView;
-import android.widget.AbsListView.OnScrollListener;
-import android.widget.ListAdapter;
-import android.widget.ListView;
+import android.view.View;
 
-public abstract class EndlessListView extends ListView implements OnScrollListener {
+public abstract class EndlessRecyclerView extends RecyclerView {
 
     private boolean mIsLoading;
     private boolean mIsError;
@@ -16,17 +13,22 @@ public abstract class EndlessListView extends ListView implements OnScrollListen
     private EndlessListener mListener;
     private int mLoadingOffset = 0;
 
-    public EndlessListView(Context context) {
+    public EndlessRecyclerView(Context context) {
         this(context, null, 0);
     }
 
-    public EndlessListView(Context context, AttributeSet attrs) {
+    public EndlessRecyclerView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public EndlessListView(Context context, AttributeSet attrs, int defStyle) {
+    public EndlessRecyclerView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        setOnScrollListener(this);
+        addOnScrollListener(new OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                loadNextPageIfNeeded();
+            }
+        });
     }
 
     public void setEndlessListener(EndlessListener listener) {
@@ -38,55 +40,56 @@ public abstract class EndlessListView extends ListView implements OnScrollListen
     }
 
     @Override
-    public void setAdapter(@NonNull ListAdapter adapter) {
+    public void setAdapter(Adapter adapter) {
         mIsLoading = false;
         mIsError = false;
-        updateFooter();
+        updateState();
+
         super.setAdapter(adapter);
+
+        loadNextPageIfNeeded();
     }
 
-    @Override
-    public void onScroll(@NonNull AbsListView view, int firstVisibleItem,
-                         int visibleItemCount, int totalItemCount) {
-        if (visibleItemCount + firstVisibleItem >= totalItemCount - mLoadingOffset
-                && getAdapter() != null) loadNextPage();
-    }
+    private void loadNextPageIfNeeded() {
+        if (getAdapter() == null) return;
 
-    @Override
-    public void onScrollStateChanged(AbsListView view, int scrollState) {
-        // NO-OP
+        View lastVisibleChild = getChildAt(getChildCount() - 1);
+        int lastVisiblePos = getChildAdapterPosition(lastVisibleChild);
+        int total = getAdapter().getItemCount();
+
+        if (lastVisiblePos >= total - mLoadingOffset) loadNextPage();
     }
 
     protected void loadNextPage() {
         if (!mIsLoading && !mIsError && mListener.canLoadNextPage()) {
             mIsLoading = true;
-            updateFooter();
+            updateState();
             mListener.onLoadNextPage();
         }
     }
 
     public void reloadNextPage() {
         mIsError = false;
-        updateFooter();
+        updateState();
         loadNextPage();
     }
 
-    private void updateFooter() {
-        onUpdateFooter(mIsLoading, mIsError);
+    private void updateState() {
+        onStateChanged(mIsLoading, mIsError);
     }
 
-    protected abstract void onUpdateFooter(boolean isLoading, boolean isError);
+    protected abstract void onStateChanged(boolean isLoading, boolean isError);
 
     public void onNextPageLoaded() {
         mIsLoading = false;
         mIsError = false;
-        updateFooter();
+        updateState();
     }
 
     public void onNextPageFail() {
         mIsLoading = false;
         mIsError = true;
-        updateFooter();
+        updateState();
     }
 
     public interface EndlessListener {

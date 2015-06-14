@@ -12,11 +12,11 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="GestureViews"
-        android:theme="@style/AppTheme.Dark">
+        android:theme="@style/AppTheme">
 
         <activity
             android:name=".activities.MainActivity"
-            android:theme="@style/AppTheme">
+            android:label="Gesture Views">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,7 +26,8 @@
 
         <activity
             android:name=".activities.ImagesPagerActivity"
-            android:label="ImageView">
+            android:label="ImageView"
+            android:theme="@style/AppTheme.FullDark">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -34,17 +35,14 @@
         </activity>
 
         <activity
-            android:name=".activities.ImageCroppingActivity"
-            android:label="ImageView (rotate &amp; crop)">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
+            android:name=".activities.ImageCropActivity"
+            android:label="Rotate &amp; crop"
+            android:theme="@style/AppTheme.FullDark.Crop" />
 
         <activity
-            android:name=".activities.ImageSnapshotActivity"
-            android:label="Cropped image" />
+            android:name=".activities.ImageCropResultActivity"
+            android:label="Cropped"
+            android:theme="@style/AppTheme.FullDark" />
 
         <activity
             android:name=".activities.LayoutPagerActivity"
@@ -66,7 +64,7 @@
 
         <activity
             android:name=".activities.FlickrListActivity"
-            android:label="Flickr">
+            android:label="Flickr Demo">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -76,7 +74,7 @@
         <activity
             android:name=".activities.FlickrImageActivity"
             android:label="Photo"
-            android:theme="@style/AppTheme.Transparent" />
+            android:theme="@style/AppTheme.FullDark.Transparent" />
 
     </application>
 

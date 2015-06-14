@@ -4,15 +4,16 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.view.LayoutInflater;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.alexvasilkov.android.commons.adapters.ItemsAdapter;
+import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.activities.FlickrImageActivity;
 import com.alexvasilkov.gestures.sample.animation.Helper;
+import com.alexvasilkov.gestures.sample.utils.GlideDrawableTarget;
 import com.alexvasilkov.gestures.sample.views.PhotosRowLayout;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -22,15 +23,17 @@ import com.googlecode.flickrjandroid.photos.PhotoList;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FlickrListAdapter extends ItemsAdapter<FlickrListAdapter.PhotoRow>
+public class FlickrListAdapter extends RecyclerView.Adapter<FlickrListAdapter.ViewHolder>
         implements View.OnClickListener {
 
     private final List<PhotoList> mPages = new ArrayList<>();
     private final List<Photo> mPhotos = new ArrayList<>();
+    private List<PhotoRow> mPhotoRows;
+
     private final int mColumns;
 
     public FlickrListAdapter(Context context) {
-        super(context);
+        super();
         mColumns = context.getResources().getInteger(R.integer.images_grid_columns);
     }
 
@@ -40,7 +43,7 @@ public class FlickrListAdapter extends ItemsAdapter<FlickrListAdapter.PhotoRow>
 
         // Combine photos into rows
         final int size = mPhotos.size();
-        List<PhotoRow> rows = new ArrayList<>(size / mColumns + 1);
+        mPhotoRows = new ArrayList<>(size / mColumns + 1);
 
         for (int i = 0; i < size; i += mColumns) {
             PhotoRow row = new PhotoRow(mColumns);
@@ -48,10 +51,15 @@ public class FlickrListAdapter extends ItemsAdapter<FlickrListAdapter.PhotoRow>
             for (int r = 0; r < rowSize; r++) {
                 row.add(mPhotos.get(i + r));
             }
-            rows.add(row);
+            mPhotoRows.add(row);
         }
 
-        setItemsList(rows);
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public int getItemCount() {
+        return mPhotoRows == null ? 0 : mPhotoRows.size();
     }
 
     public boolean canLoadNext() {
@@ -67,26 +75,24 @@ public class FlickrListAdapter extends ItemsAdapter<FlickrListAdapter.PhotoRow>
     }
 
     @Override
-    protected View createView(PhotoRow row, int pos, ViewGroup parent, LayoutInflater inflater) {
-        PhotosRowLayout layout = (PhotosRowLayout) inflater
-                .inflate(R.layout.item_flickr_images_row, parent, false);
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        ViewHolder holder = new ViewHolder(parent);
+        holder.layout.init(mColumns);
 
-        layout.init(mColumns);
-
-        int size = layout.getChildCount();
+        int size = holder.layout.getChildCount();
         for (int i = 0; i < size; i++) {
-            layout.getChildAt(i).setOnClickListener(this);
+            holder.layout.getChildAt(i).setOnClickListener(this);
         }
 
-        return layout;
+        return holder;
     }
 
     @Override
-    protected void bindView(PhotoRow row, int pos, View view) {
-        PhotosRowLayout rowView = (PhotosRowLayout) view;
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        PhotoRow row = mPhotoRows.get(position);
         int size = row.size();
         for (int i = 0; i < mColumns; i++) {
-            ImageView child = (ImageView) rowView.getChildAt(i);
+            ImageView child = (ImageView) holder.layout.getChildAt(i);
             child.setVisibility(i < size ? View.VISIBLE : View.INVISIBLE);
             bindImageView(child, i < size ? row.get(i) : null);
         }
@@ -97,14 +103,13 @@ public class FlickrListAdapter extends ItemsAdapter<FlickrListAdapter.PhotoRow>
 
         Glide.with(image.getContext())
                 .load(photo == null ? null : photo.getMediumUrl())
-                .placeholder(R.color.image_background)
                 .dontAnimate()
                 .dontTransform()
                 .thumbnail(Glide.with(image.getContext())
                         .load(photo == null ? null : photo.getThumbnailUrl())
                         .dontTransform()
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE))
-                .into(image);
+                .into(new GlideDrawableTarget(image));
     }
 
     @Override
@@ -137,6 +142,15 @@ public class FlickrListAdapter extends ItemsAdapter<FlickrListAdapter.PhotoRow>
             return photos.size();
         }
 
+    }
+
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        final PhotosRowLayout layout;
+
+        public ViewHolder(ViewGroup parent) {
+            super(Views.inflate(parent, R.layout.item_flickr_images_row));
+            layout = (PhotosRowLayout) itemView;
+        }
     }
 
 }

@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.alexvasilkov.gestures.sample.views.PaginatedListView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.alexvasilkov.gestures.sample.views.PaginatedRecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/flickr_list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:cacheColorHint="@android:color/transparent"
     android:clipToPadding="false"
-    android:divider="@android:color/transparent"
-    android:dividerHeight="0dp"
-    android:fadeScrollbars="true"
-    android:listSelector="@android:color/transparent"
-    android:paddingBottom="2dp"
-    android:paddingTop="2dp"
+    android:paddingTop="@dimen/flickr_list_margin"
     android:scrollbarStyle="outsideOverlay"
-    android:scrollingCache="false" />
+    android:scrollbars="vertical"
+    tools:context=".activities.FlickrListActivity" />

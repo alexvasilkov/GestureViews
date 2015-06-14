@@ -1,17 +1,18 @@
 package com.alexvasilkov.gestures.sample.activities;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import com.alexvasilkov.events.Events;
 
-public class BaseActivity extends Activity {
+public class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getActionBar() != null) getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -35,6 +36,15 @@ public class BaseActivity extends Activity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @NonNull
+    @Override
+    public ActionBar getSupportActionBar() {
+        // Making getSupportActionBar() method to be @NonNull
+        ActionBar actionBar = super.getSupportActionBar();
+        if (actionBar == null) throw new NullPointerException("Action bar was not initialized");
+        return actionBar;
     }
 
 }

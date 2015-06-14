@@ -13,7 +13,9 @@ public class LayoutPagerActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_layout_pager);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Painting[] paintings = Painting.getAllPaintings(getResources());
 

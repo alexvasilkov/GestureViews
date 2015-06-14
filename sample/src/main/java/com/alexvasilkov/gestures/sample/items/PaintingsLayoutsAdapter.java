@@ -35,7 +35,7 @@ public class PaintingsLayoutsAdapter extends PagerAdapter implements View.OnClic
     @Override
     public View instantiateItem(final ViewGroup container, int position) {
         Context context = container.getContext();
-        View layout = Views.inflate(container, R.layout.activity_layout_item);
+        View layout = Views.inflate(container, R.layout.item_layout);
         final int match = ViewGroup.LayoutParams.MATCH_PARENT;
         container.addView(layout, match, match);
 

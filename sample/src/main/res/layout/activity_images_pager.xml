@@ -1,24 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".activities.ImagesPagerActivity">
 
     <android.support.v4.view.ViewPager
         android:id="@+id/paintings_view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <TextView
-        android:id="@+id/painting_title"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="@drawable/image_text_shadow"
-        android:paddingBottom="8dp"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:paddingTop="20dp"
-        android:textColor="#fff"
-        android:textSize="16sp" />
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
+        <TextView
+            android:id="@+id/painting_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_margin="@dimen/margin"
+            android:shadowColor="#000000"
+            android:shadowRadius="4"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp" />
+
+        <android.support.v7.widget.Toolbar style="@style/App.Toolbar.Transparent" />
+
+    </FrameLayout>
 
 </merge>
