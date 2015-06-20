@@ -67,6 +67,7 @@ public class ImageCropActivity extends BaseActivity {
                 mImageView.getSnapshot(new GestureImageView.OnSnapshotLoadedListener() {
                     @Override
                     public void onSnapshotLoaded(Bitmap bitmap) {
+                        finish();
                         ImageCropResultActivity.show(ImageCropActivity.this, bitmap);
                     }
                 });
