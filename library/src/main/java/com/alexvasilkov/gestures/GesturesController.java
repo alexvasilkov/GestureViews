@@ -85,7 +85,7 @@ public class GesturesController extends GesturesAdapter {
         mRotateDetector = new RotationGestureDetector(context, this);
 
         mFlingScroller = new OverScroller(context);
-        mStateScroller = new FloatScroller(context);
+        mStateScroller = new FloatScroller();
 
         final ViewConfiguration configuration = ViewConfiguration.get(context);
         mTouchSlop = configuration.getScaledTouchSlop();
