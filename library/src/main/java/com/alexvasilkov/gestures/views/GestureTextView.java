@@ -1,7 +1,6 @@
 package com.alexvasilkov.gestures.views;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -10,14 +9,13 @@ import android.view.ViewParent;
 import android.widget.TextView;
 
 import com.alexvasilkov.gestures.GesturesController;
-import com.alexvasilkov.gestures.R;
 import com.alexvasilkov.gestures.State;
 
 public class GestureTextView extends TextView implements GesturesController.OnStateChangedListener {
 
     private final GesturesController mController;
 
-    private float mMinTextSize, mMaxTextSize;
+    private float mOrigSize;
     private float mSize;
 
     public GestureTextView(Context context) {
@@ -31,22 +29,18 @@ public class GestureTextView extends TextView implements GesturesController.OnSt
     public GestureTextView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         mController = new GesturesController(context, this);
-
-        //noinspection ConstantConditions
-        if (attrs != null) {
-            TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.GestureTextView);
-            mMinTextSize = a.getDimension(R.styleable.GestureTextView_gvMinTextSize, 0f);
-            mMaxTextSize = a.getDimension(R.styleable.GestureTextView_gvMaxTextSize, 0f);
-            a.recycle();
-        }
-
-        if (mMinTextSize != 0f) {
-            applySize(mMinTextSize);
-            if (mMaxTextSize != 0f)
-                mController.getSettings().setMaxZoom(mMaxTextSize / mMinTextSize);
-        }
-
         mController.getSettings().setOverzoomFactor(1f).setPanEnabled(false);
+        mOrigSize = getTextSize();
+    }
+
+    /**
+     * Returns {@link com.alexvasilkov.gestures.GesturesController}
+     * which is a main engine for {@link GestureImageView}.
+     * <p/>
+     * Use it to apply settings, modify view state and so on.
+     */
+    public GesturesController getController() {
+        return mController;
     }
 
     @Override
@@ -60,22 +54,29 @@ public class GestureTextView extends TextView implements GesturesController.OnSt
     }
 
     @Override
+    public void setTextSize(float size) {
+        super.setTextSize(size);
+        mOrigSize = getTextSize();
+        applySize(mController.getState());
+    }
+
+    @Override
+    public void setTextSize(int unit, float size) {
+        super.setTextSize(unit, size);
+        mOrigSize = getTextSize();
+        applySize(mController.getState());
+    }
+
+    @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        mController.getSettings()
-                .setViewport(w - getPaddingLeft() - getPaddingRight(),
-                        h - getPaddingTop() - getPaddingBottom())
-                .setSize(w, h);
+        mController.getSettings().setViewport(w, h).setSize(w, h);
         mController.updateState();
     }
 
     @Override
     public void onStateChanged(State state) {
-        if (mMinTextSize == 0f) return; // Nothing to do
-
-        float size = mMinTextSize * state.getZoom();
-        if (mMaxTextSize != 0f && size > mMaxTextSize) size = mMaxTextSize;
-        applySize(Math.round(size));
+        applySize(state);
     }
 
     @Override
@@ -83,10 +84,14 @@ public class GestureTextView extends TextView implements GesturesController.OnSt
         // No-op
     }
 
-    private void applySize(float size) {
-        if (mSize != size) {
+    private void applySize(State state) {
+        float size = mOrigSize * state.getZoom();
+        float maxZoom = mController.getSettings().getMaxZoom();
+        size = Math.max(mOrigSize, Math.min(size, mOrigSize * maxZoom));
+
+        if (!State.equals(mSize, size)) {
             mSize = size;
-            setTextSize(TypedValue.COMPLEX_UNIT_PX, size);
+            super.setTextSize(TypedValue.COMPLEX_UNIT_PX, size);
         }
     }
 

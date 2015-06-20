@@ -1,6 +1,7 @@
 package com.alexvasilkov.gestures;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.util.TypedValue;
 import android.view.Gravity;
 
@@ -193,8 +194,7 @@ public class Settings {
      * <p/>
      * Default value is {@link com.alexvasilkov.gestures.Settings.Fit#INSIDE}.
      */
-    public Settings setFitMethod(Fit fitMethod) {
-        if (fitMethod == null) throw new NullPointerException("Fitting method cannot be null");
+    public Settings setFitMethod(@NonNull Fit fitMethod) {
         this.fitMethod = fitMethod;
         return this;
     }

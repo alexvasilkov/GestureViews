@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <declare-styleable name="GestureTextView">
-        <attr name="gvMinTextSize" format="dimension" />
-        <attr name="gvMaxTextSize" format="dimension" />
-    </declare-styleable>
-
-</resources>
