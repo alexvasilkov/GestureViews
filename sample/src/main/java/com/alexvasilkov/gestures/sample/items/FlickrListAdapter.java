@@ -104,10 +104,8 @@ public class FlickrListAdapter extends RecyclerView.Adapter<FlickrListAdapter.Vi
         Glide.with(image.getContext())
                 .load(photo == null ? null : photo.getMediumUrl())
                 .dontAnimate()
-                .dontTransform()
                 .thumbnail(Glide.with(image.getContext())
                         .load(photo == null ? null : photo.getThumbnailUrl())
-                        .dontTransform()
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE))
                 .into(new GlideDrawableTarget(image));
     }

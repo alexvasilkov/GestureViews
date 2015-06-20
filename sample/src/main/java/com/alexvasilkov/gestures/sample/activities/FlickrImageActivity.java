@@ -67,10 +67,8 @@ public class FlickrImageActivity extends BaseActivity {
                 .load(photoUrl)
                 .thumbnail(Glide.with(this)
                         .load(photo.getThumbnailUrl())
-                        .dontTransform()
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE))
                 .dontAnimate()
-                .dontTransform()
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .listener(new GlideDrawableListener() {
                     @Override
