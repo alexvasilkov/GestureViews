@@ -150,7 +150,7 @@ public class Settings {
      * Setting overscroll distance in pixels. User will be able to "over scroll"
      * up to this distance. Cannot be < 0.
      * <p/>
-     * Default value is {@link #OVERSCROLL_DISTANCE} converted to pixels.
+     * Default value is 0.
      */
     public Settings setOverscrollDistance(float distanceX, float distanceY) {
         if (distanceX < 0f || distanceY < 0f)
