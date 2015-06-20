@@ -3,9 +3,9 @@ GestureViews
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.alexvasilkov/gesture-views/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.alexvasilkov/gesture-views)
 
-Android widgets with gesture control, including widgets for ImageView, FrameLayout and TextView
+Android views with gestures control including ImageView, FrameLayout and TextView.
 
-![GestureViews](https://raw.github.com/alexvasilkov/GestureViews/master/sample/graphics/logo_small.png)
+![GestureViews](https://raw.github.com/alexvasilkov/GestureViews/master/sample/art/logo_small.png)
 
 #### Sample app ####
 
