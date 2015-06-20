@@ -73,7 +73,7 @@ public class GesturesController extends GesturesAdapter {
         mZoomGestureMinSpan = TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP, ZOOM_GESTURE_MIN_SPAN_DP, metrics);
 
-        mSettings = new Settings(context);
+        mSettings = new Settings();
         mStateController = new StateController(mSettings);
 
         mStateListeners.add(listener);

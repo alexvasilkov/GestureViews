@@ -14,10 +14,6 @@ public class Settings {
 
     public static final float MAX_ZOOM = 2f;
     public static final float OVERZOOM_FACTOR = 1.2f;
-    /**
-     * Overscroll distance in DP
-     */
-    public static final float OVERSCROLL_DISTANCE = 0;
 
     /**
      * Viewport area
@@ -97,8 +93,8 @@ public class Settings {
      */
     private boolean isRestrictBounds = true;
 
-    Settings(Context context) {
-        setOverscrollDistance(context, OVERSCROLL_DISTANCE, OVERSCROLL_DISTANCE);
+    Settings() {
+        // Package private constructor
     }
 
     /**
