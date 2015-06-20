@@ -256,7 +256,6 @@ public class GesturesControllerForPager extends GesturesController {
         return dViewX;
     }
 
-
     private int computeInitialViewPagerX(View view, MotionEvent event) {
         // ViewPager can be in intermediate position, so we should recompute correct mViewPagerX value
         int scroll = mViewPager.getScrollX();
@@ -273,7 +272,9 @@ public class GesturesControllerForPager extends GesturesController {
 
         int touchedItem = (int) ((scroll + viewPagerTouchX) / widthWithMargin);
 
-        return widthWithMargin * touchedItem - scroll;
+        int x = widthWithMargin * touchedItem - scroll;
+        // Fixing ViewPager rounding issue (it may be off by 1 in settled state)
+        return -1 <= x && x <= 1 ? 0 : x;
     }
 
     private void passEventToViewPager(MotionEvent e) {
