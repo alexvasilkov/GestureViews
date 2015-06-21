@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.alexvasilkov.gestures.GesturesController;
 import com.alexvasilkov.gestures.State;
 
-public class GestureTextView extends TextView {
+public class GestureTextView extends TextView implements GesturesControlledView {
 
     private final GesturesController mController;
 
@@ -44,11 +44,9 @@ public class GestureTextView extends TextView {
     }
 
     /**
-     * Returns {@link com.alexvasilkov.gestures.GesturesController}
-     * which is a main engine for {@link GestureImageView}.
-     * <p/>
-     * Use it to apply settings, modify view state and so on.
+     * {@inheritDoc}
      */
+    @Override
     public GesturesController getController() {
         return mController;
     }

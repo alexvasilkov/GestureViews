@@ -22,7 +22,7 @@ import com.alexvasilkov.gestures.internal.Snapshot;
 /**
  * Gestures controlled ImageView
  */
-public class GestureImageView extends ImageView {
+public class GestureImageView extends ImageView implements GesturesControlledView {
 
     private final GesturesControllerForPager mController;
     private final Matrix mImageMatrix = new Matrix();
@@ -86,11 +86,9 @@ public class GestureImageView extends ImageView {
     }
 
     /**
-     * Returns {@link com.alexvasilkov.gestures.GesturesController}
-     * which is a main engine for {@link GestureImageView}.
-     * <p/>
-     * Use it to apply settings, modify image state and so on.
+     * {@inheritDoc}
      */
+    @Override
     public GesturesController getController() {
         return mController;
     }

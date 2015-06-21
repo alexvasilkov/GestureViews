@@ -23,7 +23,7 @@ import com.alexvasilkov.gestures.State;
  * <p/>
  * Note: only one children is eligible here.
  */
-public class GestureLayout extends FrameLayout {
+public class GestureLayout extends FrameLayout implements GesturesControlledView {
 
     private final GesturesControllerForPager mController;
 
@@ -67,11 +67,9 @@ public class GestureLayout extends FrameLayout {
     }
 
     /**
-     * Returns {@link com.alexvasilkov.gestures.GesturesController}
-     * which is a main engine for {@link GestureImageView}.
-     * <p/>
-     * Use it to apply settings, modify view state and so on.
+     * {@inheritDoc}
      */
+    @Override
     public GesturesController getController() {
         return mController;
     }
