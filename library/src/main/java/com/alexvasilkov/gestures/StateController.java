@@ -4,7 +4,7 @@ import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.graphics.RectF;
 
-import com.alexvasilkov.gestures.utils.MovementBounds;
+import com.alexvasilkov.gestures.internal.MovementBounds;
 
 public class StateController {
 
@@ -23,7 +23,7 @@ public class StateController {
      */
     private float mMinZoom, mMaxZoom;
 
-    public StateController(Settings settings) {
+    StateController(Settings settings) {
         mSettings = settings;
     }
 
@@ -51,11 +51,18 @@ public class StateController {
         }
     }
 
-    public float getMinZoom() {
+    /**
+     * @return Min zoom level as it's used by state controller.
+     */
+    public float getEffectiveMinZoom() {
         return mMinZoom;
     }
 
-    public float getMaxZoom() {
+    /**
+     * @return Max zoom level as it's used by state controller.
+     * Note, that it may be different than {@link Settings#getMaxZoom()}.
+     */
+    public float getEffectiveMaxZoom() {
         return mMaxZoom;
     }
 
@@ -64,7 +71,7 @@ public class StateController {
      *
      * @return End state for toggle animation
      */
-    public State toggleMinMaxZoom(State state, float pivotX, float pivotY) {
+    State toggleMinMaxZoom(State state, float pivotX, float pivotY) {
         final float middleZoom = (mMinZoom + mMaxZoom) / 2f;
         final float targetZoom = state.getZoom() < middleZoom ? mMaxZoom : mMinZoom;
 
@@ -76,7 +83,7 @@ public class StateController {
     /**
      * Restricts state's translation and zoom bounds, disallowing overscroll / overzoom.
      */
-    public boolean restrictStateBounds(State state) {
+    boolean restrictStateBounds(State state) {
         return restrictStateBounds(state, null, 0f, 0f, false, false);
     }
 
@@ -85,8 +92,8 @@ public class StateController {
      *
      * @return End state to animate changes or null if no changes are required
      */
-    public State restrictStateBoundsCopy(State state, float pivotX, float pivotY,
-                                         boolean allowOverscroll, boolean allowOverzoom) {
+    State restrictStateBoundsCopy(State state, float pivotX, float pivotY,
+                                  boolean allowOverscroll, boolean allowOverzoom) {
         mTmpState.set(state);
         boolean changed = restrictStateBounds(mTmpState, null, pivotX, pivotY,
                 allowOverscroll, allowOverzoom);
@@ -100,8 +107,8 @@ public class StateController {
      *
      * @return true if state was changed, false otherwise
      */
-    public boolean restrictStateBounds(State state, State prevState, float pivotX, float pivotY,
-                                       boolean allowOverscroll, boolean allowOverzoom) {
+    boolean restrictStateBounds(State state, State prevState, float pivotX, float pivotY,
+                                boolean allowOverscroll, boolean allowOverzoom) {
 
         if (!mSettings.isRestrictBounds()) return false;
 
@@ -215,9 +222,22 @@ public class StateController {
     /**
      * Do note store returned object, since it will be reused next time this method is called.
      */
-    public MovementBounds getMovementBounds(State state) {
+    MovementBounds getMovementBounds(State state) {
         mMovementBounds.setup(state, mSettings);
         return mMovementBounds;
+    }
+
+
+    /**
+     * Returns area in which {@link State#getX()} & {@link State#getY()} values can change.
+     * Note, that this is different than {@link Settings#setMovementArea(int, int)} which defines
+     * part of the viewport in which image can move.
+     *
+     * @param out   Result will be stored in this rect.
+     * @param state State for which to calculate bounds.
+     */
+    public void getEffectiveMovementArea(RectF out, State state) {
+        out.set(getMovementBounds(state).getExternalBounds());
     }
 
     /**

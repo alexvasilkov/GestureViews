@@ -17,13 +17,12 @@ import android.widget.ImageView;
 import com.alexvasilkov.gestures.GesturesController;
 import com.alexvasilkov.gestures.GesturesControllerForPager;
 import com.alexvasilkov.gestures.State;
-import com.alexvasilkov.gestures.utils.Snapshot;
+import com.alexvasilkov.gestures.internal.Snapshot;
 
 /**
  * Gestures controlled ImageView
  */
-public class GestureImageView extends ImageView
-        implements GesturesController.OnStateChangedListener {
+public class GestureImageView extends ImageView {
 
     private final GesturesControllerForPager mController;
     private final Matrix mImageMatrix = new Matrix();
@@ -43,7 +42,17 @@ public class GestureImageView extends ImageView
     public GestureImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
-        mController = new GesturesControllerForPager(context, this);
+        mController = new GesturesControllerForPager(context, new GesturesController.OnStateChangeListener() {
+            @Override
+            public void onStateChanged(State state) {
+                applyState(state);
+            }
+
+            @Override
+            public void onStateReset(State oldState, State newState) {
+                applyState(newState);
+            }
+        });
 
         setScaleType(ImageView.ScaleType.MATRIX);
     }
@@ -153,15 +162,9 @@ public class GestureImageView extends ImageView
         mController.resetState();
     }
 
-    @Override
-    public void onStateChanged(State state) {
+    private void applyState(State state) {
         state.get(mImageMatrix);
         setImageMatrix(mImageMatrix);
-    }
-
-    @Override
-    public void onStateReset(State oldState, State newState) {
-        // No-op
     }
 
 

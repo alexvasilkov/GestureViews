@@ -1,10 +1,11 @@
-package com.alexvasilkov.gestures.utils;
+package com.alexvasilkov.gestures.internal;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 
 import com.alexvasilkov.gestures.Settings;
+import com.alexvasilkov.gestures.internal.MovementBounds;
 
 public class Snapshot {
 

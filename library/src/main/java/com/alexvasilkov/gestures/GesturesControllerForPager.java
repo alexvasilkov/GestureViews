@@ -10,7 +10,7 @@ import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.ViewConfiguration;
 
-import com.alexvasilkov.gestures.detectors.RotationGestureDetector;
+import com.alexvasilkov.gestures.internal.detectors.RotationGestureDetector;
 
 /**
  * Allows cross movement between view controlled by this {@link GesturesController} and it's parent
@@ -63,7 +63,7 @@ public class GesturesControllerForPager extends GesturesController {
     private boolean mIsAllowViewPagerScrollY;
     private float mLastViewPagerEventX, mLastViewPagerEventY;
 
-    public GesturesControllerForPager(Context context, OnStateChangedListener listener) {
+    public GesturesControllerForPager(Context context, OnStateChangeListener listener) {
         super(context, listener);
 
         mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
@@ -137,7 +137,7 @@ public class GesturesControllerForPager extends GesturesController {
     }
 
     @Override
-    public boolean onDown(@NonNull MotionEvent e) {
+    protected boolean onDown(@NonNull MotionEvent e) {
         mIsViewPagerInterceptedScroll = false;
         mIsAllowViewPagerScrollY = true;
         mIsScrollGestureDetected = false;
@@ -152,7 +152,7 @@ public class GesturesControllerForPager extends GesturesController {
     }
 
     @Override
-    public boolean onScroll(@NonNull MotionEvent e1, @NonNull MotionEvent e2, float dX, float dY) {
+    protected boolean onScroll(@NonNull MotionEvent e1, @NonNull MotionEvent e2, float dX, float dY) {
         if (mViewPager == null) {
             return super.onScroll(e1, e2, dX, dY);
         } else {
@@ -171,22 +171,22 @@ public class GesturesControllerForPager extends GesturesController {
     }
 
     @Override
-    public boolean onFling(@NonNull MotionEvent e1, @NonNull MotionEvent e2, float vX, float vY) {
+    protected boolean onFling(@NonNull MotionEvent e1, @NonNull MotionEvent e2, float vX, float vY) {
         return mViewPagerX == 0 && super.onFling(e1, e2, vX, vY);
     }
 
     @Override
-    public boolean onScaleBegin(@NonNull ScaleGestureDetector detector) {
+    protected boolean onScaleBegin(@NonNull ScaleGestureDetector detector) {
         return mViewPagerX == 0 && super.onScaleBegin(detector);
     }
 
     @Override
-    public boolean onRotationBegin(@NonNull RotationGestureDetector detector) {
+    protected boolean onRotationBegin(@NonNull RotationGestureDetector detector) {
         return mViewPagerX == 0 && super.onRotationBegin(detector);
     }
 
     @Override
-    public boolean onDoubleTapEvent(@NonNull MotionEvent e) {
+    protected boolean onDoubleTapEvent(@NonNull MotionEvent e) {
         return mViewPagerX == 0 && super.onDoubleTapEvent(e);
     }
 

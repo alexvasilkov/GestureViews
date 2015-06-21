@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.utils;
+package com.alexvasilkov.gestures.internal;
 
 import android.graphics.Matrix;
 import android.graphics.PointF;

@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.detectors;
+package com.alexvasilkov.gestures.internal.detectors;
 
 import android.content.Context;
 import android.view.MotionEvent;

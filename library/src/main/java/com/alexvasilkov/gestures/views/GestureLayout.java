@@ -23,8 +23,7 @@ import com.alexvasilkov.gestures.State;
  * <p/>
  * Note: only one children is eligible here.
  */
-public class GestureLayout extends FrameLayout
-        implements GesturesController.OnStateChangedListener {
+public class GestureLayout extends FrameLayout {
 
     private final GesturesControllerForPager mController;
 
@@ -47,7 +46,17 @@ public class GestureLayout extends FrameLayout
     public GestureLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
-        mController = new GesturesControllerForPager(context, this);
+        mController = new GesturesControllerForPager(context, new GesturesController.OnStateChangeListener() {
+            @Override
+            public void onStateChanged(State state) {
+                applyState(state);
+            }
+
+            @Override
+            public void onStateReset(State oldState, State newState) {
+                applyState(newState);
+            }
+        });
     }
 
     /**
@@ -113,16 +122,11 @@ public class GestureLayout extends FrameLayout
         }
     }
 
-    @Override
-    public void onStateChanged(State state) {
+
+    private void applyState(State state) {
         state.get(mMatrix);
         mMatrix.invert(mMatrixInverse);
         invalidate();
-    }
-
-    @Override
-    public void onStateReset(State oldState, State newState) {
-        // No-op
     }
 
     @Override

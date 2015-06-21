@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.utils;
+package com.alexvasilkov.gestures.internal;
 
 import android.os.SystemClock;
 import android.view.animation.DecelerateInterpolator;
