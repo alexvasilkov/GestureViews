@@ -6,7 +6,6 @@ import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.support.annotation.NonNull;
-import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -60,17 +59,10 @@ public class GestureLayout extends FrameLayout implements GesturesControlledView
     }
 
     /**
-     * Enables scroll inside {@link android.support.v4.view.ViewPager}.
-     */
-    public void enableScrollInViewPager(ViewPager pager) {
-        mController.enableScrollInViewPager(pager);
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override
-    public GesturesController getController() {
+    public GesturesControllerForPager getController() {
         return mController;
     }
 

@@ -9,7 +9,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
-import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.ImageView;
@@ -79,17 +78,10 @@ public class GestureImageView extends ImageView implements GesturesControlledVie
     }
 
     /**
-     * Enables scroll inside {@link android.support.v4.view.ViewPager}.
-     */
-    public void enableScrollInViewPager(ViewPager pager) {
-        mController.enableScrollInViewPager(pager);
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override
-    public GesturesController getController() {
+    public GesturesControllerForPager getController() {
         return mController;
     }
 

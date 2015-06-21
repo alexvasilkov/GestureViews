@@ -31,7 +31,7 @@ public class PaintingsImagesAdapter extends PagerAdapter {
         GestureImageView gImageView = new GestureImageView(context);
         final int match = ViewGroup.LayoutParams.MATCH_PARENT;
         container.addView(gImageView, match, match);
-        gImageView.enableScrollInViewPager(mViewPager);
+        gImageView.getController().enableScrollInViewPager(mViewPager);
 
         Glide.with(context).load(mPaintings[position].getImageId()).into(gImageView);
 
