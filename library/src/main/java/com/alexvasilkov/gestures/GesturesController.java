@@ -22,7 +22,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Main logic to update view state ({@link State}) basing on screen touches.
+ * Main logic to update image state ({@link State}) basing on screen touches.
  * <p/>
  * This class implements {@link android.view.View.OnTouchListener} and provides
  * {@link GesturesController.OnStateChangedListener} to listen for state changes.
@@ -171,9 +171,9 @@ public class GesturesController extends GesturesAdapter {
      * Resets to initial state (default position, min zoom level) and notifies
      * {@link GesturesController.OnStateChangedListener} listeners.
      * <p/>
-     * Should be called after view size is changed.
+     * Should be called when image size is changed.
      * <p/>
-     * See {@link Settings#setSize(int, int)}.
+     * See {@link Settings#setImage(int, int)}.
      */
     public void resetState() {
         mStateController.resetState(mState);

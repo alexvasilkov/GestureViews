@@ -11,11 +11,11 @@ import com.alexvasilkov.gestures.State;
 import com.alexvasilkov.gestures.StateController;
 
 /**
- * Encapsulates logic related to movement bounds restriction. It will also apply view's gravity
+ * Encapsulates logic related to movement bounds restriction. It will also apply image gravity
  * provided by {@link Settings#getGravity()} method.
  * <p/>
  * Movement bounds can be represented using regular rectangle most of the time. But if fit method
- * is set to {@link Settings.Fit#OUTSIDE} and view has rotation != 0 than movement bounds will be
+ * is set to {@link Settings.Fit#OUTSIDE} and image has rotation != 0 than movement bounds will be
  * a rotated rectangle. That will complicate restrictions logic a bit.
  */
 public class MovementBounds {
@@ -99,8 +99,8 @@ public class MovementBounds {
     }
 
     /**
-     * Calculating bounds for {@link State#x} & {@link State#y} values to keep view within viewport
-     * and taking into account view's gravity (see {@link Settings#setGravity(int)})
+     * Calculating bounds for {@link State#x} & {@link State#y} values to keep image within viewport
+     * and taking image gravity into account (see {@link Settings#setGravity(int)})
      */
     public void setup(State state, Settings settings) {
         RectF area = RECT_TMP_AREA;
@@ -108,8 +108,8 @@ public class MovementBounds {
         final Rect pos;
 
         if (settings.getFitMethod() == Settings.Fit.OUTSIDE) {
-            // For OUTSIDE fit method we will rotate area rect instead of view rect,
-            // that will help us correctly fit movement area inside view's rect
+            // For OUTSIDE fit method we will rotate area rect instead of image rect,
+            // that will help us correctly fit movement area inside image rect
             mRotation = state.getRotation();
             mPivotX = area.centerX();
             mPivotY = area.centerY();
@@ -127,38 +127,38 @@ public class MovementBounds {
             pos = getPositionWithGravity(MATRIX, settings);
         }
 
-        // Calculating movement bounds for top-left corner of the scaled view
+        // Calculating movement bounds for top-left corner of the scaled image
 
         // horizontal bounds
         if (area.width() < pos.width()) {
-            // view is bigger than movement area -> restricting view movement with moving area
+            // image is bigger than movement area -> restricting image movement with moving area
             mBounds.left = area.left - (pos.width() - area.width());
             mBounds.right = area.left;
         } else {
-            // view is smaller than viewport -> positioning view according to calculated gravity
-            // and restricting view movement in this direction
+            // image is smaller than viewport -> positioning image according to calculated gravity
+            // and restricting image movement in this direction
             mBounds.left = mBounds.right = pos.left;
         }
 
         // vertical bounds
         if (area.height() < pos.height()) {
-            // view is bigger than viewport -> restricting view movement with viewport bounds
+            // image is bigger than viewport -> restricting image movement with viewport bounds
             mBounds.top = area.top - (pos.height() - area.height());
             mBounds.bottom = area.top;
         } else {
-            // view is smaller than viewport -> positioning view according to calculated gravity
-            // and restricting view movement in this direction
+            // image is smaller than viewport -> positioning image according to calculated gravity
+            // and restricting image movement in this direction
             mBounds.top = mBounds.bottom = pos.top;
         }
 
-        // We should also adjust bounds position, since top-left corner of rotated view's rectangle
+        // We should also adjust bounds position, since top-left corner of rotated image rectangle
         // will be somewhere on the edge of non-rotated bounding rectangle.
-        // Note: for OUTSIDE fit method view's rotation was skipped above, so we will not need
+        // Note: for OUTSIDE fit method image rotation was skipped above, so we will not need
         // to adjust bounds here.
         if (settings.getFitMethod() != Settings.Fit.OUTSIDE) {
             state.get(MATRIX);
 
-            RECT_TMP_F.set(0, 0, settings.getViewW(), settings.getViewH());
+            RECT_TMP_F.set(0, 0, settings.getImageW(), settings.getImageH());
             MATRIX.mapRect(RECT_TMP_F);
 
             POINT_ARR[0] = POINT_ARR[1] = 0f;
@@ -183,16 +183,16 @@ public class MovementBounds {
     }
 
     /**
-     * Returns view position within the viewport area with gravity applied,
-     * not taking into account view's position specified by matrix.
+     * Returns image position within the viewport area with gravity applied,
+     * not taking into account image position specified by matrix.
      */
     private static Rect getPositionWithGravity(Matrix matrix, Settings settings) {
-        RECT_TMP_F.set(0, 0, settings.getViewW(), settings.getViewH());
+        RECT_TMP_F.set(0, 0, settings.getImageW(), settings.getImageH());
         matrix.mapRect(RECT_TMP_F);
         final int w = Math.round(RECT_TMP_F.width());
         final int h = Math.round(RECT_TMP_F.height());
 
-        // Calculating view position basing on gravity
+        // Calculating image position basing on gravity
         RECT_TMP.set(0, 0, settings.getViewportW(), settings.getViewportH());
         Gravity.apply(settings.getGravity(), w, h, RECT_TMP, RECT_POS);
 

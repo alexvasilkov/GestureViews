@@ -9,7 +9,7 @@ import android.view.Gravity;
  * Various settings needed for {@link GesturesController} and for {@link StateController}.
  * <p/>
  * Required settings are viewport size ({@link #setViewport(int, int)})
- * and view size {@link #setSize(int, int)}
+ * and image size {@link #setImage(int, int)}
  */
 public class Settings {
 
@@ -29,9 +29,9 @@ public class Settings {
     private boolean isMovementAreaSpecified;
 
     /**
-     * View size
+     * Image size
      */
-    private int viewW, viewH;
+    private int imageW, imageH;
 
     /**
      * Max zoom level, default value is {@link #MAX_ZOOM}
@@ -49,13 +49,13 @@ public class Settings {
     private float overscrollDistanceX, overscrollDistanceY;
 
     /**
-     * If isFillViewport = true small view will be scaled to fitMethod entire viewport
+     * If isFillViewport = true small image will be scaled to fit entire viewport
      * even if it will require zoom level above max zoom level
      */
     private boolean isFillViewport = false;
 
     /**
-     * View's gravity inside viewport area
+     * Image gravity inside viewport area
      */
     private int gravity = Gravity.CENTER;
 
@@ -90,7 +90,7 @@ public class Settings {
     private int gesturesDisableCount;
 
     /**
-     * Whether view's transformations should be kept in bounds or not
+     * Whether image transformations should be kept in bounds or not
      */
     private boolean isRestrictBounds = true;
 
@@ -118,11 +118,11 @@ public class Settings {
     }
 
     /**
-     * Setting full view size
+     * Setting full image size
      */
-    public Settings setSize(int w, int h) {
-        viewW = w;
-        viewH = h;
+    public Settings setImage(int w, int h) {
+        imageW = w;
+        imageH = h;
         return this;
     }
 
@@ -169,7 +169,7 @@ public class Settings {
     }
 
     /**
-     * If set to true small view will be scaled to fit entire viewport (or entire movement area
+     * If set to true small image will be scaled to fit entire viewport (or entire movement area
      * if it was set) even if this will require zoom level above max zoom level.
      * <p/>
      * Default value is false.
@@ -180,7 +180,7 @@ public class Settings {
     }
 
     /**
-     * Setting view's gravity inside viewport area.
+     * Setting image gravity inside viewport area.
      * <p/>
      * Default value is {@link android.view.Gravity#CENTER}.
      */
@@ -190,9 +190,9 @@ public class Settings {
     }
 
     /**
-     * Setting view's fitting within viewport area.
+     * Setting image fitting method within viewport area.
      * <p/>
-     * Default value is {@link com.alexvasilkov.gestures.Settings.Fit#INSIDE}.
+     * Default value is {@link Settings.Fit#INSIDE}.
      */
     public Settings setFitMethod(@NonNull Fit fitMethod) {
         this.fitMethod = fitMethod;
@@ -268,7 +268,7 @@ public class Settings {
     }
 
     /**
-     * Sets whether view's transformations should be kept in bounds or not.
+     * Sets whether image transformations should be kept in bounds or not.
      * <p/>
      * Default value is true.
      */
@@ -298,12 +298,12 @@ public class Settings {
         return isMovementAreaSpecified ? movementAreaH : viewportH;
     }
 
-    public int getViewW() {
-        return viewW;
+    public int getImageW() {
+        return imageW;
     }
 
-    public int getViewH() {
-        return viewH;
+    public int getImageH() {
+        return imageH;
     }
 
     public float getMaxZoom() {
@@ -367,8 +367,8 @@ public class Settings {
     }
 
 
-    boolean hasViewSize() {
-        return viewW != 0 && viewH != 0;
+    boolean hasImageSize() {
+        return imageW != 0 && imageH != 0;
     }
 
     boolean hasViewportSize() {
@@ -378,22 +378,22 @@ public class Settings {
 
     public enum Fit {
         /**
-         * Fit view width inside viewport area
+         * Fit image width inside viewport area
          */
         HORIZONTAL,
 
         /**
-         * Fit view height inside viewport area
+         * Fit image height inside viewport area
          */
         VERTICAL,
 
         /**
-         * Fit both view width and view height inside viewport area
+         * Fit both image width and image height inside viewport area
          */
         INSIDE,
 
         /**
-         * Fit view width or view height inside viewport area, so the entire viewport is filled up
+         * Fit image width or image height inside viewport area, so the entire viewport is filled up
          */
         OUTSIDE
     }

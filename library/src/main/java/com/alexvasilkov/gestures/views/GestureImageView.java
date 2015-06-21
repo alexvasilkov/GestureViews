@@ -71,7 +71,6 @@ public class GestureImageView extends ImageView
 
     /**
      * Enables scroll inside {@link android.support.v4.view.ViewPager}.
-     * Makes scrolling within ViewPager smoother.
      */
     public void enableScrollInViewPager(ViewPager pager) {
         mController.enableScrollInViewPager(pager);
@@ -81,7 +80,7 @@ public class GestureImageView extends ImageView
      * Returns {@link com.alexvasilkov.gestures.GesturesController}
      * which is a main engine for {@link GestureImageView}.
      * <p/>
-     * Use it to apply settings, modify view state and so on.
+     * Use it to apply settings, modify image state and so on.
      */
     public GesturesController getController() {
         return mController;
@@ -146,9 +145,9 @@ public class GestureImageView extends ImageView
     public void setImageDrawable(Drawable drawable) {
         super.setImageDrawable(drawable);
         if (drawable == null) {
-            mController.getSettings().setSize(0, 0);
+            mController.getSettings().setImage(0, 0);
         } else {
-            mController.getSettings().setSize(
+            mController.getSettings().setImage(
                     drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
         }
         mController.resetState();

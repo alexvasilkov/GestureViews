@@ -14,7 +14,7 @@ import com.alexvasilkov.gestures.detectors.RotationGestureDetector;
 
 /**
  * Allows cross movement between view controlled by this {@link GesturesController} and it's parent
- * {@link android.support.v4.view.ViewPager} by splitting scroll movement between them.
+ * {@link android.support.v4.view.ViewPager} by splitting scroll movements between them.
  */
 public class GesturesControllerForPager extends GesturesController {
 

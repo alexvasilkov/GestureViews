@@ -37,7 +37,7 @@ public class StateController {
 
     void updateState(State state) {
         if (mIsResetRequired) {
-            // We can correctly reset state only when we have both view size and viewport size
+            // We can correctly reset state only when we have both image size and viewport size
             // but there can be a delay before we have all values properly set
             // (waiting for layout or waiting for image to be loaded)
             boolean updated = adjustZoomLevels(state);
@@ -106,7 +106,7 @@ public class StateController {
         if (!mSettings.isRestrictBounds()) return false;
 
         if (prevState != null && !State.equals(state.getRotation(), prevState.getRotation())) {
-            // Rotation will change view bounds, so we should adjust zoom levels
+            // Rotation will change image bounds, so we should adjust zoom levels
             adjustZoomLevels(state);
         }
 
@@ -223,7 +223,7 @@ public class StateController {
     /**
      * Adjusting min and max zoom levels.
      *
-     * @return true if zoom levels was correctly updated (viewport and view size are known),
+     * @return true if zoom levels was correctly updated (image and viewport sizes are known),
      * false otherwise
      */
     private boolean adjustZoomLevels(State state) {
@@ -231,22 +231,22 @@ public class StateController {
 
         float fittingZoom = 1f;
 
-        boolean isCorrectSize = mSettings.hasViewSize() && mSettings.hasViewportSize();
+        boolean isCorrectSize = mSettings.hasImageSize() && mSettings.hasViewportSize();
 
         if (isCorrectSize) {
-            float w = mSettings.getViewW(), h = mSettings.getViewH();
+            float w = mSettings.getImageW(), h = mSettings.getImageH();
             float areaW = mSettings.getMovementAreaW(), areaH = mSettings.getMovementAreaH();
 
             if (mSettings.getFitMethod() == Settings.Fit.OUTSIDE) {
-                // Computing movement area size taking rotation into account.
-                // We will inverse rotation, since it will be applied to area, not to view itself.
+                // Computing movement area size taking rotation into account. We need to inverse
+                // rotation, since it will be applied to the area, not to the image itself.
                 mMatrix.setRotate(-state.getRotation());
                 mRectF.set(0, 0, areaW, areaH);
                 mMatrix.mapRect(mRectF);
                 areaW = mRectF.width();
                 areaH = mRectF.height();
             } else {
-                // Computing view size taking rotation into account.
+                // Computing image bounding size taking rotation into account.
                 mMatrix.setRotate(state.getRotation());
                 mRectF.set(0, 0, w, h);
                 mMatrix.mapRect(mRectF);

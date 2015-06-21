@@ -52,7 +52,6 @@ public class GestureLayout extends FrameLayout
 
     /**
      * Enables scroll inside {@link android.support.v4.view.ViewPager}.
-     * Makes scrolling within ViewPager smoother.
      */
     public void enableScrollInViewPager(ViewPager pager) {
         mController.enableScrollInViewPager(pager);
@@ -109,7 +108,7 @@ public class GestureLayout extends FrameLayout
 
         View child = getChildCount() == 0 ? null : getChildAt(0);
         if (child != null) {
-            mController.getSettings().setSize(child.getWidth(), child.getHeight());
+            mController.getSettings().setImage(child.getWidth(), child.getHeight());
             mController.updateState();
         }
     }

@@ -70,7 +70,7 @@ public class GestureTextView extends TextView implements GesturesController.OnSt
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        mController.getSettings().setViewport(w, h).setSize(w, h);
+        mController.getSettings().setViewport(w, h).setImage(w, h);
         mController.updateState();
     }
 
