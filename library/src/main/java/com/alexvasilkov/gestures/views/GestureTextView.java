@@ -10,8 +10,9 @@ import android.widget.TextView;
 
 import com.alexvasilkov.gestures.GesturesController;
 import com.alexvasilkov.gestures.State;
+import com.alexvasilkov.gestures.views.interfaces.GesturesView;
 
-public class GestureTextView extends TextView implements GesturesControlledView {
+public class GestureTextView extends TextView implements GesturesView {
 
     private final GesturesController mController;
 
@@ -28,6 +29,7 @@ public class GestureTextView extends TextView implements GesturesControlledView 
 
     public GestureTextView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+
         mController = new GesturesController(context, new GesturesController.OnStateChangeListener() {
             @Override
             public void onStateChanged(State state) {
@@ -39,6 +41,7 @@ public class GestureTextView extends TextView implements GesturesControlledView 
                 applySize(newState);
             }
         });
+        mController.attachToView(this);
         mController.getSettings().setOverzoomFactor(1f).setPanEnabled(false);
         mOrigSize = getTextSize();
     }

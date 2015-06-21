@@ -2,7 +2,6 @@ package com.alexvasilkov.gestures.sample.items;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -12,11 +11,8 @@ import android.widget.ImageView;
 import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.activities.FlickrImageActivity;
-import com.alexvasilkov.gestures.sample.animation.Helper;
-import com.alexvasilkov.gestures.sample.utils.GlideDrawableTarget;
+import com.alexvasilkov.gestures.sample.utils.GlideHelper;
 import com.alexvasilkov.gestures.sample.views.PhotosRowLayout;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.googlecode.flickrjandroid.photos.Photo;
 import com.googlecode.flickrjandroid.photos.PhotoList;
 
@@ -100,23 +96,14 @@ public class FlickrListAdapter extends RecyclerView.Adapter<FlickrListAdapter.Vi
 
     private void bindImageView(ImageView image, Photo photo) {
         image.setTag(R.id.tag_item, photo);
-
-        Glide.with(image.getContext())
-                .load(photo == null ? null : photo.getMediumUrl())
-                .dontAnimate()
-                .thumbnail(Glide.with(image.getContext())
-                        .load(photo == null ? null : photo.getThumbnailUrl())
-                        .diskCacheStrategy(DiskCacheStrategy.SOURCE))
-                .into(new GlideDrawableTarget(image));
+        GlideHelper.loadFlickrThumb(photo, image);
     }
 
     @Override
     public void onClick(@NonNull View view) {
-        Photo photo = (Photo) view.getTag(R.id.tag_item);
         Activity activity = (Activity) view.getContext();
-        Intent intent = new Intent(activity, FlickrImageActivity.class);
-
-        new Helper.Starter().from((ImageView) view, photo).start(activity, intent);
+        Photo photo = (Photo) view.getTag(R.id.tag_item);
+        FlickrImageActivity.open(activity, photo, (ImageView) view);
     }
 
 

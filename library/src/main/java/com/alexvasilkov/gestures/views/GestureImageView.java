@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.ImageView;
@@ -17,18 +18,20 @@ import com.alexvasilkov.gestures.GesturesController;
 import com.alexvasilkov.gestures.GesturesControllerForPager;
 import com.alexvasilkov.gestures.State;
 import com.alexvasilkov.gestures.internal.Snapshot;
+import com.alexvasilkov.gestures.views.interfaces.ClipView;
+import com.alexvasilkov.gestures.views.interfaces.GesturesView;
+import com.alexvasilkov.gestures.views.utils.ViewClipHelper;
 
 /**
  * Gestures controlled ImageView
  */
-public class GestureImageView extends ImageView implements GesturesControlledView {
+public class GestureImageView extends ImageView implements GesturesView, ClipView {
 
     private final GesturesControllerForPager mController;
+    private final ViewClipHelper mClipHelper = new ViewClipHelper(this);
     private final Matrix mImageMatrix = new Matrix();
-    private OnSnapshotLoadedListener mSnapshotListener;
 
-    private final RectF mClipRect = new RectF(), mOldClipRect = new RectF();
-    private boolean mIsClipping;
+    private OnSnapshotLoadedListener mSnapshotListener;
 
     public GestureImageView(Context context) {
         this(context, null, 0);
@@ -52,22 +55,16 @@ public class GestureImageView extends ImageView implements GesturesControlledVie
                 applyState(newState);
             }
         });
+        mController.attachToView(this);
 
         setScaleType(ImageView.ScaleType.MATRIX);
     }
 
     @Override
     public void draw(@NonNull Canvas canvas) {
-        if (mIsClipping) {
-            canvas.save();
-            canvas.clipRect(mClipRect);
-        }
-
+        mClipHelper.onPreDraw(canvas);
         super.draw(canvas);
-
-        if (mIsClipping) {
-            canvas.restore();
-        }
+        mClipHelper.onPostDraw(canvas);
 
         if (mSnapshotListener != null) {
             Snapshot snapshot = new Snapshot(mController.getSettings());
@@ -85,41 +82,17 @@ public class GestureImageView extends ImageView implements GesturesControlledVie
         return mController;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void clipView(@Nullable RectF rect) {
+        mClipHelper.clipView(rect);
+    }
+
     public void getSnapshot(OnSnapshotLoadedListener listener) {
         mSnapshotListener = listener;
         invalidate();
-    }
-
-    /**
-     * Clips layout so only part specified in {@code rect} will be drawn.
-     * <p/>
-     * Pass {@code null} to turn clipping off.
-     */
-    public void clipLayout(RectF rect) {
-        if (rect == null) {
-            mIsClipping = false;
-            invalidate();
-        } else {
-            int w = getWidth(), h = getHeight();
-
-            // Setting previous clip rect
-            if (mIsClipping) {
-                mOldClipRect.set(mClipRect);
-            } else {
-                mOldClipRect.set(0, 0, w, h);
-            }
-
-            mIsClipping = true;
-
-            mClipRect.set(rect);
-
-            // Invalidating only updated part
-            int left = (int) Math.min(mClipRect.left, mOldClipRect.left);
-            int top = (int) Math.min(mClipRect.top, mOldClipRect.top);
-            int right = (int) Math.max(mClipRect.right, mOldClipRect.right) + 1;
-            int bottom = (int) Math.max(mClipRect.bottom, mOldClipRect.bottom) + 1;
-            invalidate(left, top, right, bottom);
-        }
     }
 
     @Override

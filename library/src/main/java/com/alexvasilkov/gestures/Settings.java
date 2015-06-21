@@ -367,11 +367,11 @@ public class Settings {
     }
 
 
-    boolean hasImageSize() {
+    public boolean hasImageSize() {
         return imageW != 0 && imageH != 0;
     }
 
-    boolean hasViewportSize() {
+    public boolean hasViewportSize() {
         return viewportW != 0 && viewportH != 0;
     }
 

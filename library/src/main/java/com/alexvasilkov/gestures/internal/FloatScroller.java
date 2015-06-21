@@ -1,7 +1,7 @@
 package com.alexvasilkov.gestures.internal;
 
 import android.os.SystemClock;
-import android.view.animation.DecelerateInterpolator;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 
 /**
@@ -9,7 +9,7 @@ import android.view.animation.Interpolator;
  */
 public class FloatScroller {
 
-    private static final int ANIMATION_DURATION = 300;
+    public static final int DEFAULT_DURATION = 250;
 
     private final Interpolator mInterpolator;
 
@@ -27,8 +27,18 @@ public class FloatScroller {
      */
     private long mStartRTC;
 
+    private long mDuration = DEFAULT_DURATION;
+
     public FloatScroller() {
-        mInterpolator = new DecelerateInterpolator();
+        mInterpolator = new AccelerateDecelerateInterpolator();
+    }
+
+    public long getDuration() {
+        return mDuration;
+    }
+
+    public void setDuration(long duration) {
+        mDuration = duration;
     }
 
     /**
@@ -77,13 +87,13 @@ public class FloatScroller {
         }
 
         long elapsed = SystemClock.elapsedRealtime() - mStartRTC;
-        if (elapsed >= ANIMATION_DURATION) {
+        if (elapsed >= DEFAULT_DURATION) {
             mFinished = true;
             mCurrValue = mFinalValue;
             return false;
         }
 
-        float time = mInterpolator.getInterpolation((float) elapsed / ANIMATION_DURATION);
+        float time = mInterpolator.getInterpolation((float) elapsed / DEFAULT_DURATION);
         mCurrValue = interpolate(mStartValue, mFinalValue, time);
         return true;
     }

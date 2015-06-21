@@ -2,8 +2,8 @@ package com.alexvasilkov.gestures;
 
 import android.content.Context;
 import android.graphics.PointF;
-import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.GestureDetector;
@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.OverScroller;
 
+import com.alexvasilkov.gestures.internal.AnimationEngine;
 import com.alexvasilkov.gestures.internal.FloatScroller;
 import com.alexvasilkov.gestures.internal.MovementBounds;
 import com.alexvasilkov.gestures.internal.detectors.RotationGestureDetector;
@@ -41,7 +42,7 @@ public class GesturesController implements View.OnTouchListener {
 
     private final List<OnStateChangeListener> mStateListeners = new LinkedList<>();
 
-    private final AnimationTick mAnimationTick;
+    private final AnimationEngine mAnimationEngine;
 
     // Various gesture detectors
     private final GestureDetector mGestureDetector;
@@ -78,7 +79,7 @@ public class GesturesController implements View.OnTouchListener {
 
         mStateListeners.add(listener);
 
-        mAnimationTick = new AnimationTick();
+        mAnimationEngine = new LocalAnimationEngine();
         InternalGesturesListener internalListener = new InternalGesturesListener();
         mGestureDetector = new GestureDetector(context, internalListener);
         mGestureDetector.setIsLongpressEnabled(false);
@@ -94,6 +95,12 @@ public class GesturesController implements View.OnTouchListener {
         mMaximumVelocity = configuration.getScaledMaximumFlingVelocity();
     }
 
+    /**
+     * Attaching controller to particular view will make animations a bit more smooth.
+     */
+    public void attachToView(@Nullable View view) {
+        mAnimationEngine.attachToView(view);
+    }
 
     /**
      * Sets listener for basic touch events.
@@ -193,17 +200,25 @@ public class GesturesController implements View.OnTouchListener {
             mStateController.restrictStateBounds(mState, mPrevState, mPivotX, mPivotY, true, true);
         }
 
-        stopFlingAnimation();
-        stopStateAnimation();
+        stopAllAnimations();
 
         mStateStart.set(mState);
         mStateEnd.set(endState);
         mStateScroller.startScroll(0f, 1f);
-        mAnimationTick.startAnimation();
+        mAnimationEngine.start();
     }
 
     public void stopStateAnimation() {
         mStateScroller.forceFinished();
+    }
+
+    public void stopFlingAnimation() {
+        mFlingScroller.forceFinished(true);
+    }
+
+    public void stopAllAnimations() {
+        stopStateAnimation();
+        stopFlingAnimation();
     }
 
     protected void notifyStateUpdated() {
@@ -316,7 +331,7 @@ public class GesturesController implements View.OnTouchListener {
                 limitFlingVelocity(vY * FLING_COEFFICIENT),
                 Integer.MIN_VALUE, Integer.MAX_VALUE,
                 Integer.MIN_VALUE, Integer.MAX_VALUE);
-        mAnimationTick.startAnimation();
+        mAnimationEngine.start();
 
         return true;
     }
@@ -341,10 +356,6 @@ public class GesturesController implements View.OnTouchListener {
         }
 
         mState.translateTo(x, y);
-    }
-
-    protected void stopFlingAnimation() {
-        mFlingScroller.forceFinished(true);
     }
 
     protected boolean onSingleTapConfirmed(MotionEvent e) {
@@ -426,15 +437,12 @@ public class GesturesController implements View.OnTouchListener {
     }
 
     /**
-     * Runnable implementation to animate state changes
+     * Animation engine implementation to animate state changes
      */
-    private class AnimationTick implements Runnable {
-
-        private final Handler mHandler = new Handler();
-
+    private class LocalAnimationEngine extends AnimationEngine {
         @Override
-        public void run() {
-            boolean needsInvalidate = false;
+        public boolean onStep() {
+            boolean shouldProceed = false;
 
             if (!mFlingScroller.isFinished()) {
                 if (mFlingScroller.computeScrollOffset()) {
@@ -449,7 +457,7 @@ public class GesturesController implements View.OnTouchListener {
                         stopFlingAnimation();
                     }
 
-                    needsInvalidate = true;
+                    shouldProceed = true;
                 }
 
                 if (mFlingScroller.isFinished()) {
@@ -461,25 +469,17 @@ public class GesturesController implements View.OnTouchListener {
                 mStateScroller.computeScroll();
                 float factor = mStateScroller.getCurr();
                 StateController.interpolate(mState, mStateStart, mStateEnd, factor);
-                needsInvalidate = true;
+                shouldProceed = true;
 
                 if (mStateScroller.isFinished()) {
                     onStateAnimationFinished();
                 }
             }
 
-            if (needsInvalidate) {
-                notifyStateUpdated();
-                startAnimation();
-            }
-        }
+            if (shouldProceed) notifyStateUpdated();
 
-        void startAnimation() {
-            mHandler.removeCallbacks(this);
-            // Small delay is required (sometimes runnable can be called immediately)
-            mHandler.postDelayed(this, 10);
+            return shouldProceed;
         }
-
     }
 
 

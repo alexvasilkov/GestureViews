@@ -6,4 +6,6 @@
         android:width="0.4dp"
         android:color="#3000" />
 
+    <solid android:color="@android:color/transparent" />
+
 </shape>

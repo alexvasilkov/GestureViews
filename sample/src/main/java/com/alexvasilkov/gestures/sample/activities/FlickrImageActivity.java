@@ -1,32 +1,52 @@
 package com.alexvasilkov.gestures.sample.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.alexvasilkov.android.commons.utils.Views;
+import com.alexvasilkov.gestures.animation.ViewPosition;
+import com.alexvasilkov.gestures.animation.ViewPositionAnimator;
 import com.alexvasilkov.gestures.sample.R;
-import com.alexvasilkov.gestures.sample.animation.Helper;
-import com.alexvasilkov.gestures.sample.utils.GlideDrawableListener;
-import com.alexvasilkov.gestures.sample.utils.GlideDrawableTarget;
+import com.alexvasilkov.gestures.sample.utils.GlideHelper;
+import com.alexvasilkov.gestures.sample.utils.ViewsCompat;
 import com.alexvasilkov.gestures.views.GestureImageView;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.googlecode.flickrjandroid.photos.Photo;
 
 public class FlickrImageActivity extends BaseActivity {
 
+    private static final String EXTRA_FROM_POSITION = "EXTRA_FROM_POSITION";
+    private static final String EXTRA_PHOTO = "EXTRA_PHOTO";
+
     private ViewHolder mViews;
-    private Helper mHelper;
+    private ViewPositionAnimator mPositionAnimator;
+
+    private Drawable mBackground;
+
+    public static void open(Activity activity, Photo photo, ImageView from) {
+        Intent intent = new Intent(activity, FlickrImageActivity.class);
+        intent.putExtra(EXTRA_FROM_POSITION, ViewPosition.from(from).pack());
+        intent.putExtra(EXTRA_PHOTO, photo);
+        activity.startActivity(intent);
+        activity.overridePendingTransition(0, 0);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        String fromPosStr = getIntent().getStringExtra(EXTRA_FROM_POSITION);
+        final ViewPosition fromPos = fromPosStr == null ? null : ViewPosition.unpack(fromPosStr);
+        final Photo photo = (Photo) getIntent().getSerializableExtra(EXTRA_PHOTO);
+
+        if (fromPos == null || photo == null)
+            throw new RuntimeException("Photo and / or view position was not specified");
 
         setContentView(R.layout.activity_flickr_image);
         setTitle(null);
@@ -36,82 +56,56 @@ public class FlickrImageActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Setting up image view
-        mViews.image.getController().getSettings()
-                .setFillViewport(true)
-                .setMaxZoom(3f)
-                .disableGestures(); // Temporary disabling touch controls
+        mViews.image.getController().getSettings().setFillViewport(true).setMaxZoom(3f);
 
         // Setting up animated background
         int color = getResources().getColor(R.color.window_background_dark_flickr);
-        final Drawable background = new ColorDrawable(color);
-        setBackground(mViews.layout, background);
+        mBackground = new ColorDrawable(color);
+        ViewsCompat.setBackground(mViews.layout, mBackground);
 
         // Playing opening animation
-        mHelper = new Helper(this, mViews.image);
-        mHelper.setAnimationUpdateListener(new Helper.AnimationUpdateListener() {
+        mPositionAnimator = new ViewPositionAnimator();
+        mPositionAnimator.reset(fromPos, mViews.image);
+        mPositionAnimator.setOnPositionChangeListener(new ViewPositionAnimator.OnPositionChangeListener() {
             @Override
-            public void onAnimationUpdate(float animationState) {
-                background.setAlpha((int) (255 * animationState));
-                mViews.toolbar.setAlpha(animationState);
-                mViews.progress.setAlpha(animationState);
+            public void onPositionChanged(float state, boolean isFinishing) {
+                onPhotoAnimationState(state, isFinishing);
             }
         });
-        mHelper.enter(savedInstanceState);
 
+        mPositionAnimator.enter(savedInstanceState == null);
+
+        // Temporary disabling touch controls
+        mViews.image.getController().getSettings().disableGestures();
         // Loading image
-        final Photo photo = mHelper.getItem();
-        final String photoUrl = photo.getLargeSize() == null
-                ? photo.getMediumUrl() : photo.getLargeUrl();
-
-        Glide.with(this)
-                .load(photoUrl)
-                .thumbnail(Glide.with(this)
-                        .load(photo.getThumbnailUrl())
-                        .diskCacheStrategy(DiskCacheStrategy.SOURCE))
-                .dontAnimate()
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .listener(new GlideDrawableListener() {
+        GlideHelper.loadFlickrFull(photo, mViews.image, mViews.progress,
+                new GlideHelper.OnImageLoadedListener() {
                     @Override
-                    public void onSuccess(String url) {
-                        if (url.equals(photoUrl)) {
-                            // Re-enabling touch controls
-                            mViews.image.getController().getSettings().enableGestures();
-                            mViews.progress.setVisibility(View.INVISIBLE);
-                        }
-                    }
-
-                    @Override
-                    public void onFail(String url) {
-                        mViews.progress.setVisibility(View.INVISIBLE);
-                    }
-                })
-                .into(new GlideDrawableTarget(mViews.image) {
-                    @Override
-                    public void onLoadStarted(Drawable placeholder) {
-                        super.onLoadStarted(placeholder);
-                        mViews.progress.setVisibility(View.VISIBLE);
+                    public void onImageLoaded() {
+                        // Re-enabling touch controls
+                        mViews.image.getController().getSettings().enableGestures();
                     }
                 });
     }
 
     @Override
     public void onBackPressed() {
-        mHelper.exit();
+        mPositionAnimator.exit(true);
     }
 
+    private void onPhotoAnimationState(float state, boolean isFinishing) {
+        mBackground.setAlpha((int) (255 * state));
+        mViews.toolbar.setAlpha(state);
+        mViews.progress.setAlpha(state);
 
-    @SuppressWarnings("deprecation")
-    private static void setBackground(View view, Drawable drawable) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-            view.setBackgroundDrawable(drawable);
-        } else {
-            view.setBackground(drawable);
+        if (state == 0f && isFinishing) {
+            finish();
+            overridePendingTransition(0, 0);
         }
     }
 
 
     private class ViewHolder {
-
         final Toolbar toolbar;
         final ViewGroup layout;
         final GestureImageView image;
@@ -123,7 +117,6 @@ public class FlickrImageActivity extends BaseActivity {
             layout = (ViewGroup) image.getParent();
             progress = Views.find(activity, R.id.flickr_progress);
         }
-
     }
 
 }
