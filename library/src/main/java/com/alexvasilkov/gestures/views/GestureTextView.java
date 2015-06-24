@@ -33,12 +33,12 @@ public class GestureTextView extends TextView implements GestureView {
         mController = new GestureController(context, new GestureController.OnStateChangeListener() {
             @Override
             public void onStateChanged(State state) {
-                applySize(state);
+                applyState(state);
             }
 
             @Override
             public void onStateReset(State oldState, State newState) {
-                applySize(newState);
+                applyState(newState);
             }
         });
         mController.attachToView(this);
@@ -68,14 +68,14 @@ public class GestureTextView extends TextView implements GestureView {
     public void setTextSize(float size) {
         super.setTextSize(size);
         mOrigSize = getTextSize();
-        applySize(mController.getState());
+        applyState(mController.getState());
     }
 
     @Override
     public void setTextSize(int unit, float size) {
         super.setTextSize(unit, size);
         mOrigSize = getTextSize();
-        applySize(mController.getState());
+        applyState(mController.getState());
     }
 
     @Override
@@ -85,7 +85,7 @@ public class GestureTextView extends TextView implements GestureView {
         mController.updateState();
     }
 
-    private void applySize(State state) {
+    protected void applyState(State state) {
         float size = mOrigSize * state.getZoom();
         float maxZoom = mController.getSettings().getMaxZoom();
         size = Math.max(mOrigSize, Math.min(size, mOrigSize * maxZoom));

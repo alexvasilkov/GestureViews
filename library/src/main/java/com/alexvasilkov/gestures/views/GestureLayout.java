@@ -115,7 +115,7 @@ public class GestureLayout extends FrameLayout implements GestureView {
     }
 
 
-    private void applyState(State state) {
+    protected void applyState(State state) {
         state.get(mMatrix);
         mMatrix.invert(mMatrixInverse);
         invalidate();
