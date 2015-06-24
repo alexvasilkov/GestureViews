@@ -3,11 +3,11 @@ package com.alexvasilkov.gestures.views.interfaces;
 import com.alexvasilkov.gestures.GesturesController;
 
 /**
- * Common interface for all Gestures* views.
+ * Common interface for all Gesture* views.
  * <p/>
  * All classes implementing this interface should be descendants of {@link android.view.View}.
  */
-public interface GesturesView {
+public interface GestureView {
 
     /**
      * Returns {@link GesturesController} which is a main engine for all gestures interactions.

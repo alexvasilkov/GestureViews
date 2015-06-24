@@ -16,14 +16,14 @@ import android.widget.FrameLayout;
 import com.alexvasilkov.gestures.GesturesController;
 import com.alexvasilkov.gestures.GesturesControllerForPager;
 import com.alexvasilkov.gestures.State;
-import com.alexvasilkov.gestures.views.interfaces.GesturesView;
+import com.alexvasilkov.gestures.views.interfaces.GestureView;
 
 /**
  * Gestures controlled layout.
  * <p/>
  * Note: only one children is eligible here.
  */
-public class GestureLayout extends FrameLayout implements GesturesView {
+public class GestureLayout extends FrameLayout implements GestureView {
 
     private final GesturesControllerForPager mController;
 

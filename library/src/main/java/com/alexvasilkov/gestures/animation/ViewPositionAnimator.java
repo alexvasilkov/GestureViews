@@ -15,20 +15,20 @@ import com.alexvasilkov.gestures.internal.AnimationEngine;
 import com.alexvasilkov.gestures.internal.FloatScroller;
 import com.alexvasilkov.gestures.views.GestureImageView;
 import com.alexvasilkov.gestures.views.interfaces.ClipView;
-import com.alexvasilkov.gestures.views.interfaces.GesturesView;
+import com.alexvasilkov.gestures.views.interfaces.GestureView;
 
 /**
  * Helper class to animate views from one position on screen to another.
  * <p/>
  * Animation can be performed from any view (e.g. {@link ImageView}) to any gestures controlled view
- * implementing {@link GesturesView} (e.g. {@link GestureImageView}).
+ * implementing {@link GestureView} (e.g. {@link GestureImageView}).
  * <p/>
  * Note, that initial and final
  * views should have same aspect ratio. In case of {@link ImageView} intial and final images should
  * have same aspect, but actual views can have different aspects (e.g. animating from square thumb
  * view with scale type = {@link ScaleType#CENTER_CROP} to rectangular full image view).
  * <p/>
- * To use this class first create an instance and than call {@link #reset(ViewPosition, GesturesView)}
+ * To use this class first create an instance and than call {@link #reset(ViewPosition, GestureView)}
  * method whenever initial or final view position is changed. After that you can call
  * {@link #enter(boolean)} and {@link #exit(boolean)} methods and listen for transition changes
  * using {@link #setOnPositionChangeListener(OnPositionChangeListener)}.
@@ -89,7 +89,7 @@ public class ViewPositionAnimator {
             };
 
 
-    public void reset(ViewPosition from, GesturesView to) {
+    public void reset(ViewPosition from, GestureView to) {
         // Cleaning up
         finishAnimation();
 

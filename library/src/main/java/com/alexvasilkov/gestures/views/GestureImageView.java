@@ -19,13 +19,13 @@ import com.alexvasilkov.gestures.GesturesControllerForPager;
 import com.alexvasilkov.gestures.State;
 import com.alexvasilkov.gestures.internal.Snapshot;
 import com.alexvasilkov.gestures.views.interfaces.ClipView;
-import com.alexvasilkov.gestures.views.interfaces.GesturesView;
+import com.alexvasilkov.gestures.views.interfaces.GestureView;
 import com.alexvasilkov.gestures.views.utils.ViewClipHelper;
 
 /**
  * Gestures controlled ImageView
  */
-public class GestureImageView extends ImageView implements GesturesView, ClipView {
+public class GestureImageView extends ImageView implements GestureView, ClipView {
 
     private final GesturesControllerForPager mController;
     private final ViewClipHelper mClipHelper = new ViewClipHelper(this);
