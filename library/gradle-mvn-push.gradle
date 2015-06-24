@@ -83,6 +83,13 @@ afterEvaluate { project ->
                         }
                     }
                 }
+
+                // Excluding dependency on support library
+                pom.whenConfigured { pom ->
+                    pom.dependencies = pom.dependencies.findAll { dep ->
+                        !dep.artifactId.startsWith('support-v4')
+                    }
+                }
             }
         }
     }
