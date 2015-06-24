@@ -16,6 +16,7 @@ import android.widget.ImageView;
 
 import com.alexvasilkov.gestures.GestureController;
 import com.alexvasilkov.gestures.GestureControllerForPager;
+import com.alexvasilkov.gestures.Settings;
 import com.alexvasilkov.gestures.State;
 import com.alexvasilkov.gestures.internal.Snapshot;
 import com.alexvasilkov.gestures.views.interfaces.ClipView;
@@ -90,6 +91,10 @@ public class GestureImageView extends ImageView implements GestureView, ClipView
         mClipHelper.clipView(rect);
     }
 
+    /**
+     * Crops bitmap as it is seen inside movement area ({@link Settings#setMovementArea(int, int)}).
+     * Result will be delivered to provided snapshot listener.
+     */
     public void getSnapshot(OnSnapshotLoadedListener listener) {
         mSnapshotListener = listener;
         invalidate();
@@ -125,14 +130,14 @@ public class GestureImageView extends ImageView implements GestureView, ClipView
         mController.resetState();
     }
 
-    private void applyState(State state) {
+    protected void applyState(State state) {
         state.get(mImageMatrix);
         setImageMatrix(mImageMatrix);
     }
 
 
     @SuppressWarnings("deprecation")
-    public static Drawable getDrawable(Context context, @DrawableRes int id) {
+    private static Drawable getDrawable(Context context, @DrawableRes int id) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             return context.getDrawable(id);
         } else {

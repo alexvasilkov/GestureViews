@@ -108,7 +108,7 @@ public class Settings {
     }
 
     /**
-     * Setting movement area size
+     * Setting movement area size. Viewport area will be used instead if no movement area is specified.
      */
     public Settings setMovementArea(int w, int h) {
         isMovementAreaSpecified = true;
