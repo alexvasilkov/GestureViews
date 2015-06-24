@@ -31,7 +31,7 @@ import java.util.List;
  * Settings can be obtained through {@link #getSettings()}. Note, that some settings are required,
  * see {@link Settings}.
  */
-public class GesturesController implements View.OnTouchListener {
+public class GestureController implements View.OnTouchListener {
 
     private static final float ZOOM_GESTURE_MIN_SPAN_DP = 20f;
     private static final float FLING_COEFFICIENT = 0.75f;
@@ -69,7 +69,7 @@ public class GesturesController implements View.OnTouchListener {
 
     private OnGestureListener mGestureListener;
 
-    public GesturesController(Context context, OnStateChangeListener listener) {
+    public GestureController(Context context, OnStateChangeListener listener) {
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         mZoomGestureMinSpan = TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP, ZOOM_GESTURE_MIN_SPAN_DP, metrics);
@@ -105,7 +105,7 @@ public class GesturesController implements View.OnTouchListener {
     /**
      * Sets listener for basic touch events.
      * <p/>
-     * See also {@link GesturesController.OnGestureListener}
+     * See also {@link GestureController.OnGestureListener}
      */
     public void setOnGesturesListener(OnGestureListener listener) {
         mGestureListener = listener;
@@ -132,7 +132,7 @@ public class GesturesController implements View.OnTouchListener {
     /**
      * Sets whether long press is enabled or not. Long press is disabled by default.
      * <p/>
-     * See also {@link GesturesController.OnGestureListener#onLongPress(android.view.MotionEvent)}
+     * See also {@link GestureController.OnGestureListener#onLongPress(android.view.MotionEvent)}
      */
     public void setLongPressEnabled(boolean enabled) {
         mGestureDetector.setIsLongpressEnabled(enabled);
@@ -152,8 +152,8 @@ public class GesturesController implements View.OnTouchListener {
      * Returns current state. In most cases you should not modify state directly,
      * use one of the methods provided in {@link StateController} instead.
      * <p/>
-     * If current state was changed outside {@link GesturesController}
-     * you should call {@link GesturesController#updateState()} to properly apply changes.
+     * If current state was changed outside {@link GestureController}
+     * you should call {@link GestureController#updateState()} to properly apply changes.
      */
     public State getState() {
         return mState;
@@ -512,7 +512,7 @@ public class GesturesController implements View.OnTouchListener {
     }
 
     /**
-     * Simple implementation of {@link GesturesController.OnGestureListener}
+     * Simple implementation of {@link GestureController.OnGestureListener}
      */
     public static class SimpleOnGestureListener implements OnGestureListener {
         @Override
@@ -554,7 +554,7 @@ public class GesturesController implements View.OnTouchListener {
 
         @Override
         public boolean onSingleTapConfirmed(@NonNull MotionEvent e) {
-            return GesturesController.this.onSingleTapConfirmed(e);
+            return GestureController.this.onSingleTapConfirmed(e);
         }
 
         @Override
@@ -564,12 +564,12 @@ public class GesturesController implements View.OnTouchListener {
 
         @Override
         public boolean onDoubleTapEvent(@NonNull MotionEvent e) {
-            return GesturesController.this.onDoubleTapEvent(e);
+            return GestureController.this.onDoubleTapEvent(e);
         }
 
         @Override
         public boolean onDown(@NonNull MotionEvent e) {
-            return GesturesController.this.onDown(e);
+            return GestureController.this.onDown(e);
         }
 
         @Override
@@ -579,54 +579,54 @@ public class GesturesController implements View.OnTouchListener {
 
         @Override
         public boolean onSingleTapUp(@NonNull MotionEvent e) {
-            return GesturesController.this.onSingleTapUp(e);
+            return GestureController.this.onSingleTapUp(e);
         }
 
         @Override
         public boolean onScroll(@NonNull MotionEvent e1, @NonNull MotionEvent e2,
                                 float distanceX, float distanceY) {
-            return GesturesController.this.onScroll(e1, e2, distanceX, distanceY);
+            return GestureController.this.onScroll(e1, e2, distanceX, distanceY);
         }
 
         @Override
         public void onLongPress(@NonNull MotionEvent e) {
-            GesturesController.this.onLongPress(e);
+            GestureController.this.onLongPress(e);
         }
 
         @Override
         public boolean onFling(@NonNull MotionEvent e1, @NonNull MotionEvent e2,
                                float velocityX, float velocityY) {
-            return GesturesController.this.onFling(e1, e2, velocityX, velocityY);
+            return GestureController.this.onFling(e1, e2, velocityX, velocityY);
         }
 
         @Override
         public boolean onRotate(@NonNull RotationGestureDetector detector) {
-            return GesturesController.this.onRotate(detector);
+            return GestureController.this.onRotate(detector);
         }
 
         @Override
         public boolean onRotationBegin(@NonNull RotationGestureDetector detector) {
-            return GesturesController.this.onRotationBegin(detector);
+            return GestureController.this.onRotationBegin(detector);
         }
 
         @Override
         public void onRotationEnd(@NonNull RotationGestureDetector detector) {
-            GesturesController.this.onRotationEnd(detector);
+            GestureController.this.onRotationEnd(detector);
         }
 
         @Override
         public boolean onScale(@NonNull ScaleGestureDetector detector) {
-            return GesturesController.this.onScale(detector);
+            return GestureController.this.onScale(detector);
         }
 
         @Override
         public boolean onScaleBegin(@NonNull ScaleGestureDetector detector) {
-            return GesturesController.this.onScaleBegin(detector);
+            return GestureController.this.onScaleBegin(detector);
         }
 
         @Override
         public void onScaleEnd(@NonNull ScaleGestureDetector detector) {
-            GesturesController.this.onScaleEnd(detector);
+            GestureController.this.onScaleEnd(detector);
         }
 
     }

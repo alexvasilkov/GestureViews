@@ -13,10 +13,10 @@ import android.view.ViewConfiguration;
 import com.alexvasilkov.gestures.internal.detectors.RotationGestureDetector;
 
 /**
- * Allows cross movement between view controlled by this {@link GesturesController} and it's parent
+ * Allows cross movement between view controlled by this {@link GestureController} and it's parent
  * {@link android.support.v4.view.ViewPager} by splitting scroll movements between them.
  */
-public class GesturesControllerForPager extends GesturesController {
+public class GestureControllerForPager extends GestureController {
 
     /**
      * Because ViewPager will immediately return true from onInterceptTouchEvent() method during
@@ -63,7 +63,7 @@ public class GesturesControllerForPager extends GesturesController {
     private boolean mIsAllowViewPagerScrollY;
     private float mLastViewPagerEventX, mLastViewPagerEventY;
 
-    public GesturesControllerForPager(Context context, OnStateChangeListener listener) {
+    public GestureControllerForPager(Context context, OnStateChangeListener listener) {
         super(context, listener);
 
         mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();

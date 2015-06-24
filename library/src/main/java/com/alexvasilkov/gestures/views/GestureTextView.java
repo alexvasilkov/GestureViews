@@ -8,13 +8,13 @@ import android.view.MotionEvent;
 import android.view.ViewParent;
 import android.widget.TextView;
 
-import com.alexvasilkov.gestures.GesturesController;
+import com.alexvasilkov.gestures.GestureController;
 import com.alexvasilkov.gestures.State;
 import com.alexvasilkov.gestures.views.interfaces.GestureView;
 
 public class GestureTextView extends TextView implements GestureView {
 
-    private final GesturesController mController;
+    private final GestureController mController;
 
     private float mOrigSize;
     private float mSize;
@@ -30,7 +30,7 @@ public class GestureTextView extends TextView implements GestureView {
     public GestureTextView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
-        mController = new GesturesController(context, new GesturesController.OnStateChangeListener() {
+        mController = new GestureController(context, new GestureController.OnStateChangeListener() {
             @Override
             public void onStateChanged(State state) {
                 applySize(state);
@@ -50,7 +50,7 @@ public class GestureTextView extends TextView implements GestureView {
      * {@inheritDoc}
      */
     @Override
-    public GesturesController getController() {
+    public GestureController getController() {
         return mController;
     }
 

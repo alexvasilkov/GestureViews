@@ -7,7 +7,7 @@ import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 
-import com.alexvasilkov.gestures.GesturesController;
+import com.alexvasilkov.gestures.GestureController;
 import com.alexvasilkov.gestures.Settings;
 import com.alexvasilkov.gestures.State;
 import com.alexvasilkov.gestures.StateController;
@@ -56,7 +56,7 @@ public class ViewPositionAnimator {
     private boolean mIsFinishing;
 
     private ViewPosition mFromPos, mToPos;
-    private GesturesController mToController;
+    private GestureController mToController;
     private View mToView;
     private ClipView mToClipView;
 
@@ -73,8 +73,8 @@ public class ViewPositionAnimator {
                 }
             };
 
-    private GesturesController.OnStateChangeListener mStateListener =
-            new GesturesController.OnStateChangeListener() {
+    private GestureController.OnStateChangeListener mStateListener =
+            new GestureController.OnStateChangeListener() {
                 @Override
                 public void onStateChanged(State state) {
                     if (!mIsAnimationStarted) requestUpdateToState();

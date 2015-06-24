@@ -1,6 +1,6 @@
 package com.alexvasilkov.gestures.views.interfaces;
 
-import com.alexvasilkov.gestures.GesturesController;
+import com.alexvasilkov.gestures.GestureController;
 
 /**
  * Common interface for all Gesture* views.
@@ -10,10 +10,10 @@ import com.alexvasilkov.gestures.GesturesController;
 public interface GestureView {
 
     /**
-     * Returns {@link GesturesController} which is a main engine for all gestures interactions.
+     * Returns {@link GestureController} which is a main engine for all gestures interactions.
      * <p/>
      * Use it to apply settings, access and modify image state and so on.
      */
-    GesturesController getController();
+    GestureController getController();
 
 }

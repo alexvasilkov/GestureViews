@@ -6,7 +6,7 @@ import android.util.TypedValue;
 import android.view.Gravity;
 
 /**
- * Various settings needed for {@link GesturesController} and for {@link StateController}.
+ * Various settings needed for {@link GestureController} and for {@link StateController}.
  * <p/>
  * Required settings are viewport size ({@link #setViewport(int, int)})
  * and image size {@link #setImage(int, int)}

@@ -14,8 +14,8 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.ImageView;
 
-import com.alexvasilkov.gestures.GesturesController;
-import com.alexvasilkov.gestures.GesturesControllerForPager;
+import com.alexvasilkov.gestures.GestureController;
+import com.alexvasilkov.gestures.GestureControllerForPager;
 import com.alexvasilkov.gestures.State;
 import com.alexvasilkov.gestures.internal.Snapshot;
 import com.alexvasilkov.gestures.views.interfaces.ClipView;
@@ -27,7 +27,7 @@ import com.alexvasilkov.gestures.views.utils.ViewClipHelper;
  */
 public class GestureImageView extends ImageView implements GestureView, ClipView {
 
-    private final GesturesControllerForPager mController;
+    private final GestureControllerForPager mController;
     private final ViewClipHelper mClipHelper = new ViewClipHelper(this);
     private final Matrix mImageMatrix = new Matrix();
 
@@ -44,7 +44,7 @@ public class GestureImageView extends ImageView implements GestureView, ClipView
     public GestureImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
-        mController = new GesturesControllerForPager(context, new GesturesController.OnStateChangeListener() {
+        mController = new GestureControllerForPager(context, new GestureController.OnStateChangeListener() {
             @Override
             public void onStateChanged(State state) {
                 applyState(state);
@@ -78,7 +78,7 @@ public class GestureImageView extends ImageView implements GestureView, ClipView
      * {@inheritDoc}
      */
     @Override
-    public GesturesControllerForPager getController() {
+    public GestureControllerForPager getController() {
         return mController;
     }
 

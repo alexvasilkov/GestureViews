@@ -13,8 +13,8 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.FrameLayout;
 
-import com.alexvasilkov.gestures.GesturesController;
-import com.alexvasilkov.gestures.GesturesControllerForPager;
+import com.alexvasilkov.gestures.GestureController;
+import com.alexvasilkov.gestures.GestureControllerForPager;
 import com.alexvasilkov.gestures.State;
 import com.alexvasilkov.gestures.views.interfaces.GestureView;
 
@@ -25,7 +25,7 @@ import com.alexvasilkov.gestures.views.interfaces.GestureView;
  */
 public class GestureLayout extends FrameLayout implements GestureView {
 
-    private final GesturesControllerForPager mController;
+    private final GestureControllerForPager mController;
 
     private final Matrix mMatrix = new Matrix();
     private final Matrix mMatrixInverse = new Matrix();
@@ -46,7 +46,7 @@ public class GestureLayout extends FrameLayout implements GestureView {
     public GestureLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
-        mController = new GesturesControllerForPager(context, new GesturesController.OnStateChangeListener() {
+        mController = new GestureControllerForPager(context, new GestureController.OnStateChangeListener() {
             @Override
             public void onStateChanged(State state) {
                 applyState(state);
@@ -64,7 +64,7 @@ public class GestureLayout extends FrameLayout implements GestureView {
      * {@inheritDoc}
      */
     @Override
-    public GesturesControllerForPager getController() {
+    public GestureControllerForPager getController() {
         return mController;
     }
 
