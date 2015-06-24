@@ -16,4 +16,5 @@ dependencies {
     compile 'com.android.support:support-v4:22.2.0'
 }
 
+// New version can be uploaded with 'gradlew clean :library:jar :library:uploadArchives'
 apply from: 'gradle-mvn-push.gradle'

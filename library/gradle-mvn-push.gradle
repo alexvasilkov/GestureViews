@@ -92,23 +92,49 @@ afterEvaluate { project ->
         sign configurations.archives
     }
 
-    task androidJavadocs(type: Javadoc) {
-        source = android.sourceSets.main.java
-        classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    task jar(type: Jar, dependsOn: compileReleaseJava) {
+        from file(project.compileReleaseJava.destinationDir)
+        exclude '**/R.class', '**/BuildConfig.class'
     }
 
-    task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
+    task javadocs(type: Javadoc) {
+        source = android.sourceSets.main.java.sourceFiles
+        classpath = files(android.bootClasspath)
+        exclude "**/internal/**"
+        title "${POM_NAME} ${VERSION_NAME} API"
+        options {
+            windowTitle "${POM_NAME} ${VERSION_NAME} API"
+        }
+
+        if (JavaVersion.current().isJava8Compatible()) {
+            allprojects {
+                tasks.withType(Javadoc) {
+                    options.addStringOption('Xdoclint:none', '-quiet')
+                }
+            }
+        }
+    }
+
+    task javadocsJar(type: Jar, dependsOn: javadocs) {
         classifier = 'javadoc'
-        from androidJavadocs.destinationDir
+        from javadocs.destinationDir
     }
 
-    task androidSourcesJar(type: Jar) {
+    task sourcesJar(type: Jar) {
         classifier = 'sources'
-        from android.sourceSets.main.java
+        from android.sourceSets.main.java.sourceFiles
     }
 
     artifacts {
-        archives androidSourcesJar
-        archives androidJavadocsJar
+        archives jar
+        archives sourcesJar
+        archives javadocsJar
+    }
+
+    // Excluding aar artifacts from uploading
+    configurations.archives.artifacts.with { archives ->
+        for (def iter = archives.iterator(); iter.hasNext();) {
+            if (iter.next().file =~ 'aar') iter.remove();
+        }
     }
 }
