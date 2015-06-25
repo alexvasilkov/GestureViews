@@ -1,6 +1,5 @@
 package com.alexvasilkov.gestures.sample.items;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -9,8 +8,8 @@ import android.widget.ImageView;
 
 import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.gestures.sample.R;
-import com.alexvasilkov.gestures.sample.utils.GlideHelper;
-import com.alexvasilkov.gestures.sample.views.PhotosRowLayout;
+import com.alexvasilkov.gestures.sample.utils.glide.GlideHelper;
+import com.alexvasilkov.gestures.sample.utils.recycler.AdapterHelper;
 import com.googlecode.flickrjandroid.photos.Photo;
 import com.googlecode.flickrjandroid.photos.PhotoList;
 
@@ -22,40 +21,32 @@ public class FlickrListAdapter extends RecyclerView.Adapter<FlickrListAdapter.Vi
 
     private final List<PhotoList> mPages = new ArrayList<>();
     private final List<Photo> mPhotos = new ArrayList<>();
-    private List<PhotoRow> mPhotoRows;
 
-    private final OnPhotoClickListener mListener;
-    private final int mColumns;
+    private final OnPhotoListener mListener;
 
-    public FlickrListAdapter(Context context, OnPhotoClickListener listener) {
+    private Photo mPhotoToListen;
+
+    public FlickrListAdapter(OnPhotoListener listener) {
         super();
-        mColumns = context.getResources().getInteger(R.integer.images_grid_columns);
         mListener = listener;
     }
 
+    public void listenForViewUpdates(Photo photo) {
+        mPhotoToListen = photo;
+    }
+
     public void setNextPage(PhotoList page) {
+        List<Photo> old = new ArrayList<>(mPhotos); // Saving copy of old list
+
         mPages.add(page);
         mPhotos.addAll(page);
 
-        // Combine photos into rows
-        final int size = mPhotos.size();
-        mPhotoRows = new ArrayList<>(size / mColumns + 1);
-
-        for (int i = 0; i < size; i += mColumns) {
-            PhotoRow row = new PhotoRow(mColumns);
-            int rowSize = size - i < mColumns ? size - i : mColumns;
-            for (int r = 0; r < rowSize; r++) {
-                row.add(mPhotos.get(i + r));
-            }
-            mPhotoRows.add(row);
-        }
-
-        notifyDataSetChanged();
+        AdapterHelper.notifyChanges(this, old, mPhotos, false);
     }
 
     @Override
     public int getItemCount() {
-        return mPhotoRows == null ? 0 : mPhotoRows.size();
+        return mPhotos.size();
     }
 
     public boolean canLoadNext() {
@@ -73,30 +64,18 @@ public class FlickrListAdapter extends RecyclerView.Adapter<FlickrListAdapter.Vi
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ViewHolder holder = new ViewHolder(parent);
-        holder.layout.init(mColumns);
-
-        int size = holder.layout.getChildCount();
-        for (int i = 0; i < size; i++) {
-            holder.layout.getChildAt(i).setOnClickListener(this);
-        }
-
+        holder.image.setOnClickListener(this);
         return holder;
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        PhotoRow row = mPhotoRows.get(position);
-        int size = row.size();
-        for (int i = 0; i < mColumns; i++) {
-            ImageView child = (ImageView) holder.layout.getChildAt(i);
-            child.setVisibility(i < size ? View.VISIBLE : View.INVISIBLE);
-            bindImageView(child, i < size ? row.get(i) : null);
-        }
-    }
+        Photo photo = mPhotos.get(position);
+        holder.image.setTag(R.id.tag_item, photo);
+        GlideHelper.loadFlickrThumb(photo, holder.image);
 
-    private void bindImageView(ImageView image, Photo photo) {
-        image.setTag(R.id.tag_item, photo);
-        GlideHelper.loadFlickrThumb(photo, image);
+        if (mPhotoToListen != null && mPhotoToListen.equals(photo))
+            mListener.onPhotoViewChanged(photo, holder.image);
     }
 
     @Override
@@ -106,39 +85,19 @@ public class FlickrListAdapter extends RecyclerView.Adapter<FlickrListAdapter.Vi
     }
 
 
-    static class PhotoRow {
-
-        final List<Photo> photos;
-
-        PhotoRow(int size) {
-            this.photos = new ArrayList<>(size);
-        }
-
-        void add(Photo photo) {
-            photos.add(photo);
-        }
-
-        Photo get(int index) {
-            return photos.get(index);
-        }
-
-        int size() {
-            return photos.size();
-        }
-
-    }
-
     static class ViewHolder extends RecyclerView.ViewHolder {
-        final PhotosRowLayout layout;
+        final ImageView image;
 
         public ViewHolder(ViewGroup parent) {
-            super(Views.inflate(parent, R.layout.item_flickr_images_row));
-            layout = (PhotosRowLayout) itemView;
+            super(Views.inflate(parent, R.layout.item_flickr_image));
+            image = (ImageView) itemView;
         }
     }
 
-    public interface OnPhotoClickListener {
+    public interface OnPhotoListener {
         void onPhotoClick(Photo photo, ImageView image);
+
+        void onPhotoViewChanged(Photo photo, ImageView image);
     }
 
 }

@@ -2,13 +2,14 @@ package com.alexvasilkov.gestures.sample.views;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.GridLayoutManager;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
 
 import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.gestures.sample.R;
-import com.alexvasilkov.gestures.sample.items.ExtendedAdapter;
+import com.alexvasilkov.gestures.sample.utils.recycler.AdapterWrapper;
 
 public class PaginatedRecyclerView extends EndlessRecyclerView {
 
@@ -23,10 +24,14 @@ public class PaginatedRecyclerView extends EndlessRecyclerView {
         }
     };
 
+    private boolean mIsFooterAdded;
     private View mFooter;
     private View mFooterProgress;
     private TextView mLoadingText;
     private TextView mFooterError;
+
+    private GridLayoutManager mGridManager;
+    private AdapterWrapper<?> mWrappedAdapter;
 
     public PaginatedRecyclerView(Context context) {
         this(context, null, 0);
@@ -59,14 +64,21 @@ public class PaginatedRecyclerView extends EndlessRecyclerView {
                 postDelayed(mErrorClickAction, ERROR_CLICK_DELAY);
             }
         });
+
+        mGridManager = layout instanceof GridLayoutManager ? (GridLayoutManager) layout : null;
+        initGridSpanSizes();
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public void setAdapter(Adapter adapter) {
-        ExtendedAdapter<?> extended = new ExtendedAdapter<>(adapter);
-        extended.addFooter(mFooter);
-        super.setAdapter(extended);
+        super.setAdapter(mWrappedAdapter = new AdapterWrapper<>(adapter));
+        initGridSpanSizes();
+    }
+
+    private void initGridSpanSizes() {
+        if (mGridManager != null && mWrappedAdapter != null)
+            mGridManager.setSpanSizeLookup(mWrappedAdapter.getGridSpanSizes(mGridManager));
     }
 
     public void setLoadingText(String text) {
@@ -79,8 +91,20 @@ public class PaginatedRecyclerView extends EndlessRecyclerView {
 
     @Override
     protected void onStateChanged(boolean isLoading, boolean isError) {
-        mFooterProgress.setVisibility(isLoading ? View.VISIBLE : View.GONE);
-        mFooterError.setVisibility(isError ? View.VISIBLE : View.GONE);
+        mFooterProgress.setVisibility(isLoading ? View.VISIBLE : View.INVISIBLE);
+        mFooterError.setVisibility(isError ? View.VISIBLE : View.INVISIBLE);
+
+        if (isLoading || isError) {
+            if (!mIsFooterAdded) {
+                mWrappedAdapter.addFooter(mFooter);
+                mIsFooterAdded = true;
+            }
+        } else {
+            if (mIsFooterAdded) {
+                mWrappedAdapter.removeFooter(mFooter);
+                mIsFooterAdded = false;
+            }
+        }
     }
 
 }

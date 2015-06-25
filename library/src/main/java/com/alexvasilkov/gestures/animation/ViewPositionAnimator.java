@@ -137,11 +137,17 @@ public class ViewPositionAnimator {
         mToClipView = to instanceof ClipView ? (ClipView) to : null;
     }
 
+    private boolean isInitialized() {
+        return mToController != null;
+    }
+
     /**
      * Update initial view in case it was changed. You should not call this method if view stays the
      * same since animator should automatically detect view position changes.
      */
     public void update(View from) {
+        if (!isInitialized()) return;
+
         cleanupFrom();
 
         mFromView = from;
@@ -152,6 +158,8 @@ public class ViewPositionAnimator {
      * Update position of initial view in case it was changed.
      */
     public void update(ViewPosition fromPos) {
+        if (!isInitialized()) return;
+
         cleanupFrom();
 
         mFromPos = fromPos;

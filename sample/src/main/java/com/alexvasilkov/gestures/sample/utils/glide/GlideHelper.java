@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.utils;
+package com.alexvasilkov.gestures.sample.utils.glide;
 
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;

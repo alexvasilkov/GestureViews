@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<com.alexvasilkov.gestures.sample.views.PhotosRowLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingBottom="@dimen/flickr_list_margin"
-    android:paddingEnd="@dimen/flickr_list_margin"
-    android:paddingRight="@dimen/flickr_list_margin"
-    tools:ignore="RtlSymmetry" />

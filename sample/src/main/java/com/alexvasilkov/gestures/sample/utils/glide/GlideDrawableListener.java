@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.utils;
+package com.alexvasilkov.gestures.sample.utils.glide;
 
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;

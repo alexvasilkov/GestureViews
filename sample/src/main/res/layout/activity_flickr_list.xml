@@ -11,9 +11,16 @@
         android:layout_height="match_parent"
         android:layout_marginTop="?actionBarSize"
         android:clipToPadding="false"
-        android:paddingTop="@dimen/flickr_list_margin"
+        android:padding="@dimen/flickr_list_margin"
         android:scrollbarStyle="outsideOverlay"
         android:scrollbars="vertical" />
+
+    <!-- Next view is only used to smoother toolbar fading -->
+
+    <View
+        android:id="@+id/flickr_toolbar_back"
+        style="@style/App.Toolbar"
+        android:background="@color/full_image_background" />
 
     <View
         android:id="@+id/full_image_background"

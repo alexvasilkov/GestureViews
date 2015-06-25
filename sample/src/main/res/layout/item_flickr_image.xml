@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.alexvasilkov.gestures.sample.views.ForegroundImageView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.alexvasilkov.gestures.sample.views.AspectImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="@dimen/flickr_list_margin"
-    android:layout_marginStart="@dimen/flickr_list_margin"
+    android:layout_margin="@dimen/flickr_list_margin"
     android:background="@drawable/flickr_image_background"
     android:foreground="?selectableItemBackground"
-    android:scaleType="centerCrop" />
+    android:scaleType="centerCrop"
+    app:aspect="1" />

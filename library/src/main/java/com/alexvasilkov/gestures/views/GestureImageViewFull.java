@@ -73,6 +73,17 @@ public class GestureImageViewFull extends GestureImageView {
     }
 
     /**
+     * Should be called whenever initial view is changed but still represents the same image.
+     */
+    public void update(ImageView from) {
+        mAnimator.update(from);
+        if (mImageFrom != null) mImageFrom.setVisibility(VISIBLE); // Restoring visibility
+
+        mImageFrom = from;
+        if (mImageFrom != null) mImageFrom.setVisibility(INVISIBLE);
+    }
+
+    /**
      * Whether {@link #exit(boolean)} method was already called.
      */
     public boolean isOpen() {

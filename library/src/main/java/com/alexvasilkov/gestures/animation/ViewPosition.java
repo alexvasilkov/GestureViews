@@ -33,15 +33,39 @@ public class ViewPosition {
     private static final Matrix TMP_MATRIX = new Matrix();
     private static final RectF TMP_SRC = new RectF(), TMP_DST = new RectF();
 
+    private static final Rect TMP_VIEW = new Rect();
+
     private static final String DELIMITER = "#";
     private static final Pattern SPLIT_PATTERN = Pattern.compile(DELIMITER);
 
     public final Rect view, viewport, image;
 
-    private ViewPosition(@NonNull View v) {
-        view = new Rect();
-        viewport = new Rect();
-        image = new Rect();
+    private ViewPosition() {
+        this.view = new Rect();
+        this.viewport = new Rect();
+        this.image = new Rect();
+    }
+
+    private ViewPosition(@NonNull Rect view, @NonNull Rect viewport, @NonNull Rect image) {
+        this.view = view;
+        this.viewport = viewport;
+        this.image = image;
+    }
+
+    public void set(@NonNull ViewPosition pos) {
+        this.view.set(pos.view);
+        this.viewport.set(pos.viewport);
+        this.image.set(pos.image);
+    }
+
+    /**
+     * @return true if view position is changed, false otherwise
+     */
+    private boolean init(@NonNull View v) {
+        // If view is not attached than we can't get it's position
+        if (v.getWindowToken() == null) return false;
+
+        TMP_VIEW.set(view);
 
         v.getLocationOnScreen(TMP_LOCATION);
 
@@ -78,16 +102,25 @@ public class ViewPosition {
         } else {
             image.set(viewport);
         }
+
+        return !TMP_VIEW.equals(view);
     }
 
-    private ViewPosition(@NonNull Rect view, @NonNull Rect viewport, @NonNull Rect image) {
-        this.view = view;
-        this.viewport = viewport;
-        this.image = image;
+    public static ViewPosition newInstance() {
+        return new ViewPosition();
     }
 
-    public static ViewPosition from(View view) {
-        return new ViewPosition(view);
+    public static ViewPosition from(@NonNull View view) {
+        ViewPosition pos = new ViewPosition();
+        pos.init(view);
+        return pos;
+    }
+
+    /**
+     * @return true if view position is changed, false otherwise
+     */
+    public static boolean from(@NonNull ViewPosition pos, @NonNull View view) {
+        return pos.init(view);
     }
 
     public String pack() {

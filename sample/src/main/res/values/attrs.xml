@@ -3,4 +3,7 @@
     <declare-styleable name="ForegroundImageView">
         <attr name="android:foreground" />
     </declare-styleable>
+
+    <attr name="aspect" />
+
 </resources>

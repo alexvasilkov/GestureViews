@@ -3,7 +3,8 @@ package com.alexvasilkov.gestures.sample.activities;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
@@ -16,14 +17,14 @@ import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.items.FlickrListAdapter;
 import com.alexvasilkov.gestures.sample.logic.FlickrApi;
 import com.alexvasilkov.gestures.sample.utils.DecorUtils;
-import com.alexvasilkov.gestures.sample.utils.GlideHelper;
+import com.alexvasilkov.gestures.sample.utils.glide.GlideHelper;
 import com.alexvasilkov.gestures.sample.views.PaginatedRecyclerView;
 import com.alexvasilkov.gestures.views.GestureImageViewFull;
 import com.googlecode.flickrjandroid.photos.Photo;
 import com.googlecode.flickrjandroid.photos.PhotoList;
 
 public class FlickrListActivity extends BaseActivity implements GestureImageViewFull.OnImageStateChangeListener,
-        FlickrListAdapter.OnPhotoClickListener {
+        FlickrListAdapter.OnPhotoListener {
 
     private ViewHolder mViews;
     private FlickrListAdapter mAdapter;
@@ -41,12 +42,16 @@ public class FlickrListActivity extends BaseActivity implements GestureImageView
 
         // Adjusting margins and paddings to fit translucent decor
         DecorUtils.paddingForStatusBar(mViews.toolbar, true);
+        DecorUtils.paddingForStatusBar(mViews.toolbarBack, true);
         DecorUtils.paddingForStatusBar(mViews.fullToolbar, true);
         DecorUtils.marginForStatusBar(mViews.images);
         DecorUtils.paddingForNavBar(mViews.images);
 
         // Setting up images list
-        mViews.images.setLayoutManager(new LinearLayoutManager(this));
+        int cols = getResources().getInteger(R.integer.images_grid_columns);
+
+        mViews.images.setLayoutManager(new GridLayoutManager(this, cols));
+        mViews.images.setItemAnimator(new DefaultItemAnimator());
         mViews.images.setLoadingText(getString(R.string.loading_images));
         mViews.images.setErrorText(getString(R.string.reload_images));
 
@@ -64,7 +69,7 @@ public class FlickrListActivity extends BaseActivity implements GestureImageView
             }
         });
 
-        mAdapter = new FlickrListAdapter(this, this);
+        mAdapter = new FlickrListAdapter(this);
         mViews.images.setAdapter(mAdapter);
 
         // Settings up full image view
@@ -109,6 +114,12 @@ public class FlickrListActivity extends BaseActivity implements GestureImageView
                 });
 
         mViews.fullImage.enter(image, true);
+        mAdapter.listenForViewUpdates(photo);
+    }
+
+    @Override
+    public void onPhotoViewChanged(Photo photo, ImageView image) {
+        mViews.fullImage.update(image);
     }
 
     @Override
@@ -116,13 +127,15 @@ public class FlickrListActivity extends BaseActivity implements GestureImageView
         mViews.fullBackground.getBackground().setAlpha((int) (255 * state));
         mViews.fullBackground.setVisibility(state == 0f ? View.INVISIBLE : View.VISIBLE);
 
-        mViews.toolbar.setAlpha((float) Math.sqrt(1d - state)); // Slow down disappearing
+        mViews.toolbar.setAlpha((float) Math.sqrt(1d - state)); // Slow down toolbar animation
         mViews.toolbar.setVisibility(state == 1f ? View.INVISIBLE : View.VISIBLE);
 
-        mViews.fullToolbar.setAlpha(state * state); // Slow down appearing
+        mViews.fullToolbar.setAlpha(state);
         mViews.fullToolbar.setVisibility(state == 0f ? View.INVISIBLE : View.VISIBLE);
 
         mViews.fullProgress.setVisibility(state == 1f ? View.VISIBLE : View.INVISIBLE);
+
+        if (state == 0f && isFinishing) mAdapter.listenForViewUpdates(null);
     }
 
 
@@ -140,6 +153,7 @@ public class FlickrListActivity extends BaseActivity implements GestureImageView
 
     private class ViewHolder {
         final Toolbar toolbar;
+        final View toolbarBack;
         final PaginatedRecyclerView images;
 
         final Toolbar fullToolbar;
@@ -149,6 +163,7 @@ public class FlickrListActivity extends BaseActivity implements GestureImageView
 
         public ViewHolder(Activity activity) {
             toolbar = Views.find(activity, R.id.toolbar);
+            toolbarBack = Views.find(activity, R.id.flickr_toolbar_back);
             images = Views.find(activity, R.id.flickr_list);
 
             fullToolbar = Views.find(activity, R.id.full_image_toolbar);

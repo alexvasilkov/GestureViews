@@ -10,6 +10,7 @@ import com.alexvasilkov.gestures.animation.ViewPosition;
 public class ViewPositionHolder implements ViewTreeObserver.OnGlobalLayoutListener {
 
     private final OnViewPositionChangedListener mListener;
+    private final ViewPosition mPos = ViewPosition.newInstance();
 
     private View mView;
 
@@ -20,8 +21,8 @@ public class ViewPositionHolder implements ViewTreeObserver.OnGlobalLayoutListen
     @Override
     public void onGlobalLayout() {
         if (mView != null) {
-            ViewPosition pos = ViewPosition.from(mView);
-            mListener.onViewPositionChanged(mView, pos);
+            boolean changed = ViewPosition.from(mPos, mView);
+            if (changed) mListener.onViewPositionChanged(mView, mPos);
         }
     }
 
@@ -40,6 +41,10 @@ public class ViewPositionHolder implements ViewTreeObserver.OnGlobalLayoutListen
                 mView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
             }
         }
+
+        mPos.view.setEmpty();
+        mPos.viewport.setEmpty();
+        mPos.image.setEmpty();
 
         mView = null;
     }
