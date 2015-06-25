@@ -27,7 +27,7 @@
         <activity
             android:name=".activities.ImagesPagerActivity"
             android:label="ImageView"
-            android:theme="@style/AppTheme.FullDark">
+            android:theme="@style/AppTheme.Full.NoTitle.Dark">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -37,12 +37,12 @@
         <activity
             android:name=".activities.ImageCropActivity"
             android:label="Rotate &amp; crop"
-            android:theme="@style/AppTheme.FullDark.Crop" />
+            android:theme="@style/AppTheme.Full.NoTitle.Crop" />
 
         <activity
             android:name=".activities.ImageCropResultActivity"
             android:label="Cropped"
-            android:theme="@style/AppTheme.FullDark" />
+            android:theme="@style/AppTheme.Full.NoTitle.Dark" />
 
         <activity
             android:name=".activities.LayoutPagerActivity"
@@ -64,17 +64,13 @@
 
         <activity
             android:name=".activities.FlickrListActivity"
-            android:label="Flickr Demo">
+            android:label="Flickr Demo"
+            android:theme="@style/AppTheme.Full.NoTitle">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
-
-        <activity
-            android:name=".activities.FlickrImageActivity"
-            android:label="Photo"
-            android:theme="@style/AppTheme.FullDark.Transparent" />
 
     </application>
 

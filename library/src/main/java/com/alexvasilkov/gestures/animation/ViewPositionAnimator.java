@@ -3,7 +3,6 @@ package com.alexvasilkov.gestures.animation;
 import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 
@@ -13,6 +12,7 @@ import com.alexvasilkov.gestures.State;
 import com.alexvasilkov.gestures.StateController;
 import com.alexvasilkov.gestures.internal.AnimationEngine;
 import com.alexvasilkov.gestures.internal.FloatScroller;
+import com.alexvasilkov.gestures.internal.ViewPositionHolder;
 import com.alexvasilkov.gestures.views.GestureImageView;
 import com.alexvasilkov.gestures.views.interfaces.ClipView;
 import com.alexvasilkov.gestures.views.interfaces.GestureView;
@@ -28,10 +28,13 @@ import com.alexvasilkov.gestures.views.interfaces.GestureView;
  * have same aspect, but actual views can have different aspects (e.g. animating from square thumb
  * view with scale type = {@link ScaleType#CENTER_CROP} to rectangular full image view).
  * <p/>
- * To use this class first create an instance and than call {@link #reset(ViewPosition, GestureView)}
- * method whenever initial or final view position is changed. After that you can call
+ * To use this class first create an instance and than call {@link #init(View, GestureView)}.
+ * Alternatively you can manually pass initial view position using
+ * {@link #init(ViewPosition, GestureView)} method. After that you can call
  * {@link #enter(boolean)} and {@link #exit(boolean)} methods and listen for transition changes
- * using {@link #setOnPositionChangeListener(OnPositionChangeListener)}.
+ * using {@link #setOnPositionChangeListener(OnPositionChangeListener)}. If initial view was change
+ * you should call {@link #update(View)} method to update to new initial view.
+ * You can also manually update initial view position using {@link #update(ViewPosition)} method.
  */
 public class ViewPositionAnimator {
 
@@ -57,68 +60,127 @@ public class ViewPositionAnimator {
 
     private ViewPosition mFromPos, mToPos;
     private GestureController mToController;
-    private View mToView;
+    private View mFromView, mToView;
     private ClipView mToClipView;
-
-
-    private ViewTreeObserver.OnPreDrawListener mToPreDrawListener =
-            new ViewTreeObserver.OnPreDrawListener() {
-                @Override
-                public boolean onPreDraw() {
-                    mToView.getViewTreeObserver().removeOnPreDrawListener(this);
-                    mToPos = ViewPosition.from(mToView);
-                    requestUpdateToState();
-                    applyAnimationState();
-                    return true;
-                }
-            };
 
     private GestureController.OnStateChangeListener mStateListener =
             new GestureController.OnStateChangeListener() {
                 @Override
                 public void onStateChanged(State state) {
-                    if (!mIsAnimationStarted) requestUpdateToState();
+                    // No-op
                 }
 
                 @Override
                 public void onStateReset(State oldState, State newState) {
-                    requestUpdateToState();
-                    requestUpdateFromState();
-                    applyAnimationState();
+                    resetToState();
                 }
             };
 
+    private final ViewPositionHolder.OnViewPositionChangedListener mPositionListener =
+            new ViewPositionHolder.OnViewPositionChangedListener() {
+                @Override
+                public void onViewPositionChanged(View view, ViewPosition position) {
+                    if (view == mToView) {
+                        mToPos = position;
+                        requestUpdateToState();
+                        applyAnimationState();
+                    } else if (mFromView != null && view == mFromView) {
+                        mFromPos = position;
+                        requestUpdateFromState();
+                        applyAnimationState();
+                    }
+                }
+            };
 
-    public void reset(ViewPosition from, GestureView to) {
-        // Cleaning up
-        finishAnimation();
+    private ViewPositionHolder mFromPosHolder = new ViewPositionHolder(mPositionListener);
+    private ViewPositionHolder mToPosHolder = new ViewPositionHolder(mPositionListener);
 
-        if (mToView != null)
-            mToView.getViewTreeObserver().removeOnPreDrawListener(mToPreDrawListener);
 
-        if (mToController != null)
-            mToController.removeOnStateChangeListener(mStateListener);
+    /**
+     * Initialize animation from {@code from} view to {@code to}.
+     * <p/>
+     * Note, if {@code from} view was changed (i.e. during list adapter refresh) you should
+     * update to new view using {@link #update(View)} method.
+     */
+    public void init(View from, GestureView to) {
+        cleanup();
 
-        mIsFinishing = false;
-        mAnimationState = 0f;
+        mFromView = from;
+        mFromPosHolder.init(from);
+        init(to);
+    }
 
-        // Setting new values
-        mFromPos = from;
+    /**
+     * Initialize animation from {@code from} position to {@code to} view.
+     * <p/>
+     * Note, if {@code from} view position was changed (i.e. during list adapter refresh) you should
+     * update to new view position using {@link #update(ViewPosition)} method.
+     */
+    public void init(ViewPosition fromPos, GestureView to) {
+        cleanup();
 
+        mFromPos = fromPos;
+        init(to);
+    }
+
+    private void init(GestureView to) {
         mToController = to.getController();
         mToController.addOnStateChangeListener(mStateListener);
 
         if (!(to instanceof View))
             throw new IllegalArgumentException("Argument 'to' should be an instance of View");
+
         mToView = (View) to;
-        mToView.getViewTreeObserver().addOnPreDrawListener(mToPreDrawListener);
+        mToPosHolder.init(mToView);
         mAnimationEngine.attachToView(mToView);
 
         mToClipView = to instanceof ClipView ? (ClipView) to : null;
+    }
 
-        requestUpdateFromState();
-        requestUpdateToState();
-        applyAnimationState();
+    /**
+     * Update initial view in case it was changed. You should not call this method if view stays the
+     * same since animator should automatically detect view position changes.
+     */
+    public void update(View from) {
+        cleanupFrom();
+
+        mFromView = from;
+        mFromPosHolder.init(from);
+    }
+
+    /**
+     * Update position of initial view in case it was changed.
+     */
+    public void update(ViewPosition fromPos) {
+        cleanupFrom();
+
+        mFromPos = fromPos;
+    }
+
+    private void cleanup() {
+        finishAnimation();
+
+        if (mToController != null) mToController.removeOnStateChangeListener(mStateListener);
+
+        mFromPosHolder.destroy();
+        mToPosHolder.destroy();
+
+        mFromView = mToView = null;
+        mFromPos = mToPos = null;
+        mToController = null;
+        mToClipView = null;
+
+        mIsFromUpdated = mIsToUpdated = false;
+
+        mIsFinishing = false;
+        mAnimationState = 0f;
+    }
+
+    private void cleanupFrom() {
+        mFromView = null;
+        mFromPos = null;
+        mIsFromUpdated = false;
+        mFromPosHolder.destroy();
     }
 
     public ViewPositionAnimator setOnPositionChangeListener(OnPositionChangeListener listener) {
@@ -135,8 +197,13 @@ public class ViewPositionAnimator {
         return this;
     }
 
+    /**
+     * Starts 'enter' animation.
+     */
     public void enter(boolean withAnimation) {
         mIsFinishing = false;
+
+        resetToState();
 
         if (withAnimation) {
             startAnimation();
@@ -147,8 +214,13 @@ public class ViewPositionAnimator {
         }
     }
 
+    /**
+     * Starts 'exit' animation.
+     */
     public void exit(boolean withAnimation) {
         mIsFinishing = true;
+
+        if (!mIsAnimationStarted) resetToState();
 
         if (withAnimation) {
             startAnimation();
@@ -157,6 +229,13 @@ public class ViewPositionAnimator {
             mAnimationState = 0f;
             applyAnimationState();
         }
+    }
+
+    private void resetToState() {
+        mToState.set(mToController.getState());
+        requestUpdateToState();
+        requestUpdateFromState();
+        applyAnimationState();
     }
 
     private void requestUpdateToState() {
@@ -175,13 +254,12 @@ public class ViewPositionAnimator {
         if (mToPos == null || settings == null || !settings.hasImageSize())
             return;
 
-        mToState.set(mToController.getState());
-
         // Computing 'To' clip by getting current 'To' image rect in 'To' view coordinates
         // (including view paddings which are not part of viewport)
         mToClip.set(0, 0, settings.getImageW(), settings.getImageH());
         mToState.get(TMP_MATRIX);
         TMP_MATRIX.mapRect(mToClip);
+
         int paddingLeft = mToPos.viewport.left - mToPos.view.left;
         int paddingTop = mToPos.viewport.top - mToPos.view.top;
         mToClip.offset(paddingLeft, paddingTop);
@@ -246,6 +324,8 @@ public class ViewPositionAnimator {
         }
 
         if (mListener != null) mListener.onPositionChanged(mAnimationState, mIsFinishing);
+
+        if (mAnimationState == 0f && mIsFinishing) cleanup();
     }
 
     private void onAnimationStarted() {

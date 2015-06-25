@@ -1,6 +1,5 @@
 package com.alexvasilkov.gestures.sample.items;
 
-import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -10,7 +9,6 @@ import android.widget.ImageView;
 
 import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.gestures.sample.R;
-import com.alexvasilkov.gestures.sample.activities.FlickrImageActivity;
 import com.alexvasilkov.gestures.sample.utils.GlideHelper;
 import com.alexvasilkov.gestures.sample.views.PhotosRowLayout;
 import com.googlecode.flickrjandroid.photos.Photo;
@@ -26,11 +24,13 @@ public class FlickrListAdapter extends RecyclerView.Adapter<FlickrListAdapter.Vi
     private final List<Photo> mPhotos = new ArrayList<>();
     private List<PhotoRow> mPhotoRows;
 
+    private final OnPhotoClickListener mListener;
     private final int mColumns;
 
-    public FlickrListAdapter(Context context) {
+    public FlickrListAdapter(Context context, OnPhotoClickListener listener) {
         super();
         mColumns = context.getResources().getInteger(R.integer.images_grid_columns);
+        mListener = listener;
     }
 
     public void setNextPage(PhotoList page) {
@@ -101,9 +101,8 @@ public class FlickrListAdapter extends RecyclerView.Adapter<FlickrListAdapter.Vi
 
     @Override
     public void onClick(@NonNull View view) {
-        Activity activity = (Activity) view.getContext();
         Photo photo = (Photo) view.getTag(R.id.tag_item);
-        FlickrImageActivity.open(activity, photo, (ImageView) view);
+        mListener.onPhotoClick(photo, (ImageView) view);
     }
 
 
@@ -136,6 +135,10 @@ public class FlickrListAdapter extends RecyclerView.Adapter<FlickrListAdapter.Vi
             super(Views.inflate(parent, R.layout.item_flickr_images_row));
             layout = (PhotosRowLayout) itemView;
         }
+    }
+
+    public interface OnPhotoClickListener {
+        void onPhotoClick(Photo photo, ImageView image);
     }
 
 }

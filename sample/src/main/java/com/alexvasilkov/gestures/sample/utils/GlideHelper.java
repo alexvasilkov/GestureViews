@@ -34,27 +34,28 @@ public class GlideHelper {
                 .thumbnail(Glide.with(image.getContext())
                         .load(photo.getThumbnailUrl())
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE))
+                .placeholder(image.getDrawable())
                 .dontAnimate()
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .listener(new GlideDrawableListener() {
                     @Override
                     public void onSuccess(String url) {
                         if (url.equals(photoUrl)) {
-                            progress.setVisibility(View.INVISIBLE);
+                            progress.animate().alpha(0f);
                             if (listener != null) listener.onImageLoaded();
                         }
                     }
 
                     @Override
                     public void onFail(String url) {
-                        progress.setVisibility(View.INVISIBLE);
+                        progress.animate().alpha(0f);
                     }
                 })
                 .into(new GlideDrawableTarget(image) {
                     @Override
                     public void onLoadStarted(Drawable placeholder) {
                         super.onLoadStarted(placeholder);
-                        progress.setVisibility(View.VISIBLE);
+                        progress.animate().alpha(1f);
                     }
                 });
     }

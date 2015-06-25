@@ -1,7 +1,12 @@
 package com.alexvasilkov.gestures.sample.activities;
 
+import android.app.Activity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.events.Events;
@@ -10,29 +15,42 @@ import com.alexvasilkov.events.Events.Result;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.items.FlickrListAdapter;
 import com.alexvasilkov.gestures.sample.logic.FlickrApi;
+import com.alexvasilkov.gestures.sample.utils.DecorUtils;
+import com.alexvasilkov.gestures.sample.utils.GlideHelper;
 import com.alexvasilkov.gestures.sample.views.PaginatedRecyclerView;
+import com.alexvasilkov.gestures.views.GestureImageViewFull;
+import com.googlecode.flickrjandroid.photos.Photo;
 import com.googlecode.flickrjandroid.photos.PhotoList;
 
-public class FlickrListActivity extends BaseActivity {
+public class FlickrListActivity extends BaseActivity implements GestureImageViewFull.OnImageStateChangeListener,
+        FlickrListAdapter.OnPhotoClickListener {
 
-    private PaginatedRecyclerView mRecyclerView;
+    private ViewHolder mViews;
     private FlickrListAdapter mAdapter;
+    private boolean mFullGesturesDisabled;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_flickr_list);
+        mViews = new ViewHolder(this);
+
+        setSupportActionBar(mViews.toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mRecyclerView = Views.find(this, R.id.flickr_list);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        // Adjusting margins and paddings to fit translucent decor
+        DecorUtils.paddingForStatusBar(mViews.toolbar, true);
+        DecorUtils.paddingForStatusBar(mViews.fullToolbar, true);
+        DecorUtils.marginForStatusBar(mViews.images);
+        DecorUtils.paddingForNavBar(mViews.images);
 
-        mRecyclerView.setLoadingText(getString(R.string.loading_images));
-        mRecyclerView.setErrorText(getString(R.string.reload_images));
+        // Setting up images list
+        mViews.images.setLayoutManager(new LinearLayoutManager(this));
+        mViews.images.setLoadingText(getString(R.string.loading_images));
+        mViews.images.setErrorText(getString(R.string.reload_images));
 
-        // Endless loading
-        mRecyclerView.setEndlessListener(new PaginatedRecyclerView.EndlessListener() {
+        mViews.images.setEndlessListener(new PaginatedRecyclerView.EndlessListener() {
             @Override
             public boolean canLoadNextPage() {
                 return mAdapter.canLoadNext();
@@ -46,19 +64,98 @@ public class FlickrListActivity extends BaseActivity {
             }
         });
 
-        mAdapter = new FlickrListAdapter(this);
-        mRecyclerView.setAdapter(mAdapter);
+        mAdapter = new FlickrListAdapter(this, this);
+        mViews.images.setAdapter(mAdapter);
+
+        // Settings up full image view
+        mViews.fullImage.getController().getSettings().setFillViewport(true).setMaxZoom(3f);
+        mViews.fullImage.setOnImageStateChangeListener(this);
+
+        mViews.fullToolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+        mViews.fullToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(@NonNull View v) {
+                onBackPressed();
+            }
+        });
     }
+
+    @Override
+    public void onBackPressed() {
+        if (mViews.fullImage.isOpen()) {
+            mViews.fullImage.exit(true);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public void onPhotoClick(Photo photo, ImageView image) {
+        // Temporary disabling touch controls
+        if (!mFullGesturesDisabled) {
+            mViews.fullImage.getController().getSettings().disableGestures();
+            mFullGesturesDisabled = true;
+        }
+
+        // Loading image
+        GlideHelper.loadFlickrFull(photo, mViews.fullImage, mViews.fullProgress,
+                new GlideHelper.OnImageLoadedListener() {
+                    @Override
+                    public void onImageLoaded() {
+                        // Re-enabling touch controls
+                        mViews.fullImage.getController().getSettings().enableGestures();
+                        mFullGesturesDisabled = false;
+                    }
+                });
+
+        mViews.fullImage.enter(image, true);
+    }
+
+    @Override
+    public void onImageStateChanged(float state, boolean isFinishing) {
+        mViews.fullBackground.getBackground().setAlpha((int) (255 * state));
+        mViews.fullBackground.setVisibility(state == 0f ? View.INVISIBLE : View.VISIBLE);
+
+        mViews.toolbar.setAlpha((float) Math.sqrt(1d - state)); // Slow down disappearing
+        mViews.toolbar.setVisibility(state == 1f ? View.INVISIBLE : View.VISIBLE);
+
+        mViews.fullToolbar.setAlpha(state * state); // Slow down appearing
+        mViews.fullToolbar.setVisibility(state == 0f ? View.INVISIBLE : View.VISIBLE);
+
+        mViews.fullProgress.setVisibility(state == 1f ? View.VISIBLE : View.INVISIBLE);
+    }
+
 
     @Result(FlickrApi.LOAD_IMAGES_EVENT)
     private void onPhotosLoaded(PhotoList page) {
         mAdapter.setNextPage(page);
-        mRecyclerView.onNextPageLoaded();
+        mViews.images.onNextPageLoaded();
     }
 
     @Failure(FlickrApi.LOAD_IMAGES_EVENT)
     private void onPhotosLoadFail() {
-        mRecyclerView.onNextPageFail();
+        mViews.images.onNextPageFail();
+    }
+
+
+    private class ViewHolder {
+        final Toolbar toolbar;
+        final PaginatedRecyclerView images;
+
+        final Toolbar fullToolbar;
+        final View fullBackground;
+        final GestureImageViewFull fullImage;
+        final View fullProgress;
+
+        public ViewHolder(Activity activity) {
+            toolbar = Views.find(activity, R.id.toolbar);
+            images = Views.find(activity, R.id.flickr_list);
+
+            fullToolbar = Views.find(activity, R.id.full_image_toolbar);
+            fullBackground = Views.find(activity, R.id.full_image_background);
+            fullImage = Views.find(activity, R.id.full_image);
+            fullProgress = Views.find(activity, R.id.full_image_progress);
+        }
     }
 
 }

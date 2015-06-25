@@ -1,11 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.alexvasilkov.gestures.sample.views.PaginatedRecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/flickr_list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clipToPadding="false"
-    android:paddingTop="@dimen/flickr_list_margin"
-    android:scrollbarStyle="outsideOverlay"
-    android:scrollbars="vertical"
-    tools:context=".activities.FlickrListActivity" />
+    tools:context=".activities.FlickrListActivity">
+
+    <com.alexvasilkov.gestures.sample.views.PaginatedRecyclerView
+        android:id="@+id/flickr_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?actionBarSize"
+        android:clipToPadding="false"
+        android:paddingTop="@dimen/flickr_list_margin"
+        android:scrollbarStyle="outsideOverlay"
+        android:scrollbars="vertical" />
+
+    <View
+        android:id="@+id/full_image_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/full_image_background"
+        android:visibility="invisible" />
+
+    <com.alexvasilkov.gestures.views.GestureImageViewFull
+        android:id="@+id/full_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <ProgressBar
+        android:id="@+id/full_image_progress"
+        android:layout_width="320dp"
+        android:layout_height="320dp"
+        android:layout_gravity="center"
+        android:padding="142dp"
+        android:visibility="invisible" />
+
+    <android.support.v7.widget.Toolbar style="@style/App.Toolbar" />
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/full_image_toolbar"
+        style="@style/App.Toolbar.Transparent"
+        android:visibility="invisible" />
+
+</merge>
