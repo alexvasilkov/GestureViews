@@ -87,13 +87,13 @@ public class FloatScroller {
         }
 
         long elapsed = SystemClock.elapsedRealtime() - mStartRTC;
-        if (elapsed >= DEFAULT_DURATION) {
+        if (elapsed >= mDuration) {
             mFinished = true;
             mCurrValue = mFinalValue;
             return false;
         }
 
-        float time = mInterpolator.getInterpolation((float) elapsed / DEFAULT_DURATION);
+        float time = mInterpolator.getInterpolation((float) elapsed / mDuration);
         mCurrValue = interpolate(mStartValue, mFinalValue, time);
         return true;
     }
