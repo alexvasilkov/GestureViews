@@ -59,9 +59,6 @@ public class GestureImageViewFull extends GestureImageView {
         mImageFrom = from;
         mIsOpen = true;
         mAnimator.init(from, this);
-
-        setImageDrawable(from.getDrawable());
-
         mAnimator.enter(withAnimation);
     }
 

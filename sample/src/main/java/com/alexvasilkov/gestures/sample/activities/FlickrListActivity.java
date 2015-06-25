@@ -102,7 +102,11 @@ public class FlickrListActivity extends BaseActivity implements GestureImageView
             mFullGesturesDisabled = true;
         }
 
-        // Loading image
+        mViews.fullImage.enter(image, true);
+        mViews.fullImage.setImageDrawable(image.getDrawable()); // For smoother animation
+        mAdapter.listenForViewUpdates(photo);
+
+        // Loading image (note)
         GlideHelper.loadFlickrFull(photo, mViews.fullImage, mViews.fullProgress,
                 new GlideHelper.OnImageLoadedListener() {
                     @Override
@@ -112,9 +116,6 @@ public class FlickrListActivity extends BaseActivity implements GestureImageView
                         mFullGesturesDisabled = false;
                     }
                 });
-
-        mViews.fullImage.enter(image, true);
-        mAdapter.listenForViewUpdates(photo);
     }
 
     @Override
