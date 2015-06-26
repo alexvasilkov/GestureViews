@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.alexvasilkov.android.commons.utils.Views;
@@ -15,23 +16,12 @@ public class PaginatedRecyclerView extends EndlessRecyclerView {
 
     public static final int PAGE_SIZE = 30;
 
-    private static final long ERROR_CLICK_DELAY = 120;
-
-    private final Runnable mErrorClickAction = new Runnable() {
-        @Override
-        public void run() {
-            reloadNextPage();
-        }
-    };
-
-    private boolean mIsFooterAdded;
-    private View mFooter;
-    private View mFooterProgress;
-    private TextView mLoadingText;
-    private TextView mFooterError;
-
     private GridLayoutManager mGridManager;
     private AdapterWrapper<?> mWrappedAdapter;
+
+    private final FooterAdapter mFooter = new FooterAdapter();
+    private String mLoadingText, mErrorText;
+    private boolean mIsLoading, mIsError;
 
     public PaginatedRecyclerView(Context context) {
         this(context, null, 0);
@@ -50,20 +40,6 @@ public class PaginatedRecyclerView extends EndlessRecyclerView {
     public void setLayoutManager(LayoutManager layout) {
         super.setLayoutManager(layout);
 
-        mFooter = Views.inflate(this, R.layout.item_footer);
-
-        mFooterProgress = Views.find(mFooter, R.id.footer_progress);
-        mLoadingText = Views.find(mFooter, R.id.loading_text);
-        mFooterError = Views.find(mFooter, R.id.footer_error);
-
-        mFooterError.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(@NonNull View view) {
-                // Reloading page with small delay, for smoother pressed state animation
-                removeCallbacks(mErrorClickAction);
-                postDelayed(mErrorClickAction, ERROR_CLICK_DELAY);
-            }
-        });
 
         mGridManager = layout instanceof GridLayoutManager ? (GridLayoutManager) layout : null;
         initGridSpanSizes();
@@ -82,28 +58,62 @@ public class PaginatedRecyclerView extends EndlessRecyclerView {
     }
 
     public void setLoadingText(String text) {
-        mLoadingText.setText(text);
+        mLoadingText = text;
     }
 
     public void setErrorText(String text) {
-        mFooterError.setText(text);
+        mErrorText = text;
     }
 
     @Override
     protected void onStateChanged(boolean isLoading, boolean isError) {
-        mFooterProgress.setVisibility(isLoading ? View.VISIBLE : View.INVISIBLE);
-        mFooterError.setVisibility(isError ? View.VISIBLE : View.INVISIBLE);
+        mIsLoading = isLoading;
+        mIsError = isError;
 
         if (isLoading || isError) {
-            if (!mIsFooterAdded) {
-                mWrappedAdapter.addFooter(mFooter);
-                mIsFooterAdded = true;
-            }
+            mWrappedAdapter.addFooter(mFooter);
         } else {
-            if (mIsFooterAdded) {
-                mWrappedAdapter.removeFooter(mFooter);
-                mIsFooterAdded = false;
-            }
+            mWrappedAdapter.removeFooter(mFooter);
+        }
+
+        mWrappedAdapter.updateFooter(mFooter);
+    }
+
+
+    private class FooterAdapter implements AdapterWrapper.ItemAdapter<FooterHolder> {
+        @Override
+        public FooterHolder onCreateViewHolder(ViewGroup parent) {
+            FooterHolder holder = new FooterHolder(parent);
+            holder.error.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(@NonNull View view) {
+                    reloadNextPage();
+                }
+            });
+            return holder;
+        }
+
+        @Override
+        public void onBindViewHolder(FooterHolder holder) {
+            holder.loadingText.setText(mLoadingText);
+            holder.error.setText(mErrorText);
+
+            holder.progress.setVisibility(mIsLoading ? View.VISIBLE : View.INVISIBLE);
+            holder.error.setVisibility(mIsError ? View.VISIBLE : View.INVISIBLE);
+        }
+    }
+
+    private static class FooterHolder extends ViewHolder {
+        final View progress;
+        final TextView loadingText;
+        final TextView error;
+
+        public FooterHolder(ViewGroup parent) {
+            super(Views.inflate(parent, R.layout.item_footer));
+
+            progress = Views.find(itemView, R.id.footer_progress);
+            loadingText = Views.find(itemView, R.id.loading_text);
+            error = Views.find(itemView, R.id.footer_error);
         }
     }
 

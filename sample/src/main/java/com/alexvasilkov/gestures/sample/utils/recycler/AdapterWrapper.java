@@ -2,29 +2,30 @@ package com.alexvasilkov.gestures.sample.utils.recycler;
 
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
+import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.support.v7.widget.RecyclerView.AdapterDataObserver;
+
 /**
  * RecyclerView adapter wrapper with headers / mFooters support
  */
-public class AdapterWrapper<VH extends RecyclerView.ViewHolder>
-        extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class AdapterWrapper<VH extends ViewHolder> extends RecyclerView.Adapter<ViewHolder> {
 
     private static final int H_TYPE_START = Integer.MIN_VALUE >> 1;
     private static final int F_TYPE_START = Integer.MIN_VALUE >> 2;
 
     private final RecyclerView.Adapter<VH> mWrapped;
-    private final List<View> mHeaders = new ArrayList<>();
-    private final List<View> mFooters = new ArrayList<>();
+    private final List<ItemAdapter<ViewHolder>> mHeaders = new ArrayList<>();
+    private final List<ItemAdapter<ViewHolder>> mFooters = new ArrayList<>();
 
     public AdapterWrapper(RecyclerView.Adapter<VH> wrapped) {
         mWrapped = wrapped;
 
-        wrapped.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+        wrapped.registerAdapterDataObserver(new AdapterDataObserver() {
             @Override
             public void onChanged() {
                 AdapterWrapper.this.notifyDataSetChanged();
@@ -63,17 +64,26 @@ public class AdapterWrapper<VH extends RecyclerView.ViewHolder>
         return mWrapped.getItemCount();
     }
 
-    public void addHeader(View view) {
-        mHeaders.add(view);
-        notifyItemInserted(mHeaders.size());
+    @SuppressWarnings("unchecked")
+    public void addHeader(ItemAdapter<? extends ViewHolder> item) {
+        int pos = find(mHeaders, item);
+        if (pos == -1) {
+            mHeaders.add((ItemAdapter<ViewHolder>) item);
+            notifyItemInserted(getHeadersCount() - 1);
+        }
     }
 
-    public void removeHeader(View view) {
-        int pos = mHeaders.indexOf(view);
+    public void removeHeader(ItemAdapter<? extends ViewHolder> item) {
+        int pos = find(mHeaders, item);
         if (pos != -1) {
             mHeaders.remove(pos);
             notifyItemRemoved(pos);
         }
+    }
+
+    public void updateHeader(ItemAdapter<? extends ViewHolder> item) {
+        int pos = find(mHeaders, item);
+        if (pos != -1) notifyItemChanged(pos);
     }
 
     public int getHeadersCount() {
@@ -84,17 +94,26 @@ public class AdapterWrapper<VH extends RecyclerView.ViewHolder>
         return pos < getHeadersCount();
     }
 
-    public void addFooter(View view) {
-        mFooters.add(view);
-        notifyItemInserted(getHeadersCount() + getWrappedCount() + getFootersCount());
+    @SuppressWarnings("unchecked")
+    public void addFooter(ItemAdapter<? extends ViewHolder> item) {
+        int pos = find(mFooters, item);
+        if (pos == -1) {
+            mFooters.add((ItemAdapter<ViewHolder>) item);
+            notifyItemInserted(getHeadersCount() + getWrappedCount() + getFootersCount() - 1);
+        }
     }
 
-    public void removeFooter(View view) {
-        int pos = mFooters.indexOf(view);
+    public void removeFooter(ItemAdapter<? extends ViewHolder> item) {
+        int pos = find(mFooters, item);
         if (pos != -1) {
             mFooters.remove(pos);
             notifyItemRemoved(getHeadersCount() + getWrappedCount() + pos);
         }
+    }
+
+    public void updateFooter(ItemAdapter<? extends ViewHolder> item) {
+        int pos = find(mFooters, item);
+        if (pos != -1) notifyItemChanged(getHeadersCount() + getWrappedCount() + pos);
     }
 
     public int getFootersCount() {
@@ -137,13 +156,13 @@ public class AdapterWrapper<VH extends RecyclerView.ViewHolder>
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType >= H_TYPE_START && viewType < H_TYPE_START + getHeadersCount()) {
             int pos = viewType - H_TYPE_START;
-            return new SimpleViewHolder(mHeaders.get(pos));
+            return mHeaders.get(pos).onCreateViewHolder(parent);
         } else if (viewType >= F_TYPE_START && viewType < F_TYPE_START + getFootersCount()) {
             int pos = viewType - F_TYPE_START;
-            return new SimpleViewHolder(mFooters.get(pos));
+            return mFooters.get(pos).onCreateViewHolder(parent);
         } else {
             return mWrapped.onCreateViewHolder(parent, viewType);
         }
@@ -151,8 +170,12 @@ public class AdapterWrapper<VH extends RecyclerView.ViewHolder>
 
     @SuppressWarnings("unchecked")
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (!isHeader(position) && !isFooter(position)) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        if (isHeader(position)) {
+            mHeaders.get(position).onBindViewHolder(holder);
+        } else if (isFooter(position)) {
+            mFooters.get(position - getHeadersCount() - getWrappedCount()).onBindViewHolder(holder);
+        } else {
             mWrapped.onBindViewHolder((VH) holder, position - getHeadersCount());
         }
     }
@@ -169,11 +192,16 @@ public class AdapterWrapper<VH extends RecyclerView.ViewHolder>
         };
     }
 
+    @SuppressWarnings({"RedundantCast", "unchecked"})
+    private static int find(List<ItemAdapter<ViewHolder>> list,
+                            ItemAdapter<? extends ViewHolder> item) {
+        return list.indexOf((ItemAdapter<ViewHolder>) item);
+    }
 
-    private static class SimpleViewHolder extends RecyclerView.ViewHolder {
-        public SimpleViewHolder(View itemView) {
-            super(itemView);
-        }
+    public interface ItemAdapter<T extends ViewHolder> {
+        T onCreateViewHolder(ViewGroup parent);
+
+        void onBindViewHolder(T holder);
     }
 
 }
