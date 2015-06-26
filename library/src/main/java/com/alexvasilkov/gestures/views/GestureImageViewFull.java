@@ -87,6 +87,14 @@ public class GestureImageViewFull extends GestureImageView {
         return mIsOpen;
     }
 
+    public long getDuration() {
+        return mAnimator.getDuration();
+    }
+
+    public void setDuration(long duration) {
+        mAnimator.setDuration(duration);
+    }
+
     protected void onPositionChanged(float state, boolean isFinishing) {
         if (mIsOpen && isFinishing) mIsOpen = false;
 
