@@ -1,13 +1,11 @@
-package com.alexvasilkov.gestures.internal;
+package com.alexvasilkov.gestures.animation;
 
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewTreeObserver;
 
-import com.alexvasilkov.gestures.animation.ViewPosition;
-
-public class ViewPositionHolder implements ViewTreeObserver.OnGlobalLayoutListener {
+class ViewPositionHolder implements ViewTreeObserver.OnGlobalLayoutListener {
 
     private final OnViewPositionChangedListener mListener;
     private final ViewPosition mPos = ViewPosition.newInstance();

@@ -12,7 +12,6 @@ import com.alexvasilkov.gestures.State;
 import com.alexvasilkov.gestures.StateController;
 import com.alexvasilkov.gestures.internal.AnimationEngine;
 import com.alexvasilkov.gestures.internal.FloatScroller;
-import com.alexvasilkov.gestures.internal.ViewPositionHolder;
 import com.alexvasilkov.gestures.views.GestureImageView;
 import com.alexvasilkov.gestures.views.interfaces.ClipView;
 import com.alexvasilkov.gestures.views.interfaces.GestureView;
