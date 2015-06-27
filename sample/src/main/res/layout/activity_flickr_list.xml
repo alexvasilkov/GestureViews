@@ -29,10 +29,11 @@
         android:background="@color/full_image_background"
         android:visibility="invisible" />
 
-    <com.alexvasilkov.gestures.views.GestureImageViewFull
+    <com.alexvasilkov.gestures.views.GestureImageView
         android:id="@+id/full_image"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:visibility="invisible" />
 
     <ProgressBar
         android:id="@+id/full_image_progress"

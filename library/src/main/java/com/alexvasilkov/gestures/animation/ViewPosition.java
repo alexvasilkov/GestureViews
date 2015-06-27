@@ -110,6 +110,10 @@ public class ViewPosition {
         return new ViewPosition();
     }
 
+    /**
+     * Computes and returns view position. Note, that view should be already attached and laid out
+     * before calling this method.
+     */
     public static ViewPosition from(@NonNull View view) {
         ViewPosition pos = new ViewPosition();
         pos.init(view);
@@ -117,12 +121,20 @@ public class ViewPosition {
     }
 
     /**
+     * Computes view position and stores it in given {@code pos}. Note, that view should be already
+     * attached and laid out before calling this method.
+     *
      * @return true if view position is changed, false otherwise
      */
     public static boolean from(@NonNull ViewPosition pos, @NonNull View view) {
         return pos.init(view);
     }
 
+    /**
+     * Packs this ViewPosition into string, which can be passed i.e. between activities.
+     *
+     * @see #unpack(String)
+     */
     public String pack() {
         String viewStr = view.flattenToString();
         String viewportStr = viewport.flattenToString();
@@ -130,6 +142,9 @@ public class ViewPosition {
         return TextUtils.join(DELIMITER, new String[]{viewStr, viewportStr, imageStr});
     }
 
+    /**
+     * Restores ViewPosition from the string created by {@link #pack()} method.
+     */
     public static ViewPosition unpack(String str) {
         String[] parts = TextUtils.split(str, SPLIT_PATTERN);
         if (parts.length != 3)

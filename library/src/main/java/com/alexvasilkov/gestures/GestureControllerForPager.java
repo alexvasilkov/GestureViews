@@ -1,6 +1,5 @@
 package com.alexvasilkov.gestures;
 
-import android.content.Context;
 import android.graphics.RectF;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -63,10 +62,9 @@ public class GestureControllerForPager extends GestureController {
     private boolean mIsAllowViewPagerScrollY;
     private float mLastViewPagerEventX, mLastViewPagerEventY;
 
-    public GestureControllerForPager(Context context, OnStateChangeListener listener) {
-        super(context, listener);
-
-        mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
+    public GestureControllerForPager(@NonNull View view) {
+        super(view);
+        mTouchSlop = ViewConfiguration.get(view.getContext()).getScaledTouchSlop();
     }
 
     /**

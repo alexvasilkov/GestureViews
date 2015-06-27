@@ -18,6 +18,7 @@ import com.alexvasilkov.gestures.GestureController;
 import com.alexvasilkov.gestures.GestureControllerForPager;
 import com.alexvasilkov.gestures.Settings;
 import com.alexvasilkov.gestures.State;
+import com.alexvasilkov.gestures.animation.ViewPositionAnimator;
 import com.alexvasilkov.gestures.internal.Snapshot;
 import com.alexvasilkov.gestures.views.interfaces.ClipView;
 import com.alexvasilkov.gestures.views.interfaces.GestureView;
@@ -32,6 +33,8 @@ public class GestureImageView extends ImageView implements GestureView, ClipView
     private final ViewClipHelper mClipHelper = new ViewClipHelper(this);
     private final Matrix mImageMatrix = new Matrix();
 
+    private ViewPositionAnimator mPositionAnimator;
+
     private OnSnapshotLoadedListener mSnapshotListener;
 
     public GestureImageView(Context context) {
@@ -45,7 +48,8 @@ public class GestureImageView extends ImageView implements GestureView, ClipView
     public GestureImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
-        mController = new GestureControllerForPager(context, new GestureController.OnStateChangeListener() {
+        mController = new GestureControllerForPager(this);
+        mController.addOnStateChangeListener(new GestureController.OnStateChangeListener() {
             @Override
             public void onStateChanged(State state) {
                 applyState(state);
@@ -56,7 +60,6 @@ public class GestureImageView extends ImageView implements GestureView, ClipView
                 applyState(newState);
             }
         });
-        mController.attachToView(this);
 
         setScaleType(ImageView.ScaleType.MATRIX);
     }
@@ -81,6 +84,14 @@ public class GestureImageView extends ImageView implements GestureView, ClipView
     @Override
     public GestureControllerForPager getController() {
         return mController;
+    }
+
+    /**
+     * @return {@link ViewPositionAnimator} instance to control animation from other view position.
+     */
+    public ViewPositionAnimator getPositionAnimator() {
+        if (mPositionAnimator == null) mPositionAnimator = new ViewPositionAnimator(this);
+        return mPositionAnimator;
     }
 
     /**

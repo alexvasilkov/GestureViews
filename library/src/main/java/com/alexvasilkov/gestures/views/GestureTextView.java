@@ -30,7 +30,9 @@ public class GestureTextView extends TextView implements GestureView {
     public GestureTextView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
-        mController = new GestureController(context, new GestureController.OnStateChangeListener() {
+        mController = new GestureController(this);
+        mController.getSettings().setOverzoomFactor(1f).setPanEnabled(false);
+        mController.addOnStateChangeListener(new GestureController.OnStateChangeListener() {
             @Override
             public void onStateChanged(State state) {
                 applyState(state);
@@ -41,8 +43,7 @@ public class GestureTextView extends TextView implements GestureView {
                 applyState(newState);
             }
         });
-        mController.attachToView(this);
-        mController.getSettings().setOverzoomFactor(1f).setPanEnabled(false);
+
         mOrigSize = getTextSize();
     }
 

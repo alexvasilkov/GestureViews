@@ -7,25 +7,22 @@ import android.view.ViewTreeObserver;
 
 class ViewPositionHolder implements ViewTreeObserver.OnGlobalLayoutListener {
 
-    private final OnViewPositionChangedListener mListener;
     private final ViewPosition mPos = ViewPosition.newInstance();
 
+    private OnViewPositionChangeListener mListener;
     private View mView;
-
-    public ViewPositionHolder(@NonNull OnViewPositionChangedListener listener) {
-        mListener = listener;
-    }
 
     @Override
     public void onGlobalLayout() {
-        if (mView != null) {
+        if (mView != null && mListener != null) {
             boolean changed = ViewPosition.from(mPos, mView);
-            if (changed) mListener.onViewPositionChanged(mView, mPos);
+            if (changed) mListener.onViewPositionChanged(mPos);
         }
     }
 
-    public void init(@NonNull View view) {
+    public void init(@NonNull View view, @NonNull OnViewPositionChangeListener listener) {
         mView = view;
+        mListener = listener;
         mView.getViewTreeObserver().addOnGlobalLayoutListener(this);
         if (isLaidOut()) onGlobalLayout();
     }
@@ -45,6 +42,7 @@ class ViewPositionHolder implements ViewTreeObserver.OnGlobalLayoutListener {
         mPos.image.setEmpty();
 
         mView = null;
+        mListener = null;
     }
 
     private boolean isLaidOut() {
@@ -55,8 +53,8 @@ class ViewPositionHolder implements ViewTreeObserver.OnGlobalLayoutListener {
         }
     }
 
-    public interface OnViewPositionChangedListener {
-        void onViewPositionChanged(View view, ViewPosition position);
+    public interface OnViewPositionChangeListener {
+        void onViewPositionChanged(@NonNull ViewPosition position);
     }
 
 }

@@ -3,7 +3,6 @@ package com.alexvasilkov.gestures;
 import android.content.Context;
 import android.graphics.PointF;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.GestureDetector;
@@ -69,7 +68,8 @@ public class GestureController implements View.OnTouchListener {
 
     private OnGestureListener mGestureListener;
 
-    public GestureController(Context context, OnStateChangeListener listener) {
+    public GestureController(@NonNull View view) {
+        Context context = view.getContext();
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         mZoomGestureMinSpan = TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP, ZOOM_GESTURE_MIN_SPAN_DP, metrics);
@@ -77,9 +77,7 @@ public class GestureController implements View.OnTouchListener {
         mSettings = new Settings();
         mStateController = new StateController(mSettings);
 
-        mStateListeners.add(listener);
-
-        mAnimationEngine = new LocalAnimationEngine();
+        mAnimationEngine = new LocalAnimationEngine(view);
         InternalGesturesListener internalListener = new InternalGesturesListener();
         mGestureDetector = new GestureDetector(context, internalListener);
         mGestureDetector.setIsLongpressEnabled(false);
@@ -93,13 +91,6 @@ public class GestureController implements View.OnTouchListener {
         mTouchSlop = configuration.getScaledTouchSlop();
         mMinimumVelocity = configuration.getScaledMinimumFlingVelocity();
         mMaximumVelocity = configuration.getScaledMaximumFlingVelocity();
-    }
-
-    /**
-     * Attaching controller to particular view will make animations a bit more smooth.
-     */
-    public void attachToView(@Nullable View view) {
-        mAnimationEngine.attachToView(view);
     }
 
     /**
@@ -448,6 +439,10 @@ public class GestureController implements View.OnTouchListener {
      * Animation engine implementation to animate state changes
      */
     private class LocalAnimationEngine extends AnimationEngine {
+        public LocalAnimationEngine(@NonNull View view) {
+            super(view);
+        }
+
         @Override
         public boolean onStep() {
             boolean shouldProceed = false;

@@ -13,18 +13,19 @@ import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.events.Events;
 import com.alexvasilkov.events.Events.Failure;
 import com.alexvasilkov.events.Events.Result;
+import com.alexvasilkov.gestures.animation.ViewPositionAnimator;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.items.FlickrListAdapter;
 import com.alexvasilkov.gestures.sample.logic.FlickrApi;
 import com.alexvasilkov.gestures.sample.utils.DecorUtils;
 import com.alexvasilkov.gestures.sample.utils.glide.GlideHelper;
 import com.alexvasilkov.gestures.sample.views.PaginatedRecyclerView;
-import com.alexvasilkov.gestures.views.GestureImageViewFull;
+import com.alexvasilkov.gestures.views.GestureImageView;
 import com.googlecode.flickrjandroid.photos.Photo;
 import com.googlecode.flickrjandroid.photos.PhotoList;
 
-public class FlickrListActivity extends BaseActivity implements GestureImageViewFull.OnImageStateChangeListener,
-        FlickrListAdapter.OnPhotoListener {
+public class FlickrListActivity extends BaseActivity
+        implements ViewPositionAnimator.PositionUpdateListener, FlickrListAdapter.OnPhotoListener {
 
     private ViewHolder mViews;
     private FlickrListAdapter mAdapter;
@@ -74,7 +75,7 @@ public class FlickrListActivity extends BaseActivity implements GestureImageView
 
         // Settings up full image view
         mViews.fullImage.getController().getSettings().setFillViewport(true).setMaxZoom(3f);
-        mViews.fullImage.setOnImageStateChangeListener(this);
+        mViews.fullImage.getPositionAnimator().addPositionUpdateListener(this);
 
         mViews.fullToolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
         mViews.fullToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -87,8 +88,8 @@ public class FlickrListActivity extends BaseActivity implements GestureImageView
 
     @Override
     public void onBackPressed() {
-        if (mViews.fullImage.isOpen()) {
-            mViews.fullImage.exit(true);
+        if (!mViews.fullImage.getPositionAnimator().isLeaving()) {
+            mViews.fullImage.getPositionAnimator().exit(true);
         } else {
             super.onBackPressed();
         }
@@ -102,7 +103,7 @@ public class FlickrListActivity extends BaseActivity implements GestureImageView
             mFullGesturesDisabled = true;
         }
 
-        mViews.fullImage.enter(image, true);
+        mViews.fullImage.getPositionAnimator().enter(image, true);
         mViews.fullImage.setImageDrawable(image.getDrawable()); // For smoother animation
         mAdapter.listenForViewUpdates(photo);
 
@@ -120,25 +121,26 @@ public class FlickrListActivity extends BaseActivity implements GestureImageView
 
     @Override
     public void onPhotoViewChanged(Photo photo, ImageView image) {
-        mViews.fullImage.update(image);
+        mViews.fullImage.getPositionAnimator().update(image);
     }
 
     @Override
-    public void onImageStateChanged(float state, boolean isFinishing) {
-        mViews.fullBackground.getBackground().setAlpha((int) (255 * state));
+    public void onPositionUpdate(float state, boolean isLeaving) {
         mViews.fullBackground.setVisibility(state == 0f ? View.INVISIBLE : View.VISIBLE);
+        mViews.fullBackground.getBackground().setAlpha((int) (255 * state));
 
-        mViews.toolbar.setAlpha((float) Math.sqrt(1d - state)); // Slow down toolbar animation
         mViews.toolbar.setVisibility(state == 1f ? View.INVISIBLE : View.VISIBLE);
+        mViews.toolbar.setAlpha((float) Math.sqrt(1d - state)); // Slow down toolbar animation
 
-        mViews.fullToolbar.setAlpha(state);
+        mViews.fullImage.setVisibility(state == 0f ? View.INVISIBLE : View.VISIBLE);
+
         mViews.fullToolbar.setVisibility(state == 0f ? View.INVISIBLE : View.VISIBLE);
+        mViews.fullToolbar.setAlpha(state);
 
         mViews.fullProgress.setVisibility(state == 1f ? View.VISIBLE : View.INVISIBLE);
 
-        if (state == 0f && isFinishing) mAdapter.listenForViewUpdates(null);
+        if (state == 0f && isLeaving) mAdapter.listenForViewUpdates(null);
     }
-
 
     @Result(FlickrApi.LOAD_IMAGES_EVENT)
     private void onPhotosLoaded(PhotoList page) {
@@ -159,7 +161,7 @@ public class FlickrListActivity extends BaseActivity implements GestureImageView
 
         final Toolbar fullToolbar;
         final View fullBackground;
-        final GestureImageViewFull fullImage;
+        final GestureImageView fullImage;
         final View fullProgress;
 
         public ViewHolder(Activity activity) {
