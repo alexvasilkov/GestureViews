@@ -121,7 +121,10 @@ public class GestureImageView extends ImageView implements GestureView, ClipView
     @Override
     public void setImageDrawable(Drawable dr) {
         super.setImageDrawable(dr);
+
         Settings settings = mController.getSettings();
+        int oldW = settings.getImageW(), oldH = settings.getImageH();
+
         if (dr == null) {
             settings.setImage(0, 0);
         } else if (dr.getIntrinsicWidth() == -1 || dr.getIntrinsicHeight() == -1) {
@@ -129,7 +132,8 @@ public class GestureImageView extends ImageView implements GestureView, ClipView
         } else {
             settings.setImage(dr.getIntrinsicWidth(), dr.getIntrinsicHeight());
         }
-        mController.resetState();
+
+        if (oldW != settings.getImageW() || oldH != settings.getImageH()) mController.resetState();
     }
 
     protected void applyState(State state) {
