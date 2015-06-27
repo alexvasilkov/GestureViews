@@ -82,6 +82,7 @@ public class ViewPositionAnimator {
                     if (view == mToView) {
                         mToPos = position;
                         requestUpdateToState();
+                        requestUpdateFromState(); // Depends on 'to' position
                         applyAnimationState();
                     } else if (mFromView != null && view == mFromView) {
                         mFromPos = position;
