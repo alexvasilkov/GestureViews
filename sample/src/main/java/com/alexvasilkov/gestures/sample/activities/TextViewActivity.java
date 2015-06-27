@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.gestures.sample.R;
-import com.alexvasilkov.gestures.views.GestureTextView;
+import com.alexvasilkov.gestures.sample.views.GestureTextView;
 
 public class TextViewActivity extends BaseActivity {
 

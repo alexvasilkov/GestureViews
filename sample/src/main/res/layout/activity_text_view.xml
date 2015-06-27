@@ -6,7 +6,7 @@
     android:fillViewport="true"
     tools:context=".activities.TextViewActivity">
 
-    <com.alexvasilkov.gestures.views.GestureTextView
+    <com.alexvasilkov.gestures.sample.views.GestureTextView
         android:id="@+id/text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

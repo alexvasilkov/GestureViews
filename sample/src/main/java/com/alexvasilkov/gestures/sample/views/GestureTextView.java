@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.views;
+package com.alexvasilkov.gestures.sample.views;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -12,6 +12,9 @@ import com.alexvasilkov.gestures.GestureController;
 import com.alexvasilkov.gestures.State;
 import com.alexvasilkov.gestures.views.interfaces.GestureView;
 
+/**
+ * Sample of TextView with added gesture controls.
+ */
 public class GestureTextView extends TextView implements GestureView {
 
     private final GestureController mController;
