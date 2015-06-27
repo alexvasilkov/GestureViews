@@ -28,14 +28,24 @@ public class StateController {
     }
 
     /**
-     * Resets to initial state (min zoom, position according to gravity)
+     * Resets to initial state (min zoom, position according to gravity). Reset will only occur
+     * when image and viewport sizes are known, otherwise reset will occur sometime in the future
+     * when {@link #updateState(State)} method will be called.
+     *
+     * @return {@code true} if reset was completed or {@code false} if reset is scheduled for future
      */
-    void resetState(State state) {
+    boolean resetState(State state) {
         mIsResetRequired = true;
-        updateState(state);
+        return updateState(state);
     }
 
-    void updateState(State state) {
+    /**
+     * Updates state (or resets state if reset was scheduled, see {@link #resetState(State)}).
+     *
+     * @return {@code true} if state was reset to initial state or {@code false} if state was
+     * updated.
+     */
+    boolean updateState(State state) {
         if (mIsResetRequired) {
             // We can correctly reset state only when we have both image size and viewport size
             // but there can be a delay before we have all values properly set
@@ -46,8 +56,10 @@ public class StateController {
             MovementBounds.setupInitialMovement(state, mSettings);
 
             mIsResetRequired = !updated;
+            return !mIsResetRequired;
         } else {
             restrictStateBounds(state);
+            return false;
         }
     }
 

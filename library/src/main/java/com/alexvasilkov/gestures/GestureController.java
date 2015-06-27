@@ -171,8 +171,12 @@ public class GestureController implements View.OnTouchListener {
      * {@link OnStateChangeListener} listeners.
      */
     public void updateState() {
-        mStateController.updateState(mState);
-        notifyStateUpdated();
+        boolean reset = mStateController.updateState(mState);
+        if (reset) {
+            notifyStateReset();
+        } else {
+            notifyStateUpdated();
+        }
     }
 
     /**
@@ -184,8 +188,12 @@ public class GestureController implements View.OnTouchListener {
      * See {@link Settings#setImage(int, int)}.
      */
     public void resetState() {
-        mStateController.resetState(mState);
-        notifyStateReset();
+        boolean reset = mStateController.resetState(mState);
+        if (reset) {
+            notifyStateReset();
+        } else {
+            notifyStateUpdated();
+        }
     }
 
     /**
