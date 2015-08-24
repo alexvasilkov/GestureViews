@@ -83,7 +83,9 @@ public class FlickrListActivity extends BaseActivity
         if (mViews.grid.getChildCount() > 0) {
             View child = mViews.grid.getChildAt(0);
             mGridPosition = mViews.grid.getChildAdapterPosition(child);
-            mGridPositionFromTop = child.getTop();
+            mGridPositionFromTop = child.getTop()
+                    - Views.getMarginParams(child).topMargin
+                    - mViews.grid.getPaddingTop();
         } else {
             mGridPosition = -1;
             mGridPositionFromTop = 0;

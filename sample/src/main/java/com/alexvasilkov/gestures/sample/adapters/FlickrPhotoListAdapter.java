@@ -35,10 +35,6 @@ public class FlickrPhotoListAdapter extends RecyclerView.Adapter<FlickrPhotoList
         AdapterHelper.notifyChanges(this, old, photos, false);
     }
 
-    public List<Photo> getPhotos() {
-        return mPhotos;
-    }
-
     @Override
     public int getItemCount() {
         return mPhotos == null ? 0 : mPhotos.size();
