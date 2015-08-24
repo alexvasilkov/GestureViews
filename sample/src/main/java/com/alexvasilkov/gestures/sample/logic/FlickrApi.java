@@ -1,13 +1,15 @@
 package com.alexvasilkov.gestures.sample.logic;
 
+import com.alexvasilkov.events.EventResult;
 import com.alexvasilkov.events.Events.Background;
-import com.alexvasilkov.events.Events.Cache;
 import com.alexvasilkov.events.Events.Subscribe;
-import com.alexvasilkov.events.cache.MemoryCache;
 import com.googlecode.flickrjandroid.Flickr;
+import com.googlecode.flickrjandroid.photos.Photo;
 import com.googlecode.flickrjandroid.photos.PhotoList;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class FlickrApi {
@@ -16,17 +18,52 @@ public class FlickrApi {
 
     private static final String API_KEY = "7f6035774a01a39f9056d6d7bde60002";
     private static final String USER_ID = "99771506@N00";
+    private static final int PER_PAGE = 30;
+    private static final Set<String> PHOTO_PARAMS = new HashSet<>();
 
-    @Background
-    @Cache(MemoryCache.class)
+    static {
+        PHOTO_PARAMS.add("url_m");
+        PHOTO_PARAMS.add("url_l");
+    }
+
+    private static final List<Photo> PHOTOS = new ArrayList<>();
+    private static final List<PhotoList> PAGES = new ArrayList<>();
+
+    @Background(singleThread = true)
     @Subscribe(LOAD_IMAGES_EVENT)
-    private static PhotoList loadImages(int page, int perPage) throws Exception {
-        Set<String> extra = new HashSet<>();
-        extra.add("url_m");
-        extra.add("url_l");
+    private static synchronized EventResult loadImages(int count) throws Exception {
+        boolean hasNext = hasNext();
 
-        return new Flickr(API_KEY).getPeopleInterface()
-                .getPublicPhotos(USER_ID, extra, perPage, page);
+        while (PHOTOS.size() < count && hasNext) {
+            PhotoList loaded = new Flickr(API_KEY).getPeopleInterface()
+                    .getPublicPhotos(USER_ID, PHOTO_PARAMS, PER_PAGE, PAGES.size() + 1);
+
+            PAGES.add(loaded);
+            PHOTOS.addAll(loaded);
+
+            hasNext = hasNext();
+        }
+
+        int resultSize;
+        if (PHOTOS.size() >= count) {
+            resultSize = count;
+        } else {
+            resultSize = PHOTOS.size();
+        }
+
+        List<Photo> result = new ArrayList<>(PHOTOS.subList(0, resultSize));
+        if (!hasNext) hasNext = PHOTOS.size() > count;
+
+        return EventResult.create().result(result, hasNext).build();
+    }
+
+    private static boolean hasNext() {
+        if (PAGES.isEmpty()) {
+            return true;
+        } else {
+            PhotoList page = PAGES.get(PAGES.size() - 1);
+            return page.getPage() * page.getPerPage() < page.getTotal();
+        }
     }
 
 }

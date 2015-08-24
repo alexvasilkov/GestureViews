@@ -17,6 +17,7 @@ import com.alexvasilkov.gestures.GestureController;
 import com.alexvasilkov.gestures.GestureControllerForPager;
 import com.alexvasilkov.gestures.State;
 import com.alexvasilkov.gestures.animation.ViewPositionAnimator;
+import com.alexvasilkov.gestures.views.interfaces.AnimatorView;
 import com.alexvasilkov.gestures.views.interfaces.GestureView;
 
 /**
@@ -24,7 +25,7 @@ import com.alexvasilkov.gestures.views.interfaces.GestureView;
  * <p/>
  * Note: only one children is eligible here.
  */
-public class GestureLayout extends FrameLayout implements GestureView {
+public class GestureLayout extends FrameLayout implements GestureView, AnimatorView {
 
     private final GestureControllerForPager mController;
 
@@ -72,8 +73,9 @@ public class GestureLayout extends FrameLayout implements GestureView {
     }
 
     /**
-     * @return {@link ViewPositionAnimator} instance to control animation from other view position.
+     * {@inheritDoc}
      */
+    @Override
     public ViewPositionAnimator getPositionAnimator() {
         if (mPositionAnimator == null) mPositionAnimator = new ViewPositionAnimator(this);
         return mPositionAnimator;

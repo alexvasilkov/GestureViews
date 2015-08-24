@@ -126,7 +126,7 @@ public class ViewPosition {
      *
      * @return true if view position is changed, false otherwise
      */
-    public static boolean from(@NonNull ViewPosition pos, @NonNull View view) {
+    public static boolean apply(@NonNull ViewPosition pos, @NonNull View view) {
         return pos.init(view);
     }
 

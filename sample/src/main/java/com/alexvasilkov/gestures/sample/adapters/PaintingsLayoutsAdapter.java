@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.items;
+package com.alexvasilkov.gestures.sample.adapters;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -14,6 +14,7 @@ import com.alexvasilkov.android.commons.texts.SpannableBuilder;
 import com.alexvasilkov.android.commons.utils.Intents;
 import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.gestures.sample.R;
+import com.alexvasilkov.gestures.sample.logic.Painting;
 import com.alexvasilkov.gestures.views.GestureLayout;
 import com.bumptech.glide.Glide;
 

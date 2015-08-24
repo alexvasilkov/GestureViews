@@ -11,7 +11,7 @@ import android.view.MenuItem;
 import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.gestures.Settings;
 import com.alexvasilkov.gestures.sample.R;
-import com.alexvasilkov.gestures.sample.items.Painting;
+import com.alexvasilkov.gestures.sample.logic.Painting;
 import com.alexvasilkov.gestures.views.GestureImageView;
 import com.bumptech.glide.Glide;
 

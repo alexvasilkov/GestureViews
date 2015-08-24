@@ -11,8 +11,8 @@ import android.widget.TextView;
 import com.alexvasilkov.android.commons.texts.SpannableBuilder;
 import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.gestures.sample.R;
-import com.alexvasilkov.gestures.sample.items.Painting;
-import com.alexvasilkov.gestures.sample.items.PaintingsImagesAdapter;
+import com.alexvasilkov.gestures.sample.logic.Painting;
+import com.alexvasilkov.gestures.sample.adapters.PaintingsImagesAdapter;
 
 public class ImagesPagerActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
 

@@ -4,16 +4,19 @@ import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 
 import com.alexvasilkov.gestures.GestureController;
+import com.alexvasilkov.gestures.GestureControllerForPager;
 import com.alexvasilkov.gestures.Settings;
 import com.alexvasilkov.gestures.State;
 import com.alexvasilkov.gestures.StateController;
 import com.alexvasilkov.gestures.internal.AnimationEngine;
 import com.alexvasilkov.gestures.internal.FloatScroller;
+import com.alexvasilkov.gestures.internal.GestureDebug;
 import com.alexvasilkov.gestures.views.GestureImageView;
 import com.alexvasilkov.gestures.views.interfaces.ClipView;
 import com.alexvasilkov.gestures.views.interfaces.GestureView;
@@ -40,6 +43,8 @@ import java.util.ArrayList;
  * You can also manually update initial view position using {@link #update(ViewPosition)} method.
  */
 public class ViewPositionAnimator {
+
+    private static final String TAG = "GestureViewAnimator";
 
     private static final Matrix TMP_MATRIX = new Matrix();
 
@@ -68,16 +73,20 @@ public class ViewPositionAnimator {
 
     private boolean mIsFromUpdated, mIsToUpdated; // Marks that update for 'From' or 'To' is needed
 
-    private ViewPositionHolder mFromPosHolder = new ViewPositionHolder();
+    private final ViewPositionHolder mFromPosHolder = new ViewPositionHolder();
     @SuppressWarnings("FieldCanBeLocal") // We need to cache it to prevent GC
-    private ViewPositionHolder mToPosHolder = new ViewPositionHolder();
+    private final ViewPositionHolder mToPosHolder = new ViewPositionHolder();
 
     private final ViewPositionHolder.OnViewPositionChangeListener mFromPositionListener =
             new ViewPositionHolder.OnViewPositionChangeListener() {
                 @Override
                 public void onViewPositionChanged(@NonNull ViewPosition position) {
+                    if (GestureDebug.isDebugAnimator())
+                        Log.d(TAG, "'From' view position updated: " + position.pack());
+
                     mFromPos = position;
                     requestUpdateFromState();
+                    applyPositionState();
                 }
             };
 
@@ -93,9 +102,13 @@ public class ViewPositionAnimator {
         mToPosHolder.init(toView, new ViewPositionHolder.OnViewPositionChangeListener() {
             @Override
             public void onViewPositionChanged(@NonNull ViewPosition position) {
+                if (GestureDebug.isDebugAnimator())
+                    Log.d(TAG, "'To' view position updated: " + position.pack());
+
                 mToPos = position;
                 requestUpdateToState();
                 requestUpdateFromState(); // Depends on 'to' position
+                applyPositionState();
             }
         });
 
@@ -108,6 +121,9 @@ public class ViewPositionAnimator {
 
             @Override
             public void onStateReset(State oldState, State newState) {
+                if (GestureDebug.isDebugAnimator())
+                    Log.d(TAG, "State reset in listener: " + newState);
+
                 resetToState();
                 applyPositionState();
             }
@@ -121,8 +137,11 @@ public class ViewPositionAnimator {
      * update to new view using {@link #update(View)} method.
      */
     public void enter(@NonNull View from, boolean withAnimation) {
-        updateInternal(from);
+        if (GestureDebug.isDebugAnimator())
+            Log.d(TAG, "Entering from view, with animation = " + withAnimation);
+
         enterInternal(withAnimation);
+        updateInternal(from);
     }
 
     /**
@@ -132,8 +151,11 @@ public class ViewPositionAnimator {
      * update to new view using {@link #update(ViewPosition)} method.
      */
     public void enter(@NonNull ViewPosition fromPos, boolean withAnimation) {
-        updateInternal(fromPos);
+        if (GestureDebug.isDebugAnimator())
+            Log.d(TAG, "Entering from view position, with animation = " + withAnimation);
+
         enterInternal(withAnimation);
+        updateInternal(fromPos);
     }
 
     /**
@@ -144,6 +166,9 @@ public class ViewPositionAnimator {
         if (mFromView == null)
             throw new IllegalStateException("Animation was not started using " +
                     "enter(View, boolean) method, cannot update 'from' view");
+
+        if (GestureDebug.isDebugAnimator())
+            Log.d(TAG, "Updating view");
 
         updateInternal(from);
     }
@@ -156,6 +181,9 @@ public class ViewPositionAnimator {
             throw new IllegalStateException("Animation was not started using " +
                     "enter(ViewPosition, boolean) method, cannot update 'from' position");
 
+        if (GestureDebug.isDebugAnimator())
+            Log.d(TAG, "Updating view position: " + fromPos.pack());
+
         updateInternal(fromPos);
     }
 
@@ -163,6 +191,9 @@ public class ViewPositionAnimator {
      * Starts 'exit' animation from {@code to} view back to {@code from}
      */
     public void exit(boolean withAnimation) {
+        if (GestureDebug.isDebugAnimator())
+            Log.d(TAG, "Exiting, with animation = " + withAnimation);
+
         if (!mIsAnimating) resetToState(); // Only resetting if not animating
 
         if (withAnimation) {
@@ -196,20 +227,31 @@ public class ViewPositionAnimator {
         mFromPos = fromPos;
     }
 
-    private void cleanup() {
-        if (mFromView != null) mFromView.setVisibility(View.VISIBLE); // Switching back to visible
+    void cleanup() {
+        if (GestureDebug.isDebugAnimator())
+            Log.d(TAG, "Cleaning up");
 
-        mFromPosHolder.destroy();
+        if (mFromView != null) mFromView.setVisibility(View.VISIBLE); // Switching back to visible
+        if (mToClipView != null) mToClipView.clipView(null);
+
+        mFromPosHolder.clear();
         mFromView = null;
         mFromPos = null;
-        mIsFromUpdated = false;
+        mIsFromUpdated = mIsToUpdated = false;
     }
 
+    /**
+     * Adds listener to the set of position updates listeners that will be notified during
+     * any position changes.
+     */
     public void addPositionUpdateListener(PositionUpdateListener listener) {
         if (mListeners == null) mListeners = new ArrayList<>();
         mListeners.add(listener);
     }
 
+    /**
+     * Removes listener added by {@link #addPositionUpdateListener(PositionUpdateListener)}.
+     */
     public void removePositionUpdateListener(PositionUpdateListener listener) {
         if (mListeners == null) return;
         mListeners.remove(listener);
@@ -284,8 +326,18 @@ public class ViewPositionAnimator {
     }
 
     private void applyPositionState() {
+        // We do not need to update while 'to' view is fully visible or fully closed
+        boolean paused = mIsLeaving ? mPositionState == 0f : mPositionState == 1f;
+        mFromPosHolder.pause(paused);
+        mToPosHolder.pause(paused);
+
+        // Perform state updates if needed
         if (!mIsToUpdated) updateToState();
         if (!mIsFromUpdated) updateFromState();
+
+        if (GestureDebug.isDebugAnimator())
+            Log.d(TAG, "Applying state: " + mPositionState + " / " + mIsLeaving
+                    + ", 'to' ready = " + mIsToUpdated + ", 'from' ready = " + mIsFromUpdated);
 
         if (mIsToUpdated && mIsFromUpdated) {
             State state = mToController.getState();
@@ -293,7 +345,10 @@ public class ViewPositionAnimator {
             mToController.updateState();
 
             interpolate(mClipRect, mFromClip, mToClip, mPositionState);
-            if (mToClipView != null) mToClipView.clipView(mPositionState == 1f ? null : mClipRect);
+            if (mToClipView != null) {
+                boolean skipClip = mPositionState == 1f || (mPositionState == 0f && isLeaving());
+                mToClipView.clipView(skipClip ? null : mClipRect);
+            }
         }
 
         if (mListeners != null) {
@@ -309,24 +364,43 @@ public class ViewPositionAnimator {
         if (mIsAnimating) return;
         mIsAnimating = true;
 
+        if (GestureDebug.isDebugAnimator())
+            Log.d(TAG, "Animation started");
+
         // Saving bounds restrictions states
         mOrigRestrictBoundsFlag = mToController.getSettings().isRestrictBounds();
         // Disabling bounds restrictions & any gestures
         mToController.getSettings().setRestrictBounds(false).disableGestures();
         // Stopping all currently playing animations
         mToController.stopAllAnimations();
+
+        // Disabling ViewPager scroll
+        if (mToController instanceof GestureControllerForPager) {
+            ((GestureControllerForPager) mToController).disableViewPager(true);
+        }
     }
 
     private void onAnimationStopped() {
         if (!mIsAnimating) return;
         mIsAnimating = false;
 
+        if (GestureDebug.isDebugAnimator())
+            Log.d(TAG, "Animation stopped");
+
         // Restoring original settings
         mToController.getSettings().setRestrictBounds(mOrigRestrictBoundsFlag).enableGestures();
         mToController.updateState();
+
+        // Enabling ViewPager scroll
+        if (mToController instanceof GestureControllerForPager) {
+            ((GestureControllerForPager) mToController).disableViewPager(false);
+        }
     }
 
     private void resetToState() {
+        if (GestureDebug.isDebugAnimator())
+            Log.d(TAG, "State reset internal: " + mToController.getState());
+
         mToState.set(mToController.getState());
         requestUpdateToState();
         requestUpdateFromState();
@@ -359,6 +433,9 @@ public class ViewPositionAnimator {
         mToClip.offset(paddingLeft, paddingTop);
 
         mIsToUpdated = true;
+
+        if (GestureDebug.isDebugAnimator())
+            Log.d(TAG, "'To' state updated");
     }
 
     private void updateFromState() {
@@ -386,6 +463,9 @@ public class ViewPositionAnimator {
         mFromClip.offset(left, top);
 
         mIsFromUpdated = true;
+
+        if (GestureDebug.isDebugAnimator())
+            Log.d(TAG, "'From' state updated");
     }
 
     /**

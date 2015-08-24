@@ -42,7 +42,7 @@ public class GestureControllerForPager extends GestureController {
             // If so, this listener should be called and we will be able to settle ViewPager manually.
             settleViewPagerIfFinished((ViewPager) view, e);
 
-            return false;
+            return true; // We should skip view pager touches to prevent some subtle bugs
         }
     };
 
@@ -51,6 +51,7 @@ public class GestureControllerForPager extends GestureController {
     private final int mTouchSlop;
 
     private ViewPager mViewPager;
+    private boolean mIsViewPagerDisabled;
 
     private MotionEvent mTmpEvent;
     private boolean mIsScrollGestureDetected;
@@ -79,6 +80,10 @@ public class GestureControllerForPager extends GestureController {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             pager.setMotionEventSplittingEnabled(false);
         }
+    }
+
+    public void disableViewPager(boolean disable) {
+        mIsViewPagerDisabled = disable;
     }
 
     @Override
@@ -246,6 +251,8 @@ public class GestureControllerForPager extends GestureController {
             mIsAllowViewPagerScrollY = movBounds.width() < mTouchSlop;
         }
 
+        if (mIsViewPagerDisabled) dPagerX = 0;
+
         boolean shouldFixViewX = mIsViewPagerInterceptedScroll && mViewPagerX == 0;
         int actualX = performViewPagerScroll(e, dPagerX, dY);
         mViewPagerX += actualX;
@@ -292,6 +299,13 @@ public class GestureControllerForPager extends GestureController {
         // but if touch was not intercepted we should settle it manually
         if (!mIsViewPagerInterceptedScroll) settleViewPagerIfFinished(mViewPager, e);
 
+        // Hack: ViewPager has bug when endFakeDrag() does not work properly.
+        // But we need to ensure ViewPager is not in fake drag mode after settleViewPagerIfFinished()
+        try {
+            if (mViewPager != null && mViewPager.isFakeDragging()) mViewPager.endFakeDrag();
+        } catch (Exception ignored) {
+        }
+
         fixedEvent.recycle();
     }
 
@@ -315,9 +329,13 @@ public class GestureControllerForPager extends GestureController {
         if (e.getActionMasked() != MotionEvent.ACTION_UP && e.getActionMasked() != MotionEvent.ACTION_CANCEL)
             return;
 
-        // If ViewPager is not settled we should force it to do so, fake drag will help here
-        pager.beginFakeDrag();
-        if (pager.isFakeDragging()) pager.endFakeDrag();
+        // Hack: if ViewPager is not settled we should force it to do so, fake drag will help
+        try {
+            // Pager may throw an annoying exception if there are no internal page state items
+            pager.beginFakeDrag();
+            if (pager.isFakeDragging()) pager.endFakeDrag();
+        } catch (Exception ignored) {
+        }
     }
 
 }

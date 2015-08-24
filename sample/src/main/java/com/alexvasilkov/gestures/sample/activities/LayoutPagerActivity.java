@@ -5,8 +5,8 @@ import android.support.v4.view.ViewPager;
 
 import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.gestures.sample.R;
-import com.alexvasilkov.gestures.sample.items.Painting;
-import com.alexvasilkov.gestures.sample.items.PaintingsLayoutsAdapter;
+import com.alexvasilkov.gestures.sample.logic.Painting;
+import com.alexvasilkov.gestures.sample.adapters.PaintingsLayoutsAdapter;
 
 public class LayoutPagerActivity extends BaseActivity {
 

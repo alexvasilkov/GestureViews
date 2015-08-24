@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.alexvasilkov.events.Events;
+import com.alexvasilkov.gestures.internal.GestureDebug;
 import com.alexvasilkov.gestures.sample.logic.FlickrApi;
 
 public class SampleApplication extends Application {
@@ -18,6 +19,9 @@ public class SampleApplication extends Application {
 
         Events.init(this);
         Events.register(FlickrApi.class);
+
+        GestureDebug.setDebugFps(true);
+        GestureDebug.setDebugAnimator(true);
     }
 
     public static Context getContext() {

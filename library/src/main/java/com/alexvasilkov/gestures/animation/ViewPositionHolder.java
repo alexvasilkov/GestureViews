@@ -5,37 +5,30 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewTreeObserver;
 
-class ViewPositionHolder implements ViewTreeObserver.OnGlobalLayoutListener {
+class ViewPositionHolder implements ViewTreeObserver.OnPreDrawListener {
 
     private final ViewPosition mPos = ViewPosition.newInstance();
 
     private OnViewPositionChangeListener mListener;
     private View mView;
+    private boolean mIsPaused;
 
     @Override
-    public void onGlobalLayout() {
-        if (mView != null && mListener != null) {
-            boolean changed = ViewPosition.from(mPos, mView);
-            if (changed) mListener.onViewPositionChanged(mPos);
-        }
+    public boolean onPreDraw() {
+        update();
+        return true;
     }
 
     public void init(@NonNull View view, @NonNull OnViewPositionChangeListener listener) {
         mView = view;
         mListener = listener;
-        mView.getViewTreeObserver().addOnGlobalLayoutListener(this);
-        if (isLaidOut()) onGlobalLayout();
+        mView.getViewTreeObserver().addOnPreDrawListener(this);
+        if (isLaidOut()) update();
     }
 
     @SuppressWarnings("deprecation")
-    public void destroy() {
-        if (mView != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                mView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-            } else {
-                mView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-            }
-        }
+    public void clear() {
+        if (mView != null) mView.getViewTreeObserver().removeOnPreDrawListener(this);
 
         mPos.view.setEmpty();
         mPos.viewport.setEmpty();
@@ -43,6 +36,21 @@ class ViewPositionHolder implements ViewTreeObserver.OnGlobalLayoutListener {
 
         mView = null;
         mListener = null;
+        mIsPaused = false;
+    }
+
+    public void pause(boolean paused) {
+        if (mIsPaused == paused) return;
+
+        mIsPaused = paused;
+        if (!paused) update();
+    }
+
+    private void update() {
+        if (mView != null && mListener != null && !mIsPaused) {
+            boolean changed = ViewPosition.apply(mPos, mView);
+            if (changed) mListener.onViewPositionChanged(mPos);
+        }
     }
 
     private boolean isLaidOut() {

@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.items;
+package com.alexvasilkov.gestures.sample.logic;
 
 import android.content.res.Resources;
 import android.content.res.TypedArray;

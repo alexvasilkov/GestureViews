@@ -20,6 +20,7 @@ import com.alexvasilkov.gestures.Settings;
 import com.alexvasilkov.gestures.State;
 import com.alexvasilkov.gestures.animation.ViewPositionAnimator;
 import com.alexvasilkov.gestures.internal.Snapshot;
+import com.alexvasilkov.gestures.views.interfaces.AnimatorView;
 import com.alexvasilkov.gestures.views.interfaces.ClipView;
 import com.alexvasilkov.gestures.views.interfaces.GestureView;
 import com.alexvasilkov.gestures.views.utils.ViewClipHelper;
@@ -27,7 +28,7 @@ import com.alexvasilkov.gestures.views.utils.ViewClipHelper;
 /**
  * Gestures controlled ImageView
  */
-public class GestureImageView extends ImageView implements GestureView, ClipView {
+public class GestureImageView extends ImageView implements GestureView, ClipView, AnimatorView {
 
     private final GestureControllerForPager mController;
     private final ViewClipHelper mClipHelper = new ViewClipHelper(this);
@@ -87,8 +88,9 @@ public class GestureImageView extends ImageView implements GestureView, ClipView
     }
 
     /**
-     * @return {@link ViewPositionAnimator} instance to control animation from other view position.
+     * {@inheritDoc}
      */
+    @Override
     public ViewPositionAnimator getPositionAnimator() {
         if (mPositionAnimator == null) mPositionAnimator = new ViewPositionAnimator(this);
         return mPositionAnimator;

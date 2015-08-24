@@ -14,8 +14,6 @@ import com.alexvasilkov.gestures.sample.utils.recycler.AdapterWrapper;
 
 public class PaginatedRecyclerView extends EndlessRecyclerView {
 
-    public static final int PAGE_SIZE = 30;
-
     private GridLayoutManager mGridManager;
     private AdapterWrapper<?> mWrappedAdapter;
 
@@ -33,13 +31,11 @@ public class PaginatedRecyclerView extends EndlessRecyclerView {
 
     public PaginatedRecyclerView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        setLoadingOffset(PAGE_SIZE / 2);
     }
 
     @Override
     public void setLayoutManager(LayoutManager layout) {
         super.setLayoutManager(layout);
-
 
         mGridManager = layout instanceof GridLayoutManager ? (GridLayoutManager) layout : null;
         initGridSpanSizes();
