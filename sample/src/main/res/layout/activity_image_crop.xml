@@ -15,8 +15,13 @@
         android:layout_height="match_parent"
         android:background="@drawable/image_frame_overlay" />
 
-    <android.support.v7.widget.Toolbar
-        style="@style/App.Toolbar.Transparent"
-        android:fitsSystemWindows="true" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true">
+
+        <android.support.v7.widget.Toolbar style="@style/App.Toolbar.Transparent" />
+
+    </FrameLayout>
 
 </merge>
