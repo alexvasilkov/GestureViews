@@ -327,11 +327,32 @@ public class StateController {
      * storing result into out state.
      */
     public static void interpolate(State out, State start, State end, float factor) {
-        float x = interpolate(start.getX(), end.getX(), factor);
-        float y = interpolate(start.getY(), end.getY(), factor);
-        float zoom = interpolate(start.getZoom(), end.getZoom(), factor);
-        float rotation = interpolate(start.getRotation(), end.getRotation(), factor);
-        out.set(x, y, zoom, rotation);
+        interpolate(out, start, start.getX(), start.getY(), end, end.getX(), end.getY(), factor);
+    }
+
+    /**
+     * Interpolates from start state to end state by given factor (from 0 to 1),
+     * storing result into out state. All operations (translation, zoom, rotation) will be performed
+     * within specified pivot points, assuming start and end pivot points represent same physical
+     * point on the image.
+     */
+    public static void interpolate(State out, State start, float startPivotX, float startPivotY,
+                                   State end, float endPivotX, float endPivotY, float factor) {
+        out.set(start);
+
+        if (!State.equals(start.getZoom(), end.getZoom())) {
+            float zoom = interpolate(start.getZoom(), end.getZoom(), factor);
+            out.zoomTo(zoom, startPivotX, startPivotY);
+        }
+
+        if (!State.equals(start.getRotation(), end.getRotation())) {
+            float rotation = interpolate(start.getRotation(), end.getRotation(), factor);
+            out.rotateTo(rotation, startPivotX, startPivotY);
+        }
+
+        float dx = interpolate(0, endPivotX - startPivotX, factor);
+        float dy = interpolate(0, endPivotY - startPivotY, factor);
+        out.translateBy(dx, dy);
     }
 
     public static float interpolate(float start, float end, float factor) {

@@ -59,6 +59,7 @@ public class ViewPositionAnimator {
     private final ClipView mToClipView;
 
     private final State mFromState = new State(), mToState = new State();
+    private float mFromPivotX, mFromPivotY, mToPivotX, mToPivotY;
     private final RectF mFromClip = new RectF(), mToClip = new RectF();
     private final RectF mClipRect = new RectF();
     private ViewPosition mFromPos, mToPos;
@@ -341,7 +342,10 @@ public class ViewPositionAnimator {
 
         if (mIsToUpdated && mIsFromUpdated) {
             State state = mToController.getState();
-            StateController.interpolate(state, mFromState, mToState, mPositionState);
+
+            StateController.interpolate(state, mFromState, mFromPivotX, mFromPivotY,
+                    mToState, mToPivotX, mToPivotY, mPositionState);
+
             mToController.updateState();
 
             interpolate(mClipRect, mFromClip, mToClip, mPositionState);
@@ -432,6 +436,9 @@ public class ViewPositionAnimator {
         int paddingTop = mToPos.viewport.top - mToPos.view.top;
         mToClip.offset(paddingLeft, paddingTop);
 
+        mToPivotX = mToClip.centerX();
+        mToPivotY = mToClip.centerY();
+
         mIsToUpdated = true;
 
         if (GestureDebug.isDebugAnimator())
@@ -449,12 +456,14 @@ public class ViewPositionAnimator {
         // Computing 'From' image in 'To' viewport coordinates
         float x = mFromPos.image.left - mToPos.viewport.left;
         float y = mFromPos.image.top - mToPos.viewport.top;
-        float w = mToController.getSettings().getImageW();
-        float h = mToController.getSettings().getImageH();
+        float w = settings.getImageW();
+        float h = settings.getImageH();
         float zoomW = w == 0f ? 1f : mFromPos.image.width() / w;
         float zoomH = h == 0f ? 1f : mFromPos.image.height() / h;
         float zoom = Math.max(zoomW, zoomH);
         mFromState.set(x, y, zoom, 0f);
+        mFromPivotX = mFromPos.image.centerX() - mToPos.viewport.left;
+        mFromPivotY = mFromPos.image.centerY() - mToPos.viewport.top;
 
         // 'From' clip is a 'From' viewport rect in coordinates of 'To' view.
         mFromClip.set(0, 0, mFromPos.viewport.width(), mFromPos.viewport.height());
