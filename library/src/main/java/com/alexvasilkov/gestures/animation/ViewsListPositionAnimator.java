@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Extension of {@link ViewsSyncHelper} that allows to request {@link #enter(int, boolean)} or
+ * Extension of {@link ViewsSyncHelper} that allows request {@link #enter(int, boolean)} or
  * {@link #exit(boolean)} animations and keeps track of {@link ViewPositionAnimator.PositionUpdateListener}
  * listeners and provides correct implementation of {@link #isLeaving()}.
  * <p/>
@@ -15,18 +15,18 @@ import java.util.List;
  */
 public class ViewsListPositionAnimator extends ViewsSyncHelper {
 
-    private final Handler handler = new Handler();
-    private final List<ViewPositionAnimator.PositionUpdateListener> listeners = new ArrayList<>();
+    private final Handler mHandler = new Handler();
+    private final List<ViewPositionAnimator.PositionUpdateListener> mListeners = new ArrayList<>();
 
-    private int enterIndex = NO_INDEX;
-    private boolean enterWithAnimation;
+    private int mEnterIndex = NO_INDEX;
+    private boolean mEnterWithAnimation;
 
-    private boolean exitRequested;
-    private boolean exitWithAnimation;
+    private boolean mExitRequested;
+    private boolean mExitWithAnimation;
 
-    private ViewPositionAnimator currentAnimator;
+    private ViewPositionAnimator mCurrentAnimator;
 
-    private Runnable clearAction = new Runnable() {
+    private final Runnable mClearAction = new Runnable() {
         @Override
         public void run() {
             clear();
@@ -42,7 +42,7 @@ public class ViewsListPositionAnimator extends ViewsSyncHelper {
                 if (state == 0f && isLeaving) {
                     // We can't remove listeners while inside listener callback,
                     // so we will clear internal state a bit later.
-                    handler.postDelayed(clearAction, 1L);
+                    mHandler.postDelayed(mClearAction, 1L);
                 }
             }
         });
@@ -53,11 +53,11 @@ public class ViewsListPositionAnimator extends ViewsSyncHelper {
      * {@link RequestsListener#requestToView(int)}) and starts enter animation when both views are ready.
      */
     public void enter(int index, boolean withAnimation) {
-        enterIndex = index;
-        enterWithAnimation = withAnimation;
+        mEnterIndex = index;
+        mEnterWithAnimation = withAnimation;
 
-        if (currentAnimator != null) cleanupAnimator(currentAnimator);
-        currentAnimator = null;
+        if (mCurrentAnimator != null) cleanupAnimator(mCurrentAnimator);
+        mCurrentAnimator = null;
 
         request(index);
     }
@@ -66,37 +66,37 @@ public class ViewsListPositionAnimator extends ViewsSyncHelper {
      * Plays exit animation, should only be called after corresponding call to {@link #enter(int, boolean)}.
      */
     public void exit(boolean withAnimation) {
-        exitRequested = true;
-        exitWithAnimation = withAnimation;
+        mExitRequested = true;
+        mExitWithAnimation = withAnimation;
 
         exitIfRequested();
     }
 
     private void exitIfRequested() {
-        if (exitRequested && currentAnimator != null) {
-            exitRequested = false;
-            currentAnimator.exit(exitWithAnimation);
+        if (mExitRequested && mCurrentAnimator != null) {
+            mExitRequested = false;
+            mCurrentAnimator.exit(mExitWithAnimation);
         }
     }
 
     public boolean isLeaving() {
-        return enterIndex == NO_INDEX || exitRequested
-                || (currentAnimator != null && currentAnimator.isLeaving());
+        return mEnterIndex == NO_INDEX || mExitRequested
+                || (mCurrentAnimator != null && mCurrentAnimator.isLeaving());
     }
 
     @Override
     protected void onReady(int index) {
-        if (index == enterIndex && getToView() != null) {
-            if (currentAnimator != getToView().getPositionAnimator()) {
+        if (index == mEnterIndex && getToView() != null) {
+            if (mCurrentAnimator != getToView().getPositionAnimator()) {
 
-                if (currentAnimator == null) {
-                    currentAnimator = getToView().getPositionAnimator();
-                    initAnimator(currentAnimator);
+                if (mCurrentAnimator == null) {
+                    mCurrentAnimator = getToView().getPositionAnimator();
+                    initAnimator(mCurrentAnimator);
 
                     if (getFromView() != null) {
-                        currentAnimator.enter(getFromView(), enterWithAnimation);
+                        mCurrentAnimator.enter(getFromView(), mEnterWithAnimation);
                     } else if (getFromPos() != null) {
-                        currentAnimator.enter(getFromPos(), enterWithAnimation);
+                        mCurrentAnimator.enter(getFromPos(), mEnterWithAnimation);
                     }
                 } else {
                     swipeAnimator();
@@ -105,9 +105,9 @@ public class ViewsListPositionAnimator extends ViewsSyncHelper {
                 exitIfRequested();
             } else {
                 if (getFromView() != null) {
-                    currentAnimator.update(getFromView());
+                    mCurrentAnimator.update(getFromView());
                 } else if (getFromPos() != null) {
-                    currentAnimator.update(getFromPos());
+                    mCurrentAnimator.update(getFromPos());
                 }
             }
         }
@@ -119,23 +119,23 @@ public class ViewsListPositionAnimator extends ViewsSyncHelper {
      * Replaces old animator with new one preserving state
      */
     private void swipeAnimator() {
-        if (currentAnimator == null) return; // Nothing to swipe
+        if (mCurrentAnimator == null) return; // Nothing to swipe
 
-        float state = currentAnimator.getPositionState();
-        boolean isLeaving = currentAnimator.isLeaving();
-        boolean isAnimating = currentAnimator.isAnimating();
+        float state = mCurrentAnimator.getPositionState();
+        boolean isLeaving = mCurrentAnimator.isLeaving();
+        boolean isAnimating = mCurrentAnimator.isAnimating();
 
-        cleanupAnimator(currentAnimator);
-        currentAnimator = getToView().getPositionAnimator();
-        initAnimator(currentAnimator);
+        cleanupAnimator(mCurrentAnimator);
+        mCurrentAnimator = getToView().getPositionAnimator();
+        initAnimator(mCurrentAnimator);
 
         if (getFromView() != null) {
-            currentAnimator.enter(getFromView(), false);
+            mCurrentAnimator.enter(getFromView(), false);
         } else if (getFromPos() != null) {
-            currentAnimator.enter(getFromPos(), false);
+            mCurrentAnimator.enter(getFromPos(), false);
         }
 
-        currentAnimator.setState(state, isLeaving, isAnimating);
+        mCurrentAnimator.setState(state, isLeaving, isAnimating);
     }
 
     /**
@@ -145,8 +145,8 @@ public class ViewsListPositionAnimator extends ViewsSyncHelper {
      * @see ViewPositionAnimator#addPositionUpdateListener(ViewPositionAnimator.PositionUpdateListener)
      */
     public void addPositionUpdateListener(ViewPositionAnimator.PositionUpdateListener listener) {
-        listeners.add(listener);
-        if (currentAnimator != null) currentAnimator.addPositionUpdateListener(listener);
+        mListeners.add(listener);
+        if (mCurrentAnimator != null) mCurrentAnimator.addPositionUpdateListener(listener);
     }
 
     /**
@@ -155,27 +155,27 @@ public class ViewsListPositionAnimator extends ViewsSyncHelper {
      * @see ViewPositionAnimator#removePositionUpdateListener(ViewPositionAnimator.PositionUpdateListener)
      */
     public void removePositionUpdateListener(ViewPositionAnimator.PositionUpdateListener listener) {
-        listeners.remove(listener);
-        if (currentAnimator != null) currentAnimator.removePositionUpdateListener(listener);
+        mListeners.remove(listener);
+        if (mCurrentAnimator != null) mCurrentAnimator.removePositionUpdateListener(listener);
     }
 
     private void initAnimator(ViewPositionAnimator animator) {
-        for (ViewPositionAnimator.PositionUpdateListener listener : listeners) {
+        for (ViewPositionAnimator.PositionUpdateListener listener : mListeners) {
             animator.addPositionUpdateListener(listener);
         }
     }
 
     private void cleanupAnimator(ViewPositionAnimator animator) {
-        for (ViewPositionAnimator.PositionUpdateListener listener : listeners) {
+        for (ViewPositionAnimator.PositionUpdateListener listener : mListeners) {
             animator.removePositionUpdateListener(listener);
         }
         animator.cleanup();
     }
 
     private void clear() {
-        enterIndex = NO_INDEX;
-        if (currentAnimator != null) cleanupAnimator(currentAnimator);
-        currentAnimator = null;
+        mEnterIndex = NO_INDEX;
+        if (mCurrentAnimator != null) cleanupAnimator(mCurrentAnimator);
+        mCurrentAnimator = null;
         cleanupRequest();
         cancelRequests();
     }

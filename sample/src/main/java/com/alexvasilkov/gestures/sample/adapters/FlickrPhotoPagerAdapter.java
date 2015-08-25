@@ -121,10 +121,10 @@ public class FlickrPhotoPagerAdapter extends AnimatorPagerAdapter<FlickrPhotoPag
     }
 
     static class ViewHolder extends RecyclePagerAdapter.ViewHolder {
-        final GestureImageView image;
-        final View progress;
+        public final GestureImageView image;
+        public final View progress;
 
-        boolean gesturesDisabled;
+        public boolean gesturesDisabled;
 
         public ViewHolder(ViewGroup parent) {
             super(Views.inflate(parent, R.layout.item_flickr_full_image));

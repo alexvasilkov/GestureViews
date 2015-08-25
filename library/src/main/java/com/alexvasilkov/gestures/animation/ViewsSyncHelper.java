@@ -25,16 +25,16 @@ public abstract class ViewsSyncHelper {
     protected static final String TAG = "GestureListAnimator";
     protected static final int NO_INDEX = -1;
 
-    private RequestsListener requestsListener;
+    private RequestsListener mRequestsListener;
 
-    private int requestedIndex = NO_INDEX, fromIndex = NO_INDEX, toIndex = NO_INDEX;
+    private int mRequestedIndex = NO_INDEX, mFromIndex = NO_INDEX, toIndex = NO_INDEX;
 
-    private View fromView;
-    private ViewPosition fromPos;
-    private AnimatorView toView;
+    private View mFromView;
+    private ViewPosition mFromPos;
+    private AnimatorView mToView;
 
     protected void setRequestsListener(@NonNull RequestsListener requestsListener) {
-        this.requestsListener = requestsListener;
+        mRequestsListener = requestsListener;
     }
 
     protected void request(int index) {
@@ -42,17 +42,17 @@ public abstract class ViewsSyncHelper {
 
         if (GestureDebug.isDebugAnimator()) Log.d(TAG, "Requesting " + index);
 
-        requestedIndex = index;
-        requestsListener.requestFromView(index);
-        requestsListener.requestToView(index);
+        mRequestedIndex = index;
+        mRequestsListener.requestFromView(index);
+        mRequestsListener.requestToView(index);
     }
 
     public View getFromView() {
-        return fromView;
+        return mFromView;
     }
 
     public ViewPosition getFromPos() {
-        return fromPos;
+        return mFromPos;
     }
 
     public void setFromView(int index, @NonNull View fromView) {
@@ -64,48 +64,48 @@ public abstract class ViewsSyncHelper {
     }
 
     private void setFromInternal(int index, View fromView, ViewPosition fromPos) {
-        if (requestedIndex == NO_INDEX || requestedIndex != index) return;
+        if (mRequestedIndex == NO_INDEX || mRequestedIndex != index) return;
 
         if (GestureDebug.isDebugAnimator()) Log.d(TAG, "Setting 'from' view for " + index);
 
-        this.fromIndex = index;
-        this.fromView = fromView;
-        this.fromPos = fromPos;
+        this.mFromIndex = index;
+        this.mFromView = fromView;
+        this.mFromPos = fromPos;
         notifyWhenReady();
     }
 
     public AnimatorView getToView() {
-        return toView;
+        return mToView;
     }
 
     public void setToView(int index, AnimatorView toView) {
-        if (requestedIndex == NO_INDEX || requestedIndex != index) return;
+        if (mRequestedIndex == NO_INDEX || mRequestedIndex != index) return;
 
         if (GestureDebug.isDebugAnimator()) Log.d(TAG, "Setting 'to' view for " + index);
 
         this.toIndex = index;
-        this.toView = toView;
+        this.mToView = toView;
         notifyWhenReady();
     }
 
     private void notifyWhenReady() {
-        if (requestedIndex == NO_INDEX || fromIndex != requestedIndex || toIndex != requestedIndex)
+        if (mRequestedIndex == NO_INDEX || mFromIndex != mRequestedIndex || toIndex != mRequestedIndex)
             return;
 
-        onReady(requestedIndex);
+        onReady(mRequestedIndex);
     }
 
     protected void cleanupRequest() {
-        if (GestureDebug.isDebugAnimator()) Log.d(TAG, "Cleaning up request " + requestedIndex);
+        if (GestureDebug.isDebugAnimator()) Log.d(TAG, "Cleaning up request " + mRequestedIndex);
 
-        fromView = null;
-        fromPos = null;
-        toView = null;
-        requestedIndex = fromIndex = toIndex = NO_INDEX;
+        mFromView = null;
+        mFromPos = null;
+        mToView = null;
+        mRequestedIndex = mFromIndex = toIndex = NO_INDEX;
     }
 
     protected void cancelRequests() {
-        requestsListener.cancelRequests();
+        mRequestsListener.cancelRequests();
     }
 
     /**
@@ -119,7 +119,7 @@ public abstract class ViewsSyncHelper {
      * @see #getToView()
      */
     protected void onReady(int index) {
-        requestsListener.onViewsReady(index);
+        mRequestsListener.onViewsReady(index);
     }
 
 

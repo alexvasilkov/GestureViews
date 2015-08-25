@@ -67,7 +67,7 @@ public class FlickrPhotoListAdapter extends RecyclerView.Adapter<FlickrPhotoList
 
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        final ImageView image;
+        public final ImageView image;
 
         public ViewHolder(ViewGroup parent) {
             super(Views.inflate(parent, R.layout.item_flickr_image));

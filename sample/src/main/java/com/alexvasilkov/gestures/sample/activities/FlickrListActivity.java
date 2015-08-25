@@ -202,13 +202,13 @@ public class FlickrListActivity extends BaseActivity
 
 
     private class ViewHolder {
-        final Toolbar toolbar;
-        final View toolbarBack;
-        final PaginatedRecyclerView grid;
+        public final Toolbar toolbar;
+        public final View toolbarBack;
+        public final PaginatedRecyclerView grid;
 
-        final ViewPager pager;
-        final Toolbar pagerToolbar;
-        final View pagerBackground;
+        public final ViewPager pager;
+        public final Toolbar pagerToolbar;
+        public final View pagerBackground;
 
         public ViewHolder(Activity activity) {
             toolbar = Views.find(activity, R.id.toolbar);

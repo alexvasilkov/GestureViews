@@ -16,20 +16,20 @@ public abstract class AnimatorPagerAdapter<VH extends RecyclePagerAdapter.ViewHo
     private static final int NO_INDEX = -1;
     private static final Rect LOCATION_PARENT = new Rect(), LOCATION = new Rect();
 
-    private final ViewsListPositionAnimator listAnimator;
-    private final ViewPager viewPager;
-    private final RecyclerView recyclerView;
-    private int fromIndex = NO_INDEX, toIndex = NO_INDEX;
-    private boolean isPagerEnabled;
-    private boolean scrollHalfVisibleItems;
+    private final ViewsListPositionAnimator mListAnimator;
+    private final ViewPager mViewPager;
+    private final RecyclerView mRecyclerView;
+    private int mFromIndex = NO_INDEX, mToIndex = NO_INDEX;
+    private boolean mIsPagerEnabled;
+    private boolean mScrollHalfVisibleItems;
 
     public AnimatorPagerAdapter(ViewPager viewPager, RecyclerView recyclerView) {
-        this.viewPager = viewPager;
-        this.recyclerView = recyclerView;
+        mViewPager = viewPager;
+        mRecyclerView = recyclerView;
 
         setPagerEnabled(false);
 
-        listAnimator = new ViewsListPositionAnimator(new ViewsRequestsListener()) {
+        mListAnimator = new ViewsListPositionAnimator(new ViewsRequestsListener()) {
             @Override
             public void exit(boolean withAnimation) {
                 // If animation state is not yet applied for 'to' view but exit is requested,
@@ -43,7 +43,7 @@ public abstract class AnimatorPagerAdapter<VH extends RecyclePagerAdapter.ViewHo
             public void enter(int index, boolean withAnimation) {
                 // We should scroll recycler view if we entering without animation,
                 // i.e. when swiping viewpager
-                scrollHalfVisibleItems = !withAnimation;
+                mScrollHalfVisibleItems = !withAnimation;
                 super.enter(index, withAnimation);
             }
         };
@@ -55,12 +55,12 @@ public abstract class AnimatorPagerAdapter<VH extends RecyclePagerAdapter.ViewHo
     }
 
     public ViewsListPositionAnimator getListAnimator() {
-        return listAnimator;
+        return mListAnimator;
     }
 
     @Override
     public final int getCount() {
-        return isPagerEnabled ? getItemsCount() : 0; // No pages if not in full screen mode
+        return mIsPagerEnabled ? getItemsCount() : 0; // No pages if not in full screen mode
     }
 
     @Override
@@ -83,21 +83,21 @@ public abstract class AnimatorPagerAdapter<VH extends RecyclePagerAdapter.ViewHo
     }
 
     private void notifyPagerItemChanged(int position) {
-        if (toIndex != NO_INDEX && toIndex == position) {
+        if (mToIndex != NO_INDEX && mToIndex == position) {
             VH holder = getViewHolder(position); // Holder sometimes maybe null
-            if (holder != null) listAnimator.setToView(position, getAnimatorView(holder));
+            if (holder != null) mListAnimator.setToView(position, getAnimatorView(holder));
         }
     }
 
     private void applyItemFromPager() {
         // If user scrolled to new page we should silently apply animation logic
-        int position = AnimatorPagerAdapter.this.viewPager.getCurrentItem();
-        if (toIndex != NO_INDEX && toIndex != position) listAnimator.enter(position, false);
+        int position = AnimatorPagerAdapter.this.mViewPager.getCurrentItem();
+        if (mToIndex != NO_INDEX && mToIndex != position) mListAnimator.enter(position, false);
     }
 
     protected void setPagerEnabled(boolean isEnabled) {
-        if (isPagerEnabled != isEnabled) {
-            isPagerEnabled = isEnabled;
+        if (mIsPagerEnabled != isEnabled) {
+            mIsPagerEnabled = isEnabled;
             notifyDataSetChanged();
         }
     }
@@ -107,22 +107,22 @@ public abstract class AnimatorPagerAdapter<VH extends RecyclePagerAdapter.ViewHo
         public void requestFromView(int index) {
             // Trying to find requested view on screen. If it is not currently on screen
             // or it is not fully visible than we should scroll to it at first.
-            fromIndex = index;
+            mFromIndex = index;
 
-            RecyclerView.ViewHolder holder = recyclerView.findViewHolderForAdapterPosition(index);
+            RecyclerView.ViewHolder holder = mRecyclerView.findViewHolderForAdapterPosition(index);
             if (holder == null) {
-                recyclerView.smoothScrollToPosition(index);
+                mRecyclerView.smoothScrollToPosition(index);
             } else {
-                listAnimator.setFromView(index, holder.itemView);
+                mListAnimator.setFromView(index, holder.itemView);
 
-                if (scrollHalfVisibleItems) {
-                    recyclerView.getGlobalVisibleRect(LOCATION_PARENT);
+                if (mScrollHalfVisibleItems) {
+                    mRecyclerView.getGlobalVisibleRect(LOCATION_PARENT);
                     View v = holder.itemView;
                     v.getGlobalVisibleRect(LOCATION);
                     if (!LOCATION_PARENT.contains(LOCATION)
                             || v.getWidth() > LOCATION.width()
                             || v.getHeight() > LOCATION.height()) {
-                        recyclerView.smoothScrollToPosition(index);
+                        mRecyclerView.smoothScrollToPosition(index);
                     }
                 }
             }
@@ -133,34 +133,34 @@ public abstract class AnimatorPagerAdapter<VH extends RecyclePagerAdapter.ViewHo
             // Trying to find view for currently shown page.
             // If it is not a selected page than we should scroll to it at first.
             setPagerEnabled(true);
-            toIndex = index;
+            mToIndex = index;
 
-            if (viewPager.getCurrentItem() == index) {
+            if (mViewPager.getCurrentItem() == index) {
                 notifyPagerItemChanged(index);
             } else {
-                viewPager.setCurrentItem(index, false);
+                mViewPager.setCurrentItem(index, false);
             }
         }
 
         @Override
         public void cancelRequests() {
-            fromIndex = toIndex = NO_INDEX;
+            mFromIndex = mToIndex = NO_INDEX;
             setPagerEnabled(false);
         }
 
         @Override
         public void onViewsReady(int index) {
             AnimatorPagerAdapter.this.onViewsReady(
-                    listAnimator.getFromView(), listAnimator.getToView(), index);
+                    mListAnimator.getFromView(), mListAnimator.getToView(), index);
         }
     }
 
     private class RecyclerChildStateListener implements RecyclerView.OnChildAttachStateChangeListener {
         @Override
         public void onChildViewAttachedToWindow(View view) {
-            int index = recyclerView.getChildAdapterPosition(view);
-            if (fromIndex != NO_INDEX && index == fromIndex) {
-                listAnimator.setFromView(index, view);
+            int index = mRecyclerView.getChildAdapterPosition(view);
+            if (mFromIndex != NO_INDEX && index == mFromIndex) {
+                mListAnimator.setFromView(index, view);
             }
         }
 

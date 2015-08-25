@@ -12,7 +12,7 @@ import com.alexvasilkov.gestures.views.GestureImageView;
 
 public class ImageCropResultActivity extends BaseActivity {
 
-    private static Bitmap sBitmapToShow;
+    private static Bitmap sBitmapToShow; // Bad, but works fine for demonstration purpose
 
     public static void show(Context context, Bitmap bitmap) {
         sBitmapToShow = bitmap;
