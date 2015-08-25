@@ -11,4 +11,14 @@
     <string name="reload_images">Load images</string>
     <string name="loading_images">Loading images…</string>
 
+    <string name="menu_enable_pan">Pan</string>
+    <string name="menu_enable_zoom">Zoom</string>
+    <string name="menu_enable_rotation">Rotation</string>
+    <string name="menu_enable_overscroll_x">Overscroll X</string>
+    <string name="menu_enable_overscroll_y">Overscroll Y</string>
+    <string name="menu_enable_overzoom">Overzoom</string>
+    <string name="menu_fit_viewport">Fit viewport</string>
+    <string name="menu_fit_method">Fit method</string>
+    <string name="menu_gravity">Gravity</string>
+
 </resources>

@@ -7,6 +7,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -21,29 +23,31 @@ import com.alexvasilkov.gestures.sample.adapters.FlickrPhotoListAdapter;
 import com.alexvasilkov.gestures.sample.adapters.FlickrPhotoPagerAdapter;
 import com.alexvasilkov.gestures.sample.logic.FlickrApi;
 import com.alexvasilkov.gestures.sample.utils.DecorUtils;
+import com.alexvasilkov.gestures.sample.utils.GestureSettingsMenu;
 import com.alexvasilkov.gestures.sample.views.PaginatedRecyclerView;
+import com.alexvasilkov.gestures.views.interfaces.GestureView;
 import com.googlecode.flickrjandroid.photos.Photo;
 
 import java.util.List;
 
-public class FlickrListActivity extends BaseActivity
-        implements ViewPositionAnimator.PositionUpdateListener, FlickrPhotoListAdapter.OnPhotoListener {
+public class FlickrListActivity extends BaseActivity implements
+        ViewPositionAnimator.PositionUpdateListener,
+        FlickrPhotoListAdapter.OnPhotoListener,
+        FlickrPhotoPagerAdapter.OnSetupGestureViewListener {
 
     private static final int PAGE_SIZE = 30;
 
     private ViewHolder mViews;
     private FlickrPhotoListAdapter mGridAdapter;
     private FlickrPhotoPagerAdapter mPagerAdapter;
+    private GestureSettingsMenu mSettingsMenu;
 
     @InstanceState
     private int mPagerPhotoPosition = -1;
-
     @InstanceState
     private int mGridPosition = -1;
-
     @InstanceState
     private int mGridPositionFromTop;
-
     @InstanceState
     private int mPhotoCount;
 
@@ -60,6 +64,9 @@ public class FlickrListActivity extends BaseActivity
         initDecorMargins();
         initGrid();
         initPager();
+
+        mSettingsMenu = new GestureSettingsMenu();
+        mSettingsMenu.onRestoreInstanceState(savedInstanceState);
 
         if (mPagerPhotoPosition != -1) {
             // Photo was show in pager, we should switch to pager mode instantly
@@ -91,7 +98,23 @@ public class FlickrListActivity extends BaseActivity
             mGridPositionFromTop = 0;
         }
 
+        mSettingsMenu.onSaveInstanceState(outState);
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return mSettingsMenu.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (mSettingsMenu.onOptionsItemSelected(item)) {
+            invalidateOptionsMenu();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
     }
 
     private void initDecorMargins() {
@@ -135,6 +158,7 @@ public class FlickrListActivity extends BaseActivity
         // Setting up pager views
         mViews.pager.setPageMargin(getResources().getDimensionPixelSize(R.dimen.view_pager_margin));
         mPagerAdapter = new FlickrPhotoPagerAdapter(mViews.pager, mViews.grid);
+        mPagerAdapter.setSetupListener(this);
         mPagerAdapter.getListAnimator().addPositionUpdateListener(this);
 
         mViews.pagerToolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
@@ -163,6 +187,11 @@ public class FlickrListActivity extends BaseActivity
 
         mViews.pagerToolbar.setVisibility(state == 0f ? View.INVISIBLE : View.VISIBLE);
         mViews.pagerToolbar.setAlpha(state);
+    }
+
+    @Override
+    public void onSetupGestureView(GestureView view) {
+        mSettingsMenu.applySettings(view);
     }
 
 

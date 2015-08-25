@@ -15,16 +15,17 @@ import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.utils.glide.GlideHelper;
 import com.alexvasilkov.gestures.views.GestureImageView;
 import com.alexvasilkov.gestures.views.interfaces.AnimatorView;
+import com.alexvasilkov.gestures.views.interfaces.GestureView;
 import com.bumptech.glide.Glide;
 import com.googlecode.flickrjandroid.photos.Photo;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class FlickrPhotoPagerAdapter extends AnimatorPagerAdapter<FlickrPhotoPagerAdapter.ViewHolder> {
 
     private final ViewPager mViewPager;
-    private List<Photo> mPhotos = new ArrayList<>();
+    private List<Photo> mPhotos;
+    private OnSetupGestureViewListener mSetupListener;
 
     public FlickrPhotoPagerAdapter(ViewPager viewPager, RecyclerView recyclerView) {
         super(viewPager, recyclerView);
@@ -34,6 +35,10 @@ public class FlickrPhotoPagerAdapter extends AnimatorPagerAdapter<FlickrPhotoPag
     public void setPhotos(List<Photo> photos) {
         mPhotos = photos;
         notifyDataSetChanged();
+    }
+
+    public void setSetupListener(OnSetupGestureViewListener listener) {
+        mSetupListener = listener;
     }
 
     @Override
@@ -73,6 +78,8 @@ public class FlickrPhotoPagerAdapter extends AnimatorPagerAdapter<FlickrPhotoPag
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
+        if (mSetupListener != null) mSetupListener.onSetupGestureView(holder.image);
+
         // Temporary disabling touch controls
         if (!holder.gesturesDisabled) {
             holder.image.getController().getSettings().disableGestures();
@@ -131,6 +138,10 @@ public class FlickrPhotoPagerAdapter extends AnimatorPagerAdapter<FlickrPhotoPag
             image = Views.find(itemView, R.id.flickr_full_image);
             progress = Views.find(itemView, R.id.flickr_full_progress);
         }
+    }
+
+    public interface OnSetupGestureViewListener {
+        void onSetupGestureView(GestureView view);
     }
 
 }

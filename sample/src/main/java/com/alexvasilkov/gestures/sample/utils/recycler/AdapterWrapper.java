@@ -11,7 +11,7 @@ import java.util.List;
 import static android.support.v7.widget.RecyclerView.AdapterDataObserver;
 
 /**
- * RecyclerView adapter wrapper with headers / mFooters support
+ * RecyclerView adapter wrapper with headers / footers support
  */
 public class AdapterWrapper<VH extends ViewHolder> extends RecyclerView.Adapter<ViewHolder> {
 
