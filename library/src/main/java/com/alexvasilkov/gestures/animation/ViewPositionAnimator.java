@@ -197,23 +197,15 @@ public class ViewPositionAnimator {
 
         if (!mIsAnimating) resetToState(); // Only resetting if not animating
 
-        if (withAnimation) {
-            setPositionState(mPositionState, true); // Starting from current position
-            startAnimation();
-        } else {
-            setPositionState(0f, true); // Applying initial state without animation
-        }
+        // Starting animation from current position or applying initial state without animation
+        setState(withAnimation ? mPositionState : 0f, true, withAnimation);
     }
 
     private void enterInternal(boolean withAnimation) {
         resetToState();
 
-        if (withAnimation) {
-            setPositionState(0f, false);
-            startAnimation();
-        } else {
-            setPositionState(1f, false); // Applying final state without animation
-        }
+        // Starting animation from initial position or applying final state without animation
+        setState(withAnimation ? 0f : 1f, false, withAnimation);
     }
 
     private void updateInternal(@NonNull View from) {
@@ -289,10 +281,12 @@ public class ViewPositionAnimator {
      * it will cleanup all internal stuff. So you will need to call {@link #enter(View, boolean)}
      * or {@link #enter(ViewPosition, boolean)} again in order to continue using animator.
      */
-    public void setPositionState(@FloatRange(from = 0f, to = 1f) float state, boolean isLeaving) {
+    public void setState(@FloatRange(from = 0f, to = 1f) float state,
+                         boolean isLeaving, boolean isAnimating) {
         stopAnimation();
         mPositionState = state;
         mIsLeaving = isLeaving;
+        if (isAnimating) startAnimationInternal();
         applyPositionState();
     }
 
@@ -307,7 +301,7 @@ public class ViewPositionAnimator {
      * Starts animation from current position state ({@link #getPositionState()}) and in current
      * direction ({@link #isLeaving()}).
      */
-    public void startAnimation() {
+    private void startAnimationInternal() {
         stopAnimation();
 
         float durationFraction = mIsLeaving ? mPositionState : 1f - mPositionState;

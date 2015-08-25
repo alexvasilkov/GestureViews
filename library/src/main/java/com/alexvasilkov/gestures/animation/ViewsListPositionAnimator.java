@@ -135,8 +135,7 @@ public class ViewsListPositionAnimator extends ViewsSyncHelper {
             currentAnimator.enter(getFromPos(), false);
         }
 
-        currentAnimator.setPositionState(state, isLeaving);
-        if (isAnimating) currentAnimator.startAnimation();
+        currentAnimator.setState(state, isLeaving, isAnimating);
     }
 
     /**
