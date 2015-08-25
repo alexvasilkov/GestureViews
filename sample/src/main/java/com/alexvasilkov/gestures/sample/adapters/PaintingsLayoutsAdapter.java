@@ -15,7 +15,7 @@ import com.alexvasilkov.android.commons.utils.Intents;
 import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.logic.Painting;
-import com.alexvasilkov.gestures.views.GestureLayout;
+import com.alexvasilkov.gestures.views.GestureFrameLayout;
 import com.bumptech.glide.Glide;
 
 public class PaintingsLayoutsAdapter extends PagerAdapter implements View.OnClickListener {
@@ -40,7 +40,7 @@ public class PaintingsLayoutsAdapter extends PagerAdapter implements View.OnClic
         final int match = ViewGroup.LayoutParams.MATCH_PARENT;
         container.addView(layout, match, match);
 
-        GestureLayout gLayout = Views.find(layout, R.id.painting_g_layout);
+        GestureFrameLayout gLayout = Views.find(layout, R.id.painting_g_layout);
         gLayout.getController().getSettings().setOverscrollDistance(context, 32, 0);
         gLayout.getController().enableScrollInViewPager(mViewPager);
 

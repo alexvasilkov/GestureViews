@@ -25,7 +25,7 @@ import com.alexvasilkov.gestures.views.interfaces.GestureView;
  * <p/>
  * Note: only one children is eligible here.
  */
-public class GestureLayout extends FrameLayout implements GestureView, AnimatorView {
+public class GestureFrameLayout extends FrameLayout implements GestureView, AnimatorView {
 
     private final GestureControllerForPager mController;
 
@@ -39,15 +39,15 @@ public class GestureLayout extends FrameLayout implements GestureView, AnimatorV
 
     private MotionEvent mCurrentMotionEvent;
 
-    public GestureLayout(Context context) {
+    public GestureFrameLayout(Context context) {
         this(context, null, 0);
     }
 
-    public GestureLayout(Context context, AttributeSet attrs) {
+    public GestureFrameLayout(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public GestureLayout(Context context, AttributeSet attrs, int defStyle) {
+    public GestureFrameLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
         mController = new GestureControllerForPager(this);

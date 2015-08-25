@@ -46,7 +46,7 @@
 
         <activity
             android:name=".activities.LayoutPagerActivity"
-            android:label="Layout">
+            android:label="FrameLayout">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -55,7 +55,7 @@
 
         <activity
             android:name=".activities.TextViewActivity"
-            android:label="TextView">
+            android:label="Custom View">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
