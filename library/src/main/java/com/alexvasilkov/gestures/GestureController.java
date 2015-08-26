@@ -3,6 +3,7 @@ package com.alexvasilkov.gestures;
 import android.content.Context;
 import android.graphics.PointF;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.GestureDetector;
@@ -18,17 +19,33 @@ import com.alexvasilkov.gestures.internal.MovementBounds;
 import com.alexvasilkov.gestures.internal.detectors.RotationGestureDetector;
 import com.alexvasilkov.gestures.internal.detectors.ScaleGestureDetectorFixed;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Main logic to update image state ({@link State}) basing on screen touches.
+ * Handles touch events to update view's position state ({@link State}) based on current
+ * setup ({@link Settings}).<br/>
+ * Settings can be obtained and altered through {@link #getSettings()}.<br/>
+ * Note, that some settings are required in order to correctly update state, see {@link Settings}.
  * <p/>
- * This class implements {@link android.view.View.OnTouchListener} and provides
- * {@link OnStateChangeListener} to listen for state changes.
+ * This class implements {@link View.OnTouchListener} to delegate touches from view to controller.
  * <p/>
- * Settings can be obtained through {@link #getSettings()}. Note, that some settings are required,
- * see {@link Settings}.
+ * State can also be manipulated directly with {@link #getState()}, {@link #updateState()}
+ * and {@link #resetState()}. You can also access {@link #getStateController()} for some additional
+ * stuff.
+ * <p/>
+ * State can be animated with {@link #animateStateTo(State)} method.<br/>
+ * See also {@link #stopFlingAnimation()}, {@link #stopStateAnimation()}
+ * and {@link #stopAllAnimations()} methods.
+ * <p/>
+ * All state changes will be passed to {@link OnStateChangeListener OnStateChangeListener}.
+ * See {@link #addOnStateChangeListener(OnStateChangeListener) addOnStateChangeListener} and
+ * {@link #removeOnStateChangeListener(OnStateChangeListener) removeOnStateChangeListener} methods.
+ * <p/>
+ * Additional touch events can be listened with {@link OnGestureListener OnGestureListener} and
+ * {@link SimpleOnGestureListener SimpleOnGestureListener} using
+ * {@link #setOnGesturesListener(OnGestureListener) setOnGesturesListener} method.
+ * <p/>
  */
 public class GestureController implements View.OnTouchListener {
 
@@ -39,7 +56,8 @@ public class GestureController implements View.OnTouchListener {
     private final float mZoomGestureMinSpan;
     private final int mTouchSlop, mMinimumVelocity, mMaximumVelocity;
 
-    private final List<OnStateChangeListener> mStateListeners = new LinkedList<>();
+    private final List<OnStateChangeListener> mStateListeners = new ArrayList<>();
+    private OnGestureListener mGestureListener;
 
     private final AnimationEngine mAnimationEngine;
 
@@ -65,8 +83,6 @@ public class GestureController implements View.OnTouchListener {
     private final Settings mSettings;
     private final State mState = new State();
     private final StateController mStateController;
-
-    private OnGestureListener mGestureListener;
 
     public GestureController(@NonNull View view) {
         Context context = view.getContext();
@@ -98,7 +114,7 @@ public class GestureController implements View.OnTouchListener {
      * <p/>
      * See also {@link GestureController.OnGestureListener}
      */
-    public void setOnGesturesListener(OnGestureListener listener) {
+    public void setOnGesturesListener(@Nullable OnGestureListener listener) {
         mGestureListener = listener;
     }
 
@@ -503,14 +519,32 @@ public class GestureController implements View.OnTouchListener {
      * Listener for different touch events
      */
     public interface OnGestureListener {
+        /**
+         * See {@link GestureDetector.OnGestureListener#onDown(MotionEvent)}
+         */
         void onDown(MotionEvent e);
 
+        /**
+         * See {@link GestureDetector.OnGestureListener#onSingleTapUp(MotionEvent)}
+         */
         boolean onSingleTapUp(MotionEvent e);
 
-        void onLongPress(MotionEvent e);
-
+        /**
+         * See {@link GestureDetector.OnDoubleTapListener#onSingleTapConfirmed(MotionEvent)}
+         */
         boolean onSingleTapConfirmed(MotionEvent e);
 
+        /**
+         * See {@link GestureDetector.OnGestureListener#onLongPress(MotionEvent)}.
+         * <p/>
+         * Note, that long press is disabled by default, use {@link #setLongPressEnabled(boolean)}
+         * to enable it.
+         */
+        void onLongPress(MotionEvent e);
+
+        /**
+         * See {@link GestureDetector.OnDoubleTapListener#onDoubleTap(MotionEvent)}
+         */
         boolean onDoubleTap(MotionEvent e);
     }
 
@@ -518,26 +552,41 @@ public class GestureController implements View.OnTouchListener {
      * Simple implementation of {@link GestureController.OnGestureListener}
      */
     public static class SimpleOnGestureListener implements OnGestureListener {
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public void onDown(MotionEvent e) {
             // no-op
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public boolean onSingleTapUp(MotionEvent e) {
             return false;
         }
 
-        @Override
-        public void onLongPress(MotionEvent e) {
-            // no-op
-        }
-
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
             return false;
         }
 
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void onLongPress(MotionEvent e) {
+            // no-op
+        }
+
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public boolean onDoubleTap(MotionEvent e) {
             return false;

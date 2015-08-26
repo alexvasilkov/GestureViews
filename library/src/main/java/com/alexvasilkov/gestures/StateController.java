@@ -6,6 +6,21 @@ import android.graphics.RectF;
 
 import com.alexvasilkov.gestures.internal.MovementBounds;
 
+/**
+ * Helper class that holds reference to {@link Settings} object and controls some aspects of view
+ * {@link State}, such as movement bounds restrictions
+ * (see {@link #getEffectiveMovementArea(RectF, State)}) and dynamic min / max zoom levels
+ * (see {@link #getEffectiveMinZoom()} and {@link #getEffectiveMaxZoom()}).
+ * <p/>
+ * It also provides few static methods that can be useful:
+ * <ul>
+ * <li>{@link #restrict(float, float, float) restrict()} float value,</li>
+ * <li>{@link #interpolate(float, float, float) interpolate()} float value</li>
+ * <li>{@link #interpolate(State, State, State, float) interpolate()} {@link State} object</li>
+ * <li>{@link #interpolate(State, State, float, float, State, float, float, float) interpolate()}
+ * {@link State} object with specified pivot point</li>
+ * </ul>
+ */
 public class StateController {
 
     private final Settings mSettings;

@@ -26,7 +26,9 @@ import com.alexvasilkov.gestures.views.interfaces.GestureView;
 import com.alexvasilkov.gestures.views.utils.ViewClipHelper;
 
 /**
- * Gestures controlled ImageView
+ * {@link ImageView} implementation controlled by {@link GestureController} ({@link #getController()}).
+ * <p/>
+ * View position can be animated with {@link ViewPositionAnimator} ({@link #getPositionAnimator()}).
  */
 public class GestureImageView extends ImageView implements GestureView, ClipView, AnimatorView {
 
