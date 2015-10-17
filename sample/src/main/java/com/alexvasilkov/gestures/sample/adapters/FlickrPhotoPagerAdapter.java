@@ -19,6 +19,8 @@ import java.util.List;
 
 public class FlickrPhotoPagerAdapter extends RecyclePagerAdapter<FlickrPhotoPagerAdapter.ViewHolder> {
 
+    private static final long PROGRESS_DELAY = 300L;
+
     private final ViewPager mViewPager;
     private List<Photo> mPhotos;
     private OnSetupGestureViewListener mSetupListener;
@@ -86,7 +88,7 @@ public class FlickrPhotoPagerAdapter extends RecyclePagerAdapter<FlickrPhotoPage
             holder.gesturesDisabled = true;
         }
 
-        holder.progress.animate().alpha(1f);
+        holder.progress.animate().setStartDelay(PROGRESS_DELAY).alpha(1f);
 
         Photo photo = mPhotos.get(position);
 
@@ -95,6 +97,7 @@ public class FlickrPhotoPagerAdapter extends RecyclePagerAdapter<FlickrPhotoPage
                 new GlideHelper.ImageLoadingListener() {
                     @Override
                     public void onLoaded() {
+                        holder.progress.animate().cancel();
                         holder.progress.animate().alpha(0f);
                         // Re-enabling touch controls
                         if (holder.gesturesDisabled) {
