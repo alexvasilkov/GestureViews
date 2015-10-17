@@ -6,8 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.alexvasilkov.gestures.animation.ViewPositionAnimator;
-import com.alexvasilkov.gestures.transition.ViewsTracker;
 import com.alexvasilkov.gestures.transition.ViewsCoordinator;
+import com.alexvasilkov.gestures.transition.ViewsTracker;
 import com.alexvasilkov.gestures.transition.ViewsTransitionAnimator;
 import com.alexvasilkov.gestures.views.interfaces.AnimatorView;
 import com.alexvasilkov.gestures.views.utils.RecyclePagerAdapter;
@@ -19,17 +19,18 @@ import com.alexvasilkov.gestures.views.utils.RecyclePagerAdapter;
  */
 public class IntoViewPagerListener<ID> implements ViewsCoordinator.OnRequestViewListener<ID> {
 
-    private final ViewsTracker<ViewPager, ID> mTracker;
     private final ViewPager mViewPager;
+    private final ViewsTracker<ViewPager, ID> mTracker;
     private final ViewsTransitionAnimator<ID> mAnimator;
     private ID mId;
 
     private boolean mPreventExit;
 
-    public IntoViewPagerListener(@NonNull ViewsTracker<ViewPager, ID> tracker,
+    public IntoViewPagerListener(@NonNull ViewPager viewPager,
+                                 @NonNull ViewsTracker<ViewPager, ID> tracker,
                                  @NonNull ViewsTransitionAnimator<ID> animator) {
+        mViewPager = viewPager;
         mTracker = tracker;
-        mViewPager = tracker.parent;
         mAnimator = animator;
 
         mViewPager.setVisibility(View.GONE); // We do not need to initialize ViewPager on startup

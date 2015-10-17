@@ -181,14 +181,15 @@ public class FlickrListActivity extends BaseActivity implements
 
     private void initAnimator() {
         mAnimator = new ViewsTransitionBuilder<Integer>()
-                .fromRecycler(new SimpleViewsTracker<RecyclerView>(mViews.grid) {
+                .fromRecyclerView(mViews.grid, new SimpleViewsTracker<RecyclerView>() {
                     @Override
                     public View getViewForPosition(int position) {
-                        RecyclerView.ViewHolder holder = parent.findViewHolderForAdapterPosition(position);
+                        RecyclerView.ViewHolder holder =
+                                mViews.grid.findViewHolderForAdapterPosition(position);
                         return holder == null ? null : FlickrPhotoListAdapter.getImage(holder);
                     }
                 })
-                .intoViewPager(new SimpleViewsTracker<ViewPager>(mViews.pager) {
+                .intoViewPager(mViews.pager, new SimpleViewsTracker<ViewPager>() {
                     @Override
                     public View getViewForPosition(int position) {
                         RecyclePagerAdapter.ViewHolder holder = mPagerAdapter.getViewHolder(position);

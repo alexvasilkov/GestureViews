@@ -2,11 +2,7 @@ package com.alexvasilkov.gestures.transition;
 
 import android.support.annotation.NonNull;
 
-public abstract class SimpleViewsTracker<V> extends ViewsTracker<V, Integer> {
-
-    public SimpleViewsTracker(V parent) {
-        super(parent);
-    }
+public abstract class SimpleViewsTracker<V> implements ViewsTracker<V, Integer> {
 
     @Override
     public int getPositionForId(@NonNull Integer id) {

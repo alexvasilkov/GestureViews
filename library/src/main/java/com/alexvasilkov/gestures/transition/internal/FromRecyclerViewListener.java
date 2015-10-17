@@ -6,25 +6,26 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.alexvasilkov.gestures.animation.ViewPositionAnimator;
-import com.alexvasilkov.gestures.transition.ViewsTracker;
 import com.alexvasilkov.gestures.transition.ViewsCoordinator;
+import com.alexvasilkov.gestures.transition.ViewsTracker;
 import com.alexvasilkov.gestures.transition.ViewsTransitionAnimator;
 
 public class FromRecyclerViewListener<ID> implements ViewsCoordinator.OnRequestViewListener<ID> {
 
     private static final Rect LOCATION_PARENT = new Rect(), LOCATION = new Rect();
 
-    private final ViewsTracker<RecyclerView, ID> mTracker;
     private final RecyclerView mRecyclerView;
+    private final ViewsTracker<RecyclerView, ID> mTracker;
     private final ViewsTransitionAnimator<ID> mAnimator;
 
     private ID mId;
     private boolean mScrollHalfVisibleItems;
 
-    public FromRecyclerViewListener(@NonNull ViewsTracker<RecyclerView, ID> tracker,
+    public FromRecyclerViewListener(@NonNull RecyclerView recyclerView,
+                                    @NonNull ViewsTracker<RecyclerView, ID> tracker,
                                     @NonNull ViewsTransitionAnimator<ID> animator) {
+        mRecyclerView = recyclerView;
         mTracker = tracker;
-        mRecyclerView = tracker.parent;
         mAnimator = animator;
 
         mRecyclerView.addOnChildAttachStateChangeListener(new ChildStateListener());
