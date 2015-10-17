@@ -20,13 +20,13 @@
     <View
         android:id="@+id/flickr_toolbar_back"
         style="@style/App.Toolbar"
-        android:background="@color/full_image_background" />
+        android:background="@color/window_background_dark_2" />
 
     <View
         android:id="@+id/full_image_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/full_image_background"
+        android:background="@color/window_background_dark_2"
         android:visibility="invisible" />
 
     <android.support.v4.view.ViewPager

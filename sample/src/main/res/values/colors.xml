@@ -2,14 +2,15 @@
 <resources>
 
     <color name="window_background">#FFFFFF</color>
-    <color name="window_background_dark">#333333</color>
-    <color name="window_background_dark_crop">#6A6A6A</color>
+
+    <!-- Next colors are slightly different to prevent window animation bug on Android 6.0 -->
+    <color name="window_background_dark">#000000</color>
+    <color name="window_background_dark_2">#000001</color>
 
     <color name="primary">#2E7D32</color>
     <color name="primary_dark">#1B5E20</color>
     <color name="accent">#F57F17</color>
 
     <color name="error_color">#CC3322</color>
-    <color name="full_image_background">#000000</color>
 
 </resources>

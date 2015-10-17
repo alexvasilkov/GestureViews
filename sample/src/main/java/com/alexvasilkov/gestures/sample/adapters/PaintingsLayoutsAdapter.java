@@ -3,7 +3,6 @@ package com.alexvasilkov.gestures.sample.adapters;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.support.annotation.NonNull;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,16 +15,22 @@ import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.logic.Painting;
 import com.alexvasilkov.gestures.views.GestureFrameLayout;
+import com.alexvasilkov.gestures.views.interfaces.GestureView;
+import com.alexvasilkov.gestures.views.utils.RecyclePagerAdapter;
 import com.bumptech.glide.Glide;
 
-public class PaintingsLayoutsAdapter extends PagerAdapter implements View.OnClickListener {
+public class PaintingsLayoutsAdapter extends RecyclePagerAdapter<PaintingsLayoutsAdapter.ViewHolder>
+        implements View.OnClickListener {
 
     private final ViewPager mViewPager;
     private final Painting[] mPaintings;
+    private final OnSetupGestureViewListener mSetupListener;
 
-    public PaintingsLayoutsAdapter(ViewPager pager, Painting[] paintings) {
+    public PaintingsLayoutsAdapter(ViewPager pager, Painting[] paintings,
+                                   OnSetupGestureViewListener listener) {
         mViewPager = pager;
         mPaintings = paintings;
+        mSetupListener = listener;
     }
 
     @Override
@@ -34,48 +39,58 @@ public class PaintingsLayoutsAdapter extends PagerAdapter implements View.OnClic
     }
 
     @Override
-    public View instantiateItem(final ViewGroup container, int position) {
-        Context context = container.getContext();
-        View layout = Views.inflate(container, R.layout.item_layout);
-        final int match = ViewGroup.LayoutParams.MATCH_PARENT;
-        container.addView(layout, match, match);
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup container) {
+        ViewHolder holder = new ViewHolder(container);
+        holder.layout.getController().getSettings().setMaxZoom(1.5f);
+        holder.layout.getController().enableScrollInViewPager(mViewPager);
+        return holder;
+    }
 
-        GestureFrameLayout gLayout = Views.find(layout, R.id.painting_g_layout);
-        gLayout.getController().getSettings().setOverscrollDistance(context, 32, 0);
-        gLayout.getController().enableScrollInViewPager(mViewPager);
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        if (mSetupListener != null) mSetupListener.onSetupGestureView(holder.layout);
+        holder.layout.getController().resetState();
 
-        ImageView image = Views.find(layout, R.id.painting_image);
-        Glide.with(context).load(mPaintings[position].getImageId()).into(image);
+        Context context = holder.itemView.getContext();
 
-        TextView title = Views.find(layout, R.id.painting_title);
+        Glide.with(context).load(mPaintings[position].getImageId()).into(holder.image);
+
         CharSequence titleText = new SpannableBuilder(context)
                 .createStyle().setFont(Typeface.DEFAULT_BOLD).apply()
                 .append(R.string.paintings_author).append("\n")
                 .clearStyle()
                 .append(mPaintings[position].getTitle())
                 .build();
-        title.setText(titleText);
+        holder.title.setText(titleText);
 
-        View button = Views.find(layout, R.id.painting_button);
-        button.setTag(mPaintings[position].getLink());
-        button.setOnClickListener(this);
-
-        return layout;
-    }
-
-    @Override
-    public void destroyItem(ViewGroup container, int position, Object object) {
-        container.removeView((View) object);
-    }
-
-    @Override
-    public boolean isViewFromObject(View view, Object object) {
-        return view == object;
+        holder.button.setTag(mPaintings[position].getLink());
+        holder.button.setOnClickListener(this);
     }
 
     @Override
     public void onClick(@NonNull View view) {
         Intents.get(view.getContext()).openWebBrowser((String) view.getTag());
+    }
+
+    static class ViewHolder extends RecyclePagerAdapter.ViewHolder {
+
+        public final GestureFrameLayout layout;
+        public final ImageView image;
+        public final TextView title;
+        public final View button;
+
+        public ViewHolder(ViewGroup container) {
+            super(Views.inflate(container, R.layout.item_layout));
+            layout = Views.find(itemView, R.id.painting_g_layout);
+            image = Views.find(layout, R.id.painting_image);
+            title = Views.find(layout, R.id.painting_title);
+            button = Views.find(layout, R.id.painting_button);
+        }
+
+    }
+
+    public interface OnSetupGestureViewListener {
+        void onSetupGestureView(GestureView view);
     }
 
 }

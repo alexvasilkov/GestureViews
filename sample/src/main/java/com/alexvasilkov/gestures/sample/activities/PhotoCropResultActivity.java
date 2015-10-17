@@ -10,13 +10,13 @@ import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.views.GestureImageView;
 
-public class ImageCropResultActivity extends BaseActivity {
+public class PhotoCropResultActivity extends BaseActivity {
 
     private static Bitmap sBitmapToShow; // Bad, but works fine for demonstration purpose
 
     public static void show(Context context, Bitmap bitmap) {
         sBitmapToShow = bitmap;
-        context.startActivity(new Intent(context, ImageCropResultActivity.class));
+        context.startActivity(new Intent(context, PhotoCropResultActivity.class));
     }
 
     @Override

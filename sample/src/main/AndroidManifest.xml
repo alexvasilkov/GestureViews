@@ -25,7 +25,27 @@
         </activity>
 
         <activity
-            android:name=".activities.ImagesPagerActivity"
+            android:name=".activities.AdvancedDemoActivity"
+            android:label="Advanced Demo"
+            android:theme="@style/AppTheme.Full.NoTitle">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".activities.PhotoCropActivity"
+            android:label="Rotate &amp; crop"
+            android:theme="@style/AppTheme.Full.NoTitle.Dark" />
+
+        <activity
+            android:name=".activities.PhotoCropResultActivity"
+            android:label="Cropped"
+            android:theme="@style/AppTheme.Full.NoTitle.Dark" />
+
+        <activity
+            android:name=".activities.ImageViewSampleActivity"
             android:label="ImageView"
             android:theme="@style/AppTheme.Full.NoTitle.Dark">
             <intent-filter>
@@ -35,17 +55,7 @@
         </activity>
 
         <activity
-            android:name=".activities.ImageCropActivity"
-            android:label="Rotate &amp; crop"
-            android:theme="@style/AppTheme.Full.NoTitle.Crop" />
-
-        <activity
-            android:name=".activities.ImageCropResultActivity"
-            android:label="Cropped"
-            android:theme="@style/AppTheme.Full.NoTitle.Dark" />
-
-        <activity
-            android:name=".activities.LayoutPagerActivity"
+            android:name=".activities.FrameLayoutSampleActivity"
             android:label="FrameLayout">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -54,18 +64,8 @@
         </activity>
 
         <activity
-            android:name=".activities.TextViewActivity"
+            android:name=".activities.CustomViewSampleActivity"
             android:label="Custom View">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".activities.FlickrListActivity"
-            android:label="Flickr Demo"
-            android:theme="@style/AppTheme.Full.NoTitle">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

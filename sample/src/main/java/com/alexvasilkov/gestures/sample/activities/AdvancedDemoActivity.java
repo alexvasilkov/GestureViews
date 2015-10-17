@@ -37,7 +37,7 @@ import com.googlecode.flickrjandroid.photos.Photo;
 
 import java.util.List;
 
-public class FlickrListActivity extends BaseActivity implements
+public class AdvancedDemoActivity extends BaseActivity implements
         ViewPositionAnimator.PositionUpdateListener,
         FlickrPhotoListAdapter.OnPhotoListener,
         FlickrPhotoPagerAdapter.OnSetupGestureViewListener {
@@ -186,6 +186,26 @@ public class FlickrListActivity extends BaseActivity implements
             @Override
             public void onClick(@NonNull View v) {
                 onBackPressed();
+            }
+        });
+
+        Menu menu = mViews.pagerToolbar.getMenu();
+        MenuItem crop = menu.add(Menu.NONE, R.id.menu_crop, 0, R.string.button_crop);
+        crop.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        crop.setIcon(R.drawable.ic_crop_white_24dp);
+
+        mViews.pagerToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.menu_crop:
+                        Photo photo = mPagerAdapter.getPhoto(mViews.pager.getCurrentItem());
+                        if (photo == null) return false;
+                        PhotoCropActivity.show(AdvancedDemoActivity.this, photo);
+                        return true;
+                    default:
+                        return false;
+                }
             }
         });
     }

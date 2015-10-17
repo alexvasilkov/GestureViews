@@ -1,23 +1,26 @@
 package com.alexvasilkov.gestures.sample.adapters;
 
-import android.content.Context;
-import android.support.v4.view.PagerAdapter;
+import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
-import android.view.View;
 import android.view.ViewGroup;
 
 import com.alexvasilkov.gestures.sample.logic.Painting;
 import com.alexvasilkov.gestures.views.GestureImageView;
+import com.alexvasilkov.gestures.views.interfaces.GestureView;
+import com.alexvasilkov.gestures.views.utils.RecyclePagerAdapter;
 import com.bumptech.glide.Glide;
 
-public class PaintingsImagesAdapter extends PagerAdapter {
+public class PaintingsImagesAdapter extends RecyclePagerAdapter<PaintingsImagesAdapter.ViewHolder> {
 
     private final ViewPager mViewPager;
     private final Painting[] mPaintings;
+    private final OnSetupGestureViewListener mSetupListener;
 
-    public PaintingsImagesAdapter(ViewPager pager, Painting[] paintings) {
+    public PaintingsImagesAdapter(ViewPager pager, Painting[] paintings,
+                                  OnSetupGestureViewListener listener) {
         mViewPager = pager;
         mPaintings = paintings;
+        mSetupListener = listener;
     }
 
     @Override
@@ -26,27 +29,33 @@ public class PaintingsImagesAdapter extends PagerAdapter {
     }
 
     @Override
-    public View instantiateItem(final ViewGroup container, int position) {
-        Context context = container.getContext();
-
-        GestureImageView gImageView = new GestureImageView(context);
-        final int match = ViewGroup.LayoutParams.MATCH_PARENT;
-        container.addView(gImageView, match, match);
-        gImageView.getController().enableScrollInViewPager(mViewPager);
-
-        Glide.with(context).load(mPaintings[position].getImageId()).into(gImageView);
-
-        return gImageView;
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup container) {
+        ViewHolder holder = new ViewHolder(container);
+        holder.image.getController().enableScrollInViewPager(mViewPager);
+        return holder;
     }
 
     @Override
-    public void destroyItem(ViewGroup container, int position, Object object) {
-        container.removeView((View) object);
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        if (mSetupListener != null) mSetupListener.onSetupGestureView(holder.image);
+        holder.image.getController().resetState();
+
+        Glide.with(holder.image.getContext())
+                .load(mPaintings[position].getImageId()).into(holder.image);
     }
 
-    @Override
-    public boolean isViewFromObject(View view, Object object) {
-        return view == object;
+
+    static class ViewHolder extends RecyclePagerAdapter.ViewHolder {
+        public final GestureImageView image;
+
+        public ViewHolder(ViewGroup container) {
+            super(new GestureImageView(container.getContext()));
+            image = (GestureImageView) itemView;
+        }
+    }
+
+    public interface OnSetupGestureViewListener {
+        void onSetupGestureView(GestureView view);
     }
 
 }

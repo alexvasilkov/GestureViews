@@ -11,15 +11,20 @@ import android.widget.TextView;
 import com.alexvasilkov.android.commons.texts.SpannableBuilder;
 import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.gestures.sample.R;
-import com.alexvasilkov.gestures.sample.logic.Painting;
 import com.alexvasilkov.gestures.sample.adapters.PaintingsImagesAdapter;
+import com.alexvasilkov.gestures.sample.logic.Painting;
+import com.alexvasilkov.gestures.sample.utils.GestureSettingsMenu;
+import com.alexvasilkov.gestures.views.interfaces.GestureView;
 
-public class ImagesPagerActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
+public class ImageViewSampleActivity extends BaseActivity
+        implements ViewPager.OnPageChangeListener, PaintingsImagesAdapter.OnSetupGestureViewListener {
 
     private Painting[] mPaintings;
 
     private ViewPager mViewPager;
     private TextView mTitleView;
+
+    private GestureSettingsMenu mSettingsMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,31 +38,37 @@ public class ImagesPagerActivity extends BaseActivity implements ViewPager.OnPag
 
         mPaintings = Painting.getAllPaintings(getResources());
 
+        mSettingsMenu = new GestureSettingsMenu();
+        mSettingsMenu.onRestoreInstanceState(savedInstanceState);
+
         mTitleView = Views.find(this, R.id.painting_title);
 
         mViewPager = Views.find(this, R.id.paintings_view_pager);
-        mViewPager.setAdapter(new PaintingsImagesAdapter(mViewPager, mPaintings));
+        mViewPager.setAdapter(new PaintingsImagesAdapter(mViewPager, mPaintings, this));
         mViewPager.addOnPageChangeListener(this);
         mViewPager.setPageMargin(getResources().getDimensionPixelSize(R.dimen.view_pager_margin));
         onPageSelected(0); // Manually calling for first item
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        mSettingsMenu.onSaveInstanceState(outState);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuItem crop = menu.add(Menu.NONE, R.id.menu_crop, 0, R.string.button_crop);
-        crop.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-        crop.setIcon(R.drawable.ic_crop_white_24dp);
-        return true;
+        return mSettingsMenu.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_crop:
-                ImageCropActivity.show(this, mViewPager.getCurrentItem());
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if (mSettingsMenu.onOptionsItemSelected(item)) {
+            invalidateOptionsMenu();
+            mViewPager.getAdapter().notifyDataSetChanged();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
     }
 
@@ -80,6 +91,11 @@ public class ImagesPagerActivity extends BaseActivity implements ViewPager.OnPag
     @Override
     public void onPageScrollStateChanged(int state) {
         // no-op
+    }
+
+    @Override
+    public void onSetupGestureView(GestureView view) {
+        mSettingsMenu.applySettings(view);
     }
 
 }

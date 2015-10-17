@@ -6,7 +6,7 @@ import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.views.GestureTextView;
 
-public class TextViewActivity extends BaseActivity {
+public class CustomViewSampleActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

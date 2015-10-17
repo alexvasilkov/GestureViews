@@ -11,19 +11,19 @@ import android.view.MenuItem;
 import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.gestures.Settings;
 import com.alexvasilkov.gestures.sample.R;
-import com.alexvasilkov.gestures.sample.logic.Painting;
+import com.alexvasilkov.gestures.sample.utils.glide.GlideHelper;
 import com.alexvasilkov.gestures.views.GestureImageView;
-import com.bumptech.glide.Glide;
+import com.googlecode.flickrjandroid.photos.Photo;
 
-public class ImageCropActivity extends BaseActivity {
+public class PhotoCropActivity extends BaseActivity {
 
-    private static final String EXTRA_POS = "EXTRA_POS";
+    private static final String EXTRA_PHOTO = "EXTRA_PHOTO";
 
     private GestureImageView mImageView;
 
-    public static void show(Context context, int pos) {
-        Intent intent = new Intent(context, ImageCropActivity.class);
-        intent.putExtra(EXTRA_POS, pos);
+    public static void show(Context context, Photo photo) {
+        Intent intent = new Intent(context, PhotoCropActivity.class);
+        intent.putExtra(EXTRA_PHOTO, photo);
         context.startActivity(intent);
     }
 
@@ -47,9 +47,8 @@ public class ImageCropActivity extends BaseActivity {
                 .setMovementArea(frameW, frameH)
                 .setRotationEnabled(true);
 
-        int pos = getIntent().getIntExtra(EXTRA_POS, 0);
-        Painting painting = Painting.getAllPaintings(getResources())[pos];
-        Glide.with(this).load(painting.getImageId()).into(mImageView);
+        Photo photo = (Photo) getIntent().getSerializableExtra(EXTRA_PHOTO);
+        GlideHelper.loadFlickrFull(photo, mImageView, null);
     }
 
     @Override
@@ -68,7 +67,7 @@ public class ImageCropActivity extends BaseActivity {
                     @Override
                     public void onSnapshotLoaded(Bitmap bitmap) {
                         finish();
-                        ImageCropResultActivity.show(ImageCropActivity.this, bitmap);
+                        PhotoCropResultActivity.show(PhotoCropActivity.this, bitmap);
                     }
                 });
                 return true;

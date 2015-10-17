@@ -20,8 +20,4 @@
         <item name="android:windowBackground">@color/window_background_dark</item>
     </style>
 
-    <style name="AppTheme.Full.NoTitle.Crop">
-        <item name="android:windowBackground">@color/window_background_dark_crop</item>
-    </style>
-
 </resources>
