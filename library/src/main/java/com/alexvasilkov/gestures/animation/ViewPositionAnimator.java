@@ -213,8 +213,6 @@ public class ViewPositionAnimator {
     }
 
     private void enterInternal(boolean withAnimation) {
-        mToController.resetState(); // Ensure we are animating to correct final state
-
         mIsActivated = true;
 
         resetToState();
@@ -399,6 +397,7 @@ public class ViewPositionAnimator {
         if (mPositionState == 0f && mIsLeaving) {
             cleanup();
             mIsActivated = false;
+            mToController.resetState(); // Switching to initial state
         }
 
         mApplyingPositionState = false;
