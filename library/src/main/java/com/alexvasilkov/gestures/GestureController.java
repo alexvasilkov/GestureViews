@@ -195,6 +195,7 @@ public class GestureController implements View.OnTouchListener {
      * See {@link Settings#setImage(int, int)}.
      */
     public void resetState() {
+        stopAllAnimations();
         boolean reset = mStateController.resetState(mState);
         if (reset) {
             notifyStateReset();

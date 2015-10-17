@@ -115,7 +115,7 @@ public class IntoViewPagerListener<ID> implements ViewsCoordinator.OnRequestView
 
         @Override
         public void onPageScrollStateChanged(int state) {
-            mPreventExit = state == ViewPager.SCROLL_STATE_DRAGGING;
+            mPreventExit = !mAnimator.isLeaving() && state == ViewPager.SCROLL_STATE_DRAGGING;
             if (state == ViewPager.SCROLL_STATE_IDLE && mId != null) switchToCurrentPage();
         }
     }

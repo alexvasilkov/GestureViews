@@ -215,8 +215,6 @@ public class ViewPositionAnimator {
     private void enterInternal(boolean withAnimation) {
         mIsActivated = true;
 
-        resetToState();
-
         // Starting animation from initial position or applying final state without animation
         setState(withAnimation ? 0f : 1f, false, withAnimation);
     }
@@ -226,6 +224,8 @@ public class ViewPositionAnimator {
                 "You should call enter(...) before calling update(...)");
 
         cleanup();
+        resetToState();
+
         mFromView = from;
         mFromPosHolder.init(from, mFromPositionListener);
         from.setVisibility(View.INVISIBLE); // We don't want to have duplicate view during animation
@@ -236,6 +236,8 @@ public class ViewPositionAnimator {
                 "You should call enter(...) before calling update(...)");
 
         cleanup();
+        resetToState();
+
         mFromPos = fromPos;
     }
 
