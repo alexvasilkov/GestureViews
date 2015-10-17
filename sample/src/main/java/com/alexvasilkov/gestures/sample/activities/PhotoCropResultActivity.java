@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
 import com.alexvasilkov.android.commons.utils.Views;
+import com.alexvasilkov.gestures.Settings;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.views.GestureImageView;
 
@@ -34,7 +35,15 @@ public class PhotoCropResultActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        int frameW = getResources().getDimensionPixelSize(R.dimen.image_frame_width);
+        int frameH = getResources().getDimensionPixelSize(R.dimen.image_frame_height);
+
         GestureImageView imageView = Views.find(this, R.id.cropped_image);
+        imageView.getController().getSettings()
+                .setFitMethod(Settings.Fit.OUTSIDE)
+                .setFillViewport(true)
+                .setMovementArea(frameW, frameH);
+
         imageView.setImageBitmap(sBitmapToShow);
     }
 
