@@ -17,8 +17,9 @@ public class FlickrApi {
     public static final String LOAD_IMAGES_EVENT = "LOAD_IMAGES_EVENT";
 
     private static final String API_KEY = "7f6035774a01a39f9056d6d7bde60002";
-    private static final String USER_ID = "99771506@N00";
+    private static final String USER_ID = "91191952@N07";
     private static final int PER_PAGE = 30;
+    private static final int MAX_PAGES = 5;
     private static final Set<String> PHOTO_PARAMS = new HashSet<>();
 
     static {
@@ -60,6 +61,8 @@ public class FlickrApi {
     private static boolean hasNext() {
         if (PAGES.isEmpty()) {
             return true;
+        } else if (PAGES.size() >= MAX_PAGES) {
+            return false;
         } else {
             PhotoList page = PAGES.get(PAGES.size() - 1);
             return page.getPage() * page.getPerPage() < page.getTotal();
