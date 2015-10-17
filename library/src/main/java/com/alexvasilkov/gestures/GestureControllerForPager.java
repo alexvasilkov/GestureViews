@@ -297,7 +297,9 @@ public class GestureControllerForPager extends GestureController {
 
         // If ViewPager intercepted touch it will settle itself automatically,
         // but if touch was not intercepted we should settle it manually
-        if (!mIsViewPagerInterceptedScroll) settleViewPagerIfFinished(mViewPager, e);
+        if (!mIsViewPagerInterceptedScroll && mViewPagerX != 0) {
+            settleViewPagerIfFinished(mViewPager, e);
+        }
 
         // Hack: ViewPager has bug when endFakeDrag() does not work properly.
         // But we need to ensure ViewPager is not in fake drag mode after settleViewPagerIfFinished()

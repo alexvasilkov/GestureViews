@@ -29,6 +29,7 @@ public class GlideHelper {
 
         Glide.with(image.getContext())
                 .load(photoUrl)
+                .placeholder(image.getDrawable())
                 .thumbnail(Glide.with(image.getContext())
                         .load(photo.getThumbnailUrl())
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE))

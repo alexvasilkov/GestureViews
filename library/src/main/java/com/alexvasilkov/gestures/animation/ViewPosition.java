@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
  * values.
  * <p/>
  * You can also serialize and deserialize this class to string using {@link #pack()} and
- * {@link #unpack(String)} methods.
+ * {@link #unpack(String)} methods. This can be useful to pass view position between activities.
  */
 public class ViewPosition {
 

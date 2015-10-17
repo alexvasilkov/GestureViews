@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,7 +26,12 @@ import com.alexvasilkov.gestures.sample.logic.FlickrApi;
 import com.alexvasilkov.gestures.sample.utils.DecorUtils;
 import com.alexvasilkov.gestures.sample.utils.GestureSettingsMenu;
 import com.alexvasilkov.gestures.sample.views.PaginatedRecyclerView;
+import com.alexvasilkov.gestures.transition.SimpleViewsTracker;
+import com.alexvasilkov.gestures.transition.ViewsCoordinator;
+import com.alexvasilkov.gestures.transition.ViewsTransitionAnimator;
+import com.alexvasilkov.gestures.transition.ViewsTransitionBuilder;
 import com.alexvasilkov.gestures.views.interfaces.GestureView;
+import com.alexvasilkov.gestures.views.utils.RecyclePagerAdapter;
 import com.googlecode.flickrjandroid.photos.Photo;
 
 import java.util.List;
@@ -38,6 +44,7 @@ public class FlickrListActivity extends BaseActivity implements
     private static final int PAGE_SIZE = 30;
 
     private ViewHolder mViews;
+    private ViewsTransitionAnimator<Integer> mAnimator;
     private FlickrPhotoListAdapter mGridAdapter;
     private FlickrPhotoPagerAdapter mPagerAdapter;
     private GestureSettingsMenu mSettingsMenu;
@@ -64,6 +71,7 @@ public class FlickrListActivity extends BaseActivity implements
         initDecorMargins();
         initGrid();
         initPager();
+        initAnimator();
 
         mSettingsMenu = new GestureSettingsMenu();
         mSettingsMenu.onRestoreInstanceState(savedInstanceState);
@@ -76,8 +84,8 @@ public class FlickrListActivity extends BaseActivity implements
 
     @Override
     public void onBackPressed() {
-        if (!mPagerAdapter.getListAnimator().isLeaving()) {
-            mPagerAdapter.getListAnimator().exit(true);
+        if (!mAnimator.isLeaving()) {
+            mAnimator.exit(true);
         } else {
             super.onBackPressed();
         }
@@ -85,7 +93,8 @@ public class FlickrListActivity extends BaseActivity implements
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        mPagerPhotoPosition = mPagerAdapter.getCount() == 0 ? -1 : mViews.pager.getCurrentItem();
+        mPagerPhotoPosition = mAnimator.isLeaving() || mPagerAdapter.getCount() == 0
+                ? -1 : mViews.pager.getCurrentItem();
 
         if (mViews.grid.getChildCount() > 0) {
             View child = mViews.grid.getChildAt(0);
@@ -157,9 +166,9 @@ public class FlickrListActivity extends BaseActivity implements
     private void initPager() {
         // Setting up pager views
         mViews.pager.setPageMargin(getResources().getDimensionPixelSize(R.dimen.view_pager_margin));
-        mPagerAdapter = new FlickrPhotoPagerAdapter(mViews.pager, mViews.grid);
+        mPagerAdapter = new FlickrPhotoPagerAdapter(mViews.pager);
         mPagerAdapter.setSetupListener(this);
-        mPagerAdapter.getListAnimator().addPositionUpdateListener(this);
+        mViews.pager.setAdapter(mPagerAdapter);
 
         mViews.pagerToolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
         mViews.pagerToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -170,9 +179,39 @@ public class FlickrListActivity extends BaseActivity implements
         });
     }
 
+    private void initAnimator() {
+        mAnimator = new ViewsTransitionBuilder<Integer>()
+                .fromRecycler(new SimpleViewsTracker<RecyclerView>(mViews.grid) {
+                    @Override
+                    public View getViewForPosition(int position) {
+                        RecyclerView.ViewHolder holder = parent.findViewHolderForAdapterPosition(position);
+                        return holder == null ? null : FlickrPhotoListAdapter.getImage(holder);
+                    }
+                })
+                .intoViewPager(new SimpleViewsTracker<ViewPager>(mViews.pager) {
+                    @Override
+                    public View getViewForPosition(int position) {
+                        RecyclePagerAdapter.ViewHolder holder = mPagerAdapter.getViewHolder(position);
+                        return holder == null ? null : FlickrPhotoPagerAdapter.getImage(holder);
+                    }
+                })
+                .build();
+        mAnimator.addPositionUpdateListener(this);
+        mAnimator.setReadyListener(new ViewsCoordinator.OnViewsReadyListener<Integer>() {
+            @Override
+            public void onViewsReady(@NonNull Integer id) {
+                // Setting image drawable from 'from' view to 'to' to prevent flickering
+                ImageView from = (ImageView) mAnimator.getFromView();
+                ImageView to = (ImageView) mAnimator.getToView();
+                if (to.getDrawable() == null) to.setImageDrawable(from.getDrawable());
+            }
+        });
+    }
+
     @Override
     public void onPhotoClick(Photo photo, int position, ImageView image) {
-        mPagerAdapter.getListAnimator().enter(position, true);
+        mPagerAdapter.setActivated(true);
+        mAnimator.enter(position, true);
     }
 
     @Override
@@ -183,10 +222,10 @@ public class FlickrListActivity extends BaseActivity implements
         mViews.toolbar.setVisibility(state == 1f ? View.INVISIBLE : View.VISIBLE);
         mViews.toolbar.setAlpha((float) Math.sqrt(1d - state)); // Slow down toolbar animation
 
-        mViews.pager.setVisibility(state == 0f && isLeaving ? View.INVISIBLE : View.VISIBLE);
-
         mViews.pagerToolbar.setVisibility(state == 0f ? View.INVISIBLE : View.VISIBLE);
         mViews.pagerToolbar.setAlpha(state);
+
+        if (isLeaving && state == 0f) mPagerAdapter.setActivated(false);
     }
 
     @Override
@@ -203,9 +242,11 @@ public class FlickrListActivity extends BaseActivity implements
         mPagerAdapter.setPhotos(photos);
         mViews.grid.onNextPageLoaded();
 
+        // Restoring saved state
         if (mPagerPhotoPosition != -1) {
             if (mPagerPhotoPosition < mPhotoCount) {
-                mPagerAdapter.getListAnimator().enter(mPagerPhotoPosition, false);
+                mPagerAdapter.setActivated(true);
+                mAnimator.enter(mPagerPhotoPosition, false);
             }
             mPagerPhotoPosition = -1;
         }
@@ -223,6 +264,12 @@ public class FlickrListActivity extends BaseActivity implements
     @Failure(FlickrApi.LOAD_IMAGES_EVENT)
     private void onPhotosLoadFail() {
         mViews.grid.onNextPageFail();
+
+        // Skipping state restoration
+        if (mPagerPhotoPosition != -1) {
+            // We can't show image right now, so we should return back to list
+            onPositionUpdate(0f, true);
+        }
 
         mPagerPhotoPosition = -1;
         mGridPosition = -1;

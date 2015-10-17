@@ -5,6 +5,10 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewTreeObserver;
 
+/**
+ * Helper class that monitors {@link View} position on screen and notifies
+ * {@link OnViewPositionChangeListener} if any changes were detected.
+ */
 class ViewPositionHolder implements ViewTreeObserver.OnPreDrawListener {
 
     private final ViewPosition mPos = ViewPosition.newInstance();
@@ -26,7 +30,6 @@ class ViewPositionHolder implements ViewTreeObserver.OnPreDrawListener {
         if (isLaidOut()) update();
     }
 
-    @SuppressWarnings("deprecation")
     public void clear() {
         if (mView != null) mView.getViewTreeObserver().removeOnPreDrawListener(this);
 

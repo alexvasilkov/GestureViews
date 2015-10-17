@@ -65,6 +65,9 @@ public class FlickrPhotoListAdapter extends RecyclerView.Adapter<FlickrPhotoList
         mListener.onPhotoClick(photo, pos, (ImageView) view);
     }
 
+    public static ImageView getImage(RecyclerView.ViewHolder holder) {
+        return ((ViewHolder) holder).image;
+    }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         public final ImageView image;

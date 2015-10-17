@@ -2,33 +2,30 @@ package com.alexvasilkov.gestures.sample.adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.gestures.animation.ViewPositionAnimator;
-import com.alexvasilkov.gestures.experimental.AnimatorPagerAdapter;
-import com.alexvasilkov.gestures.experimental.RecyclePagerAdapter;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.utils.glide.GlideHelper;
 import com.alexvasilkov.gestures.views.GestureImageView;
-import com.alexvasilkov.gestures.views.interfaces.AnimatorView;
 import com.alexvasilkov.gestures.views.interfaces.GestureView;
+import com.alexvasilkov.gestures.views.utils.RecyclePagerAdapter;
 import com.bumptech.glide.Glide;
 import com.googlecode.flickrjandroid.photos.Photo;
 
 import java.util.List;
 
-public class FlickrPhotoPagerAdapter extends AnimatorPagerAdapter<FlickrPhotoPagerAdapter.ViewHolder> {
+public class FlickrPhotoPagerAdapter extends RecyclePagerAdapter<FlickrPhotoPagerAdapter.ViewHolder> {
 
     private final ViewPager mViewPager;
     private List<Photo> mPhotos;
     private OnSetupGestureViewListener mSetupListener;
 
-    public FlickrPhotoPagerAdapter(ViewPager viewPager, RecyclerView recyclerView) {
-        super(viewPager, recyclerView);
+    private boolean mActivated;
+
+    public FlickrPhotoPagerAdapter(ViewPager viewPager) {
         mViewPager = viewPager;
     }
 
@@ -41,24 +38,22 @@ public class FlickrPhotoPagerAdapter extends AnimatorPagerAdapter<FlickrPhotoPag
         mSetupListener = listener;
     }
 
-    @Override
-    protected int getItemsCount() {
-        return mPhotos == null ? 0 : mPhotos.size();
+    /**
+     * To prevent ViewPager from holding heavy views (with bitmaps)  while it is not showing
+     * we may just pretend there are no items in this adapter ("activate" = false).
+     * But once we need to run opening animation we should "activate" this adapter again.<br/>
+     * Adapter is not activated by default.
+     */
+    public void setActivated(boolean activated) {
+        if (mActivated != activated) {
+            mActivated = activated;
+            notifyDataSetChanged();
+        }
     }
 
     @Override
-    protected AnimatorView getAnimatorView(ViewHolder holder) {
-        return holder.image;
-    }
-
-    @Override
-    protected void onViewsReady(View from, AnimatorView to, int index) {
-        super.onViewsReady(from, to, index);
-
-        // Setting image drawable from 'from' view to 'to' to prevent flickering
-        ImageView fromImage = (ImageView) from;
-        GestureImageView toImage = (GestureImageView) to;
-        if (toImage.getDrawable() == null) toImage.setImageDrawable(fromImage.getDrawable());
+    public int getCount() {
+        return !mActivated || mPhotos == null ? 0 : mPhotos.size();
     }
 
     @Override
@@ -125,6 +120,10 @@ public class FlickrPhotoPagerAdapter extends AnimatorPagerAdapter<FlickrPhotoPag
         holder.progress.setAlpha(0f);
 
         holder.image.setImageDrawable(null);
+    }
+
+    public static GestureImageView getImage(RecyclePagerAdapter.ViewHolder holder) {
+        return ((ViewHolder) holder).image;
     }
 
     static class ViewHolder extends RecyclePagerAdapter.ViewHolder {

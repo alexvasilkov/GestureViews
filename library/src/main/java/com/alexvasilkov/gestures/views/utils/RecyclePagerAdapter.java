@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.experimental;
+package com.alexvasilkov.gestures.views.utils;
 
 import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
