@@ -65,8 +65,8 @@ public class StateController {
             // We can correctly reset state only when we have both image size and viewport size
             // but there can be a delay before we have all values properly set
             // (waiting for layout or waiting for image to be loaded)
+            state.set(0f, 0f, 1f, 0f);
             boolean updated = adjustZoomLevels(state);
-
             state.set(0f, 0f, mMinZoom, 0f);
             MovementBounds.setupInitialMovement(state, mSettings);
 
