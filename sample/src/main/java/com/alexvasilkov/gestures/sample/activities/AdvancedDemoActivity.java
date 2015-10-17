@@ -22,12 +22,12 @@ import com.alexvasilkov.events.Events.Failure;
 import com.alexvasilkov.events.Events.Result;
 import com.alexvasilkov.gestures.animation.ViewPositionAnimator;
 import com.alexvasilkov.gestures.sample.R;
+import com.alexvasilkov.gestures.sample.adapters.EndlessRecyclerAdapter;
 import com.alexvasilkov.gestures.sample.adapters.FlickrPhotoListAdapter;
 import com.alexvasilkov.gestures.sample.adapters.FlickrPhotoPagerAdapter;
 import com.alexvasilkov.gestures.sample.logic.FlickrApi;
 import com.alexvasilkov.gestures.sample.utils.DecorUtils;
 import com.alexvasilkov.gestures.sample.utils.GestureSettingsMenu;
-import com.alexvasilkov.gestures.sample.views.PaginatedRecyclerView;
 import com.alexvasilkov.gestures.transition.SimpleViewsTracker;
 import com.alexvasilkov.gestures.transition.ViewsCoordinator;
 import com.alexvasilkov.gestures.transition.ViewsTransitionAnimator;
@@ -163,25 +163,23 @@ public class AdvancedDemoActivity extends BaseActivity implements
 
         mViews.grid.setLayoutManager(new GridLayoutManager(this, cols));
         mViews.grid.setItemAnimator(new DefaultItemAnimator());
-        mViews.grid.setLoadingText(getString(R.string.loading_images));
-        mViews.grid.setErrorText(getString(R.string.reload_images));
-        mViews.grid.setLoadingOffset(PAGE_SIZE / 2);
-        mViews.grid.setEndlessListener(new PaginatedRecyclerView.EndlessListener() {
+
+        mGridAdapter = new FlickrPhotoListAdapter(this);
+        mGridAdapter.setLoadingOffset(PAGE_SIZE / 2);
+        mGridAdapter.setCallbacks(new EndlessRecyclerAdapter.LoaderCallbacks() {
             @Override
-            public boolean canLoadNextPage() {
+            public boolean canLoadNextItems() {
                 return mGridAdapter.canLoadNext();
             }
 
             @Override
-            public void onLoadNextPage() {
+            public void loadNextItems() {
                 // We should either load all items that were loaded before state save / restore,
                 // or next page if we already loaded all previously shown items
-                int count = Math.max(mPhotoCount, mGridAdapter.getItemCount() + PAGE_SIZE);
+                int count = Math.max(mPhotoCount, mGridAdapter.getCount() + PAGE_SIZE);
                 Events.create(FlickrApi.LOAD_IMAGES_EVENT).param(count).post();
             }
         });
-
-        mGridAdapter = new FlickrPhotoListAdapter(this);
         mViews.grid.setAdapter(mGridAdapter);
     }
 
@@ -294,7 +292,7 @@ public class AdvancedDemoActivity extends BaseActivity implements
         mPhotoCount = photos.size();
         mGridAdapter.setPhotos(photos, hasMore);
         mPagerAdapter.setPhotos(photos);
-        mViews.grid.onNextPageLoaded();
+        mGridAdapter.onNextItemsLoaded();
 
         // Ensure listener called for 0 position
         mPagerListener.onPageSelected(mViews.pager.getCurrentItem());
@@ -320,7 +318,7 @@ public class AdvancedDemoActivity extends BaseActivity implements
 
     @Failure(FlickrApi.LOAD_IMAGES_EVENT)
     private void onPhotosLoadFail() {
-        mViews.grid.onNextPageFail();
+        mGridAdapter.onNextItemsError();
 
         // Skipping state restoration
         if (mPagerPhotoPosition != -1) {
@@ -337,7 +335,7 @@ public class AdvancedDemoActivity extends BaseActivity implements
     private class ViewHolder {
         public final Toolbar toolbar;
         public final View toolbarBack;
-        public final PaginatedRecyclerView grid;
+        public final RecyclerView grid;
 
         public final ViewPager pager;
         public final Toolbar pagerToolbar;

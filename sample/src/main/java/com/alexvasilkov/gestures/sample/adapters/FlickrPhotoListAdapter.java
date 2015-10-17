@@ -5,16 +5,18 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.gestures.sample.R;
+import com.alexvasilkov.gestures.sample.utils.RecyclerAdapterHelper;
 import com.alexvasilkov.gestures.sample.utils.glide.GlideHelper;
-import com.alexvasilkov.gestures.sample.utils.recycler.AdapterHelper;
+import com.bumptech.glide.Glide;
 import com.googlecode.flickrjandroid.photos.Photo;
 
 import java.util.List;
 
-public class FlickrPhotoListAdapter extends RecyclerView.Adapter<FlickrPhotoListAdapter.ViewHolder>
+public class FlickrPhotoListAdapter extends DefaultEndlessRecyclerAdapter<FlickrPhotoListAdapter.ViewHolder>
         implements View.OnClickListener {
 
     private List<Photo> mPhotos;
@@ -32,11 +34,11 @@ public class FlickrPhotoListAdapter extends RecyclerView.Adapter<FlickrPhotoList
         mPhotos = photos;
         mHasMore = hasMore;
 
-        AdapterHelper.notifyChanges(this, old, photos, false);
+        RecyclerAdapterHelper.notifyChanges(this, old, photos, false);
     }
 
     @Override
-    public int getItemCount() {
+    public int getCount() {
         return mPhotos == null ? 0 : mPhotos.size();
     }
 
@@ -45,17 +47,35 @@ public class FlickrPhotoListAdapter extends RecyclerView.Adapter<FlickrPhotoList
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    protected ViewHolder onCreateHolder(ViewGroup parent, int viewType) {
         ViewHolder holder = new ViewHolder(parent);
         holder.image.setOnClickListener(this);
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    protected void onBindHolder(ViewHolder holder, int position) {
         Photo photo = mPhotos.get(position);
         holder.image.setTag(R.id.tag_item, photo);
         GlideHelper.loadFlickrThumb(photo, holder.image);
+    }
+
+    @Override
+    protected void onBindLoadingView(TextView loadingText) {
+        loadingText.setText(R.string.loading_images);
+    }
+
+    @Override
+    protected void onBindErrorView(TextView errorText) {
+        errorText.setText(R.string.reload_images);
+    }
+
+    @Override
+    public void onViewRecycled(RecyclerView.ViewHolder holder) {
+        super.onViewRecycled(holder);
+        if (holder instanceof ViewHolder) {
+            Glide.clear(((ViewHolder) holder).image);
+        }
     }
 
     @Override

@@ -1,11 +1,11 @@
-package com.alexvasilkov.gestures.sample.utils.recycler;
+package com.alexvasilkov.gestures.sample.utils;
 
 import android.support.v7.widget.RecyclerView;
 
 import java.util.Collections;
 import java.util.List;
 
-public class AdapterHelper {
+public class RecyclerAdapterHelper {
 
     /**
      * Calls adapter's notify* method when items are added / removed / updated.
