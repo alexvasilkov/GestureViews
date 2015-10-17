@@ -3,16 +3,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.ImageCropActivity">
+    tools:context=".activities.PhotoCropActivity">
 
     <com.alexvasilkov.gestures.views.GestureImageView
-        android:id="@+id/painting_image"
+        android:id="@+id/cropping_image"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:paddingTop="?attr/actionBarSize" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#84000000" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
         android:background="@drawable/image_frame_overlay" />
 
     <FrameLayout

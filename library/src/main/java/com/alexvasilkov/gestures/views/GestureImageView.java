@@ -74,7 +74,8 @@ public class GestureImageView extends ImageView implements GestureView, ClipView
         mClipHelper.onPostDraw(canvas);
 
         if (mSnapshotListener != null) {
-            Snapshot snapshot = new Snapshot(mController.getSettings());
+            Snapshot snapshot = new Snapshot(mController.getSettings(),
+                    getPaddingLeft(), getPaddingTop());
             super.draw(snapshot.getCanvas());
             mSnapshotListener.onSnapshotLoaded(snapshot.getBitmap());
             mSnapshotListener = null;

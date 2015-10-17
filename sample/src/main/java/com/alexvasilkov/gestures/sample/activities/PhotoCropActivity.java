@@ -40,7 +40,7 @@ public class PhotoCropActivity extends BaseActivity {
         int frameW = getResources().getDimensionPixelSize(R.dimen.image_frame_width);
         int frameH = getResources().getDimensionPixelSize(R.dimen.image_frame_height);
 
-        mImageView = Views.find(this, R.id.painting_image);
+        mImageView = Views.find(this, R.id.cropping_image);
         mImageView.getController().getSettings()
                 .setFitMethod(Settings.Fit.OUTSIDE)
                 .setFillViewport(true)
