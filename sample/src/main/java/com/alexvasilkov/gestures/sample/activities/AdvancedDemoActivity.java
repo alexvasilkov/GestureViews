@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alexvasilkov.android.commons.state.InstanceState;
+import com.alexvasilkov.android.commons.texts.SpannableBuilder;
 import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.events.Events;
 import com.alexvasilkov.events.Events.Failure;
@@ -64,7 +65,7 @@ public class AdvancedDemoActivity extends BaseActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_flickr_list);
+        setContentView(R.layout.activity_advanced_demo);
         mViews = new ViewHolder(this);
 
         setSupportActionBar(mViews.toolbar);
@@ -128,6 +129,24 @@ public class AdvancedDemoActivity extends BaseActivity implements
         }
     }
 
+    private void onCreateOptionsMenuFullMode(Menu menu) {
+        MenuItem crop = menu.add(Menu.NONE, R.id.menu_crop, 0, R.string.button_crop);
+        crop.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        crop.setIcon(R.drawable.ic_crop_white_24dp);
+    }
+
+    private boolean onOptionsItemSelectedFullMode(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_crop:
+                Photo photo = mPagerAdapter.getPhoto(mViews.pager.getCurrentItem());
+                if (photo == null) return false;
+                PhotoCropActivity.show(AdvancedDemoActivity.this, photo);
+                return true;
+            default:
+                return false;
+        }
+    }
+
     private void initDecorMargins() {
         // Adjusting margins and paddings to fit translucent decor
         DecorUtils.paddingForStatusBar(mViews.toolbar, true);
@@ -175,8 +194,7 @@ public class AdvancedDemoActivity extends BaseActivity implements
         mPagerListener = new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
-                Photo photo = mPagerAdapter.getPhoto(position);
-                mViews.pagerTitle.setText(photo == null ? null : photo.getTitle());
+                onPhotoInPagerSelected(position);
             }
         };
         mViews.pager.addOnPageChangeListener(mPagerListener);
@@ -189,23 +207,12 @@ public class AdvancedDemoActivity extends BaseActivity implements
             }
         });
 
-        Menu menu = mViews.pagerToolbar.getMenu();
-        MenuItem crop = menu.add(Menu.NONE, R.id.menu_crop, 0, R.string.button_crop);
-        crop.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-        crop.setIcon(R.drawable.ic_crop_white_24dp);
+        onCreateOptionsMenuFullMode(mViews.pagerToolbar.getMenu());
 
         mViews.pagerToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.menu_crop:
-                        Photo photo = mPagerAdapter.getPhoto(mViews.pager.getCurrentItem());
-                        if (photo == null) return false;
-                        PhotoCropActivity.show(AdvancedDemoActivity.this, photo);
-                        return true;
-                    default:
-                        return false;
-                }
+                return onOptionsItemSelectedFullMode(item);
             }
         });
     }
@@ -238,6 +245,20 @@ public class AdvancedDemoActivity extends BaseActivity implements
                 if (to.getDrawable() == null) to.setImageDrawable(from.getDrawable());
             }
         });
+    }
+
+    private void onPhotoInPagerSelected(int position) {
+        Photo photo = mPagerAdapter.getPhoto(position);
+        if (photo == null) {
+            mViews.pagerTitle.setText(null);
+        } else {
+            SpannableBuilder title = new SpannableBuilder(AdvancedDemoActivity.this);
+            title.append(photo.getTitle()).append("\n")
+                    .createStyle().setColorResId(R.color.text_secondary_light).apply()
+                    .append(R.string.photo_by).append(" ")
+                    .append(photo.getOwner().getUsername());
+            mViews.pagerTitle.setText(title.build());
+        }
     }
 
     @Override

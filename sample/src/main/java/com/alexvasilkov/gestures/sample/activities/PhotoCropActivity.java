@@ -31,7 +31,7 @@ public class PhotoCropActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_image_crop);
+        setContentView(R.layout.activity_photo_crop);
 
         Toolbar toolbar = Views.find(this, R.id.toolbar);
         setSupportActionBar(toolbar);

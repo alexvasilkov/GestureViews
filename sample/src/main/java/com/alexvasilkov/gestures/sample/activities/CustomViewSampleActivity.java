@@ -12,7 +12,7 @@ public class CustomViewSampleActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_text_view);
+        setContentView(R.layout.activity_custom_view_sample);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         GestureTextView textView = Views.find(this, R.id.text_view);

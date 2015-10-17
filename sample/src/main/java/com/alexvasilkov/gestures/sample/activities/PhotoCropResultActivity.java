@@ -28,7 +28,7 @@ public class PhotoCropResultActivity extends BaseActivity {
             return;
         }
 
-        setContentView(R.layout.activity_image_crop_result);
+        setContentView(R.layout.activity_photo_crop_result);
 
         Toolbar toolbar = Views.find(this, R.id.toolbar);
         setSupportActionBar(toolbar);

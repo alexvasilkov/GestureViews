@@ -14,7 +14,7 @@
         android:gravity="center"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/text_primary_light"
         android:textSize="16sp"
         android:theme="@style/App.Button.Error" />
 

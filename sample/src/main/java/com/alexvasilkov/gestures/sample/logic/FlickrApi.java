@@ -25,6 +25,7 @@ public class FlickrApi {
     static {
         PHOTO_PARAMS.add("url_m");
         PHOTO_PARAMS.add("url_l");
+        PHOTO_PARAMS.add("owner_name");
     }
 
     private static final List<Photo> PHOTOS = new ArrayList<>();

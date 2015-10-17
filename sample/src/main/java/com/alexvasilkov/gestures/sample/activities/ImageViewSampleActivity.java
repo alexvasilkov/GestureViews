@@ -30,7 +30,7 @@ public class ImageViewSampleActivity extends BaseActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_images_pager);
+        setContentView(R.layout.activity_image_view_sample);
 
         Toolbar toolbar = Views.find(this, R.id.toolbar);
         setSupportActionBar(toolbar);

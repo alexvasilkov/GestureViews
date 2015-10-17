@@ -10,6 +10,7 @@
 
     <string name="reload_images">Load images</string>
     <string name="loading_images">Loading images…</string>
+    <string name="photo_by">by</string>
 
     <string name="menu_enable_pan">Pan</string>
     <string name="menu_enable_zoom">Zoom</string>
