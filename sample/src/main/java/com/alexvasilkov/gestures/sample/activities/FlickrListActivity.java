@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.alexvasilkov.android.commons.state.InstanceState;
 import com.alexvasilkov.android.commons.utils.Views;
@@ -47,6 +48,7 @@ public class FlickrListActivity extends BaseActivity implements
     private ViewsTransitionAnimator<Integer> mAnimator;
     private FlickrPhotoListAdapter mGridAdapter;
     private FlickrPhotoPagerAdapter mPagerAdapter;
+    private ViewPager.OnPageChangeListener mPagerListener;
     private GestureSettingsMenu mSettingsMenu;
 
     @InstanceState
@@ -133,6 +135,7 @@ public class FlickrListActivity extends BaseActivity implements
         DecorUtils.paddingForStatusBar(mViews.pagerToolbar, true);
         DecorUtils.marginForStatusBar(mViews.grid);
         DecorUtils.paddingForNavBar(mViews.grid);
+        DecorUtils.marginForNavBar(mViews.pagerTitle);
     }
 
     private void initGrid() {
@@ -169,6 +172,14 @@ public class FlickrListActivity extends BaseActivity implements
         mPagerAdapter = new FlickrPhotoPagerAdapter(mViews.pager);
         mPagerAdapter.setSetupListener(this);
         mViews.pager.setAdapter(mPagerAdapter);
+        mPagerListener = new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                Photo photo = mPagerAdapter.getPhoto(position);
+                mViews.pagerTitle.setText(photo == null ? null : photo.getTitle());
+            }
+        };
+        mViews.pager.addOnPageChangeListener(mPagerListener);
 
         mViews.pagerToolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
         mViews.pagerToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -226,6 +237,8 @@ public class FlickrListActivity extends BaseActivity implements
         mViews.pagerToolbar.setVisibility(state == 0f ? View.INVISIBLE : View.VISIBLE);
         mViews.pagerToolbar.setAlpha(state);
 
+        mViews.pagerTitle.setVisibility(state == 1f ? View.VISIBLE : View.INVISIBLE);
+
         if (isLeaving && state == 0f) mPagerAdapter.setActivated(false);
     }
 
@@ -238,10 +251,12 @@ public class FlickrListActivity extends BaseActivity implements
     @Result(FlickrApi.LOAD_IMAGES_EVENT)
     private void onPhotosLoaded(List<Photo> photos, boolean hasMore) {
         mPhotoCount = photos.size();
-
         mGridAdapter.setPhotos(photos, hasMore);
         mPagerAdapter.setPhotos(photos);
         mViews.grid.onNextPageLoaded();
+
+        // Ensure listener called for 0 position
+        mPagerListener.onPageSelected(mViews.pager.getCurrentItem());
 
         // Restoring saved state
         if (mPagerPhotoPosition != -1) {
@@ -285,6 +300,7 @@ public class FlickrListActivity extends BaseActivity implements
 
         public final ViewPager pager;
         public final Toolbar pagerToolbar;
+        public final TextView pagerTitle;
         public final View pagerBackground;
 
         public ViewHolder(Activity activity) {
@@ -294,6 +310,7 @@ public class FlickrListActivity extends BaseActivity implements
 
             pager = Views.find(activity, R.id.full_images_pager);
             pagerToolbar = Views.find(activity, R.id.full_image_toolbar);
+            pagerTitle = Views.find(activity, R.id.full_image_title);
             pagerBackground = Views.find(activity, R.id.full_image_background);
         }
     }

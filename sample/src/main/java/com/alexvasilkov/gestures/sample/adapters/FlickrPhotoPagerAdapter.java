@@ -34,6 +34,11 @@ public class FlickrPhotoPagerAdapter extends RecyclePagerAdapter<FlickrPhotoPage
         notifyDataSetChanged();
     }
 
+    public Photo getPhoto(int pos) {
+        if (mPhotos == null || pos < 0 || pos >= mPhotos.size()) return null;
+        return mPhotos.get(pos);
+    }
+
     public void setSetupListener(OnSetupGestureViewListener listener) {
         mSetupListener = listener;
     }
