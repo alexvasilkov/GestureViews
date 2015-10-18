@@ -1,6 +1,5 @@
 package com.alexvasilkov.gestures.sample.adapters;
 
-import android.content.Context;
 import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
@@ -14,10 +13,10 @@ import com.alexvasilkov.android.commons.utils.Intents;
 import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.logic.Painting;
+import com.alexvasilkov.gestures.sample.utils.glide.GlideHelper;
 import com.alexvasilkov.gestures.views.GestureFrameLayout;
 import com.alexvasilkov.gestures.views.interfaces.GestureView;
 import com.alexvasilkov.gestures.views.utils.RecyclePagerAdapter;
-import com.bumptech.glide.Glide;
 
 public class PaintingsLayoutsAdapter extends RecyclePagerAdapter<PaintingsLayoutsAdapter.ViewHolder>
         implements View.OnClickListener {
@@ -51,11 +50,9 @@ public class PaintingsLayoutsAdapter extends RecyclePagerAdapter<PaintingsLayout
         if (mSetupListener != null) mSetupListener.onSetupGestureView(holder.layout);
         holder.layout.getController().resetState();
 
-        Context context = holder.itemView.getContext();
+        GlideHelper.loadResource(mPaintings[position].getImageId(), holder.image);
 
-        Glide.with(context).load(mPaintings[position].getImageId()).into(holder.image);
-
-        CharSequence titleText = new SpannableBuilder(context)
+        CharSequence titleText = new SpannableBuilder(holder.itemView.getContext())
                 .createStyle().setFont(Typeface.DEFAULT_BOLD).apply()
                 .append(R.string.paintings_author).append("\n")
                 .clearStyle()
