@@ -1,11 +1,15 @@
 GestureViews
 ============
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.alexvasilkov/gesture-views/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.alexvasilkov/gesture-views)
+![Maven Central](https://img.shields.io/maven-central/v/com.alexvasilkov/gesture-views.svg?style=flat-square)
 
 ImageView and FrameLayout with gestures control and position animation.
 
 ![GestureViews](https://raw.github.com/alexvasilkov/GestureViews/master/sample/art/logo_small.png)
+
+#### Demo video ####
+
+[![Demo video](http://img.youtube.com/vi/5N5G_vgqZbI/0.jpg)](http://www.youtube.com/watch?v=5N5G_vgqZbI)
 
 #### Sample app ####
 
@@ -13,12 +17,16 @@ ImageView and FrameLayout with gestures control and position animation.
 
 #### Usage ####
 
-TODO
+Add dependency to your `build.gradle` file:
 
-Add dependency to your build.gradle file:
+    compile 'com.alexvasilkov:gesture-views:2.0.0'
 
-    compile 'com.alexvasilkov:gesture-views:x.x.x'
+Note: theoretically code is compatible with Android 2+, but it was tested only on Android 4+.
 
+See also: [sample app sources](https://github.com/alexvasilkov/GestureViews/tree/master/sample) for advanced usage example
+and [Javadoc](https://oss.sonatype.org/service/local/repositories/releases/archive/com/alexvasilkov/gesture-views/2.0.0/gesture-views-2.0.0-javadoc.jar/!/index.html) documentation.
+
+TODO: add usage examples
 
 #### License ####
 
