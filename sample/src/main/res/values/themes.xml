@@ -9,6 +9,10 @@
         <item name="colorAccent">@color/accent</item>
     </style>
 
+    <style name="AppTheme.FrameLayout">
+        <item name="colorControlHighlight">?colorPrimary</item>
+    </style>
+
     <style name="AppTheme.Full" />
 
     <style name="AppTheme.Full.NoTitle">

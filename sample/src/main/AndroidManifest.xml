@@ -36,7 +36,8 @@
 
         <activity
             android:name=".activities.FrameLayoutSampleActivity"
-            android:label="FrameLayout">
+            android:label="FrameLayout"
+            android:theme="@style/AppTheme.FrameLayout">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
