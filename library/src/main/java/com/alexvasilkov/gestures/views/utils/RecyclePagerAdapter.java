@@ -39,7 +39,11 @@ public abstract class RecyclePagerAdapter<VH extends RecyclePagerAdapter.ViewHol
         VH holder = mCache.poll();
         if (holder == null) holder = onCreateViewHolder(container);
         mAttached.put(position, holder);
-        container.addView(holder.itemView);
+
+        // We should not use previous layout params, since ViewPager stores
+        // important information there which cannot be reused
+        container.addView(holder.itemView, null);
+
         onBindViewHolder(holder, position);
         return holder;
     }

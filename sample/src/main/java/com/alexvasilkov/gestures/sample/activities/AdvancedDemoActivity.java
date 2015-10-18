@@ -28,6 +28,7 @@ import com.alexvasilkov.gestures.sample.adapters.FlickrPhotoPagerAdapter;
 import com.alexvasilkov.gestures.sample.logic.FlickrApi;
 import com.alexvasilkov.gestures.sample.utils.DecorUtils;
 import com.alexvasilkov.gestures.sample.utils.GestureSettingsMenu;
+import com.alexvasilkov.gestures.sample.views.DepthPageTransformer;
 import com.alexvasilkov.gestures.transition.SimpleViewsTracker;
 import com.alexvasilkov.gestures.transition.ViewsCoordinator;
 import com.alexvasilkov.gestures.transition.ViewsTransitionAnimator;
@@ -185,17 +186,19 @@ public class AdvancedDemoActivity extends BaseActivity implements
 
     private void initPager() {
         // Setting up pager views
-        mViews.pager.setPageMargin(getResources().getDimensionPixelSize(R.dimen.view_pager_margin));
         mPagerAdapter = new FlickrPhotoPagerAdapter(mViews.pager);
         mPagerAdapter.setSetupListener(this);
-        mViews.pager.setAdapter(mPagerAdapter);
+
         mPagerListener = new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
                 onPhotoInPagerSelected(position);
             }
         };
+
+        mViews.pager.setAdapter(mPagerAdapter);
         mViews.pager.addOnPageChangeListener(mPagerListener);
+        mViews.pager.setPageTransformer(true, new DepthPageTransformer());
 
         mViews.pagerToolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
         mViews.pagerToolbar.setNavigationOnClickListener(new View.OnClickListener() {
