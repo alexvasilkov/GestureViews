@@ -5,6 +5,8 @@ import android.support.annotation.NonNull;
 import android.util.TypedValue;
 import android.view.Gravity;
 
+import com.alexvasilkov.gestures.views.interfaces.GestureView;
+
 /**
  * Various settings needed for {@link GestureController} and for {@link StateController}.
  * <p/>
@@ -99,7 +101,9 @@ public class Settings {
     }
 
     /**
-     * Setting viewport size
+     * Setting viewport size.
+     * <p/>
+     * Should only be used when implementing custom {@link GestureView}.
      */
     public Settings setViewport(int w, int h) {
         viewportW = w;
@@ -118,7 +122,9 @@ public class Settings {
     }
 
     /**
-     * Setting full image size
+     * Setting full image size.
+     * <p/>
+     * Should only be used when implementing custom {@link GestureView}.
      */
     public Settings setImage(int w, int h) {
         imageW = w;
@@ -244,7 +250,7 @@ public class Settings {
      * Calls to this method are counted, so if you called it N times
      * you should call {@link #enableGestures()} N times to re-enable all gestures.
      * <p/>
-     * Useful to temporary disable touch gestures during animation or image loading.
+     * Useful when you need temporary disable touch gestures during animation or image loading.
      * <p/>
      * See also {@link #enableGestures()}
      */
@@ -258,8 +264,6 @@ public class Settings {
      * Calls to this method are counted, so if you called {@link #disableGestures()} N times
      * you should call this method N times to re-enable all gestures.
      * <p/>
-     * Useful to temporary disable touch gestures during animation or image loading.
-     * <p/>
      * See also {@link #disableGestures()}
      */
     public Settings enableGestures() {
@@ -269,6 +273,9 @@ public class Settings {
 
     /**
      * Sets whether image transformations should be kept in bounds or not.
+     * <p/>
+     * Can be set to {@code false} during animation to make it smoother,
+     * but you should ensure end state of animation is within bounds.
      * <p/>
      * Default value is true.
      */
