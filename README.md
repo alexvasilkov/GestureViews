@@ -15,18 +15,27 @@ ImageView and FrameLayout with gestures control and position animation.
 
 [![Get it on Google Play](http://developer.android.com/images/brand/en_generic_rgb_wo_60.png)](http://play.google.com/store/apps/details?id=com.alexvasilkov.gestures.sample)
 
+#### Introduction ####
+
+Many apps out there have rich content with lots of images. But it is hard to find a single app
+in which image viewing experience wouldn't be ugly and animations wouldn't be choppy. As Android
+user I was very disappointed with this state of the business so I decided to make this library.
+
+Main goal of this library is to make images viewing process as smooth as possible and to make it
+easier for developers to integrate it into their apps. 
+
 #### Usage ####
 
 Add dependency to your `build.gradle` file:
 
     compile 'com.alexvasilkov:gesture-views:2.0.0'
 
-Note: theoretically code is compatible with Android 2+, but it was tested only on Android 4+.
+Note: min SDK version for library is 9, but it was tested mainly on 15+.
+
+[[Usage wiki|Usage]]
 
 See also: [sample app sources](https://github.com/alexvasilkov/GestureViews/tree/master/sample) for advanced usage example
 and [Javadoc](https://oss.sonatype.org/service/local/repositories/releases/archive/com/alexvasilkov/gesture-views/2.0.0/gesture-views-2.0.0-javadoc.jar/!/index.html) documentation.
-
-TODO: add usage examples
 
 #### License ####
 
