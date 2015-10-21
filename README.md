@@ -32,7 +32,7 @@ Add dependency to your `build.gradle` file:
 
 Note: min SDK version for library is 9, but it was tested mainly on 15+.
 
-[[Usage wiki|Usage]]
+[Usage wiki](https://github.com/alexvasilkov/GestureViews/wiki/Usage)
 
 See also: [sample app sources](https://github.com/alexvasilkov/GestureViews/tree/master/sample) for advanced usage example
 and [Javadoc](https://oss.sonatype.org/service/local/repositories/releases/archive/com/alexvasilkov/gesture-views/2.0.0/gesture-views-2.0.0-javadoc.jar/!/index.html) documentation.
