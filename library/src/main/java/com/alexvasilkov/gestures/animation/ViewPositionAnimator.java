@@ -478,12 +478,12 @@ public class ViewPositionAnimator {
         mToState.get(TMP_MATRIX);
         TMP_MATRIX.mapRect(mToClip);
 
+        mToPivotX = mToClip.centerX();
+        mToPivotY = mToClip.centerY();
+
         int paddingLeft = mToPos.viewport.left - mToPos.view.left;
         int paddingTop = mToPos.viewport.top - mToPos.view.top;
         mToClip.offset(paddingLeft, paddingTop);
-
-        mToPivotX = mToClip.centerX();
-        mToPivotY = mToClip.centerY();
 
         mIsToUpdated = true;
 
@@ -510,10 +510,10 @@ public class ViewPositionAnimator {
         mFromPivotX = mFromPos.image.centerX() - mToPos.viewport.left;
         mFromPivotY = mFromPos.image.centerY() - mToPos.viewport.top;
 
-        // 'From' clip is a 'From' viewport rect in coordinates of 'To' view.
-        mFromClip.set(0, 0, mFromPos.viewport.width(), mFromPos.viewport.height());
-        float left = mFromPos.viewport.left - mToPos.view.left;
-        float top = mFromPos.viewport.top - mToPos.view.top;
+        // 'From' clip is a 'From' view rect in coordinates of 'To' view.
+        mFromClip.set(0, 0, mFromPos.view.width(), mFromPos.view.height());
+        float left = mFromPos.view.left - mToPos.view.left;
+        float top = mFromPos.view.top - mToPos.view.top;
         mFromClip.offset(left, top);
 
         mIsFromUpdated = true;
