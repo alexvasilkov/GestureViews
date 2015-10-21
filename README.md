@@ -1,7 +1,7 @@
 GestureViews
 ============
 
-![Maven Central](https://img.shields.io/maven-central/v/com.alexvasilkov/gesture-views.svg?style=flat-square)
+[![Maven Central](https://img.shields.io/maven-central/v/com.alexvasilkov/gesture-views.svg?style=flat-square)](https://maven-badges.herokuapp.com/maven-central/com.alexvasilkov/gesture-views)
 
 ImageView and FrameLayout with gestures control and position animation.
 
