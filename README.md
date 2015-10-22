@@ -9,7 +9,8 @@ ImageView and FrameLayout with gestures control and position animation.
 
 #### Demo video ####
 
-[![Demo video](http://img.youtube.com/vi/5N5G_vgqZbI/0.jpg)](http://www.youtube.com/watch?v=5N5G_vgqZbI)
+[![Demo video](https://raw.github.com/alexvasilkov/GestureViews/master/sample/art/demo.gif)](http://www.youtube.com/watch?v=5N5G_vgqZbI)  
+(Clickable)
 
 #### Sample app ####
 
