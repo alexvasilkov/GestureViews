@@ -5,12 +5,10 @@ GestureViews
 
 ImageView and FrameLayout with gestures control and position animation.
 
-![GestureViews](https://raw.github.com/alexvasilkov/GestureViews/master/sample/art/logo_small.png)
-
 #### Demo video ####
 
 [![Demo video](https://github.com/alexvasilkov/GestureViews/raw/master/sample/art/demo.gif)](http://www.youtube.com/watch?v=5N5G_vgqZbI)  
-(Clickable)
+(Click for full demo video)
 
 #### Sample app ####
 
