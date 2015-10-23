@@ -5,6 +5,9 @@ GestureViews
 
 ImageView and FrameLayout with gestures control and position animation.
 
+Main goal of this library is to make images viewing process as smooth as possible and to make it
+easier for developers to integrate it into their apps. 
+
 #### Demo video ####
 
 [![Demo video](https://github.com/alexvasilkov/GestureViews/raw/master/sample/art/demo.gif)](http://www.youtube.com/watch?v=5N5G_vgqZbI)  
@@ -13,15 +16,6 @@ ImageView and FrameLayout with gestures control and position animation.
 #### Sample app ####
 
 [![Get it on Google Play](http://developer.android.com/images/brand/en_generic_rgb_wo_60.png)](http://play.google.com/store/apps/details?id=com.alexvasilkov.gestures.sample)
-
-#### Introduction ####
-
-Many apps out there have rich content with lots of images. But it is hard to find a single app
-in which image viewing experience wouldn't be ugly and animations wouldn't be choppy. As Android
-user I was very disappointed with this state of the business so I decided to make this library.
-
-Main goal of this library is to make images viewing process as smooth as possible and to make it
-easier for developers to integrate it into their apps. 
 
 #### Usage ####
 
@@ -33,8 +27,9 @@ Note: min SDK version for library is 9, but it was tested mainly on 15+.
 
 [Usage wiki](https://github.com/alexvasilkov/GestureViews/wiki/Usage)
 
-See also: [sample app sources](https://github.com/alexvasilkov/GestureViews/tree/master/sample) for advanced usage example
-and [Javadoc](https://oss.sonatype.org/service/local/repositories/releases/archive/com/alexvasilkov/gesture-views/2.0.0/gesture-views-2.0.0-javadoc.jar/!/index.html) documentation.
+[Javadoc](https://oss.sonatype.org/service/local/repositories/releases/archive/com/alexvasilkov/gesture-views/2.0.0/gesture-views-2.0.0-javadoc.jar/!/index.html)
+
+[Sample app sources](https://github.com/alexvasilkov/GestureViews/tree/master/sample)
 
 #### License ####
 
