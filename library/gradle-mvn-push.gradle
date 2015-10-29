@@ -100,8 +100,8 @@ afterEvaluate { project ->
         sign configurations.archives
     }
 
-    task jar(type: Jar, dependsOn: compileReleaseJava) {
-        from file(project.compileReleaseJava.destinationDir)
+    task jar(type: Jar, dependsOn: compileReleaseJavaWithJavac) {
+        from file(project.compileReleaseJavaWithJavac.destinationDir)
         exclude '**/R.class', '**/BuildConfig.class'
     }
 
