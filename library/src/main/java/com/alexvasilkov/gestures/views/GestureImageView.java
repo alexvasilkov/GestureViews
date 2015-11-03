@@ -32,7 +32,7 @@ import com.alexvasilkov.gestures.views.utils.ViewClipHelper;
  */
 public class GestureImageView extends ImageView implements GestureView, ClipView, AnimatorView {
 
-    private final GestureControllerForPager mController;
+    private GestureControllerForPager mController;
     private final ViewClipHelper mClipHelper = new ViewClipHelper(this);
     private final Matrix mImageMatrix = new Matrix();
 
@@ -51,7 +51,7 @@ public class GestureImageView extends ImageView implements GestureView, ClipView
     public GestureImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
-        mController = new GestureControllerForPager(this);
+        ensureControllerCreated();
         mController.addOnStateChangeListener(new GestureController.OnStateChangeListener() {
             @Override
             public void onStateChanged(State state) {
@@ -65,6 +65,10 @@ public class GestureImageView extends ImageView implements GestureView, ClipView
         });
 
         setScaleType(ImageView.ScaleType.MATRIX);
+    }
+
+    private void ensureControllerCreated() {
+        if (mController == null) mController = new GestureControllerForPager(this);
     }
 
     @Override
@@ -137,6 +141,10 @@ public class GestureImageView extends ImageView implements GestureView, ClipView
     @Override
     public void setImageDrawable(Drawable dr) {
         super.setImageDrawable(dr);
+
+        // Method setImageDrawable can be called from super constructor,
+        // so we have to ensure controller instance is created at this point.
+        ensureControllerCreated();
 
         Settings settings = mController.getSettings();
         int oldW = settings.getImageW(), oldH = settings.getImageH();
