@@ -16,7 +16,7 @@ easier for developers to integrate it into their apps.
 
 [YouTube](http://www.youtube.com/watch?v=5N5G_vgqZbI)
 
-![Demo video](https://github.com/alexvasilkov/GestureViews/raw/master/sample/art/demo.gif)  
+[![Demo video](https://github.com/alexvasilkov/GestureViews/raw/master/sample/art/demo.gif)](http://www.youtube.com/watch?v=5N5G_vgqZbI)  
 
 #### Usage ####
 
