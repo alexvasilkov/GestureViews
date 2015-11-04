@@ -8,14 +8,15 @@ ImageView and FrameLayout with gestures control and position animation.
 Main goal of this library is to make images viewing process as smooth as possible and to make it
 easier for developers to integrate it into their apps. 
 
-#### Demo video ####
-
-[![Demo video](https://github.com/alexvasilkov/GestureViews/raw/master/sample/art/demo.gif)](http://www.youtube.com/watch?v=5N5G_vgqZbI)  
-(Click for full demo video)
-
 #### Sample app ####
 
 [![Get it on Google Play](http://developer.android.com/images/brand/en_generic_rgb_wo_60.png)](http://play.google.com/store/apps/details?id=com.alexvasilkov.gestures.sample)
+
+#### Demo video ####
+
+[YouTube](http://www.youtube.com/watch?v=5N5G_vgqZbI)
+
+![Demo video](https://github.com/alexvasilkov/GestureViews/raw/master/sample/art/demo.gif)  
 
 #### Usage ####
 
