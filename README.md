@@ -22,13 +22,13 @@ easier for developers to integrate it into their apps.
 
 Add dependency to your `build.gradle` file:
 
-    compile 'com.alexvasilkov:gesture-views:2.0.0'
+    compile 'com.alexvasilkov:gesture-views:2.0.1'
 
 Note: min SDK version for library is 9, but it was tested mainly on 15+.
 
 [Usage wiki](https://github.com/alexvasilkov/GestureViews/wiki/Usage)
 
-[Javadoc](https://oss.sonatype.org/service/local/repositories/releases/archive/com/alexvasilkov/gesture-views/2.0.0/gesture-views-2.0.0-javadoc.jar/!/index.html)
+[Javadoc](https://oss.sonatype.org/service/local/repositories/releases/archive/com/alexvasilkov/gesture-views/2.0.1/gesture-views-2.0.1-javadoc.jar/!/index.html)
 
 [Sample app sources](https://github.com/alexvasilkov/GestureViews/tree/master/sample)
 
