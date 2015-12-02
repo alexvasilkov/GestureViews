@@ -1,5 +1,6 @@
 package com.alexvasilkov.gestures.sample.activities;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -184,6 +185,7 @@ public class AdvancedDemoActivity extends BaseActivity implements
         mViews.grid.setAdapter(mGridAdapter);
     }
 
+    @SuppressLint("PrivateResource")
     private void initPager() {
         // Setting up pager views
         mPagerAdapter = new FlickrPhotoPagerAdapter(mViews.pager);
@@ -220,7 +222,7 @@ public class AdvancedDemoActivity extends BaseActivity implements
 
     private void initAnimator() {
         mAnimator = new ViewsTransitionBuilder<Integer>()
-                .fromRecyclerView(mViews.grid, new SimpleViewsTracker<RecyclerView>() {
+                .fromRecyclerView(mViews.grid, new SimpleViewsTracker() {
                     @Override
                     public View getViewForPosition(int position) {
                         RecyclerView.ViewHolder holder =
@@ -228,7 +230,7 @@ public class AdvancedDemoActivity extends BaseActivity implements
                         return holder == null ? null : FlickrPhotoListAdapter.getImage(holder);
                     }
                 })
-                .intoViewPager(mViews.pager, new SimpleViewsTracker<ViewPager>() {
+                .intoViewPager(mViews.pager, new SimpleViewsTracker() {
                     @Override
                     public View getViewForPosition(int position) {
                         RecyclePagerAdapter.ViewHolder holder = mPagerAdapter.getViewHolder(position);

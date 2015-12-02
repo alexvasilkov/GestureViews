@@ -15,14 +15,14 @@ public class FromRecyclerViewListener<ID> implements ViewsCoordinator.OnRequestV
     private static final Rect LOCATION_PARENT = new Rect(), LOCATION = new Rect();
 
     private final RecyclerView mRecyclerView;
-    private final ViewsTracker<RecyclerView, ID> mTracker;
+    private final ViewsTracker<ID> mTracker;
     private final ViewsTransitionAnimator<ID> mAnimator;
 
     private ID mId;
     private boolean mScrollHalfVisibleItems;
 
     public FromRecyclerViewListener(@NonNull RecyclerView recyclerView,
-                                    @NonNull ViewsTracker<RecyclerView, ID> tracker,
+                                    @NonNull ViewsTracker<ID> tracker,
                                     @NonNull ViewsTransitionAnimator<ID> animator) {
         mRecyclerView = recyclerView;
         mTracker = tracker;
@@ -38,6 +38,8 @@ public class FromRecyclerViewListener<ID> implements ViewsCoordinator.OnRequestV
         // or it is not fully visible than we should scroll to it at first.
         mId = id;
         int position = mTracker.getPositionForId(id);
+
+        if (position == ViewsTracker.NO_POSITION) return; // Nothing we can do
 
         View view = mTracker.getViewForPosition(position);
         if (view == null) {
@@ -67,7 +69,8 @@ public class FromRecyclerViewListener<ID> implements ViewsCoordinator.OnRequestV
         public void onChildViewAttachedToWindow(View view) {
             int position = mRecyclerView.getChildAdapterPosition(view);
             if (mId != null && mId.equals(mTracker.getIdForPosition(position))) {
-                mAnimator.setFromView(mId, view);
+                View from = mTracker.getViewForPosition(position);
+                if (from != null) mAnimator.setFromView(mId, view);
             }
         }
 

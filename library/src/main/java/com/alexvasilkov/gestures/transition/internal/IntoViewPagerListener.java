@@ -20,14 +20,14 @@ import com.alexvasilkov.gestures.views.utils.RecyclePagerAdapter;
 public class IntoViewPagerListener<ID> implements ViewsCoordinator.OnRequestViewListener<ID> {
 
     private final ViewPager mViewPager;
-    private final ViewsTracker<ViewPager, ID> mTracker;
+    private final ViewsTracker<ID> mTracker;
     private final ViewsTransitionAnimator<ID> mAnimator;
     private ID mId;
 
     private boolean mPreventExit;
 
     public IntoViewPagerListener(@NonNull ViewPager viewPager,
-                                 @NonNull ViewsTracker<ViewPager, ID> tracker,
+                                 @NonNull ViewsTracker<ID> tracker,
                                  @NonNull ViewsTransitionAnimator<ID> animator) {
         mViewPager = viewPager;
         mTracker = tracker;
@@ -41,11 +41,13 @@ public class IntoViewPagerListener<ID> implements ViewsCoordinator.OnRequestView
     }
 
     private void applyCurrentPage() {
+        if (mId == null) return;
         if (mViewPager.getAdapter() == null || mViewPager.getAdapter().getCount() == 0) return;
 
         int current = mViewPager.getCurrentItem();
+        int position = mTracker.getPositionForId(mId);
 
-        if (mId == null || current != mTracker.getPositionForId(mId)) return;
+        if (position == ViewsTracker.NO_POSITION || current != position) return;
 
         View view = mTracker.getViewForPosition(current); // View may be null
         if (view instanceof AnimatorView) {
@@ -60,7 +62,7 @@ public class IntoViewPagerListener<ID> implements ViewsCoordinator.OnRequestView
 
         // If user scrolled to new page we should silently switch views
         ID currentId = mTracker.getIdForPosition(mViewPager.getCurrentItem());
-        if (!currentId.equals(mId)) {
+        if (mId != null && currentId != null && !mId.equals(currentId)) {
             // Saving current state
             AnimatorView toView = mAnimator.getToView();
             ViewPositionAnimator animator = toView == null ? null : toView.getPositionAnimator();
@@ -93,6 +95,8 @@ public class IntoViewPagerListener<ID> implements ViewsCoordinator.OnRequestView
         // If it is not a selected page than we should scroll to it at first.
         mId = id;
         int position = mTracker.getPositionForId(id);
+
+        if (position == ViewsTracker.NO_POSITION) return; // Nothing we can do
 
         if (mViewPager.getCurrentItem() == position) {
             applyCurrentPage();

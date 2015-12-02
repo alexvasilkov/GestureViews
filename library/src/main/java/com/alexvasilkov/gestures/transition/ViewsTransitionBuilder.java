@@ -12,13 +12,13 @@ public class ViewsTransitionBuilder<ID> {
     private final ViewsTransitionAnimator<ID> animator = new ViewsTransitionAnimator<>();
 
     public ViewsTransitionBuilder<ID> fromRecyclerView(@NonNull RecyclerView recyclerView,
-                                                       @NonNull ViewsTracker<RecyclerView, ID> tracker) {
+                                                       @NonNull ViewsTracker<ID> tracker) {
         animator.setFromListener(new FromRecyclerViewListener<>(recyclerView, tracker, animator));
         return this;
     }
 
     public ViewsTransitionBuilder<ID> intoViewPager(@NonNull ViewPager viewPager,
-                                                    @NonNull ViewsTracker<ViewPager, ID> helper) {
+                                                    @NonNull ViewsTracker<ID> helper) {
         animator.setToListener(new IntoViewPagerListener<>(viewPager, helper, animator));
         return this;
     }
