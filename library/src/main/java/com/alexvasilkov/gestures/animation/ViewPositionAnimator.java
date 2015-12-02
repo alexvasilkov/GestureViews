@@ -106,19 +106,6 @@ public class ViewPositionAnimator {
         mToClipView = to instanceof ClipView ? (ClipView) to : null;
         mAnimationEngine = new LocalAnimationEngine(toView);
 
-        mToPosHolder.init(toView, new ViewPositionHolder.OnViewPositionChangeListener() {
-            @Override
-            public void onViewPositionChanged(@NonNull ViewPosition position) {
-                if (GestureDebug.isDebugAnimator())
-                    Log.d(TAG, "'To' view position updated: " + position.pack());
-
-                mToPos = position;
-                requestUpdateToState();
-                requestUpdateFromState(); // Depends on 'to' position
-                applyPositionState();
-            }
-        });
-
         mToController = to.getController();
         mToController.addOnStateChangeListener(new GestureController.OnStateChangeListener() {
             @Override
@@ -134,6 +121,19 @@ public class ViewPositionAnimator {
                     Log.d(TAG, "State reset in listener: " + newState);
 
                 resetToState();
+                applyPositionState();
+            }
+        });
+
+        mToPosHolder.init(toView, new ViewPositionHolder.OnViewPositionChangeListener() {
+            @Override
+            public void onViewPositionChanged(@NonNull ViewPosition position) {
+                if (GestureDebug.isDebugAnimator())
+                    Log.d(TAG, "'To' view position updated: " + position.pack());
+
+                mToPos = position;
+                requestUpdateToState();
+                requestUpdateFromState(); // Depends on 'to' position
                 applyPositionState();
             }
         });
