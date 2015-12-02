@@ -18,5 +18,5 @@ dependencies {
     provided 'com.android.support:support-annotations:23.1.0'
 }
 
-// New version can be uploaded with 'gradlew clean :library:jar :library:uploadArchives'
+// New version can be uploaded with './gradlew clean :library:jar :library:uploadArchives'
 apply from: 'gradle-mvn-push.gradle'
