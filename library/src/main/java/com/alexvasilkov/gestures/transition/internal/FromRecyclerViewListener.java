@@ -70,7 +70,7 @@ public class FromRecyclerViewListener<ID> implements ViewsCoordinator.OnRequestV
             int position = mRecyclerView.getChildAdapterPosition(view);
             if (mId != null && mId.equals(mTracker.getIdForPosition(position))) {
                 View from = mTracker.getViewForPosition(position);
-                if (from != null) mAnimator.setFromView(mId, view);
+                if (from != null) mAnimator.setFromView(mId, from);
             }
         }
 
