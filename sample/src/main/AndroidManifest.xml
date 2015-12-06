@@ -54,6 +54,15 @@
         </activity>
 
         <activity
+            android:name=".activities.ListTransitionActivity"
+            android:label="List transitions">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
             android:name=".activities.AdvancedDemoActivity"
             android:label="Advanced Demo"
             android:theme="@style/AppTheme.Full.NoTitle">

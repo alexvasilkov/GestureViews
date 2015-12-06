@@ -5,6 +5,7 @@
 
     <item name="menu_crop" type="id" />
 
+    <item name="tag_holder" type="id" />
     <item name="tag_item" type="id" />
 
 </resources>

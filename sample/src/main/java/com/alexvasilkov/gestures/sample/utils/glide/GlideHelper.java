@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.ViewPropertyAnimation;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
+import com.bumptech.glide.request.target.Target;
 import com.googlecode.flickrjandroid.photos.Photo;
 
 public class GlideHelper {
@@ -24,7 +26,10 @@ public class GlideHelper {
 
 
     public static void loadResource(@DrawableRes int drawableId, @NonNull ImageView image) {
-        Glide.with(image.getContext()).load(drawableId).animate(ANIMATOR).into(image);
+        Glide.with(image.getContext())
+                .load(drawableId)
+                .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+                .into(new GlideDrawableImageViewTarget(image));
     }
 
     public static void loadFlickrThumb(@Nullable Photo photo, @NonNull final ImageView image) {

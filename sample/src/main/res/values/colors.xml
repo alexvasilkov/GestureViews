@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="window_background">#FFFFFF</color>
-
     <!-- Next colors are slightly different to prevent window animation bug on Android 6.0 -->
+    <color name="window_background">#FFFFFF</color>
+    <color name="window_background_2">#FFFFFE</color>
     <color name="window_background_dark">#000000</color>
     <color name="window_background_dark_2">#000001</color>
 

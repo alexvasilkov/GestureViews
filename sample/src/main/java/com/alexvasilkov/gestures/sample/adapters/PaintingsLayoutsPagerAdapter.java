@@ -13,20 +13,20 @@ import com.alexvasilkov.android.commons.utils.Intents;
 import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.logic.Painting;
+import com.alexvasilkov.gestures.sample.utils.GestureSettingsSetupListener;
 import com.alexvasilkov.gestures.sample.utils.glide.GlideHelper;
 import com.alexvasilkov.gestures.views.GestureFrameLayout;
-import com.alexvasilkov.gestures.views.interfaces.GestureView;
 import com.alexvasilkov.gestures.views.utils.RecyclePagerAdapter;
 
-public class PaintingsLayoutsAdapter extends RecyclePagerAdapter<PaintingsLayoutsAdapter.ViewHolder>
+public class PaintingsLayoutsPagerAdapter extends RecyclePagerAdapter<PaintingsLayoutsPagerAdapter.ViewHolder>
         implements View.OnClickListener {
 
     private final ViewPager mViewPager;
     private final Painting[] mPaintings;
-    private final OnSetupGestureViewListener mSetupListener;
+    private final GestureSettingsSetupListener mSetupListener;
 
-    public PaintingsLayoutsAdapter(ViewPager pager, Painting[] paintings,
-                                   OnSetupGestureViewListener listener) {
+    public PaintingsLayoutsPagerAdapter(ViewPager pager, Painting[] paintings,
+                                        GestureSettingsSetupListener listener) {
         mViewPager = pager;
         mPaintings = paintings;
         mSetupListener = listener;
@@ -84,10 +84,6 @@ public class PaintingsLayoutsAdapter extends RecyclePagerAdapter<PaintingsLayout
             button = Views.find(layout, R.id.painting_button);
         }
 
-    }
-
-    public interface OnSetupGestureViewListener {
-        void onSetupGestureView(GestureView view);
     }
 
 }
