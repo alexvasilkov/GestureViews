@@ -226,7 +226,7 @@ public class AdvancedDemoActivity extends BaseActivity implements
                     @Override
                     public View getViewForPosition(int position) {
                         RecyclerView.ViewHolder holder =
-                                mViews.grid.findViewHolderForAdapterPosition(position);
+                                mViews.grid.findViewHolderForLayoutPosition(position);
                         return holder == null ? null : FlickrPhotoListAdapter.getImage(holder);
                     }
                 })
