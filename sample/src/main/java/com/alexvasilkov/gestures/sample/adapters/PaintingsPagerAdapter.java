@@ -5,19 +5,19 @@ import android.support.v4.view.ViewPager;
 import android.view.ViewGroup;
 
 import com.alexvasilkov.gestures.sample.logic.Painting;
+import com.alexvasilkov.gestures.sample.utils.GestureSettingsSetupListener;
 import com.alexvasilkov.gestures.sample.utils.glide.GlideHelper;
 import com.alexvasilkov.gestures.views.GestureImageView;
-import com.alexvasilkov.gestures.views.interfaces.GestureView;
 import com.alexvasilkov.gestures.views.utils.RecyclePagerAdapter;
 
-public class PaintingsImagesAdapter extends RecyclePagerAdapter<PaintingsImagesAdapter.ViewHolder> {
+public class PaintingsPagerAdapter extends RecyclePagerAdapter<PaintingsPagerAdapter.ViewHolder> {
 
     private final ViewPager mViewPager;
     private final Painting[] mPaintings;
-    private final OnSetupGestureViewListener mSetupListener;
+    private final GestureSettingsSetupListener mSetupListener;
 
-    public PaintingsImagesAdapter(ViewPager pager, Painting[] paintings,
-                                  OnSetupGestureViewListener listener) {
+    public PaintingsPagerAdapter(ViewPager pager, Painting[] paintings,
+                                 GestureSettingsSetupListener listener) {
         mViewPager = pager;
         mPaintings = paintings;
         mSetupListener = listener;
@@ -38,8 +38,11 @@ public class PaintingsImagesAdapter extends RecyclePagerAdapter<PaintingsImagesA
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         if (mSetupListener != null) mSetupListener.onSetupGestureView(holder.image);
-        holder.image.getController().resetState();
         GlideHelper.loadResource(mPaintings[position].getImageId(), holder.image);
+    }
+
+    public static GestureImageView getImage(RecyclePagerAdapter.ViewHolder holder) {
+        return ((ViewHolder) holder).image;
     }
 
 
@@ -50,10 +53,6 @@ public class PaintingsImagesAdapter extends RecyclePagerAdapter<PaintingsImagesA
             super(new GestureImageView(container.getContext()));
             image = (GestureImageView) itemView;
         }
-    }
-
-    public interface OnSetupGestureViewListener {
-        void onSetupGestureView(GestureView view);
     }
 
 }

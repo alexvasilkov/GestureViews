@@ -15,7 +15,7 @@ import com.alexvasilkov.gestures.Settings;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.views.interfaces.GestureView;
 
-public class GestureSettingsMenu {
+public class GestureSettingsMenu implements GestureSettingsSetupListener {
 
     @InstanceState
     private boolean mIsPanEnabled = true;
@@ -110,7 +110,8 @@ public class GestureSettingsMenu {
         return true;
     }
 
-    public void applySettings(GestureView view) {
+    @Override
+    public void onSetupGestureView(GestureView view) {
         Context context = ((View) view).getContext();
         float overscrollX = mIsOverscrollXEnabled ? 32f : 0f;
         float overscrollY = mIsOverscrollYEnabled ? 32f : 0f;
@@ -127,7 +128,6 @@ public class GestureSettingsMenu {
                 .setFitMethod(mFitMethod)
                 .setGravity(mGravity);
     }
-
 
     private enum GravityType {
         CENTER(Gravity.CENTER),

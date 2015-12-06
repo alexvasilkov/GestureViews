@@ -8,9 +8,9 @@ import android.view.ViewGroup;
 import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.gestures.animation.ViewPositionAnimator;
 import com.alexvasilkov.gestures.sample.R;
+import com.alexvasilkov.gestures.sample.utils.GestureSettingsSetupListener;
 import com.alexvasilkov.gestures.sample.utils.glide.GlideHelper;
 import com.alexvasilkov.gestures.views.GestureImageView;
-import com.alexvasilkov.gestures.views.interfaces.GestureView;
 import com.alexvasilkov.gestures.views.utils.RecyclePagerAdapter;
 import com.bumptech.glide.Glide;
 import com.googlecode.flickrjandroid.photos.Photo;
@@ -23,7 +23,7 @@ public class FlickrPhotoPagerAdapter extends RecyclePagerAdapter<FlickrPhotoPage
 
     private final ViewPager mViewPager;
     private List<Photo> mPhotos;
-    private OnSetupGestureViewListener mSetupListener;
+    private GestureSettingsSetupListener mSetupListener;
 
     private boolean mActivated;
 
@@ -41,7 +41,7 @@ public class FlickrPhotoPagerAdapter extends RecyclePagerAdapter<FlickrPhotoPage
         return mPhotos.get(pos);
     }
 
-    public void setSetupListener(OnSetupGestureViewListener listener) {
+    public void setSetupListener(GestureSettingsSetupListener listener) {
         mSetupListener = listener;
     }
 
@@ -145,10 +145,6 @@ public class FlickrPhotoPagerAdapter extends RecyclePagerAdapter<FlickrPhotoPage
             image = Views.find(itemView, R.id.flickr_full_image);
             progress = Views.find(itemView, R.id.flickr_full_progress);
         }
-    }
-
-    public interface OnSetupGestureViewListener {
-        void onSetupGestureView(GestureView view);
     }
 
 }

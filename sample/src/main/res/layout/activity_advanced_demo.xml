@@ -2,8 +2,7 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".activities.FlickrListActivity">
+    android:layout_height="match_parent">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/flickr_list"
@@ -13,7 +12,8 @@
         android:clipToPadding="false"
         android:padding="@dimen/flickr_list_margin"
         android:scrollbarStyle="outsideOverlay"
-        android:scrollbars="vertical" />
+        android:scrollbars="vertical"
+        tools:listitem="@layout/item_flickr_image" />
 
     <!-- Next view is only used to smoother toolbar fading -->
 
@@ -23,26 +23,26 @@
         android:background="@color/window_background_dark_2" />
 
     <View
-        android:id="@+id/full_image_background"
+        android:id="@+id/flickr_full_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/window_background_dark_2"
         android:visibility="invisible" />
 
     <android.support.v4.view.ViewPager
-        android:id="@+id/full_images_pager"
+        android:id="@+id/flickr_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
     <android.support.v7.widget.Toolbar style="@style/App.Toolbar" />
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/full_image_toolbar"
+        android:id="@+id/flickr_full_toolbar"
         style="@style/App.Toolbar.Transparent"
         android:visibility="invisible" />
 
     <TextView
-        android:id="@+id/full_image_title"
+        android:id="@+id/flickr_full_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"

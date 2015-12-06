@@ -7,13 +7,11 @@ import android.view.MenuItem;
 
 import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.gestures.sample.R;
-import com.alexvasilkov.gestures.sample.adapters.PaintingsLayoutsAdapter;
+import com.alexvasilkov.gestures.sample.adapters.PaintingsLayoutsPagerAdapter;
 import com.alexvasilkov.gestures.sample.logic.Painting;
 import com.alexvasilkov.gestures.sample.utils.GestureSettingsMenu;
-import com.alexvasilkov.gestures.views.interfaces.GestureView;
 
-public class FrameLayoutSampleActivity extends BaseActivity
-        implements PaintingsLayoutsAdapter.OnSetupGestureViewListener {
+public class FrameLayoutSampleActivity extends BaseActivity {
 
     private ViewPager mViewPager;
     private GestureSettingsMenu mSettingsMenu;
@@ -31,7 +29,7 @@ public class FrameLayoutSampleActivity extends BaseActivity
         Painting[] paintings = Painting.getAllPaintings(getResources());
 
         mViewPager = Views.find(this, R.id.paintings_view_pager);
-        mViewPager.setAdapter(new PaintingsLayoutsAdapter(mViewPager, paintings, this));
+        mViewPager.setAdapter(new PaintingsLayoutsPagerAdapter(mViewPager, paintings, mSettingsMenu));
         mViewPager.setPageMargin(getResources().getDimensionPixelSize(R.dimen.view_pager_margin));
     }
 
@@ -55,11 +53,6 @@ public class FrameLayoutSampleActivity extends BaseActivity
         } else {
             return super.onOptionsItemSelected(item);
         }
-    }
-
-    @Override
-    public void onSetupGestureView(GestureView view) {
-        mSettingsMenu.applySettings(view);
     }
 
 }

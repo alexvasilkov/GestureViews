@@ -34,7 +34,6 @@ import com.alexvasilkov.gestures.transition.SimpleViewsTracker;
 import com.alexvasilkov.gestures.transition.ViewsCoordinator;
 import com.alexvasilkov.gestures.transition.ViewsTransitionAnimator;
 import com.alexvasilkov.gestures.transition.ViewsTransitionBuilder;
-import com.alexvasilkov.gestures.views.interfaces.GestureView;
 import com.alexvasilkov.gestures.views.utils.RecyclePagerAdapter;
 import com.googlecode.flickrjandroid.photos.Photo;
 
@@ -42,8 +41,7 @@ import java.util.List;
 
 public class AdvancedDemoActivity extends BaseActivity implements
         ViewPositionAnimator.PositionUpdateListener,
-        FlickrPhotoListAdapter.OnPhotoListener,
-        FlickrPhotoPagerAdapter.OnSetupGestureViewListener {
+        FlickrPhotoListAdapter.OnPhotoListener {
 
     private static final int PAGE_SIZE = 30;
 
@@ -189,7 +187,7 @@ public class AdvancedDemoActivity extends BaseActivity implements
     private void initPager() {
         // Setting up pager views
         mPagerAdapter = new FlickrPhotoPagerAdapter(mViews.pager);
-        mPagerAdapter.setSetupListener(this);
+        mPagerAdapter.setSetupListener(mSettingsMenu);
 
         mPagerListener = new ViewPager.SimpleOnPageChangeListener() {
             @Override
@@ -286,11 +284,6 @@ public class AdvancedDemoActivity extends BaseActivity implements
         if (isLeaving && state == 0f) mPagerAdapter.setActivated(false);
     }
 
-    @Override
-    public void onSetupGestureView(GestureView view) {
-        mSettingsMenu.applySettings(view);
-    }
-
 
     @Result(FlickrApi.LOAD_IMAGES_EVENT)
     private void onPhotosLoaded(List<Photo> photos, boolean hasMore) {
@@ -352,10 +345,10 @@ public class AdvancedDemoActivity extends BaseActivity implements
             toolbarBack = Views.find(activity, R.id.flickr_toolbar_back);
             grid = Views.find(activity, R.id.flickr_list);
 
-            pager = Views.find(activity, R.id.full_images_pager);
-            pagerToolbar = Views.find(activity, R.id.full_image_toolbar);
-            pagerTitle = Views.find(activity, R.id.full_image_title);
-            pagerBackground = Views.find(activity, R.id.full_image_background);
+            pager = Views.find(activity, R.id.flickr_pager);
+            pagerToolbar = Views.find(activity, R.id.flickr_full_toolbar);
+            pagerTitle = Views.find(activity, R.id.flickr_full_title);
+            pagerBackground = Views.find(activity, R.id.flickr_full_background);
         }
     }
 

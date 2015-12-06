@@ -11,13 +11,12 @@ import android.widget.TextView;
 import com.alexvasilkov.android.commons.texts.SpannableBuilder;
 import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.gestures.sample.R;
-import com.alexvasilkov.gestures.sample.adapters.PaintingsImagesAdapter;
+import com.alexvasilkov.gestures.sample.adapters.PaintingsPagerAdapter;
 import com.alexvasilkov.gestures.sample.logic.Painting;
 import com.alexvasilkov.gestures.sample.utils.GestureSettingsMenu;
-import com.alexvasilkov.gestures.views.interfaces.GestureView;
 
 public class ImageViewSampleActivity extends BaseActivity
-        implements ViewPager.OnPageChangeListener, PaintingsImagesAdapter.OnSetupGestureViewListener {
+        implements ViewPager.OnPageChangeListener {
 
     private Painting[] mPaintings;
 
@@ -44,7 +43,7 @@ public class ImageViewSampleActivity extends BaseActivity
         mTitleView = Views.find(this, R.id.painting_title);
 
         mViewPager = Views.find(this, R.id.paintings_view_pager);
-        mViewPager.setAdapter(new PaintingsImagesAdapter(mViewPager, mPaintings, this));
+        mViewPager.setAdapter(new PaintingsPagerAdapter(mViewPager, mPaintings, mSettingsMenu));
         mViewPager.addOnPageChangeListener(this);
         mViewPager.setPageMargin(getResources().getDimensionPixelSize(R.dimen.view_pager_margin));
         onPageSelected(0); // Manually calling for first item
@@ -91,11 +90,6 @@ public class ImageViewSampleActivity extends BaseActivity
     @Override
     public void onPageScrollStateChanged(int state) {
         // no-op
-    }
-
-    @Override
-    public void onSetupGestureView(GestureView view) {
-        mSettingsMenu.applySettings(view);
     }
 
 }
