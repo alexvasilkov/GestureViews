@@ -63,13 +63,11 @@ public class PhotoCropActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_crop:
-                mImageView.getSnapshot(new GestureImageView.OnSnapshotLoadedListener() {
-                    @Override
-                    public void onSnapshotLoaded(Bitmap bitmap) {
-                        finish();
-                        PhotoCropResultActivity.show(PhotoCropActivity.this, bitmap);
-                    }
-                });
+                Bitmap cropped = mImageView.crop();
+                if (cropped != null) {
+                    PhotoCropResultActivity.show(PhotoCropActivity.this, cropped);
+                    finish();
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

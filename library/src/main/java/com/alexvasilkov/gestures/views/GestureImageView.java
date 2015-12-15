@@ -19,7 +19,7 @@ import com.alexvasilkov.gestures.GestureControllerForPager;
 import com.alexvasilkov.gestures.Settings;
 import com.alexvasilkov.gestures.State;
 import com.alexvasilkov.gestures.animation.ViewPositionAnimator;
-import com.alexvasilkov.gestures.internal.Snapshot;
+import com.alexvasilkov.gestures.internal.CropUtils;
 import com.alexvasilkov.gestures.views.interfaces.AnimatorView;
 import com.alexvasilkov.gestures.views.interfaces.ClipView;
 import com.alexvasilkov.gestures.views.interfaces.GestureView;
@@ -37,8 +37,6 @@ public class GestureImageView extends ImageView implements GestureView, ClipView
     private final Matrix mImageMatrix = new Matrix();
 
     private ViewPositionAnimator mPositionAnimator;
-
-    private OnSnapshotLoadedListener mSnapshotListener;
 
     public GestureImageView(Context context) {
         this(context, null, 0);
@@ -76,14 +74,6 @@ public class GestureImageView extends ImageView implements GestureView, ClipView
         mClipHelper.onPreDraw(canvas);
         super.draw(canvas);
         mClipHelper.onPostDraw(canvas);
-
-        if (mSnapshotListener != null) {
-            Snapshot snapshot = new Snapshot(mController.getSettings(),
-                    getPaddingLeft(), getPaddingTop());
-            super.draw(snapshot.getCanvas());
-            mSnapshotListener.onSnapshotLoaded(snapshot.getBitmap());
-            mSnapshotListener = null;
-        }
     }
 
     /**
@@ -114,10 +104,29 @@ public class GestureImageView extends ImageView implements GestureView, ClipView
     /**
      * Crops bitmap as it is seen inside movement area ({@link Settings#setMovementArea(int, int)}).
      * Result will be delivered to provided snapshot listener.
+     *
+     * @deprecated Use {@link #crop()} method instead.
      */
+    @SuppressWarnings("deprecation")
+    @Deprecated
     public void getSnapshot(OnSnapshotLoadedListener listener) {
-        mSnapshotListener = listener;
-        invalidate();
+        if (getDrawable() != null) {
+            listener.onSnapshotLoaded(crop());
+        }
+    }
+
+    /**
+     * Crops bitmap as it is seen inside movement area ({@link Settings#setMovementArea(int, int)}).
+     * <p/>
+     * Note, that size of cropped bitmap may vary from size of movement area,
+     * since we will crop part of original image at base zoom level (zoom == 1).
+     *
+     * @return Cropped bitmap or null, if no image is set to this image view or if {@link OutOfMemoryError}
+     * error was thrown during cropping.
+     */
+    @Nullable
+    public Bitmap crop() {
+        return CropUtils.crop(getDrawable(), mController.getState(), mController.getSettings());
     }
 
     @Override
@@ -176,6 +185,7 @@ public class GestureImageView extends ImageView implements GestureView, ClipView
     }
 
 
+    @Deprecated
     public interface OnSnapshotLoadedListener {
         void onSnapshotLoaded(Bitmap bitmap);
     }
