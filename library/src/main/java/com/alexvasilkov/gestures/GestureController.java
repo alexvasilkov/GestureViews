@@ -258,13 +258,16 @@ public class GestureController implements View.OnTouchListener {
 
     @Override
     public boolean onTouch(@NonNull View view, @NonNull MotionEvent event) {
-        boolean result = mGestureDetector.onTouchEvent(event);
-        result |= mScaleDetector.onTouchEvent(event);
-        result |= mRotateDetector.onTouchEvent(event);
+        MotionEvent viewportEvent = MotionEvent.obtain(event);
+        viewportEvent.offsetLocation(-view.getPaddingLeft(), -view.getPaddingTop());
 
-        if (event.getActionMasked() == MotionEvent.ACTION_UP
-                || event.getActionMasked() == MotionEvent.ACTION_CANCEL) {
-            onUpOrCancel(event);
+        boolean result = mGestureDetector.onTouchEvent(viewportEvent);
+        result |= mScaleDetector.onTouchEvent(viewportEvent);
+        result |= mRotateDetector.onTouchEvent(viewportEvent);
+
+        if (viewportEvent.getActionMasked() == MotionEvent.ACTION_UP
+                || viewportEvent.getActionMasked() == MotionEvent.ACTION_CANCEL) {
+            onUpOrCancel(viewportEvent);
         }
 
         if (mStateScroller.isFinished()) {
@@ -275,6 +278,8 @@ public class GestureController implements View.OnTouchListener {
             mPrevState.set(mState);
             notifyStateUpdated();
         }
+
+        viewportEvent.recycle();
 
         return result;
     }
