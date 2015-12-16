@@ -8,6 +8,18 @@ ImageView and FrameLayout with gestures control and position animation.
 Main goal of this library is to make images viewing process as smooth as possible and to make it
 easier for developers to integrate it into their apps. 
 
+#### Main features ####
+
+- Gestures support: pan, zoom, quick scale, fling, double tap, rotation.
+- [Gestures listener](https://github.com/alexvasilkov/GestureViews/wiki/Usage#listeners): down, single tap, double tap, long press.
+- Lots of [settings] (https://github.com/alexvasilkov/GestureViews/wiki/Settings).
+- [Seamless integration](https://github.com/alexvasilkov/GestureViews/wiki/Usage#viewpager) with ViewPager (panning smoothly turns into ViewPager flipping and vise versa).
+- State animation (animating position, zoom, rotation).
+- [View position animation](https://github.com/alexvasilkov/GestureViews/wiki/Basic-animations) ("opening" animation). Useful to animate into full image view mode.
+- [Advanced animation](https://github.com/alexvasilkov/GestureViews/wiki/Advanced-animations) from RecyclerView (or ListView) into ViewPager which keeps track of views positions.
+- [Image cropping](https://github.com/alexvasilkov/GestureViews/wiki/Image-cropping) (supports rotation).
+- Supports both ImageView and FrameLayout out of the box, but also supports [custom views](https://github.com/alexvasilkov/GestureViews/wiki/Custom-views).
+
 #### Sample app ####
 
 [![Get it on Google Play](http://developer.android.com/images/brand/en_generic_rgb_wo_60.png)](http://play.google.com/store/apps/details?id=com.alexvasilkov.gestures.sample)
