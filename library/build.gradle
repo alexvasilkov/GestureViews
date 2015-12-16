@@ -13,9 +13,9 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:23.1.0'
-    compile 'com.android.support:recyclerview-v7:23.1.0'
-    provided 'com.android.support:support-annotations:23.1.0'
+    compile 'com.android.support:support-v4:23.1.1'
+    compile 'com.android.support:recyclerview-v7:23.1.1'
+    provided 'com.android.support:support-annotations:23.1.1'
 }
 
 // New version can be uploaded with './gradlew clean :library:jar :library:uploadArchives'
