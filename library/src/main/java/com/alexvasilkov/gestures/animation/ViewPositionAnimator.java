@@ -498,14 +498,18 @@ public class ViewPositionAnimator {
         if (mToPos == null || mFromPos == null || settings == null || !settings.hasImageSize())
             return;
 
-        // Computing 'From' image in 'To' viewport coordinates
-        float x = mFromPos.image.left - mToPos.viewport.left;
-        float y = mFromPos.image.top - mToPos.viewport.top;
+        // Computing starting zoom level
         float w = settings.getImageW();
         float h = settings.getImageH();
         float zoomW = w == 0f ? 1f : mFromPos.image.width() / w;
         float zoomH = h == 0f ? 1f : mFromPos.image.height() / h;
         float zoom = Math.max(zoomW, zoomH);
+
+        // Computing 'From' image in 'To' viewport coordinates.
+        // If 'To' image have different aspect ratio it will be centered within the 'From' image.
+        float x = mFromPos.image.centerX() - 0.5f * w * zoom - mToPos.viewport.left;
+        float y = mFromPos.image.centerY() - 0.5f * h * zoom - mToPos.viewport.top;
+
         mFromState.set(x, y, zoom, 0f);
         mFromPivotX = mFromPos.image.centerX() - mToPos.viewport.left;
         mFromPivotY = mFromPos.image.centerY() - mToPos.viewport.top;
