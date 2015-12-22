@@ -148,14 +148,14 @@ public class ViewPosition {
     public static ViewPosition unpack(String str) {
         String[] parts = TextUtils.split(str, SPLIT_PATTERN);
         if (parts.length != 3)
-            throw new IllegalArgumentException("Wrong ViewInfo string: " + str);
+            throw new IllegalArgumentException("Wrong ViewPosition string: " + str);
 
         Rect view = Rect.unflattenFromString(parts[0]);
         Rect viewport = Rect.unflattenFromString(parts[1]);
         Rect image = Rect.unflattenFromString(parts[2]);
 
         if (view == null || viewport == null || image == null)
-            throw new IllegalArgumentException("Wrong ViewInfo string: " + str);
+            throw new IllegalArgumentException("Wrong ViewPosition string: " + str);
 
         return new ViewPosition(view, viewport, image);
     }
