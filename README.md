@@ -8,7 +8,7 @@ ImageView and FrameLayout with gestures control and position animation.
 Main goal of this library is to make images viewing process as smooth as possible and to make it
 easier for developers to integrate it into their apps. 
 
-#### Main features ####
+#### Features ####
 
 - Gestures support: pan, zoom, quick scale, fling, double tap, rotation.
 - [Gestures listener](https://github.com/alexvasilkov/GestureViews/wiki/Usage#listeners): down, single tap, double tap, long press.
