@@ -68,6 +68,9 @@ public class AdvancedDemoActivity extends BaseActivity implements
         setContentView(R.layout.activity_advanced_demo);
         mViews = new ViewHolder(this);
 
+        mSettingsMenu = new GestureSettingsMenu();
+        mSettingsMenu.onRestoreInstanceState(savedInstanceState);
+
         setSupportActionBar(mViews.toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -75,9 +78,6 @@ public class AdvancedDemoActivity extends BaseActivity implements
         initGrid();
         initPager();
         initAnimator();
-
-        mSettingsMenu = new GestureSettingsMenu();
-        mSettingsMenu.onRestoreInstanceState(savedInstanceState);
 
         if (mPagerPhotoPosition != -1) {
             // Photo was show in pager, we should switch to pager mode instantly
