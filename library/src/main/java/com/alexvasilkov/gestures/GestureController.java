@@ -70,7 +70,7 @@ public class GestureController implements View.OnTouchListener {
     private boolean mIsScrollDetected;
     private boolean mIsFlingDetected;
     private boolean mIsScaleDetected;
-    private float mPivotX, mPivotY;
+    private float mPivotX = Float.NaN, mPivotY = Float.NaN;
 
     private final OverScroller mFlingScroller;
     private final FloatScroller mStateScroller;
@@ -306,6 +306,7 @@ public class GestureController implements View.OnTouchListener {
         if (mIsFlingDetected || mIsDoubleTapDetected) return;
 
         State s = mStateController.restrictStateBoundsCopy(mState, mPivotX, mPivotY, false, false);
+        mPivotX = mPivotY = Float.NaN;
         animateStateTo(s);
     }
 
@@ -449,7 +450,7 @@ public class GestureController implements View.OnTouchListener {
     }
 
     protected void onFlingAnimationFinished() {
-        State endState = mStateController.restrictStateBoundsCopy(mState, 0f, 0f, false, false);
+        State endState = mStateController.restrictStateBoundsCopy(mState);
         animateStateTo(endState);
     }
 

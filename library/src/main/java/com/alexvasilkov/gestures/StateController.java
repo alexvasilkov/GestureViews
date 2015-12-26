@@ -1,6 +1,7 @@
 package com.alexvasilkov.gestures;
 
 import android.graphics.Matrix;
+import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.RectF;
 
@@ -37,6 +38,11 @@ public class StateController {
      * Values to store calculated values for min / max zoom levels
      */
     private float mMinZoom, mMaxZoom;
+
+    /**
+     * Values to store calculated values for min / max zoom levels
+     */
+    private int mMovAreaW = Integer.MIN_VALUE, mMovAreaH = Integer.MIN_VALUE;
 
     StateController(Settings settings) {
         mSettings = settings;
@@ -111,7 +117,13 @@ public class StateController {
      * Restricts state's translation and zoom bounds, disallowing overscroll / overzoom.
      */
     boolean restrictStateBounds(State state) {
-        return restrictStateBounds(state, null, 0f, 0f, false, false);
+        return restrictStateBounds(state, null, Float.NaN, Float.NaN, false, false);
+    }
+
+    State restrictStateBoundsCopy(State state) {
+        mTmpState.set(state);
+        boolean changed = restrictStateBounds(mTmpState);
+        return changed ? mTmpState.copy() : null;
     }
 
     /**
@@ -139,8 +151,14 @@ public class StateController {
 
         if (!mSettings.isRestrictBounds()) return false;
 
-        if (prevState != null && !State.equals(state.getRotation(), prevState.getRotation())) {
-            // Rotation will change image bounds, so we should adjust zoom levels
+        boolean isRotationChanged = prevState != null &&
+                !State.equals(state.getRotation(), prevState.getRotation());
+        boolean isMovAreaChanged = mMovAreaW != mSettings.getMovementAreaW() ||
+                mMovAreaH != mSettings.getMovementAreaH();
+
+        if (isRotationChanged || isMovAreaChanged) {
+            // Rotation changes and changes of movement area size will lead to image bounds changes,
+            // so we should adjust zoom levels accordingly
             adjustZoomLevels(state);
         }
 
@@ -156,6 +174,11 @@ public class StateController {
         }
 
         if (!State.equals(zoom, state.getZoom())) {
+            if (Float.isNaN(pivotX) || Float.isNaN(pivotY)) {
+                Point pivot = MovementBounds.getDefaultPivot(mSettings);
+                pivotX = pivot.x;
+                pivotY = pivot.y;
+            }
             state.zoomTo(zoom, pivotX, pivotY);
             isStateChanged = true;
         }
@@ -282,7 +305,9 @@ public class StateController {
 
         if (isCorrectSize) {
             float w = mSettings.getImageW(), h = mSettings.getImageH();
-            float areaW = mSettings.getMovementAreaW(), areaH = mSettings.getMovementAreaH();
+
+            float areaW = mMovAreaW = mSettings.getMovementAreaW();
+            float areaH = mMovAreaH = mSettings.getMovementAreaH();
 
             if (mSettings.getFitMethod() == Settings.Fit.OUTSIDE) {
                 // Computing movement area size taking rotation into account. We need to inverse

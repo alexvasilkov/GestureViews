@@ -1,6 +1,7 @@
 package com.alexvasilkov.gestures.internal;
 
 import android.graphics.Matrix;
+import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -32,6 +33,7 @@ public class MovementBounds {
     private static final RectF RECT_EXT_BOUNDS = new RectF();
     private static final Rect RECT_POS = new Rect();
     private static final Rect RECT_MOV_AREA = new Rect();
+    private static final Point POINT_PIVOT = new Point();
 
     // Movement bounds parameters
     private final RectF mBounds = new RectF();
@@ -205,6 +207,14 @@ public class MovementBounds {
         Gravity.apply(settings.getGravity(),
                 settings.getMovementAreaW(), settings.getMovementAreaH(), RECT_TMP, RECT_MOV_AREA);
         return RECT_MOV_AREA;
+    }
+
+    public static Point getDefaultPivot(Settings settings) {
+        // Calculating movement area position basing on gravity
+        Rect movArea = getMovementAreaWithGravity(settings);
+        Gravity.apply(settings.getGravity(), 0, 0, movArea, RECT_TMP);
+        POINT_PIVOT.set(RECT_TMP.left, RECT_TMP.top);
+        return POINT_PIVOT;
     }
 
 }
