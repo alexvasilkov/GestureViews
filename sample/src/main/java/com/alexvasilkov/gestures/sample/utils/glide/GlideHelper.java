@@ -28,6 +28,7 @@ public class GlideHelper {
     public static void loadResource(@DrawableRes int drawableId, @NonNull ImageView image) {
         Glide.with(image.getContext())
                 .load(drawableId)
+                .animate(ANIMATOR)
                 .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
                 .into(new GlideDrawableImageViewTarget(image));
     }
