@@ -66,11 +66,11 @@ public class GestureController implements View.OnTouchListener {
     private final ScaleGestureDetector mScaleDetector;
     private final RotationGestureDetector mRotateDetector;
 
-    private boolean mIsDoubleTapDetected;
     private boolean mIsScrollDetected;
-    private boolean mIsFlingDetected;
     private boolean mIsScaleDetected;
     private float mPivotX = Float.NaN, mPivotY = Float.NaN;
+    private boolean mIsStateChangedDuringTouch;
+    private boolean mIsRestrictZoomRequested;
 
     private final OverScroller mFlingScroller;
     private final FloatScroller mStateScroller;
@@ -148,8 +148,8 @@ public class GestureController implements View.OnTouchListener {
     /**
      * Returns settings that can be updated.
      * <p/>
-     * Note: always call {@link #updateState()} or {@link #resetState()} after settings was changed
-     * to correctly apply state restrictions.
+     * Note: call {@link #updateState()}, {@link #resetState()} or {@link #animateKeepInBounds()}
+     * after settings was changed to correctly apply state restrictions.
      */
     public Settings getSettings() {
         return mSettings;
@@ -160,7 +160,8 @@ public class GestureController implements View.OnTouchListener {
      * use one of the methods provided in {@link StateController} instead.
      * <p/>
      * If current state was changed outside {@link GestureController}
-     * you should call {@link GestureController#updateState()} to properly apply changes.
+     * you should call {@link GestureController#updateState()} or {@link #animateKeepInBounds()}
+     * to properly apply changes.
      */
     public State getState() {
         return mState;
@@ -205,23 +206,42 @@ public class GestureController implements View.OnTouchListener {
     }
 
     /**
-     * Animates current state to provided end state. Note, that no state restrictions
-     * will be applied during animation, so you should ensure end state is within bounds.
+     * Animates current state to provided end state.
+     *
+     * @return {@code true} if animation started, {@code false} otherwise. Animation may
+     * not be started if end state is {@code null} or equals to current state (after bounds
+     * restrictions are applied).
      */
-    public void animateStateTo(State endState) {
-        if (endState == null) return;
+    public boolean animateStateTo(@Nullable State endState) {
+        return animateStateTo(endState, true);
+    }
 
-        // Ensuring we always starts in correct state
-        if (mStateScroller.isFinished()) {
-            mStateController.restrictStateBounds(mState, mPrevState, mPivotX, mPivotY, true, true);
+    public boolean animateKeepInBounds() {
+        return animateStateTo(mState, true);
+    }
+
+    private boolean animateStateTo(@Nullable State endState, boolean keepInBounds) {
+        if (endState == null) return false;
+
+        State endStateFixed = null;
+        if (keepInBounds) {
+            endStateFixed = mStateController.restrictStateBoundsCopy(
+                    endState, mPivotX, mPivotY, false, false);
         }
+        if (endStateFixed == null) {
+            endStateFixed = endState;
+        }
+
+        if (endStateFixed.equals(mState)) return false; // Nothing to animate
 
         stopAllAnimations();
 
         mStateStart.set(mState);
-        mStateEnd.set(endState);
+        mStateEnd.set(endStateFixed);
         mStateScroller.startScroll(0f, 1f);
         mAnimationEngine.start();
+
+        return true;
     }
 
     public void stopStateAnimation() {
@@ -265,19 +285,29 @@ public class GestureController implements View.OnTouchListener {
         result |= mScaleDetector.onTouchEvent(viewportEvent);
         result |= mRotateDetector.onTouchEvent(viewportEvent);
 
+        if (mIsStateChangedDuringTouch) {
+            mIsStateChangedDuringTouch = false;
+
+            mStateController.restrictStateBounds(mState, mPrevState, mPivotX, mPivotY, true, true);
+
+            if (!mState.equals(mPrevState)) {
+                mPrevState.set(mState);
+                notifyStateUpdated();
+            }
+        }
+
         if (viewportEvent.getActionMasked() == MotionEvent.ACTION_UP
                 || viewportEvent.getActionMasked() == MotionEvent.ACTION_CANCEL) {
             onUpOrCancel(viewportEvent);
         }
 
-        if (mStateScroller.isFinished()) {
-            mStateController.restrictStateBounds(mState, mPrevState, mPivotX, mPivotY, true, true);
+        if (mStateScroller.isFinished() && mIsRestrictZoomRequested) {
+            State restrictedState = mStateController.restrictStateBoundsCopy(
+                    mState, mPivotX, mPivotY, true, false);
+            animateStateTo(restrictedState, false);
         }
 
-        if (!mState.equals(mPrevState)) {
-            mPrevState.set(mState);
-            notifyStateUpdated();
-        }
+        mIsRestrictZoomRequested = false;
 
         viewportEvent.recycle();
 
@@ -286,28 +316,23 @@ public class GestureController implements View.OnTouchListener {
 
     protected boolean onDown(MotionEvent e) {
         stopFlingAnimation();
+        if (mSettings.isEnabled() && !mStateScroller.isFinished()) {
+            stopStateAnimation();
+            mIsRestrictZoomRequested = true;
+        }
 
-        mIsDoubleTapDetected = false;
         mIsScrollDetected = false;
-        mIsFlingDetected = false;
         mIsScaleDetected = false;
 
         if (mGestureListener != null) mGestureListener.onDown(e);
 
-        if (mSettings.isEnabled()) {
-            stopStateAnimation();
-            return true;
-        } else {
-            return false;
-        }
+        return mSettings.isEnabled();
     }
 
     protected void onUpOrCancel(MotionEvent e) {
-        if (mIsFlingDetected || mIsDoubleTapDetected) return;
-
-        State s = mStateController.restrictStateBoundsCopy(mState, mPivotX, mPivotY, false, false);
-        mPivotX = mPivotY = Float.NaN;
-        animateStateTo(s);
+        if (mFlingScroller.isFinished()) {
+            animateKeepInBounds();
+        }
     }
 
     protected boolean onSingleTapUp(MotionEvent e) {
@@ -329,15 +354,21 @@ public class GestureController implements View.OnTouchListener {
             if (mIsScrollDetected) return true;
         }
 
-        if (mIsScrollDetected) mState.translateBy(-dX, -dY);
+        if (mIsScrollDetected) {
+            // Only scrolling if we are not zoomed less than min zoom
+            float minZoom = mStateController.getEffectiveMinZoom();
+            float zoom = mState.getZoom();
+            if (zoom > minZoom || State.equals(zoom, minZoom)) {
+                mState.translateBy(-dX, -dY);
+                mIsStateChangedDuringTouch = true;
+            }
+        }
 
         return mIsScrollDetected;
     }
 
     protected boolean onFling(MotionEvent e1, MotionEvent e2, float vX, float vY) {
         if (!mSettings.isPanEnabled() || !mStateScroller.isFinished()) return false;
-
-        mIsFlingDetected = true;
 
         int x = Math.round(mState.getX());
         int y = Math.round(mState.getY());
@@ -395,11 +426,7 @@ public class GestureController implements View.OnTouchListener {
 
         if (!mSettings.isDoubleTapEnabled()) return false;
 
-        mIsDoubleTapDetected = true;
-
-        State endState = mStateController.toggleMinMaxZoom(mState, e.getX(), e.getY());
-        mStateController.restrictStateBounds(endState, null, e.getX(), e.getY(), false, false);
-        animateStateTo(endState);
+        animateStateTo(mStateController.toggleMinMaxZoom(mState, e.getX(), e.getY()));
 
         return true;
     }
@@ -410,14 +437,14 @@ public class GestureController implements View.OnTouchListener {
     }
 
     protected boolean onScale(ScaleGestureDetector detector) {
-        if (!mSettings.isZoomEnabled() || !mStateScroller.isFinished()) return true;
-
-        if (detector.getCurrentSpan() > mZoomGestureMinSpan) {
+        if (mSettings.isZoomEnabled() && mStateScroller.isFinished() &&
+                detector.getCurrentSpan() > mZoomGestureMinSpan) {
             // When scale is end (in onRotationEnd method),
             // scale detector will return wrong focus point, so we should save it here
             mPivotX = detector.getFocusX();
             mPivotY = detector.getFocusY();
             mState.zoomBy(detector.getScaleFactor(), mPivotX, mPivotY);
+            mIsStateChangedDuringTouch = true;
         }
 
         return true;
@@ -425,12 +452,7 @@ public class GestureController implements View.OnTouchListener {
 
     protected void onScaleEnd(ScaleGestureDetector detector) {
         mIsScaleDetected = false;
-
-        if (!mSettings.isZoomEnabled()) return;
-
-        // Scroll can still be in place, so we should preserver overscroll
-        State s = mStateController.restrictStateBoundsCopy(mState, mPivotX, mPivotY, true, false);
-        animateStateTo(s);
+        mIsRestrictZoomRequested = true;
     }
 
     protected boolean onRotationBegin(RotationGestureDetector detector) {
@@ -438,9 +460,10 @@ public class GestureController implements View.OnTouchListener {
     }
 
     protected boolean onRotate(RotationGestureDetector detector) {
-        if (!mSettings.isRotationEnabled() || !mStateScroller.isFinished()) return true;
-
-        mState.rotateBy(detector.getRotationDelta(), detector.getFocusX(), detector.getFocusY());
+        if (mSettings.isRotationEnabled() && mStateScroller.isFinished()) {
+            mState.rotateBy(detector.getRotationDelta(), detector.getFocusX(), detector.getFocusY());
+            mIsStateChangedDuringTouch = true;
+        }
 
         return true;
     }
@@ -450,12 +473,11 @@ public class GestureController implements View.OnTouchListener {
     }
 
     protected void onFlingAnimationFinished() {
-        State endState = mStateController.restrictStateBoundsCopy(mState);
-        animateStateTo(endState);
+        animateKeepInBounds();
     }
 
     protected void onStateAnimationFinished() {
-        // no-op
+        // No-op
     }
 
     /**
