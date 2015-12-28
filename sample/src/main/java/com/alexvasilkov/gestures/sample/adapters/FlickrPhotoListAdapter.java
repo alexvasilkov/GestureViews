@@ -86,7 +86,11 @@ public class FlickrPhotoListAdapter extends DefaultEndlessRecyclerAdapter<Flickr
     }
 
     public static ImageView getImage(RecyclerView.ViewHolder holder) {
-        return ((ViewHolder) holder).image;
+        if (holder instanceof ViewHolder) {
+            return ((ViewHolder) holder).image;
+        } else {
+            return null;
+        }
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
