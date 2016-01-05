@@ -296,15 +296,15 @@ public class GestureController implements View.OnTouchListener {
             }
         }
 
-        if (viewportEvent.getActionMasked() == MotionEvent.ACTION_UP
-                || viewportEvent.getActionMasked() == MotionEvent.ACTION_CANCEL) {
-            onUpOrCancel(viewportEvent);
-        }
-
-        if (mStateScroller.isFinished() && mIsRestrictZoomRequested) {
+        if (mIsRestrictZoomRequested) {
             State restrictedState = mStateController.restrictStateBoundsCopy(
                     mState, mPivotX, mPivotY, true, false);
             animateStateTo(restrictedState, false);
+        }
+
+        if (viewportEvent.getActionMasked() == MotionEvent.ACTION_UP
+                || viewportEvent.getActionMasked() == MotionEvent.ACTION_CANCEL) {
+            onUpOrCancel(viewportEvent);
         }
 
         mIsRestrictZoomRequested = false;
