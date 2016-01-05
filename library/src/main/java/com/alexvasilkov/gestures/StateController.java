@@ -4,6 +4,7 @@ import android.graphics.Matrix;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.RectF;
+import android.support.annotation.Nullable;
 
 import com.alexvasilkov.gestures.internal.MovementBounds;
 
@@ -120,17 +121,12 @@ public class StateController {
         return restrictStateBounds(state, null, Float.NaN, Float.NaN, false, false);
     }
 
-    State restrictStateBoundsCopy(State state) {
-        mTmpState.set(state);
-        boolean changed = restrictStateBounds(mTmpState);
-        return changed ? mTmpState.copy() : null;
-    }
-
     /**
      * Restricts state's translation and zoom bounds.
      *
      * @return End state to animate changes or null if no changes are required
      */
+    @Nullable
     State restrictStateBoundsCopy(State state, float pivotX, float pivotY,
                                   boolean allowOverscroll, boolean allowOverzoom) {
         mTmpState.set(state);
