@@ -8,4 +8,4 @@
     android:foreground="?selectableItemBackground"
     android:scaleType="centerCrop"
     app:aspect="2"
-    tools:src="@drawable/view_at_rouelles_le_havre" />
+    tools:src="@drawable/painting_01" />

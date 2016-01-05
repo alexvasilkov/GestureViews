@@ -13,6 +13,7 @@ import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.adapters.PaintingsPagerAdapter;
 import com.alexvasilkov.gestures.sample.logic.Painting;
+import com.alexvasilkov.gestures.sample.logic.PaintingsHelper;
 import com.alexvasilkov.gestures.sample.utils.GestureSettingsMenu;
 
 public class ImageViewSampleActivity extends BaseActivity
@@ -30,12 +31,13 @@ public class ImageViewSampleActivity extends BaseActivity
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_image_view_sample);
+        setTitle(null);
 
         Toolbar toolbar = Views.find(this, R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mPaintings = Painting.getAllPaintings(getResources());
+        mPaintings = PaintingsHelper.list(getResources());
 
         mSettingsMenu = new GestureSettingsMenu();
         mSettingsMenu.onRestoreInstanceState(savedInstanceState);
@@ -80,7 +82,7 @@ public class ImageViewSampleActivity extends BaseActivity
     public void onPageSelected(int position) {
         CharSequence title = new SpannableBuilder(this)
                 .createStyle().setFont(Typeface.DEFAULT_BOLD).apply()
-                .append(R.string.paintings_author).append("\n")
+                .append(mPaintings[position].getAuthor()).append("\n")
                 .clearStyle()
                 .append(mPaintings[position].getTitle())
                 .build();

@@ -9,6 +9,7 @@ import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.adapters.PaintingsLayoutsPagerAdapter;
 import com.alexvasilkov.gestures.sample.logic.Painting;
+import com.alexvasilkov.gestures.sample.logic.PaintingsHelper;
 import com.alexvasilkov.gestures.sample.utils.GestureSettingsMenu;
 
 public class FrameLayoutSampleActivity extends BaseActivity {
@@ -26,7 +27,7 @@ public class FrameLayoutSampleActivity extends BaseActivity {
         mSettingsMenu = new GestureSettingsMenu();
         mSettingsMenu.onRestoreInstanceState(savedInstanceState);
 
-        Painting[] paintings = Painting.getAllPaintings(getResources());
+        Painting[] paintings = PaintingsHelper.list(getResources());
 
         mViewPager = Views.find(this, R.id.paintings_view_pager);
         mViewPager.setAdapter(new PaintingsLayoutsPagerAdapter(mViewPager, paintings, mSettingsMenu));

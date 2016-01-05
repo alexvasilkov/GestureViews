@@ -1,31 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="paintings_author">Claude Monet</string>
+    <string-array name="paintings_authors">
+        <item>Johannes Vermeer</item>
+        <item>Pablo Picasso</item>
+        <item>Vincent van Gogh</item>
+        <item>Edvard Munch</item>
+        <item>Claude Monet</item>
+    </string-array>
 
     <string-array name="paintings_titles">
-        <item>Garden at Sainte-Adresse</item>
-        <item>View At Rouelles Le Havre</item>
-        <item>The Bodmer Oak</item>
-        <item>The Japanese Bridge (The Water-Lily Pond)</item>
-        <item>A Farmyard in Normandy</item>
+        <item>The Girl with a Pearl Earring</item>
+        <item>Guernica</item>
+        <item>The Starry Night</item>
+        <item>The Scream</item>
+        <item>Water Lilies</item>
     </string-array>
 
     <array name="paintings_images">
-        <item>@drawable/garden_at_sainte_adresse</item>
-        <item>@drawable/view_at_rouelles_le_havre</item>
-        <item>@drawable/the_bodmer_oak</item>
-        <item>@drawable/japanese_bridge</item>
-        <item>@drawable/farmyard_in_normandy</item>
+        <item>@drawable/painting_01</item>
+        <item>@drawable/painting_02</item>
+        <item>@drawable/painting_03</item>
+        <item>@drawable/painting_04</item>
+        <item>@drawable/painting_05</item>
     </array>
 
     <array name="paintings_links">
-        <item>http://www.wikiart.org/en/claude-monet/garden-at-sainte-adresse</item>
-        <item>http://www.wikiart.org/en/claude-monet/view-at-rouelles-le-havre</item>
-        <item>http://www.wikiart.org/en/claude-monet/the-bodmer-oak</item>
-        <item>http://www.wikiart.org/en/claude-monet/the-japanese-bridge-the-water-lily-pond-1899
-        </item>
-        <item>http://www.wikiart.org/en/claude-monet/a-farmyard-in-normandy</item>
+        <item>http://www.wikiart.org/en/johannes-vermeer/the-girl-with-a-pearl-earring</item>
+        <item>http://www.wikiart.org/en/pablo-picasso/guernica-1937</item>
+        <item>http://www.wikiart.org/en/vincent-van-gogh/the-starry-night-1889</item>
+        <item>http://www.wikiart.org/en/edvard-munch/the-scream-1893</item>
+        <item>http://www.wikiart.org/en/claude-monet/water-lilies-40</item>
     </array>
 
 </resources>

@@ -54,7 +54,7 @@ public class PaintingsLayoutsPagerAdapter extends RecyclePagerAdapter<PaintingsL
 
         CharSequence titleText = new SpannableBuilder(holder.itemView.getContext())
                 .createStyle().setFont(Typeface.DEFAULT_BOLD).apply()
-                .append(R.string.paintings_author).append("\n")
+                .append(mPaintings[position].getAuthor()).append("\n")
                 .clearStyle()
                 .append(mPaintings[position].getTitle())
                 .build();

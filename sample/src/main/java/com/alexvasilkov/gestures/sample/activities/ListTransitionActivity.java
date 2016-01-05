@@ -15,6 +15,7 @@ import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.adapters.PaintingsListAdapter;
 import com.alexvasilkov.gestures.sample.adapters.PaintingsPagerAdapter;
 import com.alexvasilkov.gestures.sample.logic.Painting;
+import com.alexvasilkov.gestures.sample.logic.PaintingsHelper;
 import com.alexvasilkov.gestures.sample.utils.GestureSettingsMenu;
 import com.alexvasilkov.gestures.transition.SimpleViewsTracker;
 import com.alexvasilkov.gestures.transition.ViewsTransitionAnimator;
@@ -41,7 +42,7 @@ public class ListTransitionActivity extends BaseActivity implements
         mSettingsMenu = new GestureSettingsMenu();
         mSettingsMenu.onRestoreInstanceState(savedInstanceState);
 
-        Painting[] paintings = Painting.getAllPaintings(getResources());
+        Painting[] paintings = PaintingsHelper.list(getResources());
         mViews.list.setAdapter(new PaintingsListAdapter(paintings, this));
         mPagerAdapter = new PaintingsPagerAdapter(mViews.pager, paintings, mSettingsMenu);
         mViews.pager.setAdapter(mPagerAdapter);
