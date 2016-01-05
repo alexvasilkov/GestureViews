@@ -44,6 +44,7 @@ public class AdvancedDemoActivity extends BaseActivity implements
         FlickrPhotoListAdapter.OnPhotoListener {
 
     private static final int PAGE_SIZE = 30;
+    private static final int NO_POSITION = -1;
 
     private ViewHolder mViews;
     private ViewsTransitionAnimator<Integer> mAnimator;
@@ -53,13 +54,13 @@ public class AdvancedDemoActivity extends BaseActivity implements
     private GestureSettingsMenu mSettingsMenu;
 
     @InstanceState
-    private int mPagerPhotoPosition = -1;
+    private int mSavedPagerPosition = NO_POSITION;
     @InstanceState
-    private int mGridPosition = -1;
+    private int mSavedGridPosition = NO_POSITION;
     @InstanceState
-    private int mGridPositionFromTop;
+    private int mSavedGridPositionFromTop;
     @InstanceState
-    private int mPhotoCount;
+    private int mSavedPhotoCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,10 +80,23 @@ public class AdvancedDemoActivity extends BaseActivity implements
         initPager();
         initAnimator();
 
-        if (mPagerPhotoPosition != -1) {
+        if (mSavedPagerPosition != NO_POSITION) {
             // Photo was show in pager, we should switch to pager mode instantly
             onPositionUpdate(1f, false);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        mSettingsMenu.onSaveInstanceState(outState);
+        saveScreenState();
+        super.onSaveInstanceState(outState);
+        clearScreenState(); // We don't want to restore state if activity instance is not destroyed
     }
 
     @Override
@@ -92,26 +106,6 @@ public class AdvancedDemoActivity extends BaseActivity implements
         } else {
             super.onBackPressed();
         }
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        mPagerPhotoPosition = mAnimator.isLeaving() || mPagerAdapter.getCount() == 0
-                ? -1 : mViews.pager.getCurrentItem();
-
-        if (mViews.grid.getChildCount() > 0) {
-            View child = mViews.grid.getChildAt(0);
-            mGridPosition = mViews.grid.getChildAdapterPosition(child);
-            mGridPositionFromTop = child.getTop()
-                    - Views.getMarginParams(child).topMargin
-                    - mViews.grid.getPaddingTop();
-        } else {
-            mGridPosition = -1;
-            mGridPositionFromTop = 0;
-        }
-
-        mSettingsMenu.onSaveInstanceState(outState);
-        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -176,7 +170,7 @@ public class AdvancedDemoActivity extends BaseActivity implements
             public void loadNextItems() {
                 // We should either load all items that were loaded before state save / restore,
                 // or next page if we already loaded all previously shown items
-                int count = Math.max(mPhotoCount, mGridAdapter.getCount() + PAGE_SIZE);
+                int count = Math.max(mSavedPhotoCount, mGridAdapter.getCount() + PAGE_SIZE);
                 Events.create(FlickrApi.LOAD_IMAGES_EVENT).param(count).post();
             }
         });
@@ -284,10 +278,33 @@ public class AdvancedDemoActivity extends BaseActivity implements
         if (isLeaving && state == 0f) mPagerAdapter.setActivated(false);
     }
 
+    private void saveScreenState() {
+        clearScreenState();
+
+        mSavedPhotoCount = mGridAdapter.getCount();
+
+        mSavedPagerPosition = mAnimator.isLeaving() || mPagerAdapter.getCount() == 0
+                ? NO_POSITION : mViews.pager.getCurrentItem();
+
+        if (mViews.grid.getChildCount() > 0) {
+            View child = mViews.grid.getChildAt(0);
+            mSavedGridPosition = mViews.grid.getChildAdapterPosition(child);
+            mSavedGridPositionFromTop = child.getTop()
+                    - Views.getMarginParams(child).topMargin
+                    - mViews.grid.getPaddingTop();
+        }
+    }
+
+    private void clearScreenState() {
+        mSavedPhotoCount = 0;
+        mSavedPagerPosition = NO_POSITION;
+        mSavedGridPosition = NO_POSITION;
+        mSavedGridPositionFromTop = 0;
+    }
+
 
     @Result(FlickrApi.LOAD_IMAGES_EVENT)
     private void onPhotosLoaded(List<Photo> photos, boolean hasMore) {
-        mPhotoCount = photos.size();
         mGridAdapter.setPhotos(photos, hasMore);
         mPagerAdapter.setPhotos(photos);
         mGridAdapter.onNextItemsLoaded();
@@ -296,22 +313,17 @@ public class AdvancedDemoActivity extends BaseActivity implements
         mPagerListener.onPageSelected(mViews.pager.getCurrentItem());
 
         // Restoring saved state
-        if (mPagerPhotoPosition != -1) {
-            if (mPagerPhotoPosition < mPhotoCount) {
-                mPagerAdapter.setActivated(true);
-                mAnimator.enter(mPagerPhotoPosition, false);
-            }
-            mPagerPhotoPosition = -1;
+        if (mSavedPagerPosition != NO_POSITION && mSavedPagerPosition < photos.size()) {
+            mPagerAdapter.setActivated(true);
+            mAnimator.enter(mSavedPagerPosition, false);
         }
 
-        if (mGridPosition != -1) {
-            if (mGridPosition < mPhotoCount) {
-                ((GridLayoutManager) mViews.grid.getLayoutManager())
-                        .scrollToPositionWithOffset(mGridPosition, mGridPositionFromTop);
-            }
-            mGridPosition = -1;
-            mGridPositionFromTop = 0;
+        if (mSavedGridPosition != NO_POSITION && mSavedGridPosition < photos.size()) {
+            ((GridLayoutManager) mViews.grid.getLayoutManager())
+                    .scrollToPositionWithOffset(mSavedGridPosition, mSavedGridPositionFromTop);
         }
+
+        clearScreenState();
     }
 
     @Failure(FlickrApi.LOAD_IMAGES_EVENT)
@@ -319,14 +331,12 @@ public class AdvancedDemoActivity extends BaseActivity implements
         mGridAdapter.onNextItemsError();
 
         // Skipping state restoration
-        if (mPagerPhotoPosition != -1) {
+        if (mSavedPagerPosition != NO_POSITION) {
             // We can't show image right now, so we should return back to list
             onPositionUpdate(0f, true);
         }
 
-        mPagerPhotoPosition = -1;
-        mGridPosition = -1;
-        mGridPositionFromTop = 0;
+        clearScreenState();
     }
 
 
