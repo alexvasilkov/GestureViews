@@ -6,6 +6,7 @@ import com.alexvasilkov.events.Events.Subscribe;
 import com.googlecode.flickrjandroid.Flickr;
 import com.googlecode.flickrjandroid.photos.Photo;
 import com.googlecode.flickrjandroid.photos.PhotoList;
+import com.googlecode.flickrjandroid.photos.SearchParameters;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -17,7 +18,7 @@ public class FlickrApi {
     public static final String LOAD_IMAGES_EVENT = "LOAD_IMAGES_EVENT";
 
     private static final String API_KEY = "7f6035774a01a39f9056d6d7bde60002";
-    private static final String USER_ID = "91191952@N07";
+    private static final String SEARCH_QUERY = "nature";
     private static final int PER_PAGE = 30;
     private static final int MAX_PAGES = 5;
     private static final Set<String> PHOTO_PARAMS = new HashSet<>();
@@ -36,9 +37,16 @@ public class FlickrApi {
     private static synchronized EventResult loadImages(int count) throws Exception {
         boolean hasNext = hasNext();
 
+        SearchParameters params = new SearchParameters();
+        params.setText(SEARCH_QUERY);
+        params.setSafeSearch(Flickr.SAFETYLEVEL_SAFE);
+        params.setSort(SearchParameters.RELEVANCE);
+        params.setLicense("9"); // Public Domain Dedication (CC0)
+        params.setExtras(PHOTO_PARAMS);
+
         while (PHOTOS.size() < count && hasNext) {
-            PhotoList loaded = new Flickr(API_KEY).getPeopleInterface()
-                    .getPublicPhotos(USER_ID, PHOTO_PARAMS, PER_PAGE, PAGES.size() + 1);
+            PhotoList loaded = new Flickr(API_KEY).getPhotosInterface()
+                    .search(params, PER_PAGE, PAGES.size() + 1);
 
             PAGES.add(loaded);
             PHOTOS.addAll(loaded);
