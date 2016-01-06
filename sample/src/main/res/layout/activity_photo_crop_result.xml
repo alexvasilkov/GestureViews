@@ -8,8 +8,7 @@
     <com.alexvasilkov.gestures.views.GestureImageView
         android:id="@+id/cropped_image"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingTop="?attr/actionBarSize" />
+        android:layout_height="match_parent" />
 
     <FrameLayout
         android:layout_width="match_parent"

@@ -11,16 +11,11 @@
         android:layout_height="match_parent"
         android:paddingTop="?attr/actionBarSize" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="#84000000" />
-
-    <View
+    <com.alexvasilkov.gestures.views.utils.FinderView
+        android:id="@+id/cropping_finder"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize"
-        android:background="@drawable/image_frame_overlay" />
+        android:paddingTop="?attr/actionBarSize" />
 
     <FrameLayout
         android:layout_width="match_parent"

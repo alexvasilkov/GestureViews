@@ -22,4 +22,8 @@
     <string name="menu_fit_method">Fit method</string>
     <string name="menu_gravity">Gravity</string>
 
+    <string name="menu_crop_rect">Rectangle</string>
+    <string name="menu_crop_square">Square</string>
+    <string name="menu_crop_circle">Circle</string>
+
 </resources>

@@ -4,6 +4,9 @@
     <item name="toolbar" type="id" />
 
     <item name="menu_crop" type="id" />
+    <item name="menu_crop_rect" type="id" />
+    <item name="menu_crop_square" type="id" />
+    <item name="menu_crop_circle" type="id" />
 
     <item name="tag_holder" type="id" />
     <item name="tag_item" type="id" />

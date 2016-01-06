@@ -206,6 +206,17 @@ public class GestureController implements View.OnTouchListener {
     }
 
     /**
+     * Sets pivot point for zooming when keeping image in bounds.
+     *
+     * @see #animateStateTo(State)
+     * @see #animateKeepInBounds()
+     */
+    public void setPivot(float pivotX, float pivotY) {
+        mPivotX = pivotX;
+        mPivotY = pivotY;
+    }
+
+    /**
      * Animates current state to provided end state.
      *
      * @return {@code true} if animation started, {@code false} otherwise. Animation may
@@ -216,6 +227,12 @@ public class GestureController implements View.OnTouchListener {
         return animateStateTo(endState, true);
     }
 
+    /**
+     * Animates to correct position withing bounds.
+     *
+     * @return {@code true} if animation started, {@code false} otherwise. Animation may
+     * not be started if image already withing bounds.
+     */
     public boolean animateKeepInBounds() {
         return animateStateTo(mState, true);
     }
