@@ -238,7 +238,9 @@ public class GestureController implements View.OnTouchListener {
     }
 
     private boolean animateStateTo(@Nullable State endState, boolean keepInBounds) {
-        if (endState == null) return false;
+        if (endState == null) {
+            return false;
+        }
 
         State endStateFixed = null;
         if (keepInBounds) {
@@ -249,7 +251,9 @@ public class GestureController implements View.OnTouchListener {
             endStateFixed = endState;
         }
 
-        if (endStateFixed.equals(mState)) return false; // Nothing to animate
+        if (endStateFixed.equals(mState)) {
+            return false; // Nothing to animate
+        }
 
         stopAllAnimations();
 
@@ -331,7 +335,7 @@ public class GestureController implements View.OnTouchListener {
         return result;
     }
 
-    protected boolean onDown(MotionEvent e) {
+    protected boolean onDown(@NonNull MotionEvent e) {
         stopFlingAnimation();
         if (mSettings.isEnabled() && !mStateScroller.isFinished()) {
             stopStateAnimation();
@@ -341,34 +345,46 @@ public class GestureController implements View.OnTouchListener {
         mIsScrollDetected = false;
         mIsScaleDetected = false;
 
-        if (mGestureListener != null) mGestureListener.onDown(e);
+        if (mGestureListener != null) {
+            mGestureListener.onDown(e);
+        }
 
         return mSettings.isEnabled();
     }
 
-    protected void onUpOrCancel(MotionEvent e) {
+    protected void onUpOrCancel(@NonNull MotionEvent e) {
         if (mFlingScroller.isFinished()) {
             animateKeepInBounds();
         }
+
+        if (mGestureListener != null) {
+            mGestureListener.onUpOrCancel(e);
+        }
     }
 
-    protected boolean onSingleTapUp(MotionEvent e) {
+    protected boolean onSingleTapUp(@NonNull MotionEvent e) {
         return mGestureListener != null && mGestureListener.onSingleTapUp(e);
     }
 
-    protected void onLongPress(MotionEvent e) {
-        if (mGestureListener != null) mGestureListener.onLongPress(e);
+    protected void onLongPress(@NonNull MotionEvent e) {
+        if (mGestureListener != null) {
+            mGestureListener.onLongPress(e);
+        }
     }
 
-    protected boolean onScroll(MotionEvent e1, MotionEvent e2, float dX, float dY) {
-        if (!mSettings.isPanEnabled() || !mStateScroller.isFinished()) return false;
+    protected boolean onScroll(@NonNull MotionEvent e1, @NonNull MotionEvent e2, float dX, float dY) {
+        if (!mSettings.isPanEnabled() || !mStateScroller.isFinished()) {
+            return false;
+        }
 
         if (!mIsScrollDetected) {
             mIsScrollDetected = Math.abs(e2.getX() - e1.getX()) > mTouchSlop
                     || Math.abs(e2.getY() - e1.getY()) > mTouchSlop;
 
             // First scroll event can jerk a bit, so we will ignore it for smoother scrolling
-            if (mIsScrollDetected) return true;
+            if (mIsScrollDetected) {
+                return true;
+            }
         }
 
         if (mIsScrollDetected) {
@@ -384,8 +400,10 @@ public class GestureController implements View.OnTouchListener {
         return mIsScrollDetected;
     }
 
-    protected boolean onFling(MotionEvent e1, MotionEvent e2, float vX, float vY) {
-        if (!mSettings.isPanEnabled() || !mStateScroller.isFinished()) return false;
+    protected boolean onFling(@NonNull MotionEvent e1, @NonNull MotionEvent e2, float vX, float vY) {
+        if (!mSettings.isPanEnabled() || !mStateScroller.isFinished()) {
+            return false;
+        }
 
         int x = Math.round(mState.getX());
         int y = Math.round(mState.getY());
@@ -433,18 +451,26 @@ public class GestureController implements View.OnTouchListener {
     }
 
     protected boolean onDoubleTapEvent(MotionEvent e) {
-        if (e.getActionMasked() != MotionEvent.ACTION_UP) return false;
+        if (!mSettings.isDoubleTapEnabled()) {
+            return false;
+        }
+
+        if (e.getActionMasked() != MotionEvent.ACTION_UP) {
+            return false;
+        }
+
         // ScaleGestureDetector can perform zoom by "double tap & drag" since KITKAT,
         // so we should suppress our double tap in this case
-        if (mIsScaleDetected) return false;
+        if (mIsScaleDetected) {
+            return false;
+        }
 
         // Let user redefine double tap
-        if (mGestureListener != null && mGestureListener.onDoubleTap(e)) return true;
-
-        if (!mSettings.isDoubleTapEnabled()) return false;
+        if (mGestureListener != null && mGestureListener.onDoubleTap(e)) {
+            return true;
+        }
 
         animateStateTo(mStateController.toggleMinMaxZoom(mState, e.getX(), e.getY()));
-
         return true;
     }
 
@@ -454,12 +480,14 @@ public class GestureController implements View.OnTouchListener {
     }
 
     protected boolean onScale(ScaleGestureDetector detector) {
-        if (mSettings.isZoomEnabled() && mStateScroller.isFinished() &&
-                detector.getCurrentSpan() > mZoomGestureMinSpan) {
-            // When scale is end (in onRotationEnd method),
-            // scale detector will return wrong focus point, so we should save it here
+        if (!mSettings.isZoomEnabled() || !mStateScroller.isFinished()) {
+            return false;
+        }
+
+        if (detector.getCurrentSpan() > mZoomGestureMinSpan) {
             mPivotX = detector.getFocusX();
             mPivotY = detector.getFocusY();
+
             mState.zoomBy(detector.getScaleFactor(), mPivotX, mPivotY);
             mIsStateChangedDuringTouch = true;
         }
@@ -467,6 +495,7 @@ public class GestureController implements View.OnTouchListener {
         return true;
     }
 
+    @SuppressWarnings("UnusedParameters")
     protected void onScaleEnd(ScaleGestureDetector detector) {
         mIsScaleDetected = false;
         mIsRestrictZoomRequested = true;
@@ -485,6 +514,7 @@ public class GestureController implements View.OnTouchListener {
         return true;
     }
 
+    @SuppressWarnings("UnusedParameters")
     protected void onRotationEnd(RotationGestureDetector detector) {
         // No-op
     }
@@ -541,7 +571,9 @@ public class GestureController implements View.OnTouchListener {
                 }
             }
 
-            if (shouldProceed) notifyStateUpdated();
+            if (shouldProceed) {
+                notifyStateUpdated();
+            }
 
             return shouldProceed;
         }
@@ -568,17 +600,26 @@ public class GestureController implements View.OnTouchListener {
         /**
          * See {@link GestureDetector.OnGestureListener#onDown(MotionEvent)}
          */
-        void onDown(MotionEvent e);
+        void onDown(@NonNull MotionEvent e);
+
+        /**
+         * See {@link GestureDetector.OnGestureListener#onDown(MotionEvent)}
+         */
+        void onUpOrCancel(@NonNull MotionEvent e);
 
         /**
          * See {@link GestureDetector.OnGestureListener#onSingleTapUp(MotionEvent)}
+         *
+         * @return true if event was consumed, false otherwise
          */
-        boolean onSingleTapUp(MotionEvent e);
+        boolean onSingleTapUp(@NonNull MotionEvent e);
 
         /**
          * See {@link GestureDetector.OnDoubleTapListener#onSingleTapConfirmed(MotionEvent)}
+         *
+         * @return true if event was consumed, false otherwise
          */
-        boolean onSingleTapConfirmed(MotionEvent e);
+        boolean onSingleTapConfirmed(@NonNull MotionEvent e);
 
         /**
          * See {@link GestureDetector.OnGestureListener#onLongPress(MotionEvent)}.
@@ -586,12 +627,14 @@ public class GestureController implements View.OnTouchListener {
          * Note, that long press is disabled by default, use {@link #setLongPressEnabled(boolean)}
          * to enable it.
          */
-        void onLongPress(MotionEvent e);
+        void onLongPress(@NonNull MotionEvent e);
 
         /**
          * See {@link GestureDetector.OnDoubleTapListener#onDoubleTap(MotionEvent)}
+         *
+         * @return true if event was consumed, false otherwise
          */
-        boolean onDoubleTap(MotionEvent e);
+        boolean onDoubleTap(@NonNull MotionEvent e);
     }
 
     /**
@@ -602,7 +645,7 @@ public class GestureController implements View.OnTouchListener {
          * {@inheritDoc}
          */
         @Override
-        public void onDown(MotionEvent e) {
+        public void onDown(@NonNull MotionEvent e) {
             // no-op
         }
 
@@ -610,23 +653,7 @@ public class GestureController implements View.OnTouchListener {
          * {@inheritDoc}
          */
         @Override
-        public boolean onSingleTapUp(MotionEvent e) {
-            return false;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public boolean onSingleTapConfirmed(MotionEvent e) {
-            return false;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void onLongPress(MotionEvent e) {
+        public void onUpOrCancel(@NonNull MotionEvent e) {
             // no-op
         }
 
@@ -634,7 +661,31 @@ public class GestureController implements View.OnTouchListener {
          * {@inheritDoc}
          */
         @Override
-        public boolean onDoubleTap(MotionEvent e) {
+        public boolean onSingleTapUp(@NonNull MotionEvent e) {
+            return false;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean onSingleTapConfirmed(@NonNull MotionEvent e) {
+            return false;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void onLongPress(@NonNull MotionEvent e) {
+            // no-op
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean onDoubleTap(@NonNull MotionEvent e) {
             return false;
         }
     }
