@@ -22,7 +22,7 @@ public class AspectImageView extends ForegroundImageView {
     public AspectImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        TypedArray a = context.obtainStyledAttributes(attrs, new int[]{R.attr.aspect});
+        TypedArray a = context.obtainStyledAttributes(attrs, new int[] { R.attr.aspect });
         aspect = a.getFloat(0, aspect);
         a.recycle();
     }

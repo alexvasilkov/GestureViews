@@ -112,7 +112,8 @@ public class Settings {
     }
 
     /**
-     * Setting movement area size. Viewport area will be used instead if no movement area is specified.
+     * Setting movement area size. Viewport area will be used instead if no movement area is
+     * specified.
      */
     public Settings setMovementArea(int w, int h) {
         isMovementAreaSpecified = true;
@@ -148,7 +149,9 @@ public class Settings {
      * Default value is {@link #OVERZOOM_FACTOR}.
      */
     public Settings setOverzoomFactor(float factor) {
-        if (factor < 1f) throw new IllegalArgumentException("Overzoom factor cannot be < 1");
+        if (factor < 1f) {
+            throw new IllegalArgumentException("Overzoom factor cannot be < 1");
+        }
         overzoomFactor = factor;
         return this;
     }
@@ -160,8 +163,9 @@ public class Settings {
      * Default value is 0.
      */
     public Settings setOverscrollDistance(float distanceX, float distanceY) {
-        if (distanceX < 0f || distanceY < 0f)
+        if (distanceX < 0f || distanceY < 0f) {
             throw new IllegalArgumentException("Overscroll distance cannot be < 0");
+        }
         overscrollDistanceX = distanceX;
         overscrollDistanceY = distanceY;
         return this;
@@ -171,7 +175,8 @@ public class Settings {
      * Same as {@link #setOverscrollDistance(float, float)} but accepts distance in DP
      */
     public Settings setOverscrollDistance(Context context, float distanceXDp, float distanceYDp) {
-        return setOverscrollDistance(toPixels(context, distanceXDp), toPixels(context, distanceYDp));
+        return setOverscrollDistance(toPixels(context, distanceXDp),
+                toPixels(context, distanceYDp));
     }
 
     /**
@@ -400,7 +405,7 @@ public class Settings {
         INSIDE,
 
         /**
-         * Fit image width or image height inside viewport area, so the entire viewport is filled up
+         * Fit image width or image height inside viewport area, so the entire viewport is filled
          */
         OUTSIDE
     }

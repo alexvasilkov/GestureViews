@@ -372,7 +372,9 @@ public class GestureController implements View.OnTouchListener {
         }
     }
 
-    protected boolean onScroll(@NonNull MotionEvent e1, @NonNull MotionEvent e2, float dX, float dY) {
+    protected boolean onScroll(@NonNull MotionEvent e1, @NonNull MotionEvent e2,
+            float dX, float dY) {
+
         if (!mSettings.isPanEnabled() || !mStateScroller.isFinished()) {
             return false;
         }
@@ -400,7 +402,9 @@ public class GestureController implements View.OnTouchListener {
         return mIsScrollDetected;
     }
 
-    protected boolean onFling(@NonNull MotionEvent e1, @NonNull MotionEvent e2, float vX, float vY) {
+    protected boolean onFling(@NonNull MotionEvent e1, @NonNull MotionEvent e2,
+            float vX, float vY) {
+
         if (!mSettings.isPanEnabled() || !mStateScroller.isFinished()) {
             return false;
         }
@@ -507,7 +511,9 @@ public class GestureController implements View.OnTouchListener {
 
     protected boolean onRotate(RotationGestureDetector detector) {
         if (mSettings.isRotationEnabled() && mStateScroller.isFinished()) {
-            mState.rotateBy(detector.getRotationDelta(), detector.getFocusX(), detector.getFocusY());
+            float pivotX = detector.getFocusX();
+            float pivotY = detector.getFocusY();
+            mState.rotateBy(detector.getRotationDelta(), pivotX, pivotY);
             mIsStateChangedDuringTouch = true;
         }
 
@@ -733,7 +739,7 @@ public class GestureController implements View.OnTouchListener {
 
         @Override
         public boolean onScroll(@NonNull MotionEvent e1, @NonNull MotionEvent e2,
-                                float distanceX, float distanceY) {
+                float distanceX, float distanceY) {
             return GestureController.this.onScroll(e1, e2, distanceX, distanceY);
         }
 
@@ -744,7 +750,7 @@ public class GestureController implements View.OnTouchListener {
 
         @Override
         public boolean onFling(@NonNull MotionEvent e1, @NonNull MotionEvent e2,
-                               float velocityX, float velocityY) {
+                float velocityX, float velocityY) {
             return GestureController.this.onFling(e1, e2, velocityX, velocityY);
         }
 

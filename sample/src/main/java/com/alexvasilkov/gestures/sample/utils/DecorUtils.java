@@ -19,7 +19,9 @@ public class DecorUtils {
             view.setPadding(view.getPaddingLeft(), view.getPaddingTop() + height,
                     view.getPaddingRight(), view.getPaddingBottom());
 
-            if (isFixedSize) Views.getParams(view).height += height;
+            if (isFixedSize) {
+                Views.getParams(view).height += height;
+            }
         }
     }
 
@@ -62,7 +64,8 @@ public class DecorUtils {
                     == Configuration.ORIENTATION_PORTRAIT;
 
             boolean isTablet = (context.getResources().getConfiguration().screenLayout
-                    & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE;
+                    & Configuration.SCREENLAYOUT_SIZE_MASK) >=
+                    Configuration.SCREENLAYOUT_SIZE_LARGE;
 
             String key = isPortrait ? "navigation_bar_height" :
                     (isTablet ? "navigation_bar_height_landscape" : null);

@@ -12,11 +12,15 @@ public class RecyclerAdapterHelper {
      * Only correctly works if items order is unchanged.
      */
     public static <T> void notifyChanges(RecyclerView.Adapter<?> adapter,
-                                         List<T> oldList, List<T> newList,
-                                         boolean notifyCommons) {
+            List<T> oldList, List<T> newList,
+            boolean notifyCommons) {
 
-        if (oldList == null) oldList = Collections.emptyList();
-        if (newList == null) newList = Collections.emptyList();
+        if (oldList == null) {
+            oldList = Collections.emptyList();
+        }
+        if (newList == null) {
+            newList = Collections.emptyList();
+        }
 
         // Notifying about changes to animate items
         int lastNew = 0;
@@ -35,7 +39,9 @@ public class RecyclerAdapterHelper {
                     current++;
                 }
 
-                if (notifyCommons) adapter.notifyItemChanged(current);
+                if (notifyCommons) {
+                    adapter.notifyItemChanged(current);
+                }
                 current++;
 
                 lastNew = newPos + 1;
@@ -48,7 +54,9 @@ public class RecyclerAdapterHelper {
         }
 
         // If no common items, than no animation is needed
-        if (!hasCommonItems) adapter.notifyDataSetChanged();
+        if (!hasCommonItems) {
+            adapter.notifyDataSetChanged();
+        }
     }
 
 }

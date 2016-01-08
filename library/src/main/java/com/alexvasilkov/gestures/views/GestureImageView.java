@@ -26,9 +26,11 @@ import com.alexvasilkov.gestures.views.interfaces.GestureView;
 import com.alexvasilkov.gestures.views.utils.ViewClipHelper;
 
 /**
- * {@link ImageView} implementation controlled by {@link GestureController} ({@link #getController()}).
+ * {@link ImageView} implementation controlled by {@link GestureController}
+ * ({@link #getController()}).
  * <p/>
- * View position can be animated with {@link ViewPositionAnimator} ({@link #getPositionAnimator()}).
+ * View position can be animated with {@link ViewPositionAnimator}
+ * ({@link #getPositionAnimator()}).
  */
 public class GestureImageView extends ImageView implements GestureView, ClipView, AnimatorView {
 
@@ -66,7 +68,9 @@ public class GestureImageView extends ImageView implements GestureView, ClipView
     }
 
     private void ensureControllerCreated() {
-        if (mController == null) mController = new GestureControllerForPager(this);
+        if (mController == null) {
+            mController = new GestureControllerForPager(this);
+        }
     }
 
     @Override
@@ -89,7 +93,9 @@ public class GestureImageView extends ImageView implements GestureView, ClipView
      */
     @Override
     public ViewPositionAnimator getPositionAnimator() {
-        if (mPositionAnimator == null) mPositionAnimator = new ViewPositionAnimator(this);
+        if (mPositionAnimator == null) {
+            mPositionAnimator = new ViewPositionAnimator(this);
+        }
         return mPositionAnimator;
     }
 
@@ -102,7 +108,7 @@ public class GestureImageView extends ImageView implements GestureView, ClipView
     }
 
     /**
-     * Crops bitmap as it is seen inside movement area ({@link Settings#setMovementArea(int, int)}).
+     * Crops bitmap as it is seen inside movement area: {@link Settings#setMovementArea(int, int)}.
      * Result will be delivered to provided snapshot listener.
      *
      * @deprecated Use {@link #crop()} method instead.
@@ -116,13 +122,13 @@ public class GestureImageView extends ImageView implements GestureView, ClipView
     }
 
     /**
-     * Crops bitmap as it is seen inside movement area ({@link Settings#setMovementArea(int, int)}).
+     * Crops bitmap as it is seen inside movement area: {@link Settings#setMovementArea(int, int)}.
      * <p/>
      * Note, that size of cropped bitmap may vary from size of movement area,
      * since we will crop part of original image at base zoom level (zoom == 1).
      *
-     * @return Cropped bitmap or null, if no image is set to this image view or if {@link OutOfMemoryError}
-     * error was thrown during cropping.
+     * @return Cropped bitmap or null, if no image is set to this image view or if
+     * {@link OutOfMemoryError} error was thrown during cropping.
      */
     @Nullable
     public Bitmap crop() {
@@ -166,7 +172,9 @@ public class GestureImageView extends ImageView implements GestureView, ClipView
             settings.setImage(dr.getIntrinsicWidth(), dr.getIntrinsicHeight());
         }
 
-        if (oldW != settings.getImageW() || oldH != settings.getImageH()) mController.resetState();
+        if (oldW != settings.getImageW() || oldH != settings.getImageH()) {
+            mController.resetState();
+        }
     }
 
     protected void applyState(State state) {

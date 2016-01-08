@@ -101,8 +101,8 @@ public class MovementBounds {
     }
 
     /**
-     * Calculating bounds for {@link State#x} & {@link State#y} values to keep image within viewport
-     * and taking image gravity into account (see {@link Settings#setGravity(int)})
+     * Calculating bounds for {@link State#x} & {@link State#y} values to keep image within
+     * viewport and taking image gravity into account (see {@link Settings#setGravity(int)})
      */
     public void setup(State state, Settings settings) {
         RectF area = RECT_TMP_AREA;

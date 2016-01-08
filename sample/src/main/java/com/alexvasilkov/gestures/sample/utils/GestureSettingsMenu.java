@@ -146,7 +146,9 @@ public class GestureSettingsMenu implements GestureSettingsSetupListener {
 
         public static GravityType find(int gravity) {
             for (GravityType type : values()) {
-                if (type.gravity == gravity) return type;
+                if (type.gravity == gravity) {
+                    return type;
+                }
             }
             return null;
         }

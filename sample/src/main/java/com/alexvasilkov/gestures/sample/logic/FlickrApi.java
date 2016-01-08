@@ -62,7 +62,9 @@ public class FlickrApi {
         }
 
         List<Photo> result = new ArrayList<>(PHOTOS.subList(0, resultSize));
-        if (!hasNext) hasNext = PHOTOS.size() > count;
+        if (!hasNext) {
+            hasNext = PHOTOS.size() > count;
+        }
 
         return EventResult.create().result(result, hasNext).build();
     }

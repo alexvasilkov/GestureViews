@@ -63,7 +63,9 @@ public class ViewPosition {
      */
     private boolean init(@NonNull View v) {
         // If view is not attached than we can't get it's position
-        if (v.getWindowToken() == null) return false;
+        if (v.getWindowToken() == null) {
+            return false;
+        }
 
         TMP_VIEW.set(view);
 
@@ -139,7 +141,7 @@ public class ViewPosition {
         String viewStr = view.flattenToString();
         String viewportStr = viewport.flattenToString();
         String imageStr = image.flattenToString();
-        return TextUtils.join(DELIMITER, new String[]{viewStr, viewportStr, imageStr});
+        return TextUtils.join(DELIMITER, new String[] { viewStr, viewportStr, imageStr });
     }
 
     /**
@@ -147,15 +149,17 @@ public class ViewPosition {
      */
     public static ViewPosition unpack(String str) {
         String[] parts = TextUtils.split(str, SPLIT_PATTERN);
-        if (parts.length != 3)
+        if (parts.length != 3) {
             throw new IllegalArgumentException("Wrong ViewPosition string: " + str);
+        }
 
         Rect view = Rect.unflattenFromString(parts[0]);
         Rect viewport = Rect.unflattenFromString(parts[1]);
         Rect image = Rect.unflattenFromString(parts[2]);
 
-        if (view == null || viewport == null || image == null)
+        if (view == null || viewport == null || image == null) {
             throw new IllegalArgumentException("Wrong ViewPosition string: " + str);
+        }
 
         return new ViewPosition(view, viewport, image);
     }

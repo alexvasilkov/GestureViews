@@ -90,7 +90,7 @@ public class State {
     }
 
     /**
-     * Applying state from given matrix. Matrix should contain correct translation / scale / rotation.
+     * Applying state from given matrix. Matrix should contain correct translation/scale/rotation.
      */
     public void set(Matrix matrix) {
         this.matrix.set(matrix);
@@ -125,20 +125,28 @@ public class State {
      * scale = sqrt(b^2+d^2)
      * rotation = atan(c/d) = atan(-b/a)
      * </pre>
-     * See <a href="http://stackoverflow.com/questions/4361242/extract-rotation-scale-values-from-2d-transformation-matrix">here</a>.
+     * See <a href="http://stackoverflow.com/questions/4361242">here</a>.
      */
     private void updateFromMatrix(boolean updateZoom, boolean updateRotation) {
         matrix.getValues(tmp);
         x = tmp[2];
         y = tmp[5];
-        if (updateZoom) zoom = (float) Math.sqrt(tmp[1] * tmp[1] + tmp[4] * tmp[4]);
-        if (updateRotation) rotation = (float) Math.toDegrees(Math.atan2(tmp[3], tmp[4]));
+        if (updateZoom) {
+            zoom = (float) Math.sqrt(tmp[1] * tmp[1] + tmp[4] * tmp[4]);
+        }
+        if (updateRotation) {
+            rotation = (float) Math.toDegrees(Math.atan2(tmp[3], tmp[4]));
+        }
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         State state = (State) o;
 

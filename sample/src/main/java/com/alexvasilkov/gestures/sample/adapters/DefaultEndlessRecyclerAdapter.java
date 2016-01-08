@@ -17,13 +17,14 @@ public abstract class DefaultEndlessRecyclerAdapter<VH extends RecyclerView.View
     private static final int EXTRA_LOADING_TYPE = Integer.MAX_VALUE;
     private static final int EXTRA_ERROR_TYPE = Integer.MAX_VALUE - 1;
 
-    private final GridLayoutManager.SpanSizeLookup mSpanSizes = new GridLayoutManager.SpanSizeLookup() {
-        @Override
-        public int getSpanSize(int position) {
-            return position == getCount() && (isLoading() || isError()) ? mSpanCount :
-                    mOriginalSpanLookup == null ? 1 : mOriginalSpanLookup.getSpanSize(position);
-        }
-    };
+    private final GridLayoutManager.SpanSizeLookup mSpanSizes =
+            new GridLayoutManager.SpanSizeLookup() {
+                @Override
+                public int getSpanSize(int pos) {
+                    return pos == getCount() && (isLoading() || isError()) ? mSpanCount :
+                            mOriginalSpanLookup == null ? 1 : mOriginalSpanLookup.getSpanSize(pos);
+                }
+            };
 
     private GridLayoutManager.SpanSizeLookup mOriginalSpanLookup;
     private int mSpanCount;
@@ -45,7 +46,8 @@ public abstract class DefaultEndlessRecyclerAdapter<VH extends RecyclerView.View
     protected abstract VH onCreateHolder(ViewGroup parent, int viewType);
 
     @Override
-    public final void onBindViewHolder(RecyclerView.ViewHolder holder, int position, List<Object> payloads) {
+    public final void onBindViewHolder(RecyclerView.ViewHolder holder, int position,
+            List<Object> payloads) {
         onBindViewHolder(holder, position);
     }
 
@@ -79,10 +81,13 @@ public abstract class DefaultEndlessRecyclerAdapter<VH extends RecyclerView.View
 
         int type = getViewType(position);
 
-        if (type == EXTRA_LOADING_TYPE)
-            throw new IllegalArgumentException("Cannot use " + EXTRA_LOADING_TYPE + " as view type");
-        if (type == EXTRA_ERROR_TYPE)
+        if (type == EXTRA_LOADING_TYPE) {
+            throw new IllegalArgumentException(
+                    "Cannot use " + EXTRA_LOADING_TYPE + " as view type");
+        }
+        if (type == EXTRA_ERROR_TYPE) {
             throw new IllegalArgumentException("Cannot use " + EXTRA_ERROR_TYPE + " as view type");
+        }
 
         return type;
     }

@@ -80,7 +80,9 @@ public class ForegroundImageView extends ImageView {
     @Override
     public void jumpDrawablesToCurrentState() {
         super.jumpDrawablesToCurrentState();
-        if (foreground != null) foreground.jumpToCurrentState();
+        if (foreground != null) {
+            foreground.jumpToCurrentState();
+        }
     }
 
     @Override

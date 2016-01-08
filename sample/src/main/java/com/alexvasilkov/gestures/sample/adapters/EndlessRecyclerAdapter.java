@@ -6,12 +6,13 @@ import android.view.View;
 public abstract class EndlessRecyclerAdapter<VH extends RecyclerView.ViewHolder>
         extends RecyclerView.Adapter<VH> {
 
-    private final RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
-        @Override
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-            loadNextItemsIfNeeded(recyclerView);
-        }
-    };
+    private final RecyclerView.OnScrollListener mScrollListener =
+            new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    loadNextItemsIfNeeded(recyclerView);
+                }
+            };
 
     private boolean mIsLoading;
     private boolean mIsError;
@@ -78,7 +79,9 @@ public abstract class EndlessRecyclerAdapter<VH extends RecyclerView.ViewHolder>
             int lastVisiblePos = recyclerView.getChildAdapterPosition(lastVisibleChild);
             int total = getItemCount();
 
-            if (lastVisiblePos >= total - mLoadingOffset) loadNextItems();
+            if (lastVisiblePos >= total - mLoadingOffset) {
+                loadNextItems();
+            }
         }
     }
 

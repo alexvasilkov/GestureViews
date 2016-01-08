@@ -30,7 +30,8 @@ public class FrameLayoutSampleActivity extends BaseActivity {
         Painting[] paintings = PaintingsHelper.list(getResources());
 
         mViewPager = Views.find(this, R.id.paintings_view_pager);
-        mViewPager.setAdapter(new PaintingsLayoutsPagerAdapter(mViewPager, paintings, mSettingsMenu));
+        mViewPager.setAdapter(
+                new PaintingsLayoutsPagerAdapter(mViewPager, paintings, mSettingsMenu));
         mViewPager.setPageMargin(getResources().getDimensionPixelSize(R.dimen.view_pager_margin));
     }
 

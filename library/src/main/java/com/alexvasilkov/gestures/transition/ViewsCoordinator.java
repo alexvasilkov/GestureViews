@@ -21,8 +21,8 @@ import com.alexvasilkov.gestures.views.interfaces.AnimatorView;
  * corresponding item's view.
  * <p/>
  * Method {@link #request(Object)} should be called when particular item needs to be synced.
- * This method will trigger methods {@link OnRequestViewListener#onRequestView(Object)} of listeners
- * set by {@link #setFromListener(OnRequestViewListener) setFromListener} and
+ * This method will trigger methods {@link OnRequestViewListener#onRequestView(Object)} of
+ * listeners set by {@link #setFromListener(OnRequestViewListener) setFromListener} and
  * {@link #setToListener(OnRequestViewListener) setToListener} methods.
  * <p/>
  * When views were requested this class starts waiting for 'from' and 'to' views to be provided
@@ -58,7 +58,9 @@ public class ViewsCoordinator<ID> {
     public void request(@NonNull ID id) {
         cleanupRequest();
 
-        if (GestureDebug.isDebugAnimator()) Log.d(TAG, "Requesting " + id);
+        if (GestureDebug.isDebugAnimator()) {
+            Log.d(TAG, "Requesting " + id);
+        }
 
         mRequestedId = id;
         mFromListener.onRequestView(id);
@@ -82,10 +84,16 @@ public class ViewsCoordinator<ID> {
     }
 
     private void setFromInternal(@NonNull ID id, View fromView, ViewPosition fromPos) {
-        if (mRequestedId == null || !mRequestedId.equals(id)) return;
-        if (mFromView == fromView && mFromPos == fromPos) return; // Already set
+        if (mRequestedId == null || !mRequestedId.equals(id)) {
+            return;
+        }
+        if (mFromView == fromView && mFromPos == fromPos) {
+            return; // Already set
+        }
 
-        if (GestureDebug.isDebugAnimator()) Log.d(TAG, "Setting 'from' view for " + id);
+        if (GestureDebug.isDebugAnimator()) {
+            Log.d(TAG, "Setting 'from' view for " + id);
+        }
 
         mFromId = id;
         mFromView = fromView;
@@ -98,10 +106,16 @@ public class ViewsCoordinator<ID> {
     }
 
     public void setToView(@NonNull ID id, @NonNull AnimatorView toView) {
-        if (mRequestedId == null || !mRequestedId.equals(id)) return;
-        if (mToView == toView) return; // Already set
+        if (mRequestedId == null || !mRequestedId.equals(id)) {
+            return;
+        }
+        if (mToView == toView) {
+            return; // Already set
+        }
 
-        if (GestureDebug.isDebugAnimator()) Log.d(TAG, "Setting 'to' view for " + id);
+        if (GestureDebug.isDebugAnimator()) {
+            Log.d(TAG, "Setting 'to' view for " + id);
+        }
 
         mToId = id;
         mToView = toView;
@@ -109,16 +123,21 @@ public class ViewsCoordinator<ID> {
     }
 
     private void notifyWhenReady() {
-        if (mRequestedId == null || !mRequestedId.equals(mFromId) || !mRequestedId.equals(mToId))
+        if (mRequestedId == null || !mRequestedId.equals(mFromId) || !mRequestedId.equals(mToId)) {
             return;
+        }
 
         onViewsReady(mRequestedId);
     }
 
     protected void cleanupRequest() {
-        if (mRequestedId == null) return;
+        if (mRequestedId == null) {
+            return;
+        }
 
-        if (GestureDebug.isDebugAnimator()) Log.d(TAG, "Cleaning up request " + mRequestedId);
+        if (GestureDebug.isDebugAnimator()) {
+            Log.d(TAG, "Cleaning up request " + mRequestedId);
+        }
 
         mFromView = null;
         mFromPos = null;
@@ -137,7 +156,9 @@ public class ViewsCoordinator<ID> {
      * @see #getToView()
      */
     protected void onViewsReady(@NonNull ID id) {
-        if (mReadyListener != null) mReadyListener.onViewsReady(id);
+        if (mReadyListener != null) {
+            mReadyListener.onViewsReady(id);
+        }
     }
 
 

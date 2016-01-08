@@ -22,8 +22,8 @@ public class FromRecyclerViewListener<ID> implements ViewsCoordinator.OnRequestV
     private boolean mScrollHalfVisibleItems;
 
     public FromRecyclerViewListener(@NonNull RecyclerView recyclerView,
-                                    @NonNull ViewsTracker<ID> tracker,
-                                    @NonNull ViewsTransitionAnimator<ID> animator) {
+            @NonNull ViewsTracker<ID> tracker,
+            @NonNull ViewsTransitionAnimator<ID> animator) {
         mRecyclerView = recyclerView;
         mTracker = tracker;
         mAnimator = animator;
@@ -39,7 +39,9 @@ public class FromRecyclerViewListener<ID> implements ViewsCoordinator.OnRequestV
         mId = id;
         int position = mTracker.getPositionForId(id);
 
-        if (position == ViewsTracker.NO_POSITION) return; // Nothing we can do
+        if (position == ViewsTracker.NO_POSITION) {
+            return; // Nothing we can do
+        }
 
         View view = mTracker.getViewForPosition(position);
         if (view == null) {
@@ -70,7 +72,9 @@ public class FromRecyclerViewListener<ID> implements ViewsCoordinator.OnRequestV
             int position = mRecyclerView.getChildAdapterPosition(view);
             if (mId != null && mId.equals(mTracker.getIdForPosition(position))) {
                 View from = mTracker.getViewForPosition(position);
-                if (from != null) mAnimator.setFromView(mId, from);
+                if (from != null) {
+                    mAnimator.setFromView(mId, from);
+                }
             }
         }
 
@@ -83,7 +87,9 @@ public class FromRecyclerViewListener<ID> implements ViewsCoordinator.OnRequestV
     private class UpdateListener implements ViewPositionAnimator.PositionUpdateListener {
         @Override
         public void onPositionUpdate(float state, boolean isLeaving) {
-            if (state == 0f && isLeaving) mId = null;
+            if (state == 0f && isLeaving) {
+                mId = null;
+            }
             mRecyclerView.setVisibility(state == 1f && !isLeaving ? View.INVISIBLE : View.VISIBLE);
             mScrollHalfVisibleItems = state == 1f; // Only scroll if we in full mode
         }

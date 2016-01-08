@@ -61,8 +61,8 @@ public class GlideHelper {
     }
 
     public static void loadFlickrFull(@NonNull Photo photo,
-                                      @NonNull final ImageView image,
-                                      @Nullable final ImageLoadingListener listener) {
+            @NonNull final ImageView image,
+            @Nullable final ImageLoadingListener listener) {
 
         final String photoUrl = photo.getLargeSize() == null
                 ? photo.getMediumUrl() : photo.getLargeUrl();
@@ -80,13 +80,17 @@ public class GlideHelper {
                     @Override
                     public void onSuccess(String url) {
                         if (url.equals(photoUrl)) {
-                            if (listener != null) listener.onLoaded();
+                            if (listener != null) {
+                                listener.onLoaded();
+                            }
                         }
                     }
 
                     @Override
                     public void onFail(String url) {
-                        if (listener != null) listener.onFailed();
+                        if (listener != null) {
+                            listener.onFailed();
+                        }
                     }
                 })
                 .into(new GlideDrawableTarget(image));

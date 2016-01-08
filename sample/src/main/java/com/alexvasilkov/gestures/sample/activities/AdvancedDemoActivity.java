@@ -133,7 +133,9 @@ public class AdvancedDemoActivity extends BaseActivity implements
         switch (item.getItemId()) {
             case R.id.menu_crop:
                 Photo photo = mPagerAdapter.getPhoto(mViews.pager.getCurrentItem());
-                if (photo == null) return false;
+                if (photo == null) {
+                    return false;
+                }
                 PhotoCropActivity.show(AdvancedDemoActivity.this, photo);
                 return true;
             default:
@@ -225,7 +227,8 @@ public class AdvancedDemoActivity extends BaseActivity implements
                 .intoViewPager(mViews.pager, new SimpleViewsTracker() {
                     @Override
                     public View getViewForPosition(int position) {
-                        RecyclePagerAdapter.ViewHolder holder = mPagerAdapter.getViewHolder(position);
+                        RecyclePagerAdapter.ViewHolder holder = mPagerAdapter.getViewHolder(
+                                position);
                         return holder == null ? null : FlickrPhotoPagerAdapter.getImage(holder);
                     }
                 })
@@ -237,7 +240,9 @@ public class AdvancedDemoActivity extends BaseActivity implements
                 // Setting image drawable from 'from' view to 'to' to prevent flickering
                 ImageView from = (ImageView) mAnimator.getFromView();
                 ImageView to = (ImageView) mAnimator.getToView();
-                if (to.getDrawable() == null) to.setImageDrawable(from.getDrawable());
+                if (to.getDrawable() == null) {
+                    to.setImageDrawable(from.getDrawable());
+                }
             }
         });
     }
@@ -275,7 +280,9 @@ public class AdvancedDemoActivity extends BaseActivity implements
 
         mViews.pagerTitle.setVisibility(state == 1f ? View.VISIBLE : View.INVISIBLE);
 
-        if (isLeaving && state == 0f) mPagerAdapter.setActivated(false);
+        if (isLeaving && state == 0f) {
+            mPagerAdapter.setActivated(false);
+        }
     }
 
     private void saveScreenState() {

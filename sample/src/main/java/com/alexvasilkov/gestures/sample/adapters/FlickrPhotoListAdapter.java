@@ -16,7 +16,8 @@ import com.googlecode.flickrjandroid.photos.Photo;
 
 import java.util.List;
 
-public class FlickrPhotoListAdapter extends DefaultEndlessRecyclerAdapter<FlickrPhotoListAdapter.ViewHolder>
+public class FlickrPhotoListAdapter
+        extends DefaultEndlessRecyclerAdapter<FlickrPhotoListAdapter.ViewHolder>
         implements View.OnClickListener {
 
     private List<Photo> mPhotos;

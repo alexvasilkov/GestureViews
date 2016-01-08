@@ -17,7 +17,8 @@ import com.googlecode.flickrjandroid.photos.Photo;
 
 import java.util.List;
 
-public class FlickrPhotoPagerAdapter extends RecyclePagerAdapter<FlickrPhotoPagerAdapter.ViewHolder> {
+public class FlickrPhotoPagerAdapter
+        extends RecyclePagerAdapter<FlickrPhotoPagerAdapter.ViewHolder> {
 
     private static final long PROGRESS_DELAY = 300L;
 
@@ -37,8 +38,7 @@ public class FlickrPhotoPagerAdapter extends RecyclePagerAdapter<FlickrPhotoPage
     }
 
     public Photo getPhoto(int pos) {
-        if (mPhotos == null || pos < 0 || pos >= mPhotos.size()) return null;
-        return mPhotos.get(pos);
+        return mPhotos == null || pos < 0 || pos >= mPhotos.size() ? null : mPhotos.get(pos);
     }
 
     public void setSetupListener(GestureSettingsSetupListener listener) {
@@ -80,7 +80,9 @@ public class FlickrPhotoPagerAdapter extends RecyclePagerAdapter<FlickrPhotoPage
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        if (mSetupListener != null) mSetupListener.onSetupGestureView(holder.image);
+        if (mSetupListener != null) {
+            mSetupListener.onSetupGestureView(holder.image);
+        }
 
         // Temporary disabling touch controls
         if (!holder.gesturesDisabled) {

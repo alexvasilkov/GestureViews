@@ -15,7 +15,9 @@ public class CropUtils {
      * Crops image drawable into bitmap according to current image position
      */
     public static Bitmap crop(Drawable drawable, State state, Settings settings) {
-        if (drawable == null) return null;
+        if (drawable == null) {
+            return null;
+        }
 
         float zoom = state.getZoom();
 

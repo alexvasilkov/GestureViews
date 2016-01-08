@@ -21,9 +21,11 @@ import com.alexvasilkov.gestures.views.interfaces.AnimatorView;
 import com.alexvasilkov.gestures.views.interfaces.GestureView;
 
 /**
- * {@link FrameLayout} implementation controlled by {@link GestureController} ({@link #getController()}).
+ * {@link FrameLayout} implementation controlled by {@link GestureController}
+ * ({@link #getController()}).
  * <p/>
- * View position can be animated with {@link ViewPositionAnimator} ({@link #getPositionAnimator()}).
+ * View position can be animated with {@link ViewPositionAnimator}
+ * ({@link #getPositionAnimator()}).
  * <p/>
  * Note: only one children is eligible in this layout.
  */
@@ -79,7 +81,9 @@ public class GestureFrameLayout extends FrameLayout implements GestureView, Anim
      */
     @Override
     public ViewPositionAnimator getPositionAnimator() {
-        if (mPositionAnimator == null) mPositionAnimator = new ViewPositionAnimator(this);
+        if (mPositionAnimator == null) {
+            mPositionAnimator = new ViewPositionAnimator(this);
+        }
         return mPositionAnimator;
     }
 
@@ -146,8 +150,9 @@ public class GestureFrameLayout extends FrameLayout implements GestureView, Anim
 
     @Override
     public void addView(@NonNull View child, int index, @NonNull ViewGroup.LayoutParams params) {
-        if (getChildCount() != 0)
+        if (getChildCount() != 0) {
             throw new IllegalArgumentException("GestureFrameLayout can contain only one child");
+        }
         super.addView(child, index, params);
     }
 

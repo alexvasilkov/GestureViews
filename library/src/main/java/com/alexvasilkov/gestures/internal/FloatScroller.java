@@ -5,7 +5,8 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 
 /**
- * A simple class that animates float values.Functionally similar to a {@link android.widget.Scroller}.
+ * A simple class that animates float values.Functionally similar to a
+ * {@link android.widget.Scroller}.
  */
 public class FloatScroller {
 
@@ -23,7 +24,7 @@ public class FloatScroller {
     private float mCurrValue;
 
     /**
-     * The time the animation started, computed using {@link android.os.SystemClock#elapsedRealtime()}.
+     * The time the animation started, computed using {@link SystemClock#elapsedRealtime()}.
      */
     private long mStartRTC;
 

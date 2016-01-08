@@ -27,11 +27,15 @@ class ViewPositionHolder implements ViewTreeObserver.OnPreDrawListener {
         mView = view;
         mListener = listener;
         mView.getViewTreeObserver().addOnPreDrawListener(this);
-        if (isLaidOut()) update();
+        if (isLaidOut()) {
+            update();
+        }
     }
 
     public void clear() {
-        if (mView != null) mView.getViewTreeObserver().removeOnPreDrawListener(this);
+        if (mView != null) {
+            mView.getViewTreeObserver().removeOnPreDrawListener(this);
+        }
 
         mPos.view.setEmpty();
         mPos.viewport.setEmpty();
@@ -43,16 +47,22 @@ class ViewPositionHolder implements ViewTreeObserver.OnPreDrawListener {
     }
 
     public void pause(boolean paused) {
-        if (mIsPaused == paused) return;
+        if (mIsPaused == paused) {
+            return;
+        }
 
         mIsPaused = paused;
-        if (!paused) update();
+        if (!paused) {
+            update();
+        }
     }
 
     private void update() {
         if (mView != null && mListener != null && !mIsPaused) {
             boolean changed = ViewPosition.apply(mPos, mView);
-            if (changed) mListener.onViewPositionChanged(mPos);
+            if (changed) {
+                mListener.onViewPositionChanged(mPos);
+            }
         }
     }
 

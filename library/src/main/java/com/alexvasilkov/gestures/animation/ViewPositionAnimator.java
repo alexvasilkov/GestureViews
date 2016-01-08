@@ -27,8 +27,8 @@ import java.util.List;
 /**
  * Helper class to animate views from one position on screen to another.
  * <p/>
- * Animation can be performed from any view (e.g. {@link ImageView}) to any gestures controlled view
- * implementing {@link GestureView} (e.g. {@link GestureImageView}).
+ * Animation can be performed from any view (e.g. {@link ImageView}) to any gestures controlled
+ * view implementing {@link GestureView} (e.g. {@link GestureImageView}).
  * <p/>
  * Note, that initial and final views should have same aspect ratio for correct animation.
  * In case of {@link ImageView} initial and final images should have same aspect, but actual views
@@ -39,7 +39,8 @@ import java.util.List;
  * Alternatively you can manually pass initial view position using
  * {@link #enter(ViewPosition, boolean)} method. <br/>
  * To exit back to initial view call {@link #exit(boolean)} method.<br/>
- * You can listen for position changes using {@link #addPositionUpdateListener(PositionUpdateListener)}.<br/>
+ * You can listen for position changes using
+ * {@link #addPositionUpdateListener(PositionUpdateListener)}.<br/>
  * If initial view was changed you should call {@link #update(View)} method to update to new view.
  * You can also manually update initial view position using {@link #update(ViewPosition)} method.
  */
@@ -88,8 +89,9 @@ public class ViewPositionAnimator {
             new ViewPositionHolder.OnViewPositionChangeListener() {
                 @Override
                 public void onViewPositionChanged(@NonNull ViewPosition position) {
-                    if (GestureDebug.isDebugAnimator())
+                    if (GestureDebug.isDebugAnimator()) {
                         Log.d(TAG, "'From' view position updated: " + position.pack());
+                    }
 
                     mFromPos = position;
                     requestUpdateFromState();
@@ -99,8 +101,9 @@ public class ViewPositionAnimator {
 
 
     public ViewPositionAnimator(@NonNull GestureView to) {
-        if (!(to instanceof View))
+        if (!(to instanceof View)) {
             throw new IllegalArgumentException("Argument 'to' should be an instance of View");
+        }
 
         View toView = (View) to;
         mToClipView = to instanceof ClipView ? (ClipView) to : null;
@@ -115,10 +118,13 @@ public class ViewPositionAnimator {
 
             @Override
             public void onStateReset(State oldState, State newState) {
-                if (!mIsActivated) return;
+                if (!mIsActivated) {
+                    return;
+                }
 
-                if (GestureDebug.isDebugAnimator())
+                if (GestureDebug.isDebugAnimator()) {
                     Log.d(TAG, "State reset in listener: " + newState);
+                }
 
                 resetToState();
                 applyPositionState();
@@ -128,8 +134,9 @@ public class ViewPositionAnimator {
         mToPosHolder.init(toView, new ViewPositionHolder.OnViewPositionChangeListener() {
             @Override
             public void onViewPositionChanged(@NonNull ViewPosition position) {
-                if (GestureDebug.isDebugAnimator())
+                if (GestureDebug.isDebugAnimator()) {
                     Log.d(TAG, "'To' view position updated: " + position.pack());
+                }
 
                 mToPos = position;
                 requestUpdateToState();
@@ -146,8 +153,9 @@ public class ViewPositionAnimator {
      * update to new view using {@link #update(View)} method.
      */
     public void enter(@NonNull View from, boolean withAnimation) {
-        if (GestureDebug.isDebugAnimator())
+        if (GestureDebug.isDebugAnimator()) {
             Log.d(TAG, "Entering from view, with animation = " + withAnimation);
+        }
 
         enterInternal(withAnimation);
         updateInternal(from);
@@ -156,12 +164,14 @@ public class ViewPositionAnimator {
     /**
      * Starts 'enter' animation from {@code from} position to {@code to} view.
      * <p/>
-     * Note, if {@code from} view position was changed (i.e. during list adapter refresh) you should
+     * Note, if {@code from} view position was changed (i.e. during list adapter refresh) you
+     * should
      * update to new view using {@link #update(ViewPosition)} method.
      */
     public void enter(@NonNull ViewPosition fromPos, boolean withAnimation) {
-        if (GestureDebug.isDebugAnimator())
+        if (GestureDebug.isDebugAnimator()) {
             Log.d(TAG, "Entering from view position, with animation = " + withAnimation);
+        }
 
         enterInternal(withAnimation);
         updateInternal(fromPos);
@@ -172,12 +182,14 @@ public class ViewPositionAnimator {
      * the same since animator should automatically detect view position changes.
      */
     public void update(@NonNull View from) {
-        if (mFromView == null)
+        if (mFromView == null) {
             throw new IllegalStateException("Animation was not started using " +
                     "enter(View, boolean) method, cannot update 'from' view");
+        }
 
-        if (GestureDebug.isDebugAnimator())
+        if (GestureDebug.isDebugAnimator()) {
             Log.d(TAG, "Updating view");
+        }
 
         updateInternal(from);
     }
@@ -186,12 +198,14 @@ public class ViewPositionAnimator {
      * Updates position of initial view in case it was changed.
      */
     public void update(@NonNull ViewPosition fromPos) {
-        if (mFromPos == null)
+        if (mFromPos == null) {
             throw new IllegalStateException("Animation was not started using " +
                     "enter(ViewPosition, boolean) method, cannot update 'from' position");
+        }
 
-        if (GestureDebug.isDebugAnimator())
+        if (GestureDebug.isDebugAnimator()) {
             Log.d(TAG, "Updating view position: " + fromPos.pack());
+        }
 
         updateInternal(fromPos);
     }
@@ -200,13 +214,17 @@ public class ViewPositionAnimator {
      * Starts 'exit' animation from {@code to} view back to {@code from}
      */
     public void exit(boolean withAnimation) {
-        if (GestureDebug.isDebugAnimator())
+        if (GestureDebug.isDebugAnimator()) {
             Log.d(TAG, "Exiting, with animation = " + withAnimation);
+        }
 
-        if (!mIsActivated)
+        if (!mIsActivated) {
             throw new IllegalStateException("You should call enter(...) before calling exit(...)");
+        }
 
-        if (!mIsAnimating) resetToState(); // Only resetting if not animating
+        if (!mIsAnimating) {
+            resetToState(); // Only resetting if not animating
+        }
 
         // Starting animation from current position or applying initial state without animation
         setState(withAnimation ? mPositionState : 0f, true, withAnimation);
@@ -220,8 +238,10 @@ public class ViewPositionAnimator {
     }
 
     private void updateInternal(@NonNull View from) {
-        if (!mIsActivated) throw new IllegalStateException(
-                "You should call enter(...) before calling update(...)");
+        if (!mIsActivated) {
+            throw new IllegalStateException(
+                    "You should call enter(...) before calling update(...)");
+        }
 
         cleanup();
         resetToState();
@@ -232,8 +252,10 @@ public class ViewPositionAnimator {
     }
 
     private void updateInternal(@NonNull ViewPosition fromPos) {
-        if (!mIsActivated) throw new IllegalStateException(
-                "You should call enter(...) before calling update(...)");
+        if (!mIsActivated) {
+            throw new IllegalStateException(
+                    "You should call enter(...) before calling update(...)");
+        }
 
         cleanup();
         resetToState();
@@ -242,11 +264,16 @@ public class ViewPositionAnimator {
     }
 
     private void cleanup() {
-        if (GestureDebug.isDebugAnimator())
+        if (GestureDebug.isDebugAnimator()) {
             Log.d(TAG, "Cleaning up");
+        }
 
-        if (mFromView != null) mFromView.setVisibility(View.VISIBLE); // Switching back to visible
-        if (mToClipView != null) mToClipView.clipView(null);
+        if (mFromView != null) {
+            mFromView.setVisibility(View.VISIBLE); // Switching back to visible
+        }
+        if (mToClipView != null) {
+            mToClipView.clipView(null);
+        }
 
         mFromPosHolder.clear();
         mFromView = null;
@@ -314,11 +341,13 @@ public class ViewPositionAnimator {
      * or {@link #enter(ViewPosition, boolean)} again in order to continue using animator.
      */
     public void setState(@FloatRange(from = 0f, to = 1f) float state,
-                         boolean isLeaving, boolean isAnimating) {
+            boolean isLeaving, boolean isAnimating) {
         stopAnimation();
         mPositionState = state;
         mIsLeaving = isLeaving;
-        if (isAnimating) startAnimationInternal();
+        if (isAnimating) {
+            startAnimationInternal();
+        }
         applyPositionState();
     }
 
@@ -366,12 +395,17 @@ public class ViewPositionAnimator {
         mToPosHolder.pause(paused);
 
         // Perform state updates if needed
-        if (!mIsToUpdated) updateToState();
-        if (!mIsFromUpdated) updateFromState();
+        if (!mIsToUpdated) {
+            updateToState();
+        }
+        if (!mIsFromUpdated) {
+            updateFromState();
+        }
 
-        if (GestureDebug.isDebugAnimator())
+        if (GestureDebug.isDebugAnimator()) {
             Log.d(TAG, "Applying state: " + mPositionState + " / " + mIsLeaving
                     + ", 'to' ready = " + mIsToUpdated + ", 'from' ready = " + mIsFromUpdated);
+        }
 
         if (mIsToUpdated && mIsFromUpdated) {
             State state = mToController.getState();
@@ -390,7 +424,9 @@ public class ViewPositionAnimator {
 
         mIteratingListeners = true;
         for (int i = 0, size = mListeners.size(); i < size; i++) {
-            if (mApplyingPositionStateScheduled) break; // No need to call listeners anymore
+            if (mApplyingPositionStateScheduled) {
+                break; // No need to call listeners anymore
+            }
             mListeners.get(i).onPositionUpdate(mPositionState, mIsLeaving);
         }
         mIteratingListeners = false;
@@ -411,11 +447,14 @@ public class ViewPositionAnimator {
     }
 
     private void onAnimationStarted() {
-        if (mIsAnimating) return;
+        if (mIsAnimating) {
+            return;
+        }
         mIsAnimating = true;
 
-        if (GestureDebug.isDebugAnimator())
+        if (GestureDebug.isDebugAnimator()) {
             Log.d(TAG, "Animation started");
+        }
 
         // Saving bounds restrictions states
         mOrigRestrictBoundsFlag = mToController.getSettings().isRestrictBounds();
@@ -431,11 +470,14 @@ public class ViewPositionAnimator {
     }
 
     private void onAnimationStopped() {
-        if (!mIsAnimating) return;
+        if (!mIsAnimating) {
+            return;
+        }
         mIsAnimating = false;
 
-        if (GestureDebug.isDebugAnimator())
+        if (GestureDebug.isDebugAnimator()) {
             Log.d(TAG, "Animation stopped");
+        }
 
         // Restoring original settings
         mToController.getSettings().setRestrictBounds(mOrigRestrictBoundsFlag).enableGestures();
@@ -448,8 +490,9 @@ public class ViewPositionAnimator {
     }
 
     private void resetToState() {
-        if (GestureDebug.isDebugAnimator())
+        if (GestureDebug.isDebugAnimator()) {
             Log.d(TAG, "State reset internal: " + mToController.getState());
+        }
 
         mToState.set(mToController.getState());
         requestUpdateToState();
@@ -465,12 +508,15 @@ public class ViewPositionAnimator {
     }
 
     private void updateToState() {
-        if (mIsToUpdated) return;
+        if (mIsToUpdated) {
+            return;
+        }
 
         Settings settings = mToController == null ? null : mToController.getSettings();
 
-        if (mToPos == null || settings == null || !settings.hasImageSize())
+        if (mToPos == null || settings == null || !settings.hasImageSize()) {
             return;
+        }
 
         // Computing 'To' clip by getting current 'To' image rect in 'To' view coordinates
         // (including view paddings which are not part of viewport)
@@ -487,16 +533,21 @@ public class ViewPositionAnimator {
 
         mIsToUpdated = true;
 
-        if (GestureDebug.isDebugAnimator()) Log.d(TAG, "'To' state updated");
+        if (GestureDebug.isDebugAnimator()) {
+            Log.d(TAG, "'To' state updated");
+        }
     }
 
     private void updateFromState() {
-        if (mIsFromUpdated) return;
+        if (mIsFromUpdated) {
+            return;
+        }
 
         Settings settings = mToController == null ? null : mToController.getSettings();
 
-        if (mToPos == null || mFromPos == null || settings == null || !settings.hasImageSize())
+        if (mToPos == null || mFromPos == null || settings == null || !settings.hasImageSize()) {
             return;
+        }
 
         // Computing starting zoom level
         float w = settings.getImageW();
@@ -522,7 +573,9 @@ public class ViewPositionAnimator {
 
         mIsFromUpdated = true;
 
-        if (GestureDebug.isDebugAnimator()) Log.d(TAG, "'From' state updated");
+        if (GestureDebug.isDebugAnimator()) {
+            Log.d(TAG, "'From' state updated");
+        }
     }
 
     /**
@@ -562,10 +615,10 @@ public class ViewPositionAnimator {
 
     public interface PositionUpdateListener {
         /**
-         * @param state     Position state within range {@code [0, 1]}, where {@code 0} is for
-         *                  initial (from) position and {@code 1} is for final (to) position.
+         * @param state Position state within range {@code [0, 1]}, where {@code 0} is for
+         * initial (from) position and {@code 1} is for final (to) position.
          * @param isLeaving {@code false} if transitioning from initial to final position
-         *                  (entering) or {@code true} for reverse transition.
+         * (entering) or {@code true} for reverse transition.
          */
         void onPositionUpdate(float state, boolean isLeaving);
     }

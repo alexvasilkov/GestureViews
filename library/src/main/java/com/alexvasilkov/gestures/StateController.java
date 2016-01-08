@@ -128,7 +128,7 @@ public class StateController {
      */
     @Nullable
     State restrictStateBoundsCopy(State state, float pivotX, float pivotY,
-                                  boolean allowOverscroll, boolean allowOverzoom) {
+            boolean allowOverscroll, boolean allowOverzoom) {
         mTmpState.set(state);
         boolean changed = restrictStateBounds(mTmpState, null, pivotX, pivotY,
                 allowOverscroll, allowOverzoom);
@@ -143,9 +143,11 @@ public class StateController {
      * @return true if state was changed, false otherwise
      */
     boolean restrictStateBounds(State state, State prevState, float pivotX, float pivotY,
-                                boolean allowOverscroll, boolean allowOverzoom) {
+            boolean allowOverscroll, boolean allowOverzoom) {
 
-        if (!mSettings.isRestrictBounds()) return false;
+        if (!mSettings.isRestrictBounds()) {
+            return false;
+        }
 
         boolean isRotationChanged = prevState != null &&
                 !State.equals(state.getRotation(), prevState.getRotation());
@@ -218,7 +220,9 @@ public class StateController {
     }
 
     private float applyZoomResilience(float zoom, float prevZoom, float overzoom) {
-        if (overzoom == 1f) return zoom;
+        if (overzoom == 1f) {
+            return zoom;
+        }
 
         float minZoom = mMinZoom / overzoom;
         float maxZoom = mMaxZoom * overzoom;
@@ -241,8 +245,10 @@ public class StateController {
     }
 
     private float applyTranslationResilience(float value, float prevValue,
-                                             float boundsMin, float boundsMax, float overscroll) {
-        if (overscroll == 0) return value;
+            float boundsMin, float boundsMax, float overscroll) {
+        if (overscroll == 0) {
+            return value;
+        }
 
         float resilience = 0f;
 
@@ -257,7 +263,9 @@ public class StateController {
         if (resilience == 0f) {
             return value;
         } else {
-            if (resilience > 1f) resilience = 1f;
+            if (resilience > 1f) {
+                resilience = 1f;
+            }
             float delta = value - prevValue;
             delta *= (1f - (float) Math.sqrt(resilience));
             return prevValue + delta;
@@ -279,7 +287,7 @@ public class StateController {
      * Note, that this is different than {@link Settings#setMovementArea(int, int)} which defines
      * part of the viewport in which image can move.
      *
-     * @param out   Result will be stored in this rect.
+     * @param out Result will be stored in this rect.
      * @param state State for which to calculate bounds.
      */
     public void getEffectiveMovementArea(RectF out, State state) {
@@ -368,12 +376,12 @@ public class StateController {
 
     /**
      * Interpolates from start state to end state by given factor (from 0 to 1),
-     * storing result into out state. All operations (translation, zoom, rotation) will be performed
-     * within specified pivot points, assuming start and end pivot points represent same physical
-     * point on the image.
+     * storing result into out state. All operations (translation, zoom, rotation) will be
+     * performed within specified pivot points, assuming start and end pivot points represent
+     * same physical point on the image.
      */
     public static void interpolate(State out, State start, float startPivotX, float startPivotY,
-                                   State end, float endPivotX, float endPivotY, float factor) {
+            State end, float endPivotX, float endPivotY, float factor) {
         out.set(start);
 
         if (!State.equals(start.getZoom(), end.getZoom())) {

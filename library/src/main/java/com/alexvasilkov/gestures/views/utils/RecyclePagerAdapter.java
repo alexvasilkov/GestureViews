@@ -15,7 +15,8 @@ import java.util.Queue;
  * <p/>
  * Inspired by {@link RecyclerView.Adapter}.
  */
-public abstract class RecyclePagerAdapter<VH extends RecyclePagerAdapter.ViewHolder> extends PagerAdapter {
+public abstract class RecyclePagerAdapter<VH extends RecyclePagerAdapter.ViewHolder>
+        extends PagerAdapter {
 
     private final Queue<VH> mCache = new LinkedList<>();
     private final SparseArray<VH> mAttached = new SparseArray<>();
@@ -37,7 +38,9 @@ public abstract class RecyclePagerAdapter<VH extends RecyclePagerAdapter.ViewHol
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         VH holder = mCache.poll();
-        if (holder == null) holder = onCreateViewHolder(container);
+        if (holder == null) {
+            holder = onCreateViewHolder(container);
+        }
         mAttached.put(position, holder);
 
         // We should not use previous layout params, since ViewPager stores

@@ -41,7 +41,9 @@ public class PhotoCropResultActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (isFinishing()) sBitmapToShow = null;
+        if (isFinishing()) {
+            sBitmapToShow = null;
+        }
     }
 
 }

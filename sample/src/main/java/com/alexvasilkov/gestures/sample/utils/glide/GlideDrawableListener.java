@@ -8,16 +8,16 @@ public abstract class GlideDrawableListener implements RequestListener<String, G
 
     @Override
     public boolean onException(Exception e, String url,
-                               Target<GlideDrawable> target,
-                               boolean isFirstResource) {
+            Target<GlideDrawable> target,
+            boolean isFirstResource) {
         onFail(url);
         return false;
     }
 
     @Override
     public boolean onResourceReady(GlideDrawable resource, String url,
-                                   Target<GlideDrawable> target,
-                                   boolean isFromMemoryCache, boolean isFirstResource) {
+            Target<GlideDrawable> target,
+            boolean isFromMemoryCache, boolean isFirstResource) {
         onSuccess(url);
         return false;
     }

@@ -62,7 +62,9 @@ public class GestureTextView extends TextView implements GestureView {
     public boolean onTouchEvent(@NonNull MotionEvent event) {
         if (event.getActionMasked() == MotionEvent.ACTION_POINTER_DOWN) {
             ViewParent parent = getParent();
-            if (parent != null) parent.requestDisallowInterceptTouchEvent(true);
+            if (parent != null) {
+                parent.requestDisallowInterceptTouchEvent(true);
+            }
         }
 
         return mController.onTouch(this, event);

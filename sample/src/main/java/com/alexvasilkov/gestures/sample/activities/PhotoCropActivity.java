@@ -99,17 +99,17 @@ public class PhotoCropActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (mFinderShape == FinderShape.RECT) {
-            MenuItem shape = menu.add(Menu.NONE, R.id.menu_crop_square, 0, R.string.menu_crop_square);
-            shape.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-            shape.setIcon(R.drawable.ic_crop_square_white_24dp);
+            MenuItem s = menu.add(Menu.NONE, R.id.menu_crop_square, 0, R.string.menu_crop_square);
+            s.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+            s.setIcon(R.drawable.ic_crop_square_white_24dp);
         } else if (mFinderShape == FinderShape.SQUARE) {
-            MenuItem shape = menu.add(Menu.NONE, R.id.menu_crop_circle, 0, R.string.menu_crop_circle);
-            shape.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-            shape.setIcon(R.drawable.ic_radio_button_unchecked_white_24dp);
+            MenuItem s = menu.add(Menu.NONE, R.id.menu_crop_circle, 0, R.string.menu_crop_circle);
+            s.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+            s.setIcon(R.drawable.ic_radio_button_unchecked_white_24dp);
         } else {
-            MenuItem shape = menu.add(Menu.NONE, R.id.menu_crop_rect, 0, R.string.menu_crop_rect);
-            shape.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-            shape.setIcon(R.drawable.ic_crop_16_9_white_24dp);
+            MenuItem s = menu.add(Menu.NONE, R.id.menu_crop_rect, 0, R.string.menu_crop_rect);
+            s.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+            s.setIcon(R.drawable.ic_crop_16_9_white_24dp);
         }
 
         MenuItem crop = menu.add(Menu.NONE, R.id.menu_crop, 0, R.string.button_crop);

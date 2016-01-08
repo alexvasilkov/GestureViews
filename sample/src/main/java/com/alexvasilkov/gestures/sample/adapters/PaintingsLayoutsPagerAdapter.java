@@ -18,7 +18,8 @@ import com.alexvasilkov.gestures.sample.utils.glide.GlideHelper;
 import com.alexvasilkov.gestures.views.GestureFrameLayout;
 import com.alexvasilkov.gestures.views.utils.RecyclePagerAdapter;
 
-public class PaintingsLayoutsPagerAdapter extends RecyclePagerAdapter<PaintingsLayoutsPagerAdapter.ViewHolder>
+public class PaintingsLayoutsPagerAdapter
+        extends RecyclePagerAdapter<PaintingsLayoutsPagerAdapter.ViewHolder>
         implements View.OnClickListener {
 
     private final ViewPager mViewPager;
@@ -26,7 +27,7 @@ public class PaintingsLayoutsPagerAdapter extends RecyclePagerAdapter<PaintingsL
     private final GestureSettingsSetupListener mSetupListener;
 
     public PaintingsLayoutsPagerAdapter(ViewPager pager, Painting[] paintings,
-                                        GestureSettingsSetupListener listener) {
+            GestureSettingsSetupListener listener) {
         mViewPager = pager;
         mPaintings = paintings;
         mSetupListener = listener;
@@ -47,7 +48,9 @@ public class PaintingsLayoutsPagerAdapter extends RecyclePagerAdapter<PaintingsL
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        if (mSetupListener != null) mSetupListener.onSetupGestureView(holder.layout);
+        if (mSetupListener != null) {
+            mSetupListener.onSetupGestureView(holder.layout);
+        }
         holder.layout.getController().resetState();
 
         GlideHelper.loadResource(mPaintings[position].getImageId(), holder.image);

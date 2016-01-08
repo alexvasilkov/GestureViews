@@ -17,7 +17,7 @@ public class PaintingsPagerAdapter extends RecyclePagerAdapter<PaintingsPagerAda
     private final GestureSettingsSetupListener mSetupListener;
 
     public PaintingsPagerAdapter(ViewPager pager, Painting[] paintings,
-                                 GestureSettingsSetupListener listener) {
+            GestureSettingsSetupListener listener) {
         mViewPager = pager;
         mPaintings = paintings;
         mSetupListener = listener;
@@ -37,7 +37,9 @@ public class PaintingsPagerAdapter extends RecyclePagerAdapter<PaintingsPagerAda
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        if (mSetupListener != null) mSetupListener.onSetupGestureView(holder.image);
+        if (mSetupListener != null) {
+            mSetupListener.onSetupGestureView(holder.image);
+        }
         GlideHelper.loadResource(mPaintings[position].getImageId(), holder.image);
     }
 

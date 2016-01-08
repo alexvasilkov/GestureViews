@@ -26,7 +26,7 @@ public class GlideDrawableTarget extends GlideDrawableImageViewTarget {
 
     @Override
     public void onResourceReady(GlideDrawable resource,
-                                GlideAnimation<? super GlideDrawable> glideAnimation) {
+            GlideAnimation<? super GlideDrawable> glideAnimation) {
 
         if (mStartTime == 0 || SystemClock.uptimeMillis() - mStartTime < NO_ANIMATION_INTERVAL) {
             mStartTime = 0L;

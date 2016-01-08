@@ -12,10 +12,10 @@ class ImageViewHelper {
      * Helper method to calculate drawing matrix. Based on ImageView source code.
      */
     static void applyScaleType(ImageView.ScaleType type,
-                               int dwidth, int dheight,
-                               int vwidth, int vheight,
-                               Matrix imageMatrix,
-                               Matrix outMatrix) {
+            int dwidth, int dheight,
+            int vwidth, int vheight,
+            Matrix imageMatrix,
+            Matrix outMatrix) {
 
         if (ImageView.ScaleType.CENTER == type) {
             // Center bitmap in view, no scaling.

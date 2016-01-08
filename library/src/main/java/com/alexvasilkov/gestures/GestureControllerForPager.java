@@ -38,8 +38,9 @@ public class GestureControllerForPager extends GestureController {
                 return true;
             }
 
-            // User can touch outside of child view, so we will not have a chance to settle ViewPager.
-            // If so, this listener should be called and we will be able to settle ViewPager manually.
+            // User can touch outside of child view, so we will not have a chance to settle
+            // ViewPager. If so, this listener should be called and we will be able to settle
+            // ViewPager manually.
             settleViewPagerIfFinished((ViewPager) view, e);
 
             return true; // We should skip view pager touches to prevent some subtle bugs
@@ -158,7 +159,9 @@ public class GestureControllerForPager extends GestureController {
     }
 
     @Override
-    protected boolean onScroll(@NonNull MotionEvent e1, @NonNull MotionEvent e2, float dX, float dY) {
+    protected boolean onScroll(@NonNull MotionEvent e1, @NonNull MotionEvent e2,
+            float dX, float dY) {
+
         if (mViewPager == null) {
             return super.onScroll(e1, e2, dX, dY);
         } else {
@@ -177,7 +180,9 @@ public class GestureControllerForPager extends GestureController {
     }
 
     @Override
-    protected boolean onFling(@NonNull MotionEvent e1, @NonNull MotionEvent e2, float vX, float vY) {
+    protected boolean onFling(@NonNull MotionEvent e1, @NonNull MotionEvent e2,
+            float vX, float vY) {
+
         return !hasViewPagerX() && super.onFling(e1, e2, vX, vY);
     }
 
@@ -202,7 +207,9 @@ public class GestureControllerForPager extends GestureController {
      * of view itself.
      */
     private float scrollBy(@NonNull MotionEvent e, float dX, float dY) {
-        if (mIsSkipViewPager) return dX;
+        if (mIsSkipViewPager) {
+            return dX;
+        }
 
         float dViewX, dPagerX;
 
@@ -220,7 +227,9 @@ public class GestureControllerForPager extends GestureController {
             float availablePagerX = dir * mViewPagerX < 0 ? Math.abs(mViewPagerX) : 0;
 
             // Not available if already overscrolled in same direction
-            if (availableViewX < 0) availableViewX = 0;
+            if (availableViewX < 0) {
+                availableViewX = 0;
+            }
 
             if (availablePagerX >= movementX) {
                 // Only ViewPager is moved
@@ -302,8 +311,8 @@ public class GestureControllerForPager extends GestureController {
             settleViewPagerIfFinished(mViewPager, e);
         }
 
-        // Hack: ViewPager has bug when endFakeDrag() does not work properly.
-        // But we need to ensure ViewPager is not in fake drag mode after settleViewPagerIfFinished()
+        // Hack: ViewPager has bug when endFakeDrag() does not work properly. But we need to ensure
+        // ViewPager is not in fake drag mode after settleViewPagerIfFinished()
         try {
             if (mViewPager != null && mViewPager.isFakeDragging()) {
                 mViewPager.endFakeDrag();

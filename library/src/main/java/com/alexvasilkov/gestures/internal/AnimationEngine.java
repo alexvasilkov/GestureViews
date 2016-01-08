@@ -27,7 +27,9 @@ public abstract class AnimationEngine implements Runnable {
             }
         }
 
-        if (continueAnimation) scheduleNextStep();
+        if (continueAnimation) {
+            scheduleNextStep();
+        }
     }
 
     public abstract boolean onStep();

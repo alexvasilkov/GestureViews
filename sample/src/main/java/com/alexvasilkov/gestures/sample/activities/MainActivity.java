@@ -47,10 +47,14 @@ public class MainActivity extends BaseActivity {
 
         String packageName = getApplicationInfo().packageName;
         List<ResolveInfo> resolveList = getPackageManager().queryIntentActivities(mainIntent, 0);
-        if (resolveList == null) return list;
+        if (resolveList == null) {
+            return list;
+        }
 
         for (ResolveInfo info : resolveList) {
-            if (packageName.equals(info.activityInfo.packageName)) list.add(info.activityInfo);
+            if (packageName.equals(info.activityInfo.packageName)) {
+                list.add(info.activityInfo);
+            }
         }
 
         return list;
