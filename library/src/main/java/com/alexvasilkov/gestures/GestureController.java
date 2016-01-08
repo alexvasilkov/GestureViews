@@ -50,7 +50,7 @@ import java.util.List;
 public class GestureController implements View.OnTouchListener {
 
     private static final float ZOOM_GESTURE_MIN_SPAN_DP = 20f;
-    private static final float FLING_COEFFICIENT = 0.75f;
+    private static final float FLING_COEFFICIENT = 0.9f;
 
     // Control constants converted to pixels
     private final float mZoomGestureMinSpan;
