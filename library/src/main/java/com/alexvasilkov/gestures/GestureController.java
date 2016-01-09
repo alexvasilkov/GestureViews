@@ -371,12 +371,6 @@ public class GestureController implements View.OnTouchListener {
 
     protected boolean onDown(@NonNull MotionEvent e) {
         stopFlingAnimation();
-        if (mSettings.isEnabled() && isAnimatingState()) {
-            // In the middle of animation we may be in wrong state,
-            // so we should animate to correct state if needed (but allowing overscroll)
-            stopStateAnimation();
-            mIsRestrictZoomRequested = true;
-        }
 
         mIsScrollDetected = false;
         mIsScaleDetected = false;
