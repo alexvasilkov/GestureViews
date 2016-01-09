@@ -17,6 +17,8 @@ import com.alexvasilkov.gestures.internal.detectors.RotationGestureDetector;
  */
 public class GestureControllerForPager extends GestureController {
 
+    private static final float ZOOM_THRESHOLD = 1.01f;
+
     /**
      * Because ViewPager will immediately return true from onInterceptTouchEvent() method during
      * settling animation, we will have no chance to prevent it from doing this.
@@ -53,16 +55,15 @@ public class GestureControllerForPager extends GestureController {
 
     private ViewPager mViewPager;
     private boolean mIsViewPagerDisabled;
+    private boolean mIsViewPagerDisabledWhenZoomed = true;
 
     private MotionEvent mTmpEvent;
     private boolean mIsScrollGestureDetected;
-    private boolean mIsScrollingViewPager;
     private boolean mIsSkipViewPager;
 
     private int mViewPagerX;
     private boolean mIsViewPagerInterceptedScroll;
-    private boolean mIsAllowViewPagerScrollY;
-    private float mLastViewPagerEventX, mLastViewPagerEventY;
+    private float mLastViewPagerEventX;
 
     public GestureControllerForPager(@NonNull View view) {
         super(view);
@@ -83,8 +84,19 @@ public class GestureControllerForPager extends GestureController {
         }
     }
 
+    /**
+     * Disables ViewPager scroll. Default is false.
+     */
     public void disableViewPager(boolean disable) {
         mIsViewPagerDisabled = disable;
+    }
+
+    /**
+     * Disables ViewPager scroll when image is zoomed above minimum zoom level. Default is true.
+     */
+    @SuppressWarnings("unused") // Public API
+    public void disableViewPagerWhenZoomed(boolean disable) {
+        mIsViewPagerDisabledWhenZoomed = disable;
     }
 
     @Override
@@ -107,14 +119,9 @@ public class GestureControllerForPager extends GestureController {
         switch (event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
                 mViewPager.requestDisallowInterceptTouchEvent(true);
-
                 mIsSkipViewPager = false;
-
                 mViewPagerX = computeViewPagerXOffset(view);
-                mIsScrollingViewPager = hasViewPagerX();
-
                 mLastViewPagerEventX = event.getX();
-                mLastViewPagerEventY = event.getY();
                 break;
 
             case MotionEvent.ACTION_POINTER_DOWN:
@@ -146,7 +153,6 @@ public class GestureControllerForPager extends GestureController {
     @Override
     protected boolean onDown(@NonNull MotionEvent e) {
         mIsViewPagerInterceptedScroll = false;
-        mIsAllowViewPagerScrollY = true;
         mIsScrollGestureDetected = false;
         passEventToViewPager(e);
         return super.onDown(e);
@@ -167,7 +173,7 @@ public class GestureControllerForPager extends GestureController {
         } else {
             if (!mIsScrollGestureDetected) {
                 mIsScrollGestureDetected = true;
-                // First scroll event can jerk a bit, so we will ignore it for smoother scrolling
+                // First scroll event can stutter a bit, so we will ignore it for smoother scrolling
                 return true;
             }
 
@@ -253,26 +259,24 @@ public class GestureControllerForPager extends GestureController {
             dViewX = 0f;
         }
 
-        // Checking vertical and horizontal thresholds
-        if (!mIsScrollingViewPager) {
-            mIsScrollingViewPager = true;
-            // We want ViewPager to stop scrolling horizontally only if view has a small
-            // movement area and a vertical scroll is detected.
-            // We will allow passing dY to ViewPager so it will be able to stop itself
-            // if vertical scroll is detected.
-            mIsAllowViewPagerScrollY = movBounds.width() < mTouchSlop;
-        }
+        float minZoom = getStateController().getEffectiveMinZoom();
+        float overzoom = minZoom == 0f ? 1f : state.getZoom() / minZoom;
 
-        if (mIsViewPagerDisabled) {
-            dPagerX = 0;
-        }
+        boolean skipPagerDrag = mIsViewPagerDisabled ||
+                (mIsViewPagerDisabledWhenZoomed && overzoom > ZOOM_THRESHOLD) ||
+                state.getY() < movBounds.top - mTouchSlop ||
+                state.getY() > movBounds.bottom + mTouchSlop;
 
-        boolean shouldFixViewX = mIsViewPagerInterceptedScroll && mViewPagerX == 0;
-        int actualX = performViewPagerScroll(e, dPagerX, dY);
-        mViewPagerX += actualX;
-        // Adding back scroll not handled by ViewPager
-        if (shouldFixViewX) {
-            dViewX += Math.round(dPagerX) - actualX;
+        if (skipPagerDrag) {
+            dViewX += dPagerX;
+        } else {
+            boolean shouldFixViewX = mIsViewPagerInterceptedScroll && mViewPagerX == 0;
+            int actualX = performViewPagerScroll(e, dPagerX);
+            mViewPagerX += actualX;
+            // Adding back scroll not handled by ViewPager
+            if (shouldFixViewX) {
+                dViewX += Math.round(dPagerX) - actualX;
+            }
         }
 
         return dViewX;
@@ -291,13 +295,23 @@ public class GestureControllerForPager extends GestureController {
         return mViewPagerX < -1 || mViewPagerX > 1;
     }
 
+    /**
+     * Manually scrolls ViewPager and returns actual distance at which pager was scrolled
+     */
+    private int performViewPagerScroll(@NonNull MotionEvent e, float dPagerX) {
+        int scrollBegin = mViewPager.getScrollX();
+        mLastViewPagerEventX += dPagerX;
+        passEventToViewPager(e);
+        return scrollBegin - mViewPager.getScrollX();
+    }
+
     private void passEventToViewPager(@NonNull MotionEvent e) {
         if (mViewPager == null) {
             return;
         }
 
         MotionEvent fixedEvent = obtainOnePointerEvent(e);
-        fixedEvent.setLocation(mLastViewPagerEventX, mLastViewPagerEventY);
+        fixedEvent.setLocation(mLastViewPagerEventX, 0f);
 
         if (mIsViewPagerInterceptedScroll) {
             mViewPager.onTouchEvent(fixedEvent);
@@ -321,19 +335,6 @@ public class GestureControllerForPager extends GestureController {
         }
 
         fixedEvent.recycle();
-    }
-
-    /**
-     * Manually scrolls ViewPager and returns actual distance at which pager was scrolled
-     */
-    private int performViewPagerScroll(@NonNull MotionEvent e, float dPagerX, float dY) {
-        int scrollBegin = mViewPager.getScrollX();
-        mLastViewPagerEventX += dPagerX;
-        if (mIsAllowViewPagerScrollY) {
-            mLastViewPagerEventY += dY;
-        }
-        passEventToViewPager(e);
-        return scrollBegin - mViewPager.getScrollX();
     }
 
     private static MotionEvent obtainOnePointerEvent(@NonNull MotionEvent e) {
