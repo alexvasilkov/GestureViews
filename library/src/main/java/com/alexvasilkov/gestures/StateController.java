@@ -25,13 +25,13 @@ import com.alexvasilkov.gestures.internal.MovementBounds;
  */
 public class StateController {
 
-    private final Settings mSettings;
-
     // Temporary objects
-    private final State mTmpState = new State();
-    private final Matrix mMatrix = new Matrix();
-    private final RectF mRectF = new RectF();
-    private final MovementBounds mMovementBounds = new MovementBounds();
+    private static final State TMP_STATE = new State();
+    private static final Matrix TMP_MATRIX = new Matrix();
+    private static final RectF TMP_RECT_F = new RectF();
+    private static final MovementBounds TMP_MOV_BOUNDS = new MovementBounds();
+
+    private final Settings mSettings;
 
     private boolean mIsResetRequired = true;
 
@@ -39,11 +39,6 @@ public class StateController {
      * Values to store calculated values for min / max zoom levels
      */
     private float mMinZoom, mMaxZoom;
-
-    /**
-     * Values to store calculated values for min / max zoom levels
-     */
-    private int mMovAreaW = Integer.MIN_VALUE, mMovAreaH = Integer.MIN_VALUE;
 
     StateController(Settings settings) {
         mSettings = settings;
@@ -106,6 +101,8 @@ public class StateController {
      * @return End state for toggle animation
      */
     State toggleMinMaxZoom(State state, float pivotX, float pivotY) {
+        adjustZoomLevels(state); // Calculating zoom levels
+
         final float middleZoom = (mMinZoom + mMaxZoom) / 2f;
         final float targetZoom = state.getZoom() < middleZoom ? mMaxZoom : mMinZoom;
 
@@ -129,10 +126,10 @@ public class StateController {
     @Nullable
     State restrictStateBoundsCopy(State state, float pivotX, float pivotY,
             boolean allowOverscroll, boolean allowOverzoom) {
-        mTmpState.set(state);
-        boolean changed = restrictStateBounds(mTmpState, null, pivotX, pivotY,
+        TMP_STATE.set(state);
+        boolean changed = restrictStateBounds(TMP_STATE, null, pivotX, pivotY,
                 allowOverscroll, allowOverzoom);
-        return changed ? mTmpState.copy() : null;
+        return changed ? TMP_STATE.copy() : null;
     }
 
     /**
@@ -149,16 +146,7 @@ public class StateController {
             return false;
         }
 
-        boolean isRotationChanged = prevState != null &&
-                !State.equals(state.getRotation(), prevState.getRotation());
-        boolean isMovAreaChanged = mMovAreaW != mSettings.getMovementAreaW() ||
-                mMovAreaH != mSettings.getMovementAreaH();
-
-        if (isRotationChanged || isMovAreaChanged) {
-            // Rotation changes and changes of movement area size will lead to image bounds changes,
-            // so we should adjust zoom levels accordingly
-            adjustZoomLevels(state);
-        }
+        adjustZoomLevels(state); // Calculating zoom levels
 
         boolean isStateChanged = false;
 
@@ -277,8 +265,8 @@ public class StateController {
      * Do note store returned object, since it will be reused next time this method is called.
      */
     MovementBounds getMovementBounds(State state) {
-        mMovementBounds.setup(state, mSettings);
-        return mMovementBounds;
+        TMP_MOV_BOUNDS.setup(state, mSettings);
+        return TMP_MOV_BOUNDS;
     }
 
 
@@ -310,24 +298,24 @@ public class StateController {
         if (isCorrectSize) {
             float w = mSettings.getImageW(), h = mSettings.getImageH();
 
-            float areaW = mMovAreaW = mSettings.getMovementAreaW();
-            float areaH = mMovAreaH = mSettings.getMovementAreaH();
+            float areaW = mSettings.getMovementAreaW();
+            float areaH = mSettings.getMovementAreaH();
 
             if (mSettings.getFitMethod() == Settings.Fit.OUTSIDE) {
                 // Computing movement area size taking rotation into account. We need to inverse
                 // rotation, since it will be applied to the area, not to the image itself.
-                mMatrix.setRotate(-state.getRotation());
-                mRectF.set(0, 0, areaW, areaH);
-                mMatrix.mapRect(mRectF);
-                areaW = mRectF.width();
-                areaH = mRectF.height();
+                TMP_MATRIX.setRotate(-state.getRotation());
+                TMP_RECT_F.set(0, 0, areaW, areaH);
+                TMP_MATRIX.mapRect(TMP_RECT_F);
+                areaW = TMP_RECT_F.width();
+                areaH = TMP_RECT_F.height();
             } else {
                 // Computing image bounding size taking rotation into account.
-                mMatrix.setRotate(state.getRotation());
-                mRectF.set(0, 0, w, h);
-                mMatrix.mapRect(mRectF);
-                w = mRectF.width();
-                h = mRectF.height();
+                TMP_MATRIX.setRotate(state.getRotation());
+                TMP_RECT_F.set(0, 0, w, h);
+                TMP_MATRIX.mapRect(TMP_RECT_F);
+                w = TMP_RECT_F.width();
+                h = TMP_RECT_F.height();
             }
 
             switch (mSettings.getFitMethod()) {
