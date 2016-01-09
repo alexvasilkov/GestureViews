@@ -71,6 +71,7 @@ public class GestureController implements View.OnTouchListener {
     private float mPivotX = Float.NaN, mPivotY = Float.NaN;
     private boolean mIsStateChangedDuringTouch;
     private boolean mIsRestrictZoomRequested;
+    private boolean mIsAnimatingInBounds;
 
     private final OverScroller mFlingScroller;
     private final FloatScroller mStateScroller;
@@ -114,6 +115,7 @@ public class GestureController implements View.OnTouchListener {
      * <p/>
      * See also {@link GestureController.OnGestureListener}
      */
+    @SuppressWarnings("unused") // Public API
     public void setOnGesturesListener(@Nullable OnGestureListener listener) {
         mGestureListener = listener;
     }
@@ -132,6 +134,7 @@ public class GestureController implements View.OnTouchListener {
      * <p/>
      * See also {@link #addOnStateChangeListener(OnStateChangeListener)}
      */
+    @SuppressWarnings("unused") // Public API
     public void removeOnStateChangeListener(OnStateChangeListener listener) {
         mStateListeners.remove(listener);
     }
@@ -141,6 +144,7 @@ public class GestureController implements View.OnTouchListener {
      * <p/>
      * See also {@link GestureController.OnGestureListener#onLongPress(android.view.MotionEvent)}
      */
+    @SuppressWarnings("unused") // Public API
     public void setLongPressEnabled(boolean enabled) {
         mGestureDetector.setIsLongpressEnabled(enabled);
     }
@@ -257,6 +261,7 @@ public class GestureController implements View.OnTouchListener {
 
         stopAllAnimations();
 
+        mIsAnimatingInBounds = keepInBounds;
         mStateStart.set(mState);
         mStateEnd.set(endStateFixed);
         mStateScroller.startScroll(0f, 1f);
@@ -266,16 +271,33 @@ public class GestureController implements View.OnTouchListener {
     }
 
     public void stopStateAnimation() {
-        mStateScroller.forceFinished();
+        if (!mStateScroller.isFinished()) {
+            mStateScroller.forceFinished();
+            onStateAnimationFinished(true);
+        }
     }
 
     public void stopFlingAnimation() {
-        mFlingScroller.forceFinished(true);
+        if (!mFlingScroller.isFinished()) {
+            mFlingScroller.forceFinished(true);
+            onFlingAnimationFinished(true);
+        }
     }
 
     public void stopAllAnimations() {
         stopStateAnimation();
         stopFlingAnimation();
+    }
+
+    protected void onFlingAnimationFinished(boolean forced) {
+        if (!forced) {
+            animateKeepInBounds();
+        }
+    }
+
+    @SuppressWarnings("UnusedParameters") // Public API (can be overridden)
+    protected void onStateAnimationFinished(boolean forced) {
+        mIsAnimatingInBounds = false;
     }
 
     protected void notifyStateUpdated() {
@@ -312,12 +334,13 @@ public class GestureController implements View.OnTouchListener {
             mStateController.restrictStateBounds(mState, mPrevState, mPivotX, mPivotY, true, true);
 
             if (!mState.equals(mPrevState)) {
-                mPrevState.set(mState);
                 notifyStateUpdated();
             }
         }
 
         if (mIsRestrictZoomRequested) {
+            mIsRestrictZoomRequested = false;
+
             State restrictedState = mStateController.restrictStateBoundsCopy(
                     mState, mPivotX, mPivotY, true, false);
             animateStateTo(restrictedState, false);
@@ -328,8 +351,6 @@ public class GestureController implements View.OnTouchListener {
             onUpOrCancel(viewportEvent);
         }
 
-        mIsRestrictZoomRequested = false;
-
         viewportEvent.recycle();
 
         return result;
@@ -338,6 +359,8 @@ public class GestureController implements View.OnTouchListener {
     protected boolean onDown(@NonNull MotionEvent e) {
         stopFlingAnimation();
         if (mSettings.isEnabled() && !mStateScroller.isFinished()) {
+            // In the middle of animation we may be in wrong state,
+            // so we should animate to correct state if needed (but allowing overscroll)
             stopStateAnimation();
             mIsRestrictZoomRequested = true;
         }
@@ -353,7 +376,7 @@ public class GestureController implements View.OnTouchListener {
     }
 
     protected void onUpOrCancel(@NonNull MotionEvent e) {
-        if (mFlingScroller.isFinished()) {
+        if (mFlingScroller.isFinished() && !mIsAnimatingInBounds) {
             animateKeepInBounds();
         }
 
@@ -383,7 +406,7 @@ public class GestureController implements View.OnTouchListener {
             mIsScrollDetected = Math.abs(e2.getX() - e1.getX()) > mTouchSlop
                     || Math.abs(e2.getY() - e1.getY()) > mTouchSlop;
 
-            // First scroll event can jerk a bit, so we will ignore it for smoother scrolling
+            // First scroll event can stutter a bit, so we will ignore it for smoother scrolling
             if (mIsScrollDetected) {
                 return true;
             }
@@ -391,9 +414,7 @@ public class GestureController implements View.OnTouchListener {
 
         if (mIsScrollDetected) {
             // Only scrolling if we are not zoomed less than min zoom
-            float minZoom = mStateController.getEffectiveMinZoom();
-            float zoom = mState.getZoom();
-            if (zoom > minZoom || State.equals(zoom, minZoom)) {
+            if (State.compare(mState.getZoom(), mStateController.getEffectiveMinZoom()) >= 0) {
                 mState.translateBy(-dX, -dY);
                 mIsStateChangedDuringTouch = true;
             }
@@ -438,9 +459,13 @@ public class GestureController implements View.OnTouchListener {
         }
     }
 
-    @SuppressWarnings("UnusedParameters")
-    protected void onFlingScroll(float fromX, float fromY, float toX, float toY) {
-        float x = toX, y = toY;
+    /**
+     * @return true if state was changed, false otherwise
+     */
+    protected boolean onFlingScroll(int dX, int dY) {
+        float prevX = mState.getX(), prevY = mState.getY();
+        float x = prevX + dX, y = prevY + dY;
+
         if (mSettings.isRestrictBounds()) {
             PointF pos = mFlingBounds.restrict(x, y);
             x = pos.x;
@@ -448,6 +473,7 @@ public class GestureController implements View.OnTouchListener {
         }
 
         mState.translateTo(x, y);
+        return !State.equals(prevX, x) || !State.equals(prevY, y);
     }
 
     protected boolean onSingleTapConfirmed(MotionEvent e) {
@@ -484,22 +510,19 @@ public class GestureController implements View.OnTouchListener {
     }
 
     protected boolean onScale(ScaleGestureDetector detector) {
-        if (!mSettings.isZoomEnabled() || !mStateScroller.isFinished()) {
-            return false;
-        }
-
-        if (detector.getCurrentSpan() > mZoomGestureMinSpan) {
-            mPivotX = detector.getFocusX();
-            mPivotY = detector.getFocusY();
-
-            mState.zoomBy(detector.getScaleFactor(), mPivotX, mPivotY);
-            mIsStateChangedDuringTouch = true;
+        if (mSettings.isZoomEnabled() && mStateScroller.isFinished()) {
+            if (detector.getCurrentSpan() > mZoomGestureMinSpan) {
+                mPivotX = detector.getFocusX();
+                mPivotY = detector.getFocusY();
+                mState.zoomBy(detector.getScaleFactor(), mPivotX, mPivotY);
+                mIsStateChangedDuringTouch = true;
+            }
         }
 
         return true;
     }
 
-    @SuppressWarnings("UnusedParameters")
+    @SuppressWarnings("UnusedParameters") // Public API (can be overridden)
     protected void onScaleEnd(ScaleGestureDetector detector) {
         mIsScaleDetected = false;
         mIsRestrictZoomRequested = true;
@@ -511,25 +534,17 @@ public class GestureController implements View.OnTouchListener {
 
     protected boolean onRotate(RotationGestureDetector detector) {
         if (mSettings.isRotationEnabled() && mStateScroller.isFinished()) {
-            float pivotX = detector.getFocusX();
-            float pivotY = detector.getFocusY();
-            mState.rotateBy(detector.getRotationDelta(), pivotX, pivotY);
+            mPivotX = detector.getFocusX();
+            mPivotY = detector.getFocusY();
+            mState.rotateBy(detector.getRotationDelta(), mPivotX, mPivotY);
             mIsStateChangedDuringTouch = true;
         }
 
         return true;
     }
 
-    @SuppressWarnings("UnusedParameters")
+    @SuppressWarnings("UnusedParameters") // Public API (can be overridden)
     protected void onRotationEnd(RotationGestureDetector detector) {
-        // No-op
-    }
-
-    protected void onFlingAnimationFinished() {
-        animateKeepInBounds();
-    }
-
-    protected void onStateAnimationFinished() {
         // No-op
     }
 
@@ -546,15 +561,13 @@ public class GestureController implements View.OnTouchListener {
             boolean shouldProceed = false;
 
             if (!mFlingScroller.isFinished()) {
+                int prevX = mFlingScroller.getCurrX(), prevY = mFlingScroller.getCurrY();
+
                 if (mFlingScroller.computeScrollOffset()) {
-                    float lastX = mState.getX(), lastY = mState.getY();
+                    int dX = mFlingScroller.getCurrX() - prevX;
+                    int dY = mFlingScroller.getCurrY() - prevY;
 
-                    float x = mFlingScroller.getCurrX();
-                    float y = mFlingScroller.getCurrY();
-
-                    onFlingScroll(lastX, lastY, x, y);
-
-                    if (State.equals(lastX, mState.getX()) && State.equals(lastY, mState.getY())) {
+                    if (!onFlingScroll(dX, dY)) {
                         stopFlingAnimation();
                     }
 
@@ -562,7 +575,7 @@ public class GestureController implements View.OnTouchListener {
                 }
 
                 if (mFlingScroller.isFinished()) {
-                    onFlingAnimationFinished();
+                    onFlingAnimationFinished(false);
                 }
             }
 
@@ -573,7 +586,7 @@ public class GestureController implements View.OnTouchListener {
                 shouldProceed = true;
 
                 if (mStateScroller.isFinished()) {
-                    onStateAnimationFinished();
+                    onStateAnimationFinished(false);
                 }
             }
 

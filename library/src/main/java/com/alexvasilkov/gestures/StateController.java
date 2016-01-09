@@ -357,6 +357,9 @@ public class StateController {
             }
         } else {
             mMinZoom = fittingZoom;
+            if (!mSettings.isZoomEnabled()) {
+                mMaxZoom = mMinZoom;
+            }
         }
 
         return isCorrectSize;

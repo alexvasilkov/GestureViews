@@ -7,7 +7,7 @@ import android.graphics.Matrix;
  */
 public class State {
 
-    public static final float COMPARISON_EPSILON = 0.0001f;
+    public static final float EPSILON = 0.0001f;
 
     private final Matrix matrix = new Matrix();
     private final float[] tmp = new float[9];
@@ -169,10 +169,17 @@ public class State {
     }
 
     /**
-     * Compares two float values, allowing small difference (see {@link #COMPARISON_EPSILON})
+     * Compares two float values, allowing small difference (see {@link #EPSILON})
      */
     public static boolean equals(float v1, float v2) {
-        return Math.abs(v1 - v2) < COMPARISON_EPSILON;
+        return compare(v1, v2) == 0;
+    }
+
+    /**
+     * Compares two float values, allowing small difference (see {@link #EPSILON})
+     */
+    public static int compare(float v1, float v2) {
+        return v1 > v2 + EPSILON ? 1 : v1 < v2 - EPSILON ? -1 : 0;
     }
 
 }
