@@ -17,6 +17,8 @@ import com.alexvasilkov.gestures.views.interfaces.GestureView;
 
 public class GestureSettingsMenu implements GestureSettingsSetupListener {
 
+    private static final float OVERSCROLL = 32f;
+
     @InstanceState
     private boolean mIsPanEnabled = true;
     @InstanceState
@@ -113,8 +115,8 @@ public class GestureSettingsMenu implements GestureSettingsSetupListener {
     @Override
     public void onSetupGestureView(GestureView view) {
         Context context = ((View) view).getContext();
-        float overscrollX = mIsOverscrollXEnabled ? 32f : 0f;
-        float overscrollY = mIsOverscrollYEnabled ? 32f : 0f;
+        float overscrollX = mIsOverscrollXEnabled ? OVERSCROLL : 0f;
+        float overscrollY = mIsOverscrollYEnabled ? OVERSCROLL : 0f;
         float overzoom = mIsOverzoomEnabled ? Settings.OVERZOOM_FACTOR : 1f;
 
         view.getController().getSettings()
