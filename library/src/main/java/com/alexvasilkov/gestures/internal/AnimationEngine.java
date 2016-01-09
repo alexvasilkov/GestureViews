@@ -35,6 +35,7 @@ public abstract class AnimationEngine implements Runnable {
     public abstract boolean onStep();
 
     private void scheduleNextStep() {
+        mView.removeCallbacks(this);
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
             mView.postDelayed(this, FRAME_TIME);
         } else {
