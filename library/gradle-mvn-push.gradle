@@ -102,7 +102,7 @@ afterEvaluate { project ->
 
     task jar(type: Jar, dependsOn: compileReleaseJavaWithJavac) {
         from file(project.compileReleaseJavaWithJavac.destinationDir)
-        exclude '**/R.class', '**/BuildConfig.class'
+        exclude '**/R.class', '**/R$*.class', '**/BuildConfig.class'
     }
 
     task javadocs(type: Javadoc) {
