@@ -34,6 +34,7 @@ public class FloatScroller {
         mInterpolator = new AccelerateDecelerateInterpolator();
     }
 
+    @SuppressWarnings("unused") // To keep similar to standard Scroller
     public long getDuration() {
         return mDuration;
     }
@@ -57,6 +58,7 @@ public class FloatScroller {
      *
      * @see android.widget.Scroller#abortAnimation()
      */
+    @SuppressWarnings("unused") // To keep similar to standard Scroller
     public void abortAnimation() {
         mFinished = true;
         mCurrValue = mFinalValue;

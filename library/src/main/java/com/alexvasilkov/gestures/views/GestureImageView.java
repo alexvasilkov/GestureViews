@@ -113,7 +113,7 @@ public class GestureImageView extends ImageView implements GestureView, ClipView
      *
      * @deprecated Use {@link #crop()} method instead.
      */
-    @SuppressWarnings("deprecation")
+    @SuppressWarnings({ "deprecation", "unused" }) // Public API
     @Deprecated
     public void getSnapshot(OnSnapshotLoadedListener listener) {
         if (getDrawable() != null) {

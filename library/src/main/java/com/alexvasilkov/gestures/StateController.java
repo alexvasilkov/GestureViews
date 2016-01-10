@@ -91,6 +91,7 @@ public class StateController {
      * @return Max zoom level as it's used by state controller.
      * Note, that it may be different than {@link Settings#getMaxZoom()}.
      */
+    @SuppressWarnings("unused") // Public API
     public float getEffectiveMaxZoom() {
         return mMaxZoom;
     }
@@ -278,6 +279,7 @@ public class StateController {
      * @param out Result will be stored in this rect.
      * @param state State for which to calculate bounds.
      */
+    @SuppressWarnings("unused") // Public API
     public void getEffectiveMovementArea(RectF out, State state) {
         out.set(getMovementBounds(state).getExternalBounds());
     }

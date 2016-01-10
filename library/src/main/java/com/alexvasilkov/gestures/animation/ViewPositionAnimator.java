@@ -309,10 +309,12 @@ public class ViewPositionAnimator {
         mListenersToRemove.clear();
     }
 
+    @SuppressWarnings("unused") // Public API
     public long getDuration() {
         return mDuration;
     }
 
+    @SuppressWarnings("unused") // Public API
     public void setDuration(long duration) {
         mDuration = duration;
     }

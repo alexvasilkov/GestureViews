@@ -147,6 +147,7 @@ public class ViewPosition {
     /**
      * Restores ViewPosition from the string created by {@link #pack()} method.
      */
+    @SuppressWarnings("unused") // Public API
     public static ViewPosition unpack(String str) {
         String[] parts = TextUtils.split(str, SPLIT_PATTERN);
         if (parts.length != 3) {
