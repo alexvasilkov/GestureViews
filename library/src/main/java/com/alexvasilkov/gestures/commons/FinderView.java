@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.views.utils;
+package com.alexvasilkov.gestures.commons;
 
 import android.content.Context;
 import android.graphics.Canvas;

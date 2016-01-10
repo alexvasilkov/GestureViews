@@ -8,7 +8,7 @@ import com.alexvasilkov.gestures.sample.logic.Painting;
 import com.alexvasilkov.gestures.sample.utils.GestureSettingsSetupListener;
 import com.alexvasilkov.gestures.sample.utils.glide.GlideHelper;
 import com.alexvasilkov.gestures.views.GestureImageView;
-import com.alexvasilkov.gestures.views.utils.RecyclePagerAdapter;
+import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
 
 public class PaintingsPagerAdapter extends RecyclePagerAdapter<PaintingsPagerAdapter.ViewHolder> {
 

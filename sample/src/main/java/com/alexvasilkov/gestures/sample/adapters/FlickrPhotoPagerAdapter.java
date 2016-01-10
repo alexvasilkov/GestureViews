@@ -11,7 +11,7 @@ import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.utils.GestureSettingsSetupListener;
 import com.alexvasilkov.gestures.sample.utils.glide.GlideHelper;
 import com.alexvasilkov.gestures.views.GestureImageView;
-import com.alexvasilkov.gestures.views.utils.RecyclePagerAdapter;
+import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
 import com.bumptech.glide.Glide;
 import com.googlecode.flickrjandroid.photos.Photo;
 

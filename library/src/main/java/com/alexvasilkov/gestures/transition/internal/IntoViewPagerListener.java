@@ -10,7 +10,7 @@ import com.alexvasilkov.gestures.transition.ViewsCoordinator;
 import com.alexvasilkov.gestures.transition.ViewsTracker;
 import com.alexvasilkov.gestures.transition.ViewsTransitionAnimator;
 import com.alexvasilkov.gestures.views.interfaces.AnimatorView;
-import com.alexvasilkov.gestures.views.utils.RecyclePagerAdapter;
+import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
 
 /**
  * Helper class to animate transitions into ViewPager with GestureView-driven pages.

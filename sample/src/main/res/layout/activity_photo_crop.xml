@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:paddingTop="?attr/actionBarSize" />
 
-    <com.alexvasilkov.gestures.views.utils.FinderView
+    <com.alexvasilkov.gestures.commons.FinderView
         android:id="@+id/cropping_finder"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

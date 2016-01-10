@@ -29,12 +29,12 @@ import com.alexvasilkov.gestures.sample.adapters.FlickrPhotoPagerAdapter;
 import com.alexvasilkov.gestures.sample.logic.FlickrApi;
 import com.alexvasilkov.gestures.sample.utils.DecorUtils;
 import com.alexvasilkov.gestures.sample.utils.GestureSettingsMenu;
-import com.alexvasilkov.gestures.sample.views.DepthPageTransformer;
+import com.alexvasilkov.gestures.commons.DepthPageTransformer;
 import com.alexvasilkov.gestures.transition.SimpleViewsTracker;
 import com.alexvasilkov.gestures.transition.ViewsCoordinator;
 import com.alexvasilkov.gestures.transition.ViewsTransitionAnimator;
 import com.alexvasilkov.gestures.transition.ViewsTransitionBuilder;
-import com.alexvasilkov.gestures.views.utils.RecyclePagerAdapter;
+import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
 import com.googlecode.flickrjandroid.photos.Photo;
 
 import java.util.List;

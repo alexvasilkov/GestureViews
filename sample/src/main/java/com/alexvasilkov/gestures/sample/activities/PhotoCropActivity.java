@@ -17,7 +17,7 @@ import com.alexvasilkov.gestures.State;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.utils.glide.GlideHelper;
 import com.alexvasilkov.gestures.views.GestureImageView;
-import com.alexvasilkov.gestures.views.utils.FinderView;
+import com.alexvasilkov.gestures.commons.FinderView;
 import com.googlecode.flickrjandroid.photos.Photo;
 
 public class PhotoCropActivity extends BaseActivity {

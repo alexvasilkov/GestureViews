@@ -20,7 +20,7 @@ import com.alexvasilkov.gestures.sample.utils.GestureSettingsMenu;
 import com.alexvasilkov.gestures.transition.SimpleViewsTracker;
 import com.alexvasilkov.gestures.transition.ViewsTransitionAnimator;
 import com.alexvasilkov.gestures.transition.ViewsTransitionBuilder;
-import com.alexvasilkov.gestures.views.utils.RecyclePagerAdapter;
+import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
 
 public class ListTransitionActivity extends BaseActivity implements
         PaintingsListAdapter.OnPaintingListener,
