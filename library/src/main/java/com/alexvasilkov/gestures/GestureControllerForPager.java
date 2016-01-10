@@ -394,6 +394,9 @@ public class GestureControllerForPager extends GestureController {
         }
     }
 
+    /**
+     * Inspired by hidden method View#transformMatrixToGlobal().
+     */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private static void transformMatrixToPager(Matrix matrix, View view, ViewPager pager) {
         View parent = (View) view.getParent();
