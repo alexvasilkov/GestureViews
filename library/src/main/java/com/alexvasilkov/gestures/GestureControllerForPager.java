@@ -125,6 +125,10 @@ public class GestureControllerForPager extends GestureController {
 
     @Override
     protected boolean onDown(@NonNull MotionEvent e) {
+        if (mViewPager == null) {
+            return super.onDown(e);
+        }
+
         mViewPager.requestDisallowInterceptTouchEvent(true);
 
         mIsSkipViewPager = false;
