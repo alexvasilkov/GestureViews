@@ -19,7 +19,7 @@ import com.alexvasilkov.gestures.internal.detectors.RotationGestureDetector;
  */
 public class GestureControllerForPager extends GestureController {
 
-    private static final float SCROLL_THRESHOLD = 25f;
+    private static final float SCROLL_THRESHOLD = 15f;
     private static final float OVERSCROLL_THRESHOLD_FACTOR = 4f;
 
     /**
