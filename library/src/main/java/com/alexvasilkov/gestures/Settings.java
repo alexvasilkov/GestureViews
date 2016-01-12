@@ -96,6 +96,11 @@ public class Settings {
      */
     private boolean isRestrictBounds = true;
 
+    /**
+     * Whether image rotation should stick to 90 degrees or can be free
+     */
+    private boolean isRestrictRotation = false;
+
     Settings() {
         // Package private constructor
     }
@@ -279,13 +284,21 @@ public class Settings {
     /**
      * Sets whether image transformations should be kept in bounds or not.
      * <p/>
-     * Can be set to {@code false} during animation to make it smoother,
-     * but you should ensure end state of animation is within bounds.
-     * <p/>
      * Default value is true.
      */
     public Settings setRestrictBounds(boolean isRestrictBounds) {
         this.isRestrictBounds = isRestrictBounds;
+        return this;
+    }
+
+    /**
+     * Sets whether image rotation should stick to 90 degrees intervals or can be free.
+     * Only applied when {@link #isRestrictBounds()} is true as well.
+     * <p/>
+     * Default value is false.
+     */
+    public Settings setRestrictRotation(boolean isRestrictRotation) {
+        this.isRestrictRotation = isRestrictRotation;
         return this;
     }
 
@@ -368,6 +381,10 @@ public class Settings {
 
     public boolean isRestrictBounds() {
         return isRestrictBounds;
+    }
+
+    public boolean isRestrictRotation() {
+        return isRestrictRotation;
     }
 
     /**

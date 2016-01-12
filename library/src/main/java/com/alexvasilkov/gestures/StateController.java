@@ -116,7 +116,7 @@ public class StateController {
      * Restricts state's translation and zoom bounds, disallowing overscroll / overzoom.
      */
     boolean restrictStateBounds(State state) {
-        return restrictStateBounds(state, null, Float.NaN, Float.NaN, false, false);
+        return restrictStateBounds(state, null, Float.NaN, Float.NaN, false, false, true);
     }
 
     /**
@@ -125,11 +125,11 @@ public class StateController {
      * @return End state to animate changes or null if no changes are required
      */
     @Nullable
-    State restrictStateBoundsCopy(State state, float pivotX, float pivotY,
-            boolean allowOverscroll, boolean allowOverzoom) {
+    State restrictStateBoundsCopy(State state, State prevState, float pivotX, float pivotY,
+            boolean allowOverscroll, boolean allowOverzoom, boolean restrictRotation) {
         TMP_STATE.set(state);
-        boolean changed = restrictStateBounds(TMP_STATE, null, pivotX, pivotY,
-                allowOverscroll, allowOverzoom);
+        boolean changed = restrictStateBounds(TMP_STATE, prevState, pivotX, pivotY,
+                allowOverscroll, allowOverzoom, restrictRotation);
         return changed ? TMP_STATE.copy() : null;
     }
 
@@ -141,15 +141,30 @@ public class StateController {
      * @return true if state was changed, false otherwise
      */
     boolean restrictStateBounds(State state, State prevState, float pivotX, float pivotY,
-            boolean allowOverscroll, boolean allowOverzoom) {
+            boolean allowOverscroll, boolean allowOverzoom, boolean restrictRotation) {
 
         if (!mSettings.isRestrictBounds()) {
             return false;
         }
 
-        adjustZoomLevels(state); // Calculating zoom levels
+        // Calculating default pivot point, if not provided
+        if (Float.isNaN(pivotX) || Float.isNaN(pivotY)) {
+            Point pivot = MovementBounds.getDefaultPivot(mSettings);
+            pivotX = pivot.x;
+            pivotY = pivot.y;
+        }
 
         boolean isStateChanged = false;
+
+        if (restrictRotation && mSettings.isRestrictRotation()) {
+            float rotation = Math.round(state.getRotation() / 90f) * 90f;
+            if (!State.equals(rotation, state.getRotation())) {
+                state.rotateTo(rotation, pivotX, pivotY);
+                isStateChanged = true;
+            }
+        }
+
+        adjustZoomLevels(state); // Calculating zoom levels
 
         float overzoom = allowOverzoom ? mSettings.getOverzoomFactor() : 1f;
 
@@ -161,11 +176,6 @@ public class StateController {
         }
 
         if (!State.equals(zoom, state.getZoom())) {
-            if (Float.isNaN(pivotX) || Float.isNaN(pivotY)) {
-                Point pivot = MovementBounds.getDefaultPivot(mSettings);
-                pivotX = pivot.x;
-                pivotY = pivot.y;
-            }
             state.zoomTo(zoom, pivotX, pivotY);
             isStateChanged = true;
         }
@@ -235,7 +245,7 @@ public class StateController {
 
     private float applyTranslationResilience(float value, float prevValue,
             float boundsMin, float boundsMax, float overscroll) {
-        if (overscroll == 0) {
+        if (overscroll == 0f) {
             return value;
         }
 
@@ -382,8 +392,28 @@ public class StateController {
             out.zoomTo(zoom, startPivotX, startPivotY);
         }
 
-        if (!State.equals(start.getRotation(), end.getRotation())) {
-            float rotation = interpolate(start.getRotation(), end.getRotation(), factor);
+        // Getting rotations
+        float startRotation = start.getRotation();
+        float endRotation = end.getRotation();
+
+        float rotation = Float.NaN;
+
+        // Choosing shortest path to interpolate
+        if (Math.abs(startRotation - endRotation) <= 180f) {
+            if (!State.equals(startRotation, endRotation)) {
+                rotation = interpolate(startRotation, endRotation, factor);
+            }
+        } else {
+            // Keeping rotation positive
+            float startRotationPositive = startRotation < 0f ? startRotation + 360f : startRotation;
+            float endRotationPositive = endRotation < 0f ? endRotation + 360f : endRotation;
+
+            if (!State.equals(startRotationPositive, endRotationPositive)) {
+                rotation = interpolate(startRotationPositive, endRotationPositive, factor);
+            }
+        }
+
+        if (!Float.isNaN(rotation)) {
             out.rotateTo(rotation, startPivotX, startPivotY);
         }
 

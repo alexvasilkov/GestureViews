@@ -71,6 +71,7 @@ public class GestureController implements View.OnTouchListener {
     private float mPivotX = Float.NaN, mPivotY = Float.NaN;
     private boolean mIsStateChangedDuringTouch;
     private boolean mIsRestrictZoomRequested;
+    private boolean mIsRestrictRotationRequested;
     private boolean mIsAnimatingInBounds;
 
     private final OverScroller mFlingScroller;
@@ -249,7 +250,7 @@ public class GestureController implements View.OnTouchListener {
         State endStateFixed = null;
         if (keepInBounds) {
             endStateFixed = mStateController.restrictStateBoundsCopy(
-                    endState, mPivotX, mPivotY, false, false);
+                    endState, mPrevState, mPivotX, mPivotY, false, false, true);
         }
         if (endStateFixed == null) {
             endStateFixed = endState;
@@ -344,18 +345,20 @@ public class GestureController implements View.OnTouchListener {
         if (mIsStateChangedDuringTouch) {
             mIsStateChangedDuringTouch = false;
 
-            mStateController.restrictStateBounds(mState, mPrevState, mPivotX, mPivotY, true, true);
+            mStateController.restrictStateBounds(
+                    mState, mPrevState, mPivotX, mPivotY, true, true, false);
 
             if (!mState.equals(mPrevState)) {
                 notifyStateUpdated();
             }
         }
 
-        if (mIsRestrictZoomRequested) {
+        if (mIsRestrictZoomRequested || mIsRestrictRotationRequested) {
             mIsRestrictZoomRequested = false;
+            mIsRestrictRotationRequested = false;
 
             State restrictedState = mStateController.restrictStateBoundsCopy(
-                    mState, mPivotX, mPivotY, true, false);
+                    mState, mPrevState, mPivotX, mPivotY, true, false, true);
             animateStateTo(restrictedState, false);
         }
 
@@ -550,7 +553,7 @@ public class GestureController implements View.OnTouchListener {
 
     @SuppressWarnings("UnusedParameters") // Public API (can be overridden)
     protected void onRotationEnd(RotationGestureDetector detector) {
-        // No-op
+        mIsRestrictRotationRequested = true;
     }
 
     /**

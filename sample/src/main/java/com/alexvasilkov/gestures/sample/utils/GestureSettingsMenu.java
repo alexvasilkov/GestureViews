@@ -26,6 +26,8 @@ public class GestureSettingsMenu implements GestureSettingsSetupListener {
     @InstanceState
     private boolean mIsRotationEnabled = false;
     @InstanceState
+    private boolean mIsRestrictRotation = false;
+    @InstanceState
     private boolean mIsOverscrollXEnabled = false;
     @InstanceState
     private boolean mIsOverscrollYEnabled = false;
@@ -50,6 +52,7 @@ public class GestureSettingsMenu implements GestureSettingsSetupListener {
         addBoolMenu(menu, mIsPanEnabled, R.string.menu_enable_pan);
         addBoolMenu(menu, mIsZoomEnabled, R.string.menu_enable_zoom);
         addBoolMenu(menu, mIsRotationEnabled, R.string.menu_enable_rotation);
+        addBoolMenu(menu, mIsRestrictRotation, R.string.menu_restrict_rotation);
         addBoolMenu(menu, mIsOverscrollXEnabled, R.string.menu_enable_overscroll_x);
         addBoolMenu(menu, mIsOverscrollYEnabled, R.string.menu_enable_overscroll_y);
         addBoolMenu(menu, mIsOverzoomEnabled, R.string.menu_enable_overzoom);
@@ -86,6 +89,9 @@ public class GestureSettingsMenu implements GestureSettingsSetupListener {
                 break;
             case R.string.menu_enable_rotation:
                 mIsRotationEnabled = !mIsRotationEnabled;
+                break;
+            case R.string.menu_restrict_rotation:
+                mIsRestrictRotation = !mIsRestrictRotation;
                 break;
             case R.string.menu_enable_overscroll_x:
                 mIsOverscrollXEnabled = !mIsOverscrollXEnabled;
@@ -126,6 +132,7 @@ public class GestureSettingsMenu implements GestureSettingsSetupListener {
                 .setOverscrollDistance(context, overscrollX, overscrollY)
                 .setOverzoomFactor(overzoom)
                 .setRotationEnabled(mIsRotationEnabled)
+                .setRestrictRotation(mIsRestrictRotation)
                 .setFillViewport(mIsFitViewport)
                 .setFitMethod(mFitMethod)
                 .setGravity(mGravity);
