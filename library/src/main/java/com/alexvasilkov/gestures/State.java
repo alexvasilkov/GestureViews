@@ -28,6 +28,9 @@ public class State {
         return zoom;
     }
 
+    /**
+     * Rotation in degrees within the range [-180..180].
+     */
     public float getRotation() {
         return rotation;
     }
@@ -78,6 +81,14 @@ public class State {
     }
 
     public void set(float x, float y, float zoom, float rotation) {
+        // Keeping rotation within the range [-180..180]
+        while (rotation < -180f) {
+            rotation += 360f;
+        }
+        while (rotation > 180f) {
+            rotation -= 360f;
+        }
+
         this.x = x;
         this.y = y;
         this.zoom = zoom;
@@ -85,8 +96,12 @@ public class State {
 
         // Note, that order is vital here
         matrix.reset();
-        matrix.postScale(zoom, zoom);
-        matrix.postRotate(rotation);
+        if (zoom != 1f) {
+            matrix.postScale(zoom, zoom);
+        }
+        if (rotation != 0f) {
+            matrix.postRotate(rotation);
+        }
         matrix.postTranslate(x, y);
     }
 
@@ -133,7 +148,7 @@ public class State {
         x = tmp[2];
         y = tmp[5];
         if (updateZoom) {
-            zoom = (float) Math.sqrt(tmp[1] * tmp[1] + tmp[4] * tmp[4]);
+            zoom = (float) Math.hypot(tmp[1], tmp[4]);
         }
         if (updateRotation) {
             rotation = (float) Math.toDegrees(Math.atan2(tmp[3], tmp[4]));
