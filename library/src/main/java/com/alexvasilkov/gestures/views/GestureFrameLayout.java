@@ -123,16 +123,29 @@ public class GestureFrameLayout extends FrameLayout implements GestureView, Anim
     }
 
     @Override
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        super.onLayout(changed, left, top, right, bottom);
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
         View child = getChildCount() == 0 ? null : getChildAt(0);
         if (child != null) {
-            mController.getSettings().setImage(child.getWidth(), child.getHeight());
+            mController.getSettings().setImage(child.getMeasuredWidth(), child.getMeasuredHeight());
             mController.updateState();
         }
     }
 
+    @Override
+    protected void measureChildWithMargins(View child, int parentWidthMeasureSpec, int widthUsed,
+            int parentHeightMeasureSpec, int heightUsed) {
+        final MarginLayoutParams lp = (MarginLayoutParams) child.getLayoutParams();
+
+        final int extraW = getPaddingLeft() + getPaddingRight() +
+                lp.leftMargin + lp.rightMargin + widthUsed;
+        final int extraH = getPaddingTop() + getPaddingBottom() +
+                lp.topMargin + lp.bottomMargin + heightUsed;
+
+        child.measure(getChildMeasureSpecFixed(parentWidthMeasureSpec, extraW, lp.width),
+                getChildMeasureSpecFixed(parentHeightMeasureSpec, extraH, lp.height));
+    }
 
     protected void applyState(State state) {
         state.get(mMatrix);
@@ -171,6 +184,15 @@ public class GestureFrameLayout extends FrameLayout implements GestureView, Anim
         matrix.mapRect(mTmpFloatRect);
         rect.set(Math.round(mTmpFloatRect.left), Math.round(mTmpFloatRect.top),
                 Math.round(mTmpFloatRect.right), Math.round(mTmpFloatRect.bottom));
+    }
+
+
+    protected static int getChildMeasureSpecFixed(int spec, int extra, int childDimension) {
+        if (childDimension == ViewGroup.LayoutParams.WRAP_CONTENT) {
+            return MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(spec), MeasureSpec.UNSPECIFIED);
+        } else {
+            return getChildMeasureSpec(spec, extra, childDimension);
+        }
     }
 
 }
