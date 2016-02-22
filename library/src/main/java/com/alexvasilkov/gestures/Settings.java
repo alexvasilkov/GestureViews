@@ -82,6 +82,11 @@ public class Settings {
     private boolean isRotationEnabled = false;
 
     /**
+     * Whether image rotation should stick to 90 degrees or can be free
+     */
+    private boolean isRestrictRotation = false;
+
+    /**
      * Whether zooming by double tap is enabled or not
      */
     private boolean isDoubleTapEnabled = true;
@@ -95,11 +100,6 @@ public class Settings {
      * Whether image transformations should be kept in bounds or not
      */
     private boolean isRestrictBounds = true;
-
-    /**
-     * Whether image rotation should stick to 90 degrees or can be free
-     */
-    private boolean isRestrictRotation = false;
 
     Settings() {
         // Package private constructor
@@ -246,6 +246,17 @@ public class Settings {
     }
 
     /**
+     * Sets whether image rotation should stick to 90 degrees intervals or can be free.
+     * Only applied when {@link #isRestrictBounds()} is true as well.
+     * <p/>
+     * Default value is false.
+     */
+    public Settings setRestrictRotation(boolean isRestrictRotation) {
+        this.isRestrictRotation = isRestrictRotation;
+        return this;
+    }
+
+    /**
      * Sets whether zooming by double tap is enabled or not.
      * <p/>
      * Default value is true.
@@ -288,17 +299,6 @@ public class Settings {
      */
     public Settings setRestrictBounds(boolean isRestrictBounds) {
         this.isRestrictBounds = isRestrictBounds;
-        return this;
-    }
-
-    /**
-     * Sets whether image rotation should stick to 90 degrees intervals or can be free.
-     * Only applied when {@link #isRestrictBounds()} is true as well.
-     * <p/>
-     * Default value is false.
-     */
-    public Settings setRestrictRotation(boolean isRestrictRotation) {
-        this.isRestrictRotation = isRestrictRotation;
         return this;
     }
 
@@ -371,6 +371,10 @@ public class Settings {
         return isGesturesEnabled() && isRotationEnabled;
     }
 
+    public boolean isRestrictRotation() {
+        return isRestrictRotation;
+    }
+
     public boolean isDoubleTapEnabled() {
         return isGesturesEnabled() && isDoubleTapEnabled;
     }
@@ -381,10 +385,6 @@ public class Settings {
 
     public boolean isRestrictBounds() {
         return isRestrictBounds;
-    }
-
-    public boolean isRestrictRotation() {
-        return isRestrictRotation;
     }
 
     /**
