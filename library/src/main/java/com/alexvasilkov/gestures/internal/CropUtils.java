@@ -22,8 +22,10 @@ public class CropUtils {
         float zoom = state.getZoom();
 
         // Computing crop size for base zoom level (zoom == 1)
-        int w = Math.round(settings.getMovementAreaW() / zoom);
-        int h = Math.round(settings.getMovementAreaH() / zoom);
+        int wTmp = Math.round(settings.getMovementAreaW() / zoom);
+        int hTmp = Math.round(settings.getMovementAreaH() / zoom);
+        int w = wTmp > 0 ? wTmp : settings.getMovementAreaW();
+        int h = hTmp > 0 ? hTmp : settings.getMovementAreaH();
 
         // Crop area coordinates within viewport
         Rect pos = MovementBounds.getMovementAreaWithGravity(settings);
