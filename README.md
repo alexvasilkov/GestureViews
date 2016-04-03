@@ -22,7 +22,9 @@ easier for developers to integrate it into their apps.
 
 #### Sample app ####
 
-[![Get it on Google Play](http://developer.android.com/images/brand/en_generic_rgb_wo_60.png)](http://play.google.com/store/apps/details?id=com.alexvasilkov.gestures.sample)
+<a href="http://play.google.com/store/apps/details?id=com.alexvasilkov.gestures.sample">
+  <img alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/apps/en-play-badge-border.png" height="64" />
+</a>
 
 #### Demo video ####
 
