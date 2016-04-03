@@ -17,4 +17,28 @@ allprojects {
     repositories {
         jcenter()
     }
+
+    // Enabling checkstyle for all sub projects
+    project == rootProject || project.afterEvaluate {
+        project.apply plugin: 'checkstyle'
+
+        project.extensions.getByName('checkstyle').with {
+            toolVersion = '6.15'
+            configFile file("${rootDir}/checkstyle.xml")
+        }
+
+        task checkstyle(type: Checkstyle) {
+            source 'src'
+            include '**/*.java', '**/*.xml'
+            classpath = files()
+        }
+
+        project.tasks.getByName('check').dependsOn 'checkstyle'
+
+        project.extensions.getByName('android').with {
+            lintOptions {
+                ignore 'GoogleAppIndexingWarning', 'ContentDescription'
+            }
+        }
+    }
 }
