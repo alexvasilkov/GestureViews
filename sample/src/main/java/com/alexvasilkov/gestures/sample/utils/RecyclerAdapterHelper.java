@@ -7,6 +7,8 @@ import java.util.List;
 
 public class RecyclerAdapterHelper {
 
+    private RecyclerAdapterHelper() {}
+
     /**
      * Calls adapter's notify* method when items are added / removed / updated.
      * Only correctly works if items order is unchanged.

@@ -19,85 +19,89 @@ public class Settings {
     public static final float OVERZOOM_FACTOR = 2f;
 
     /**
-     * Viewport area
+     * Viewport area.
      */
-    private int viewportW, viewportH;
+    private int viewportW;
+    private int viewportH;
 
     /**
-     * Moving area
+     * Moving area.
      */
-    private int movementAreaW, movementAreaH;
+    private int movementAreaW;
+    private int movementAreaH;
 
     private boolean isMovementAreaSpecified;
 
     /**
-     * Image size
+     * Image size.
      */
-    private int imageW, imageH;
+    private int imageW;
+    private int imageH;
 
     /**
-     * Max zoom level, default value is {@link #MAX_ZOOM}
+     * Max zoom level, default value is {@link #MAX_ZOOM}.
      */
     private float maxZoom = MAX_ZOOM;
 
     /**
-     * Overzoom factor
+     * Overzoom factor.
      */
     private float overzoomFactor = OVERZOOM_FACTOR;
 
     /**
-     * Overscroll distance
+     * Overscroll distance.
      */
-    private float overscrollDistanceX, overscrollDistanceY;
+    private float overscrollDistanceX;
+    private float overscrollDistanceY;
 
     /**
      * If isFillViewport = true small image will be scaled to fit entire viewport
-     * even if it will require zoom level above max zoom level
+     * even if it will require zoom level above max zoom level.
      */
     private boolean isFillViewport = false;
 
     /**
-     * Image gravity inside viewport area
+     * Image gravity inside viewport area.
      */
     private int gravity = Gravity.CENTER;
 
     /**
-     * Initial fitting within viewport area
+     * Initial fitting within viewport area.
      */
     private Fit fitMethod = Fit.INSIDE;
 
     /**
-     * Whether panning is enabled or not
+     * Whether panning is enabled or not.
      */
     private boolean isPanEnabled = true;
 
     /**
-     * Whether zooming is enabled or not
+     * Whether zooming is enabled or not.
      */
     private boolean isZoomEnabled = true;
 
     /**
-     * Whether rotation gesture is enabled or not
+     * Whether rotation gesture is enabled or not.
      */
     private boolean isRotationEnabled = false;
 
     /**
-     * Whether image rotation should stick to 90 degrees or can be free
+     * Whether image rotation should stick to 90 degrees or can be free.
      */
     private boolean isRestrictRotation = false;
 
     /**
-     * Whether zooming by double tap is enabled or not
+     * Whether zooming by double tap is enabled or not.
      */
     private boolean isDoubleTapEnabled = true;
 
     /**
-     * Counter for gestures disable calls
+     * Counter for gestures disable calls.
      */
     private int gesturesDisableCount;
 
     /**
-     * Whether image transformations should be kept in bounds or not
+     * Whether image transformations should be kept in bounds or not.
      */
     private boolean isRestrictBounds = true;
 
@@ -110,9 +114,9 @@ public class Settings {
      * <p/>
      * Should only be used when implementing custom {@link GestureView}.
      */
-    public Settings setViewport(int w, int h) {
-        viewportW = w;
-        viewportH = h;
+    public Settings setViewport(int width, int height) {
+        viewportW = width;
+        viewportH = height;
         return this;
     }
 
@@ -120,10 +124,10 @@ public class Settings {
      * Setting movement area size. Viewport area will be used instead if no movement area is
      * specified.
      */
-    public Settings setMovementArea(int w, int h) {
+    public Settings setMovementArea(int width, int height) {
         isMovementAreaSpecified = true;
-        movementAreaW = w;
-        movementAreaH = h;
+        movementAreaW = width;
+        movementAreaH = height;
         return this;
     }
 
@@ -132,9 +136,9 @@ public class Settings {
      * <p/>
      * Should only be used when implementing custom {@link GestureView}.
      */
-    public Settings setImage(int w, int h) {
-        imageW = w;
-        imageH = h;
+    public Settings setImage(int width, int height) {
+        imageW = width;
+        imageH = height;
         return this;
     }
 
@@ -177,7 +181,7 @@ public class Settings {
     }
 
     /**
-     * Same as {@link #setOverscrollDistance(float, float)} but accepts distance in DP
+     * Same as {@link #setOverscrollDistance(float, float)} but accepts distance in DP.
      */
     public Settings setOverscrollDistance(Context context, float distanceXDp, float distanceYDp) {
         return setOverscrollDistance(toPixels(context, distanceXDp),
@@ -388,11 +392,11 @@ public class Settings {
     }
 
     /**
-     * Whether at least one of pan, zoom, rotation or double tap are enabled or not
+     * Whether at least one of pan, zoom, rotation or double tap are enabled or not.
      */
     public boolean isEnabled() {
-        return isGesturesEnabled() &&
-                (isPanEnabled || isZoomEnabled || isRotationEnabled || isDoubleTapEnabled);
+        return isGesturesEnabled()
+                && (isPanEnabled || isZoomEnabled || isRotationEnabled || isDoubleTapEnabled);
     }
 
 
@@ -407,22 +411,22 @@ public class Settings {
 
     public enum Fit {
         /**
-         * Fit image width inside viewport area
+         * Fit image width inside viewport area.
          */
         HORIZONTAL,
 
         /**
-         * Fit image height inside viewport area
+         * Fit image height inside viewport area.
          */
         VERTICAL,
 
         /**
-         * Fit both image width and image height inside viewport area
+         * Fit both image width and image height inside viewport area.
          */
         INSIDE,
 
         /**
-         * Fit image width or image height inside viewport area, so the entire viewport is filled
+         * Fit image width or image height inside viewport area, so the entire viewport is filled.
          */
         OUTSIDE
     }

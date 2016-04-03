@@ -1,5 +1,6 @@
 package com.alexvasilkov.gestures.sample.adapters;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -17,19 +18,20 @@ public abstract class DefaultEndlessRecyclerAdapter<VH extends RecyclerView.View
     private static final int EXTRA_LOADING_TYPE = Integer.MAX_VALUE;
     private static final int EXTRA_ERROR_TYPE = Integer.MAX_VALUE - 1;
 
-    private final GridLayoutManager.SpanSizeLookup mSpanSizes =
+    private final GridLayoutManager.SpanSizeLookup spanSizes =
             new GridLayoutManager.SpanSizeLookup() {
                 @Override
                 public int getSpanSize(int pos) {
-                    return pos == getCount() && (isLoading() || isError()) ? mSpanCount :
-                            mOriginalSpanLookup == null ? 1 : mOriginalSpanLookup.getSpanSize(pos);
+                    return pos == getCount() && (isLoading() || isError()) ? spanCount
+                            : originalSpanLookup == null ? 1 : originalSpanLookup.getSpanSize(pos);
                 }
             };
 
-    private GridLayoutManager.SpanSizeLookup mOriginalSpanLookup;
-    private int mSpanCount;
+    private GridLayoutManager.SpanSizeLookup originalSpanLookup;
+    private int spanCount;
 
-    private boolean mOldIsLoading, mOldIsError;
+    private boolean oldIsLoading;
+    private boolean oldIsError;
 
 
     @Override
@@ -102,13 +104,13 @@ public abstract class DefaultEndlessRecyclerAdapter<VH extends RecyclerView.View
     protected void onLoadingStateChanged() {
         super.onLoadingStateChanged();
 
-        if (mOldIsLoading) {
+        if (oldIsLoading) {
             if (isError()) {
                 notifyItemChanged(getCount()); // Switching to error view
             } else if (!isLoading()) {
                 notifyItemRemoved(getCount()); // Loading view is removed
             }
-        } else if (mOldIsError) {
+        } else if (oldIsError) {
             if (isLoading()) {
                 notifyItemChanged(getCount()); // Switching to loading view
             } else if (!isError()) {
@@ -120,8 +122,8 @@ public abstract class DefaultEndlessRecyclerAdapter<VH extends RecyclerView.View
             }
         }
 
-        mOldIsError = isError();
-        mOldIsLoading = isLoading();
+        oldIsError = isError();
+        oldIsLoading = isLoading();
     }
 
     @Override
@@ -137,9 +139,9 @@ public abstract class DefaultEndlessRecyclerAdapter<VH extends RecyclerView.View
         super.onAttachedToRecyclerView(recyclerView);
         if (recyclerView.getLayoutManager() instanceof GridLayoutManager) {
             GridLayoutManager gridManager = (GridLayoutManager) recyclerView.getLayoutManager();
-            mSpanCount = gridManager.getSpanCount();
-            mOriginalSpanLookup = gridManager.getSpanSizeLookup();
-            gridManager.setSpanSizeLookup(mSpanSizes);
+            spanCount = gridManager.getSpanCount();
+            originalSpanLookup = gridManager.getSpanSizeLookup();
+            gridManager.setSpanSizeLookup(spanSizes);
         }
     }
 
@@ -148,9 +150,9 @@ public abstract class DefaultEndlessRecyclerAdapter<VH extends RecyclerView.View
         super.onDetachedFromRecyclerView(recyclerView);
         if (recyclerView.getLayoutManager() instanceof GridLayoutManager) {
             GridLayoutManager gridManager = (GridLayoutManager) recyclerView.getLayoutManager();
-            gridManager.setSpanSizeLookup(mOriginalSpanLookup);
-            mOriginalSpanLookup = null;
-            mSpanCount = 1;
+            gridManager.setSpanSizeLookup(originalSpanLookup);
+            originalSpanLookup = null;
+            spanCount = 1;
         }
     }
 
@@ -172,7 +174,7 @@ public abstract class DefaultEndlessRecyclerAdapter<VH extends RecyclerView.View
             error = Views.find(itemView, R.id.extra_error);
             error.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
+                public void onClick(@NonNull View view) {
                     adapter.reloadNextItemsIfError();
                 }
             });

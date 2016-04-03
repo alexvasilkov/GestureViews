@@ -13,22 +13,22 @@ import com.alexvasilkov.gestures.sample.utils.glide.GlideHelper;
 
 public class PaintingsListAdapter extends BaseAdapter implements View.OnClickListener {
 
-    private final Painting[] mPaintings;
-    private final OnPaintingListener mListener;
+    private final Painting[] paintings;
+    private final OnPaintingListener listener;
 
     public PaintingsListAdapter(Painting[] paintings, OnPaintingListener listener) {
-        mPaintings = paintings;
-        mListener = listener;
+        this.paintings = paintings;
+        this.listener = listener;
     }
 
     @Override
     public int getCount() {
-        return mPaintings.length;
+        return paintings.length;
     }
 
     @Override
     public Object getItem(int position) {
-        return mPaintings[position];
+        return paintings[position];
     }
 
     @Override
@@ -57,13 +57,13 @@ public class PaintingsListAdapter extends BaseAdapter implements View.OnClickLis
 
     private void onBindHolder(ViewHolder holder, int position) {
         holder.image.setTag(R.id.tag_item, position);
-        GlideHelper.loadResource(mPaintings[position].getImageId(), holder.image);
+        GlideHelper.loadResource(paintings[position].getImageId(), holder.image);
     }
 
     @Override
     public void onClick(@NonNull View view) {
         int pos = (Integer) view.getTag(R.id.tag_item);
-        mListener.onPaintingClick(mPaintings[pos], pos, (ImageView) view);
+        listener.onPaintingClick(pos);
     }
 
     public static ImageView getImage(View itemView) {
@@ -72,17 +72,17 @@ public class PaintingsListAdapter extends BaseAdapter implements View.OnClickLis
     }
 
     static class ViewHolder {
-        public final View itemView;
-        public final ImageView image;
+        final View itemView;
+        final ImageView image;
 
-        public ViewHolder(ViewGroup parent) {
+        ViewHolder(ViewGroup parent) {
             itemView = Views.inflate(parent, R.layout.item_image);
             image = (ImageView) itemView;
         }
     }
 
     public interface OnPaintingListener {
-        void onPaintingClick(Painting painting, int position, ImageView image);
+        void onPaintingClick(int position);
     }
 
 }

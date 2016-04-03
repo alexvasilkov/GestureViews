@@ -6,7 +6,7 @@ import android.view.View;
 public abstract class EndlessRecyclerAdapter<VH extends RecyclerView.ViewHolder>
         extends RecyclerView.Adapter<VH> {
 
-    private final RecyclerView.OnScrollListener mScrollListener =
+    private final RecyclerView.OnScrollListener scrollListener =
             new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -14,56 +14,56 @@ public abstract class EndlessRecyclerAdapter<VH extends RecyclerView.ViewHolder>
                 }
             };
 
-    private boolean mIsLoading;
-    private boolean mIsError;
+    private boolean isLoading;
+    private boolean isError;
 
-    private LoaderCallbacks mCallbacks;
-    private int mLoadingOffset = 0;
+    private LoaderCallbacks callbacks;
+    private int loadingOffset = 0;
 
     public final boolean isLoading() {
-        return mIsLoading;
+        return isLoading;
     }
 
     public final boolean isError() {
-        return mIsError;
+        return isError;
     }
 
     public void setCallbacks(LoaderCallbacks callbacks) {
-        mCallbacks = callbacks;
+        this.callbacks = callbacks;
     }
 
     public void setLoadingOffset(int loadingOffset) {
-        mLoadingOffset = loadingOffset;
+        this.loadingOffset = loadingOffset;
     }
 
     public void loadNextItems() {
-        if (!mIsLoading && !mIsError && mCallbacks != null && mCallbacks.canLoadNextItems()) {
-            mIsLoading = true;
+        if (!isLoading && !isError && callbacks != null && callbacks.canLoadNextItems()) {
+            isLoading = true;
             onLoadingStateChanged();
-            mCallbacks.loadNextItems();
+            callbacks.loadNextItems();
         }
     }
 
     public void reloadNextItemsIfError() {
-        if (mIsError) {
-            mIsError = false;
+        if (isError) {
+            isError = false;
             onLoadingStateChanged();
             loadNextItems();
         }
     }
 
     public void onNextItemsLoaded() {
-        if (mIsLoading) {
-            mIsLoading = false;
-            mIsError = false;
+        if (isLoading) {
+            isLoading = false;
+            isError = false;
             onLoadingStateChanged();
         }
     }
 
     public void onNextItemsError() {
-        if (mIsLoading) {
-            mIsLoading = false;
-            mIsError = true;
+        if (isLoading) {
+            isLoading = false;
+            isError = true;
             onLoadingStateChanged();
         }
     }
@@ -74,12 +74,12 @@ public abstract class EndlessRecyclerAdapter<VH extends RecyclerView.ViewHolder>
 
 
     private void loadNextItemsIfNeeded(RecyclerView recyclerView) {
-        if (!mIsLoading && !mIsError) {
+        if (!isLoading && !isError) {
             View lastVisibleChild = recyclerView.getChildAt(recyclerView.getChildCount() - 1);
             int lastVisiblePos = recyclerView.getChildAdapterPosition(lastVisibleChild);
             int total = getItemCount();
 
-            if (lastVisiblePos >= total - mLoadingOffset) {
+            if (lastVisiblePos >= total - loadingOffset) {
                 loadNextItems();
             }
         }
@@ -89,14 +89,14 @@ public abstract class EndlessRecyclerAdapter<VH extends RecyclerView.ViewHolder>
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
-        recyclerView.addOnScrollListener(mScrollListener);
+        recyclerView.addOnScrollListener(scrollListener);
         loadNextItemsIfNeeded(recyclerView);
     }
 
     @Override
     public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
         super.onDetachedFromRecyclerView(recyclerView);
-        recyclerView.removeOnScrollListener(mScrollListener);
+        recyclerView.removeOnScrollListener(scrollListener);
     }
 
 

@@ -12,55 +12,56 @@ import com.alexvasilkov.gestures.transition.ViewsTransitionAnimator;
 
 public class FromRecyclerViewListener<ID> implements ViewsCoordinator.OnRequestViewListener<ID> {
 
-    private static final Rect LOCATION_PARENT = new Rect(), LOCATION = new Rect();
+    private static final Rect locationParent = new Rect();
+    private static final Rect locationChild = new Rect();
 
-    private final RecyclerView mRecyclerView;
-    private final ViewsTracker<ID> mTracker;
-    private final ViewsTransitionAnimator<ID> mAnimator;
+    private final RecyclerView recyclerView;
+    private final ViewsTracker<ID> tracker;
+    private final ViewsTransitionAnimator<ID> animator;
 
-    private ID mId;
-    private boolean mScrollHalfVisibleItems;
+    private ID id;
+    private boolean scrollHalfVisibleItems;
 
     public FromRecyclerViewListener(@NonNull RecyclerView recyclerView,
             @NonNull ViewsTracker<ID> tracker,
             @NonNull ViewsTransitionAnimator<ID> animator) {
-        mRecyclerView = recyclerView;
-        mTracker = tracker;
-        mAnimator = animator;
+        this.recyclerView = recyclerView;
+        this.tracker = tracker;
+        this.animator = animator;
 
-        mRecyclerView.addOnChildAttachStateChangeListener(new ChildStateListener());
-        mAnimator.addPositionUpdateListener(new UpdateListener());
+        this.recyclerView.addOnChildAttachStateChangeListener(new ChildStateListener());
+        this.animator.addPositionUpdateListener(new UpdateListener());
     }
 
     @Override
     public void onRequestView(@NonNull ID id) {
         // Trying to find requested view on screen. If it is not currently on screen
         // or it is not fully visible than we should scroll to it at first.
-        mId = id;
-        int position = mTracker.getPositionForId(id);
+        this.id = id;
+        int position = tracker.getPositionForId(id);
 
         if (position == ViewsTracker.NO_POSITION) {
             return; // Nothing we can do
         }
 
-        View view = mTracker.getViewForPosition(position);
+        View view = tracker.getViewForPosition(position);
         if (view == null) {
-            mRecyclerView.smoothScrollToPosition(position);
+            recyclerView.smoothScrollToPosition(position);
         } else {
-            mAnimator.setFromView(id, view);
+            animator.setFromView(id, view);
 
-            if (mScrollHalfVisibleItems) {
-                mRecyclerView.getGlobalVisibleRect(LOCATION_PARENT);
-                LOCATION_PARENT.left += mRecyclerView.getPaddingLeft();
-                LOCATION_PARENT.right -= mRecyclerView.getPaddingRight();
-                LOCATION_PARENT.top += mRecyclerView.getPaddingTop();
-                LOCATION_PARENT.bottom -= mRecyclerView.getPaddingBottom();
+            if (scrollHalfVisibleItems) {
+                recyclerView.getGlobalVisibleRect(locationParent);
+                locationParent.left += recyclerView.getPaddingLeft();
+                locationParent.right -= recyclerView.getPaddingRight();
+                locationParent.top += recyclerView.getPaddingTop();
+                locationParent.bottom -= recyclerView.getPaddingBottom();
 
-                view.getGlobalVisibleRect(LOCATION);
-                if (!LOCATION_PARENT.contains(LOCATION)
-                        || view.getWidth() > LOCATION.width()
-                        || view.getHeight() > LOCATION.height()) {
-                    mRecyclerView.smoothScrollToPosition(position);
+                view.getGlobalVisibleRect(locationChild);
+                if (!locationParent.contains(locationChild)
+                        || view.getWidth() > locationChild.width()
+                        || view.getHeight() > locationChild.height()) {
+                    recyclerView.smoothScrollToPosition(position);
                 }
             }
         }
@@ -69,11 +70,11 @@ public class FromRecyclerViewListener<ID> implements ViewsCoordinator.OnRequestV
     private class ChildStateListener implements RecyclerView.OnChildAttachStateChangeListener {
         @Override
         public void onChildViewAttachedToWindow(View view) {
-            int position = mRecyclerView.getChildAdapterPosition(view);
-            if (mId != null && mId.equals(mTracker.getIdForPosition(position))) {
-                View from = mTracker.getViewForPosition(position);
+            int position = recyclerView.getChildAdapterPosition(view);
+            if (id != null && id.equals(tracker.getIdForPosition(position))) {
+                View from = tracker.getViewForPosition(position);
                 if (from != null) {
-                    mAnimator.setFromView(mId, from);
+                    animator.setFromView(id, from);
                 }
             }
         }
@@ -88,10 +89,10 @@ public class FromRecyclerViewListener<ID> implements ViewsCoordinator.OnRequestV
         @Override
         public void onPositionUpdate(float state, boolean isLeaving) {
             if (state == 0f && isLeaving) {
-                mId = null;
+                id = null;
             }
-            mRecyclerView.setVisibility(state == 1f && !isLeaving ? View.INVISIBLE : View.VISIBLE);
-            mScrollHalfVisibleItems = state == 1f; // Only scroll if we in full mode
+            recyclerView.setVisibility(state == 1f && !isLeaving ? View.INVISIBLE : View.VISIBLE);
+            scrollHalfVisibleItems = state == 1f; // Only scroll if we in full mode
         }
     }
 

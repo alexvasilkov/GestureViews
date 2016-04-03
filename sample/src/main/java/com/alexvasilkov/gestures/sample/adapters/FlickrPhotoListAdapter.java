@@ -20,31 +20,31 @@ public class FlickrPhotoListAdapter
         extends DefaultEndlessRecyclerAdapter<FlickrPhotoListAdapter.ViewHolder>
         implements View.OnClickListener {
 
-    private List<Photo> mPhotos;
-    private boolean mHasMore = true;
+    private List<Photo> photos;
+    private boolean hasMore = true;
 
-    private final OnPhotoListener mListener;
+    private final OnPhotoListener listener;
 
     public FlickrPhotoListAdapter(OnPhotoListener listener) {
         super();
-        mListener = listener;
+        this.listener = listener;
     }
 
     public void setPhotos(List<Photo> photos, boolean hasMore) {
-        List<Photo> old = mPhotos;
-        mPhotos = photos;
-        mHasMore = hasMore;
+        List<Photo> old = this.photos;
+        this.photos = photos;
+        this.hasMore = hasMore;
 
         RecyclerAdapterHelper.notifyChanges(this, old, photos, false);
     }
 
     @Override
     public int getCount() {
-        return mPhotos == null ? 0 : mPhotos.size();
+        return photos == null ? 0 : photos.size();
     }
 
     public boolean canLoadNext() {
-        return mHasMore;
+        return hasMore;
     }
 
     @Override
@@ -56,7 +56,7 @@ public class FlickrPhotoListAdapter
 
     @Override
     protected void onBindHolder(ViewHolder holder, int position) {
-        Photo photo = mPhotos.get(position);
+        Photo photo = photos.get(position);
         holder.image.setTag(R.id.tag_item, photo);
         GlideHelper.loadFlickrThumb(photo, holder.image);
     }
@@ -82,8 +82,8 @@ public class FlickrPhotoListAdapter
     @Override
     public void onClick(@NonNull View view) {
         Photo photo = (Photo) view.getTag(R.id.tag_item);
-        int pos = mPhotos.indexOf(photo);
-        mListener.onPhotoClick(photo, pos, (ImageView) view);
+        int pos = photos.indexOf(photo);
+        listener.onPhotoClick(pos);
     }
 
     public static ImageView getImage(RecyclerView.ViewHolder holder) {
@@ -95,16 +95,16 @@ public class FlickrPhotoListAdapter
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        public final ImageView image;
+        final ImageView image;
 
-        public ViewHolder(ViewGroup parent) {
+        ViewHolder(ViewGroup parent) {
             super(Views.inflate(parent, R.layout.item_flickr_image));
             image = (ImageView) itemView;
         }
     }
 
     public interface OnPhotoListener {
-        void onPhotoClick(Photo photo, int position, ImageView image);
+        void onPhotoClick(int position);
     }
 
 }

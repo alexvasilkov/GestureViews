@@ -15,8 +15,7 @@
     <ProgressBar
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:layout_gravity="end|center_vertical"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp" />
+        android:layout_gravity="right|center_vertical"
+        android:layout_marginRight="@dimen/margin" />
 
 </FrameLayout>

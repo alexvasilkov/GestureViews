@@ -25,10 +25,12 @@ public class GlideHelper {
                 }
             };
 
+    private GlideHelper() {}
 
     public static void loadResource(@DrawableRes int drawableId, @NonNull ImageView image) {
         DisplayMetrics metrics = image.getResources().getDisplayMetrics();
-        final int w = metrics.widthPixels, h = metrics.heightPixels;
+        final int displayWidth = metrics.widthPixels;
+        final int displayHeight = metrics.heightPixels;
 
         Glide.with(image.getContext())
                 .load(drawableId)
@@ -42,7 +44,7 @@ public class GlideHelper {
                         super.getSize(new SizeReadyCallback() {
                             @Override
                             public void onSizeReady(int width, int height) {
-                                cb.onSizeReady(w / 2, h / 2);
+                                cb.onSizeReady(displayWidth / 2, displayHeight / 2);
                             }
                         });
                     }
@@ -60,8 +62,7 @@ public class GlideHelper {
                 .into(new GlideDrawableTarget(image));
     }
 
-    public static void loadFlickrFull(@NonNull Photo photo,
-            @NonNull final ImageView image,
+    public static void loadFlickrFull(@NonNull Photo photo, @NonNull final ImageView image,
             @Nullable final ImageLoadingListener listener) {
 
         final String photoUrl = photo.getLargeSize() == null

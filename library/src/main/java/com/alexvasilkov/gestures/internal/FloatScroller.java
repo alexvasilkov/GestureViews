@@ -12,35 +12,36 @@ public class FloatScroller {
 
     public static final int DEFAULT_DURATION = 250;
 
-    private final Interpolator mInterpolator;
+    private final Interpolator interpolator;
 
-    private boolean mFinished = true;
+    private boolean finished = true;
 
-    private float mStartValue, mFinalValue;
+    private float startValue;
+    private float finalValue;
 
     /**
      * Current value computed by {@link #computeScroll()}.
      */
-    private float mCurrValue;
+    private float currValue;
 
     /**
      * The time the animation started, computed using {@link SystemClock#elapsedRealtime()}.
      */
-    private long mStartRTC;
+    private long startRtc;
 
-    private long mDuration = DEFAULT_DURATION;
+    private long duration = DEFAULT_DURATION;
 
     public FloatScroller() {
-        mInterpolator = new AccelerateDecelerateInterpolator();
+        interpolator = new AccelerateDecelerateInterpolator();
     }
 
     @SuppressWarnings("unused") // To keep similar to standard Scroller
     public long getDuration() {
-        return mDuration;
+        return duration;
     }
 
     public void setDuration(long duration) {
-        mDuration = duration;
+        this.duration = duration;
     }
 
     /**
@@ -50,7 +51,7 @@ public class FloatScroller {
      * @see android.widget.Scroller#forceFinished(boolean)
      */
     public void forceFinished() {
-        mFinished = true;
+        finished = true;
     }
 
     /**
@@ -60,8 +61,8 @@ public class FloatScroller {
      */
     @SuppressWarnings("unused") // To keep similar to standard Scroller
     public void abortAnimation() {
-        mFinished = true;
-        mCurrValue = mFinalValue;
+        finished = true;
+        currValue = finalValue;
     }
 
     /**
@@ -70,12 +71,12 @@ public class FloatScroller {
      * @see android.widget.Scroller#startScroll(int, int, int, int)
      */
     public void startScroll(float startValue, float finalValue) {
-        mFinished = false;
-        mStartRTC = SystemClock.elapsedRealtime();
+        finished = false;
+        startRtc = SystemClock.elapsedRealtime();
 
-        mStartValue = startValue;
-        mFinalValue = finalValue;
-        mCurrValue = startValue;
+        this.startValue = startValue;
+        this.finalValue = finalValue;
+        currValue = startValue;
     }
 
     /**
@@ -85,19 +86,19 @@ public class FloatScroller {
      * @see android.widget.Scroller#computeScrollOffset()
      */
     public boolean computeScroll() {
-        if (mFinished) {
+        if (finished) {
             return false;
         }
 
-        long elapsed = SystemClock.elapsedRealtime() - mStartRTC;
-        if (elapsed >= mDuration) {
-            mFinished = true;
-            mCurrValue = mFinalValue;
+        long elapsed = SystemClock.elapsedRealtime() - startRtc;
+        if (elapsed >= duration) {
+            finished = true;
+            currValue = finalValue;
             return false;
         }
 
-        float time = mInterpolator.getInterpolation((float) elapsed / mDuration);
-        mCurrValue = interpolate(mStartValue, mFinalValue, time);
+        float time = interpolator.getInterpolation((float) elapsed / duration);
+        currValue = interpolate(startValue, finalValue, time);
         return true;
     }
 
@@ -107,7 +108,7 @@ public class FloatScroller {
      * @see android.widget.Scroller#isFinished()
      */
     public boolean isFinished() {
-        return mFinished;
+        return finished;
     }
 
     /**
@@ -116,7 +117,7 @@ public class FloatScroller {
      * @see android.widget.Scroller#getStartX()
      */
     public float getStart() {
-        return mStartValue;
+        return startValue;
     }
 
     /**
@@ -125,7 +126,7 @@ public class FloatScroller {
      * @see android.widget.Scroller#getFinalX()
      */
     public float getFinal() {
-        return mFinalValue;
+        return finalValue;
     }
 
     /**
@@ -134,11 +135,11 @@ public class FloatScroller {
      * @see android.widget.Scroller#getCurrX()
      */
     public float getCurr() {
-        return mCurrValue;
+        return currValue;
     }
 
-    private static float interpolate(float x1, float x2, float f) {
-        return x1 + (x2 - x1) * f;
+    private static float interpolate(float x1, float x2, float state) {
+        return x1 + (x2 - x1) * state;
     }
 
 }

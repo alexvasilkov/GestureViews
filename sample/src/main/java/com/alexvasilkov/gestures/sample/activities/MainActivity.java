@@ -62,44 +62,44 @@ public class MainActivity extends BaseActivity {
 
     private static class SampleAdapter extends RecyclerView.Adapter<SampleAdapter.ViewHolder> {
 
-        private final PackageManager mPackageManager;
-        private final List<ActivityInfo> mList;
+        private final PackageManager packageManager;
+        private final List<ActivityInfo> list;
 
-        public SampleAdapter(Context context, List<ActivityInfo> list) {
+        SampleAdapter(Context context, List<ActivityInfo> list) {
             super();
-            mPackageManager = context.getPackageManager();
-            mList = list;
+            packageManager = context.getPackageManager();
+            this.list = list;
         }
 
         @Override
-        public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
             return new ViewHolder(viewGroup);
         }
 
         @Override
-        public void onBindViewHolder(ViewHolder viewHolder, int i) {
-            viewHolder.info = mList.get(i);
-            viewHolder.text.setText(viewHolder.info.loadLabel(mPackageManager));
+        public void onBindViewHolder(ViewHolder viewHolder, int position) {
+            viewHolder.info = list.get(position);
+            viewHolder.text.setText(viewHolder.info.loadLabel(packageManager));
         }
 
         @Override
         public int getItemCount() {
-            return mList == null ? 0 : mList.size();
+            return list == null ? 0 : list.size();
         }
 
         static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
             final TextView text;
             ActivityInfo info;
 
-            public ViewHolder(ViewGroup parent) {
+            ViewHolder(ViewGroup parent) {
                 super(Views.inflate(parent, R.layout.item_main));
                 text = (TextView) itemView;
                 itemView.setOnClickListener(this);
             }
 
             @Override
-            public void onClick(@NonNull View v) {
-                ((MainActivity) v.getContext()).onItemClicked(info);
+            public void onClick(@NonNull View view) {
+                ((MainActivity) view.getContext()).onItemClicked(info);
             }
         }
 

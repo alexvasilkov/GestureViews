@@ -14,21 +14,21 @@ import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.gestures.GestureController;
 import com.alexvasilkov.gestures.Settings;
 import com.alexvasilkov.gestures.State;
+import com.alexvasilkov.gestures.commons.FinderView;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.utils.glide.GlideHelper;
 import com.alexvasilkov.gestures.views.GestureImageView;
-import com.alexvasilkov.gestures.commons.FinderView;
 import com.googlecode.flickrjandroid.photos.Photo;
 
 public class PhotoCropActivity extends BaseActivity {
 
     private static final String EXTRA_PHOTO = "EXTRA_PHOTO";
 
-    private GestureImageView mImageView;
-    private FinderView mFinderView;
+    private GestureImageView imageView;
+    private FinderView finderView;
 
     @InstanceState
-    private FinderShape mFinderShape = FinderShape.RECT;
+    private FinderShape finderShape = FinderShape.RECT;
 
     public static void show(Context context, Photo photo) {
         Intent intent = new Intent(context, PhotoCropActivity.class);
@@ -46,33 +46,33 @@ public class PhotoCropActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mImageView = Views.find(this, R.id.cropping_image);
-        mImageView.getController().getSettings()
+        imageView = Views.find(this, R.id.cropping_image);
+        imageView.getController().getSettings()
                 .setFitMethod(Settings.Fit.OUTSIDE)
                 .setFillViewport(true)
                 .setRotationEnabled(true);
 
-        mFinderView = Views.find(this, R.id.cropping_finder);
-        mFinderView.setSettings(mImageView.getController().getSettings());
+        finderView = Views.find(this, R.id.cropping_finder);
+        finderView.setSettings(imageView.getController().getSettings());
 
         Photo photo = (Photo) getIntent().getSerializableExtra(EXTRA_PHOTO);
-        GlideHelper.loadFlickrFull(photo, mImageView, null);
+        GlideHelper.loadFlickrFull(photo, imageView, null);
 
         applyFinderShape(false);
     }
 
     private void applyFinderShape(boolean animate) {
-        mFinderView.setRounded(mFinderShape == FinderShape.CIRCLE);
+        finderView.setRounded(finderShape == FinderShape.CIRCLE);
 
         // Computing cropping area size
         DisplayMetrics metrics = getResources().getDisplayMetrics();
-        int w = Math.min(metrics.widthPixels, metrics.heightPixels) * 3 / 4;
-        int h = mFinderShape == FinderShape.RECT ? w * 9 / 16 : w;
+        int finderWidth = Math.min(metrics.widthPixels, metrics.heightPixels) * 3 / 4;
+        int finderHeight = finderShape == FinderShape.RECT ? finderWidth * 9 / 16 : finderWidth;
 
-        GestureController controller = mImageView.getController();
+        GestureController controller = imageView.getController();
 
         // Setting cropping area
-        controller.getSettings().setMovementArea(w, h);
+        controller.getSettings().setMovementArea(finderWidth, finderHeight);
 
         if (animate) {
             // Animating to zoomed out state, keeping image in bounds
@@ -87,29 +87,30 @@ public class PhotoCropActivity extends BaseActivity {
         }
 
         // Updating cropping area changes
-        mFinderView.update(animate);
+        finderView.update(animate);
     }
 
     private void setFinderShape(FinderShape shape) {
-        mFinderShape = shape;
+        finderShape = shape;
         applyFinderShape(true);
         invalidateOptionsMenu();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (mFinderShape == FinderShape.RECT) {
-            MenuItem s = menu.add(Menu.NONE, R.id.menu_crop_square, 0, R.string.menu_crop_square);
-            s.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-            s.setIcon(R.drawable.ic_crop_square_white_24dp);
-        } else if (mFinderShape == FinderShape.SQUARE) {
-            MenuItem s = menu.add(Menu.NONE, R.id.menu_crop_circle, 0, R.string.menu_crop_circle);
-            s.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-            s.setIcon(R.drawable.ic_radio_button_unchecked_white_24dp);
+        MenuItem shape;
+        if (finderShape == FinderShape.RECT) {
+            shape = menu.add(Menu.NONE, R.id.menu_crop_square, 0, R.string.menu_crop_square);
+            shape.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+            shape.setIcon(R.drawable.ic_crop_square_white_24dp);
+        } else if (finderShape == FinderShape.SQUARE) {
+            shape = menu.add(Menu.NONE, R.id.menu_crop_circle, 0, R.string.menu_crop_circle);
+            shape.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+            shape.setIcon(R.drawable.ic_radio_button_unchecked_white_24dp);
         } else {
-            MenuItem s = menu.add(Menu.NONE, R.id.menu_crop_rect, 0, R.string.menu_crop_rect);
-            s.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-            s.setIcon(R.drawable.ic_crop_16_9_white_24dp);
+            shape = menu.add(Menu.NONE, R.id.menu_crop_rect, 0, R.string.menu_crop_rect);
+            shape.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+            shape.setIcon(R.drawable.ic_crop_16_9_white_24dp);
         }
 
         MenuItem crop = menu.add(Menu.NONE, R.id.menu_crop, 0, R.string.button_crop);
@@ -124,7 +125,7 @@ public class PhotoCropActivity extends BaseActivity {
         switch (item.getItemId()) {
             case R.id.menu_crop:
                 // Cropping image within selected area
-                Bitmap cropped = mImageView.crop();
+                Bitmap cropped = imageView.crop();
                 if (cropped != null) {
                     PhotoCropResultActivity.show(PhotoCropActivity.this, cropped);
                     finish();

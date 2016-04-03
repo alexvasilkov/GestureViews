@@ -7,11 +7,11 @@ import android.view.ViewGroup;
 
 import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.gestures.animation.ViewPositionAnimator;
+import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.utils.GestureSettingsSetupListener;
 import com.alexvasilkov.gestures.sample.utils.glide.GlideHelper;
 import com.alexvasilkov.gestures.views.GestureImageView;
-import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
 import com.bumptech.glide.Glide;
 import com.googlecode.flickrjandroid.photos.Photo;
 
@@ -22,27 +22,27 @@ public class FlickrPhotoPagerAdapter
 
     private static final long PROGRESS_DELAY = 300L;
 
-    private final ViewPager mViewPager;
-    private List<Photo> mPhotos;
-    private GestureSettingsSetupListener mSetupListener;
+    private final ViewPager viewPager;
+    private List<Photo> photos;
+    private GestureSettingsSetupListener setupListener;
 
-    private boolean mActivated;
+    private boolean activated;
 
     public FlickrPhotoPagerAdapter(ViewPager viewPager) {
-        mViewPager = viewPager;
+        this.viewPager = viewPager;
     }
 
     public void setPhotos(List<Photo> photos) {
-        mPhotos = photos;
+        this.photos = photos;
         notifyDataSetChanged();
     }
 
     public Photo getPhoto(int pos) {
-        return mPhotos == null || pos < 0 || pos >= mPhotos.size() ? null : mPhotos.get(pos);
+        return photos == null || pos < 0 || pos >= photos.size() ? null : photos.get(pos);
     }
 
     public void setSetupListener(GestureSettingsSetupListener listener) {
-        mSetupListener = listener;
+        setupListener = listener;
     }
 
     /**
@@ -52,22 +52,22 @@ public class FlickrPhotoPagerAdapter
      * Adapter is not activated by default.
      */
     public void setActivated(boolean activated) {
-        if (mActivated != activated) {
-            mActivated = activated;
+        if (this.activated != activated) {
+            this.activated = activated;
             notifyDataSetChanged();
         }
     }
 
     @Override
     public int getCount() {
-        return !mActivated || mPhotos == null ? 0 : mPhotos.size();
+        return !activated || photos == null ? 0 : photos.size();
     }
 
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup container) {
         final ViewHolder holder = new ViewHolder(container);
         holder.image.getController().getSettings().setFillViewport(true).setMaxZoom(3f);
-        holder.image.getController().enableScrollInViewPager(mViewPager);
+        holder.image.getController().enableScrollInViewPager(viewPager);
         holder.image.getPositionAnimator().addPositionUpdateListener(
                 new ViewPositionAnimator.PositionUpdateListener() {
                     @Override
@@ -80,8 +80,8 @@ public class FlickrPhotoPagerAdapter
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        if (mSetupListener != null) {
-            mSetupListener.onSetupGestureView(holder.image);
+        if (setupListener != null) {
+            setupListener.onSetupGestureView(holder.image);
         }
 
         // Temporary disabling touch controls
@@ -92,7 +92,7 @@ public class FlickrPhotoPagerAdapter
 
         holder.progress.animate().setStartDelay(PROGRESS_DELAY).alpha(1f);
 
-        Photo photo = mPhotos.get(position);
+        Photo photo = photos.get(position);
 
         // Loading image
         GlideHelper.loadFlickrFull(photo, holder.image,
@@ -137,12 +137,12 @@ public class FlickrPhotoPagerAdapter
     }
 
     static class ViewHolder extends RecyclePagerAdapter.ViewHolder {
-        public final GestureImageView image;
-        public final View progress;
+        final GestureImageView image;
+        final View progress;
 
-        public boolean gesturesDisabled;
+        boolean gesturesDisabled;
 
-        public ViewHolder(ViewGroup parent) {
+        ViewHolder(ViewGroup parent) {
             super(Views.inflate(parent, R.layout.item_flickr_full_image));
             image = Views.find(itemView, R.id.flickr_full_image);
             progress = Views.find(itemView, R.id.flickr_full_progress);

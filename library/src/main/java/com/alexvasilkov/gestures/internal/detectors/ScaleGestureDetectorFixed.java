@@ -12,8 +12,9 @@ import android.view.ScaleGestureDetector;
  */
 public class ScaleGestureDetectorFixed extends ScaleGestureDetector {
 
-    private float mCurrY, mPrevY;
-    private float mLastScaleFactor;
+    private float currY;
+    private float prevY;
+    private float lastScaleFactor;
 
     public ScaleGestureDetectorFixed(Context context, OnScaleGestureListener listener) {
         super(context, listener);
@@ -33,14 +34,14 @@ public class ScaleGestureDetectorFixed extends ScaleGestureDetector {
 
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
-        boolean result = super.onTouchEvent(event);
+        final boolean result = super.onTouchEvent(event);
 
-        mPrevY = mCurrY;
-        mCurrY = event.getY();
+        prevY = currY;
+        currY = event.getY();
 
         if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
-            mPrevY = event.getY();
-            mLastScaleFactor = 1f;
+            prevY = event.getY();
+            lastScaleFactor = 1f;
         }
 
         return result;
@@ -56,11 +57,11 @@ public class ScaleGestureDetectorFixed extends ScaleGestureDetector {
     @Override
     public float getScaleFactor() {
         float factor = super.getScaleFactor();
-        float lastFactor = mLastScaleFactor;
-        mLastScaleFactor = factor;
+        float lastFactor = lastScaleFactor;
+        lastScaleFactor = factor;
 
         if (isInDoubleTapMode()) {
-            return (mCurrY > mPrevY && factor > 1f) || (mCurrY < mPrevY && factor < 1f)
+            return (currY > prevY && factor > 1f) || (currY < prevY && factor < 1f)
                     ? factor : lastFactor;
         }
 

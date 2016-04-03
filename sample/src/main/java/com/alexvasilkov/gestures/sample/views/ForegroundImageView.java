@@ -4,9 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
@@ -27,22 +25,12 @@ public class ForegroundImageView extends ImageView {
     public ForegroundImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ForegroundImageView);
-        Drawable foreground = a.getDrawable(R.styleable.ForegroundImageView_android_foreground);
+        TypedArray arr = context.obtainStyledAttributes(attrs, R.styleable.ForegroundImageView);
+        Drawable foreground = arr.getDrawable(R.styleable.ForegroundImageView_android_foreground);
         if (foreground != null) {
             setForeground(foreground);
         }
-        a.recycle();
-    }
-
-    /**
-     * Supply a drawable resource that is to be rendered on top of all of the child
-     * views in the frame layout.
-     *
-     * @param drawableResId The drawable resource to be drawn on top of the children.
-     */
-    public void setForegroundResource(@DrawableRes int drawableResId) {
-        setForeground(ContextCompat.getDrawable(getContext(), drawableResId));
+        arr.recycle();
     }
 
     /**
@@ -103,10 +91,10 @@ public class ForegroundImageView extends ImageView {
     }
 
     @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
+    protected void onSizeChanged(int width, int height, int oldWidth, int oldHeight) {
+        super.onSizeChanged(width, height, oldWidth, oldHeight);
         if (foreground != null) {
-            foreground.setBounds(0, 0, w, h);
+            foreground.setBounds(0, 0, width, height);
             invalidate();
         }
     }

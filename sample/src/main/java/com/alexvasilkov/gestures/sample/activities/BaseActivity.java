@@ -1,5 +1,6 @@
 package com.alexvasilkov.gestures.sample.activities;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
@@ -9,6 +10,7 @@ import android.view.MenuItem;
 import com.alexvasilkov.android.commons.state.InstanceStateManager;
 import com.alexvasilkov.events.Events;
 
+@SuppressLint("Registered")
 public class BaseActivity extends AppCompatActivity {
 
     @Override

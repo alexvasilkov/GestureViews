@@ -11,8 +11,10 @@ import com.alexvasilkov.gestures.State;
 
 public class CropUtils {
 
+    private CropUtils() {}
+
     /**
-     * Crops image drawable into bitmap according to current image position
+     * Crops image drawable into bitmap according to current image position.
      */
     public static Bitmap crop(Drawable drawable, State state, Settings settings) {
         if (drawable == null) {
@@ -22,8 +24,8 @@ public class CropUtils {
         float zoom = state.getZoom();
 
         // Computing crop size for base zoom level (zoom == 1)
-        int w = Math.round(settings.getMovementAreaW() / zoom);
-        int h = Math.round(settings.getMovementAreaH() / zoom);
+        int width = Math.round(settings.getMovementAreaW() / zoom);
+        int height = Math.round(settings.getMovementAreaH() / zoom);
 
         // Crop area coordinates within viewport
         Rect pos = MovementBounds.getMovementAreaWithGravity(settings);
@@ -37,7 +39,7 @@ public class CropUtils {
 
         try {
             // Draw drawable into bitmap
-            Bitmap dst = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+            Bitmap dst = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 
             Canvas canvas = new Canvas(dst);
             canvas.concat(matrix);

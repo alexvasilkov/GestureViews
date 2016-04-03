@@ -17,10 +17,10 @@ import com.alexvasilkov.gestures.views.interfaces.GestureView;
  */
 public class GestureTextView extends TextView implements GestureView {
 
-    private final GestureController mController;
+    private final GestureController controller;
 
-    private float mOrigSize;
-    private float mSize;
+    private float origSize;
+    private float size;
 
     public GestureTextView(Context context) {
         this(context, null, 0);
@@ -33,9 +33,9 @@ public class GestureTextView extends TextView implements GestureView {
     public GestureTextView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
-        mController = new GestureController(this);
-        mController.getSettings().setOverzoomFactor(1f).setPanEnabled(false);
-        mController.addOnStateChangeListener(new GestureController.OnStateChangeListener() {
+        controller = new GestureController(this);
+        controller.getSettings().setOverzoomFactor(1f).setPanEnabled(false);
+        controller.addOnStateChangeListener(new GestureController.OnStateChangeListener() {
             @Override
             public void onStateChanged(State state) {
                 applyState(state);
@@ -47,7 +47,7 @@ public class GestureTextView extends TextView implements GestureView {
             }
         });
 
-        mOrigSize = getTextSize();
+        origSize = getTextSize();
     }
 
     /**
@@ -55,7 +55,7 @@ public class GestureTextView extends TextView implements GestureView {
      */
     @Override
     public GestureController getController() {
-        return mController;
+        return controller;
     }
 
     @Override
@@ -67,37 +67,37 @@ public class GestureTextView extends TextView implements GestureView {
             }
         }
 
-        return mController.onTouch(this, event);
+        return controller.onTouch(this, event);
     }
 
     @Override
     public void setTextSize(float size) {
         super.setTextSize(size);
-        mOrigSize = getTextSize();
-        applyState(mController.getState());
+        origSize = getTextSize();
+        applyState(controller.getState());
     }
 
     @Override
     public void setTextSize(int unit, float size) {
         super.setTextSize(unit, size);
-        mOrigSize = getTextSize();
-        applyState(mController.getState());
+        origSize = getTextSize();
+        applyState(controller.getState());
     }
 
     @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-        mController.getSettings().setViewport(w, h).setImage(w, h);
-        mController.updateState();
+    protected void onSizeChanged(int width, int height, int oldWidth, int oldHeight) {
+        super.onSizeChanged(width, height, oldWidth, oldHeight);
+        controller.getSettings().setViewport(width, height).setImage(width, height);
+        controller.updateState();
     }
 
     protected void applyState(State state) {
-        float size = mOrigSize * state.getZoom();
-        float maxZoom = mController.getSettings().getMaxZoom();
-        size = Math.max(mOrigSize, Math.min(size, mOrigSize * maxZoom));
+        float size = origSize * state.getZoom();
+        float maxZoom = controller.getSettings().getMaxZoom();
+        size = Math.max(origSize, Math.min(size, origSize * maxZoom));
 
-        if (!State.equals(mSize, size)) {
-            mSize = size;
+        if (!State.equals(this.size, size)) {
+            this.size = size;
             super.setTextSize(TypedValue.COMPLEX_UNIT_PX, size);
         }
     }

@@ -12,10 +12,10 @@ import com.alexvasilkov.gestures.views.GestureImageView;
 
 public class PhotoCropResultActivity extends BaseActivity {
 
-    private static Bitmap sBitmapToShow; // Bad, but works fine for demonstration purpose
+    private static Bitmap bitmapToShow; // Bad, but works fine for demonstration purpose
 
     public static void show(Context context, Bitmap bitmap) {
-        sBitmapToShow = bitmap;
+        bitmapToShow = bitmap;
         context.startActivity(new Intent(context, PhotoCropResultActivity.class));
     }
 
@@ -23,7 +23,7 @@ public class PhotoCropResultActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (sBitmapToShow == null) {
+        if (bitmapToShow == null) {
             finish();
             return;
         }
@@ -35,14 +35,14 @@ public class PhotoCropResultActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         GestureImageView imageView = Views.find(this, R.id.cropped_image);
-        imageView.setImageBitmap(sBitmapToShow);
+        imageView.setImageBitmap(bitmapToShow);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         if (isFinishing()) {
-            sBitmapToShow = null;
+            bitmapToShow = null;
         }
     }
 

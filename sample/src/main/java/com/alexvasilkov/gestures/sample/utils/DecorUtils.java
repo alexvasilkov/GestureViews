@@ -12,6 +12,8 @@ import com.alexvasilkov.android.commons.utils.Views;
 
 public class DecorUtils {
 
+    private DecorUtils() {}
+
     public static void paddingForStatusBar(View view, boolean isFixedSize) {
         if (isCanHaveTransparentDecor()) {
             int height = getStratusBarHeight(view.getContext());
@@ -64,11 +66,11 @@ public class DecorUtils {
                     == Configuration.ORIENTATION_PORTRAIT;
 
             boolean isTablet = (context.getResources().getConfiguration().screenLayout
-                    & Configuration.SCREENLAYOUT_SIZE_MASK) >=
-                    Configuration.SCREENLAYOUT_SIZE_LARGE;
+                    & Configuration.SCREENLAYOUT_SIZE_MASK)
+                    >= Configuration.SCREENLAYOUT_SIZE_LARGE;
 
-            String key = isPortrait ? "navigation_bar_height" :
-                    (isTablet ? "navigation_bar_height_landscape" : null);
+            String key = isPortrait ? "navigation_bar_height"
+                    : (isTablet ? "navigation_bar_height_landscape" : null);
 
             return key == null ? 0 : getDimenSize(context, key);
         } else {

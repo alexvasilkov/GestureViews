@@ -14,8 +14,8 @@ import com.alexvasilkov.gestures.sample.utils.GestureSettingsMenu;
 
 public class FrameLayoutSampleActivity extends BaseActivity {
 
-    private ViewPager mViewPager;
-    private GestureSettingsMenu mSettingsMenu;
+    private ViewPager viewPager;
+    private GestureSettingsMenu settingsMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,33 +24,33 @@ public class FrameLayoutSampleActivity extends BaseActivity {
         setContentView(R.layout.activity_frame_layout_sample);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mSettingsMenu = new GestureSettingsMenu();
-        mSettingsMenu.onRestoreInstanceState(savedInstanceState);
+        settingsMenu = new GestureSettingsMenu();
+        settingsMenu.onRestoreInstanceState(savedInstanceState);
 
         Painting[] paintings = PaintingsHelper.list(getResources());
 
-        mViewPager = Views.find(this, R.id.paintings_view_pager);
-        mViewPager.setAdapter(
-                new PaintingsLayoutsPagerAdapter(mViewPager, paintings, mSettingsMenu));
-        mViewPager.setPageMargin(getResources().getDimensionPixelSize(R.dimen.view_pager_margin));
+        viewPager = Views.find(this, R.id.paintings_view_pager);
+        viewPager.setAdapter(
+                new PaintingsLayoutsPagerAdapter(viewPager, paintings, settingsMenu));
+        viewPager.setPageMargin(getResources().getDimensionPixelSize(R.dimen.view_pager_margin));
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        mSettingsMenu.onSaveInstanceState(outState);
+        settingsMenu.onSaveInstanceState(outState);
         super.onSaveInstanceState(outState);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        return mSettingsMenu.onCreateOptionsMenu(menu);
+        return settingsMenu.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (mSettingsMenu.onOptionsItemSelected(item)) {
+        if (settingsMenu.onOptionsItemSelected(item)) {
             invalidateOptionsMenu();
-            mViewPager.getAdapter().notifyDataSetChanged();
+            viewPager.getAdapter().notifyDataSetChanged();
             return true;
         } else {
             return super.onOptionsItemSelected(item);

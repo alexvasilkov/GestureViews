@@ -19,6 +19,161 @@ import android.view.View;
  */
 public class RotationGestureDetector {
 
+    private static final float ROTATION_SLOP = 5f;
+
+    private final OnRotationGestureListener listener;
+
+    private float focusX;
+    private float focusY;
+    private float initialAngle;
+    private float currAngle;
+    private float prevAngle;
+    private boolean isInProgress;
+    private boolean isGestureAccepted;
+
+    /**
+     * Creates a RotationGestureDetector with the supplied listener.
+     * You may only use this constructor from a {@link android.os.Looper Looper} thread.
+     *
+     * @param context the application's context
+     * @param listener the listener invoked for all the callbacks, this must not be null.
+     * @throws NullPointerException if {@code listener} is null.
+     */
+    @SuppressWarnings("UnusedParameters") // To keep similar to standard ScaleGestureDetector
+    public RotationGestureDetector(Context context, OnRotationGestureListener listener) {
+        this.listener = listener;
+    }
+
+    /**
+     * Accepts MotionEvents and dispatches events to a {@link OnRotationGestureListener}
+     * when appropriate.
+     * <p/>
+     * <p>Applications should pass a complete and consistent event stream to this method.
+     * A complete and consistent event stream involves all MotionEvents from the initial
+     * ACTION_DOWN to the final ACTION_UP or ACTION_CANCEL.</p>
+     *
+     * @param event The event to process
+     * @return true if the event was processed and the detector wants to receive the
+     * rest of the MotionEvents in this event stream.
+     */
+    public boolean onTouchEvent(MotionEvent event) {
+
+        switch (event.getActionMasked()) {
+            case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_CANCEL:
+            case MotionEvent.ACTION_UP:
+
+                cancelRotation();
+                break;
+
+            case MotionEvent.ACTION_POINTER_DOWN:
+
+                if (event.getPointerCount() == 2) {
+                    // Second finger is placed
+                    initialAngle = prevAngle = currAngle = computeRotation(event);
+                }
+                break;
+
+            case MotionEvent.ACTION_MOVE:
+
+                if (event.getPointerCount() >= 2 && (!isInProgress || isGestureAccepted)) {
+                    // Moving 2 or more fingers on the screen
+                    currAngle = computeRotation(event);
+                    focusX = 0.5f * (event.getX(1) + event.getX(0));
+                    focusY = 0.5f * (event.getY(1) + event.getY(0));
+                    boolean isAlreadyStarted = isInProgress;
+                    tryStartRotation();
+                    boolean isAccepted = !isAlreadyStarted || processRotation();
+                    if (isAccepted) {
+                        prevAngle = currAngle;
+                    }
+                }
+                break;
+
+            case MotionEvent.ACTION_POINTER_UP:
+
+                if (event.getPointerCount() == 2) {
+                    // Only one finger is left
+                    cancelRotation();
+                }
+                break;
+
+            default:
+        }
+
+        return true;
+    }
+
+    private void tryStartRotation() {
+        if (isInProgress || Math.abs(initialAngle - currAngle) < ROTATION_SLOP) {
+            return;
+        }
+        isInProgress = true;
+        isGestureAccepted = listener.onRotationBegin(this);
+    }
+
+    private void cancelRotation() {
+        if (!isInProgress) {
+            return;
+        }
+        isInProgress = false;
+        if (isGestureAccepted) {
+            listener.onRotationEnd(this);
+            isGestureAccepted = false;
+        }
+    }
+
+    private boolean processRotation() {
+        return isInProgress && isGestureAccepted && listener.onRotate(this);
+    }
+
+    private float computeRotation(MotionEvent event) {
+        return (float) Math.toDegrees(Math.atan2(
+                event.getY(1) - event.getY(0), event.getX(1) - event.getX(0)));
+    }
+
+    /**
+     * Returns {@code true} if a rotation gesture is in progress.
+     */
+    @SuppressWarnings("unused") // To keep similar to standard ScaleGestureDetector
+    public boolean isInProgress() {
+        return isInProgress;
+    }
+
+    /**
+     * Get the X coordinate of the current gesture's focal point. If a gesture is in progress,
+     * the focal point is between each of the pointers forming the gesture.
+     * <p/>
+     * If {@link #isInProgress()} would return false, the result of this function is undefined.
+     *
+     * @return X coordinate of the focal point in pixels.
+     */
+    public float getFocusX() {
+        return focusX;
+    }
+
+    /**
+     * Get the Y coordinate of the current gesture's focal point. If a gesture is in progress,
+     * the focal point is between each of the pointers forming the gesture.
+     * <p/>
+     * If {@link #isInProgress()} would return false, the result of this function is undefined.
+     *
+     * @return Y coordinate of the focal point in pixels.
+     */
+    public float getFocusY() {
+        return focusY;
+    }
+
+    /**
+     * Return the rotation delta in degrees from the previous rotation event to the current event.
+     *
+     * @return The current rotation delta in degrees.
+     */
+    public float getRotationDelta() {
+        return currAngle - prevAngle;
+    }
+
+
     /**
      * The listener for receiving notifications when gestures occur. If you want to listen for all
      * the different gestures then implement this interface. If you only want to listen for a
@@ -92,156 +247,6 @@ public class RotationGestureDetector {
         public void onRotationEnd(RotationGestureDetector detector) {
             // Intentionally empty
         }
-    }
-
-    private static final float ROTATION_SLOP = 5f;
-
-    private final OnRotationGestureListener mListener;
-
-    private float mFocusX, mFocusY;
-    private float mInitialAngle, mCurrAngle, mPrevAngle;
-    private boolean mIsInProgress;
-    private boolean mIsGestureAccepted;
-
-    /**
-     * Creates a RotationGestureDetector with the supplied listener.
-     * You may only use this constructor from a {@link android.os.Looper Looper} thread.
-     *
-     * @param context the application's context
-     * @param listener the listener invoked for all the callbacks, this must not be null.
-     * @throws NullPointerException if {@code listener} is null.
-     */
-    @SuppressWarnings("UnusedParameters") // To keep similar to standard ScaleGestureDetector
-    public RotationGestureDetector(Context context, OnRotationGestureListener listener) {
-        mListener = listener;
-    }
-
-    /**
-     * Accepts MotionEvents and dispatches events to a {@link OnRotationGestureListener}
-     * when appropriate.
-     * <p/>
-     * <p>Applications should pass a complete and consistent event stream to this method.
-     * A complete and consistent event stream involves all MotionEvents from the initial
-     * ACTION_DOWN to the final ACTION_UP or ACTION_CANCEL.</p>
-     *
-     * @param event The event to process
-     * @return true if the event was processed and the detector wants to receive the
-     * rest of the MotionEvents in this event stream.
-     */
-    public boolean onTouchEvent(MotionEvent event) {
-
-        switch (event.getActionMasked()) {
-            case MotionEvent.ACTION_DOWN:
-            case MotionEvent.ACTION_CANCEL:
-            case MotionEvent.ACTION_UP:
-
-                cancelRotation();
-                break;
-
-            case MotionEvent.ACTION_POINTER_DOWN:
-
-                if (event.getPointerCount() == 2) {
-                    // Second finger is placed
-                    mInitialAngle = mPrevAngle = mCurrAngle = computeRotation(event);
-                }
-                break;
-
-            case MotionEvent.ACTION_MOVE:
-
-                if (event.getPointerCount() >= 2 && (!mIsInProgress || mIsGestureAccepted)) {
-                    // Moving 2 or more fingers on the screen
-                    mCurrAngle = computeRotation(event);
-                    mFocusX = 0.5f * (event.getX(1) + event.getX(0));
-                    mFocusY = 0.5f * (event.getY(1) + event.getY(0));
-                    boolean isAlreadyStarted = mIsInProgress;
-                    tryStartRotation();
-                    boolean isAccepted = !isAlreadyStarted || processRotation();
-                    if (isAccepted) {
-                        mPrevAngle = mCurrAngle;
-                    }
-                }
-                break;
-
-            case MotionEvent.ACTION_POINTER_UP:
-
-                if (event.getPointerCount() == 2) {
-                    // Only one finger is left
-                    cancelRotation();
-                }
-                break;
-
-        }
-
-        return true;
-    }
-
-    private void tryStartRotation() {
-        if (mIsInProgress || Math.abs(mInitialAngle - mCurrAngle) < ROTATION_SLOP) {
-            return;
-        }
-        mIsInProgress = true;
-        mIsGestureAccepted = mListener.onRotationBegin(this);
-    }
-
-    private void cancelRotation() {
-        if (!mIsInProgress) {
-            return;
-        }
-        mIsInProgress = false;
-        if (mIsGestureAccepted) {
-            mListener.onRotationEnd(this);
-            mIsGestureAccepted = false;
-        }
-    }
-
-    private boolean processRotation() {
-        return mIsInProgress && mIsGestureAccepted && mListener.onRotate(this);
-    }
-
-    private float computeRotation(MotionEvent event) {
-        return (float) Math.toDegrees(Math.atan2(
-                event.getY(1) - event.getY(0), event.getX(1) - event.getX(0)));
-    }
-
-    /**
-     * Returns {@code true} if a rotation gesture is in progress.
-     */
-    @SuppressWarnings("unused") // To keep similar to standard ScaleGestureDetector
-    public boolean isInProgress() {
-        return mIsInProgress;
-    }
-
-    /**
-     * Get the X coordinate of the current gesture's focal point. If a gesture is in progress,
-     * the focal point is between each of the pointers forming the gesture.
-     * <p/>
-     * If {@link #isInProgress()} would return false, the result of this function is undefined.
-     *
-     * @return X coordinate of the focal point in pixels.
-     */
-    public float getFocusX() {
-        return mFocusX;
-    }
-
-    /**
-     * Get the Y coordinate of the current gesture's focal point. If a gesture is in progress,
-     * the focal point is between each of the pointers forming the gesture.
-     * <p/>
-     * If {@link #isInProgress()} would return false, the result of this function is undefined.
-     *
-     * @return Y coordinate of the focal point in pixels.
-     */
-    public float getFocusY() {
-        return mFocusY;
-    }
-
-    /**
-     * Return the rotation delta in degrees from the previous rotation event to the current event.
-     *
-     * @return The current rotation delta in degrees.
-     */
-    public float getRotationDelta() {
-        return mCurrAngle - mPrevAngle;
     }
 
 }

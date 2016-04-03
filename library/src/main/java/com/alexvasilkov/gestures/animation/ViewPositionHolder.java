@@ -11,11 +11,11 @@ import android.view.ViewTreeObserver;
  */
 class ViewPositionHolder implements ViewTreeObserver.OnPreDrawListener {
 
-    private final ViewPosition mPos = ViewPosition.newInstance();
+    private final ViewPosition pos = ViewPosition.newInstance();
 
-    private OnViewPositionChangeListener mListener;
-    private View mView;
-    private boolean mIsPaused;
+    private OnViewPositionChangeListener listener;
+    private View view;
+    private boolean isPaused;
 
     @Override
     public boolean onPreDraw() {
@@ -24,53 +24,54 @@ class ViewPositionHolder implements ViewTreeObserver.OnPreDrawListener {
     }
 
     public void init(@NonNull View view, @NonNull OnViewPositionChangeListener listener) {
-        mView = view;
-        mListener = listener;
-        mView.getViewTreeObserver().addOnPreDrawListener(this);
+        this.view = view;
+        this.listener = listener;
+
+        view.getViewTreeObserver().addOnPreDrawListener(this);
         if (isLaidOut()) {
             update();
         }
     }
 
     public void clear() {
-        if (mView != null) {
-            mView.getViewTreeObserver().removeOnPreDrawListener(this);
+        if (view != null) {
+            view.getViewTreeObserver().removeOnPreDrawListener(this);
         }
 
-        mPos.view.setEmpty();
-        mPos.viewport.setEmpty();
-        mPos.image.setEmpty();
+        pos.view.setEmpty();
+        pos.viewport.setEmpty();
+        pos.image.setEmpty();
 
-        mView = null;
-        mListener = null;
-        mIsPaused = false;
+        view = null;
+        listener = null;
+        isPaused = false;
     }
 
     public void pause(boolean paused) {
-        if (mIsPaused == paused) {
+        if (isPaused == paused) {
             return;
         }
 
-        mIsPaused = paused;
+        isPaused = paused;
         if (!paused) {
             update();
         }
     }
 
     private void update() {
-        if (mView != null && mListener != null && !mIsPaused) {
-            boolean changed = ViewPosition.apply(mPos, mView);
+        if (view != null && listener != null && !isPaused) {
+            boolean changed = ViewPosition.apply(pos, view);
             if (changed) {
-                mListener.onViewPositionChanged(mPos);
+                listener.onViewPositionChanged(pos);
             }
         }
     }
 
     private boolean isLaidOut() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            return mView.isLaidOut();
+            return view.isLaidOut();
         } else {
-            return mView.getWidth() > 0 && mView.getHeight() > 0;
+            return view.getWidth() > 0 && view.getHeight() > 0;
         }
     }
 

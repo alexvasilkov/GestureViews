@@ -6,11 +6,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.alexvasilkov.gestures.animation.ViewPositionAnimator;
+import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
 import com.alexvasilkov.gestures.transition.ViewsCoordinator;
 import com.alexvasilkov.gestures.transition.ViewsTracker;
 import com.alexvasilkov.gestures.transition.ViewsTransitionAnimator;
 import com.alexvasilkov.gestures.views.interfaces.AnimatorView;
-import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
 
 /**
  * Helper class to animate transitions into ViewPager with GestureView-driven pages.
@@ -19,80 +19,80 @@ import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
  */
 public class IntoViewPagerListener<ID> implements ViewsCoordinator.OnRequestViewListener<ID> {
 
-    private final ViewPager mViewPager;
-    private final ViewsTracker<ID> mTracker;
-    private final ViewsTransitionAnimator<ID> mAnimator;
-    private ID mId;
+    private final ViewPager viewPager;
+    private final ViewsTracker<ID> tracker;
+    private final ViewsTransitionAnimator<ID> animator;
+    private ID id;
 
-    private boolean mPreventExit;
+    private boolean preventExit;
 
     public IntoViewPagerListener(@NonNull ViewPager viewPager,
             @NonNull ViewsTracker<ID> tracker,
             @NonNull ViewsTransitionAnimator<ID> animator) {
-        mViewPager = viewPager;
-        mTracker = tracker;
-        mAnimator = animator;
+        this.viewPager = viewPager;
+        this.tracker = tracker;
+        this.animator = animator;
 
-        mViewPager.setVisibility(View.GONE); // We do not need to initialize ViewPager on startup
-        mViewPager.addOnPageChangeListener(new PagerListener());
-        mViewPager.setOnHierarchyChangeListener(new ChildStateListener());
+        viewPager.setVisibility(View.GONE); // We do not need to initialize ViewPager on startup
+        viewPager.addOnPageChangeListener(new PagerListener());
+        viewPager.setOnHierarchyChangeListener(new ChildStateListener());
 
-        mAnimator.addPositionUpdateListener(new UpdateListener());
+        animator.addPositionUpdateListener(new UpdateListener());
     }
 
     private void applyCurrentPage() {
-        if (mId == null) {
+        if (id == null) {
             return;
         }
-        if (mViewPager.getAdapter() == null || mViewPager.getAdapter().getCount() == 0) {
+        if (viewPager.getAdapter() == null || viewPager.getAdapter().getCount() == 0) {
             return;
         }
 
-        int current = mViewPager.getCurrentItem();
-        int position = mTracker.getPositionForId(mId);
+        int current = viewPager.getCurrentItem();
+        int position = tracker.getPositionForId(id);
 
         if (position == ViewsTracker.NO_POSITION || current != position) {
             return;
         }
 
-        View view = mTracker.getViewForPosition(current); // View may be null
+        View view = tracker.getViewForPosition(current); // View may be null
         if (view instanceof AnimatorView) {
-            mAnimator.setToView(mId, (AnimatorView) view);
+            animator.setToView(id, (AnimatorView) view);
         } else if (view != null) {
-            throw new IllegalArgumentException("View for " + mId + " should be AnimatorView");
+            throw new IllegalArgumentException("View for " + id + " should be AnimatorView");
         }
     }
 
     private void switchToCurrentPage() {
-        if (mViewPager.getAdapter() == null || mViewPager.getAdapter().getCount() == 0) {
+        if (viewPager.getAdapter() == null || viewPager.getAdapter().getCount() == 0) {
             return;
         }
 
         // If user scrolled to new page we should silently switch views
-        ID currentId = mTracker.getIdForPosition(mViewPager.getCurrentItem());
-        if (mId != null && currentId != null && !mId.equals(currentId)) {
+        ID currentId = tracker.getIdForPosition(viewPager.getCurrentItem());
+        if (id != null && currentId != null && !id.equals(currentId)) {
             // Saving current state
-            AnimatorView toView = mAnimator.getToView();
+            AnimatorView toView = animator.getToView();
             ViewPositionAnimator animator = toView == null ? null : toView.getPositionAnimator();
             boolean isLeaving = animator != null && animator.isLeaving();
             boolean isAnimating = animator != null && animator.isAnimating();
 
             // Switching to new page, preventing exit of previous page
             skipExit();
-            mAnimator.enter(currentId, false);
+            this.animator.enter(currentId, false);
 
             // Applying saved state
             if (isLeaving) {
-                mAnimator.exit(isAnimating);
+                this.animator.exit(isAnimating);
             }
         }
     }
 
     private void skipExit() {
-        if (mAnimator.getToView() == null) {
+        if (animator.getToView() == null) {
             return;
         }
-        ViewPositionAnimator animator = mAnimator.getToView().getPositionAnimator();
+        ViewPositionAnimator animator = this.animator.getToView().getPositionAnimator();
         if (animator.isLeaving() && animator.getPositionState() == 1f) {
             animator.setState(1f, false, false);
         }
@@ -101,23 +101,23 @@ public class IntoViewPagerListener<ID> implements ViewsCoordinator.OnRequestView
     @Override
     public void onRequestView(@NonNull ID id) {
         // Requesting ViewPager layout if it was in 'gone' state
-        if (mViewPager.getVisibility() == View.GONE) {
-            mViewPager.setVisibility(View.INVISIBLE);
+        if (viewPager.getVisibility() == View.GONE) {
+            viewPager.setVisibility(View.INVISIBLE);
         }
 
         // Trying to find view for currently shown page.
         // If it is not a selected page than we should scroll to it at first.
-        mId = id;
-        int position = mTracker.getPositionForId(id);
+        this.id = id;
+        int position = tracker.getPositionForId(id);
 
         if (position == ViewsTracker.NO_POSITION) {
             return; // Nothing we can do
         }
 
-        if (mViewPager.getCurrentItem() == position) {
+        if (viewPager.getCurrentItem() == position) {
             applyCurrentPage();
         } else {
-            mViewPager.setCurrentItem(position, false);
+            viewPager.setCurrentItem(position, false);
         }
     }
 
@@ -135,8 +135,8 @@ public class IntoViewPagerListener<ID> implements ViewsCoordinator.OnRequestView
 
         @Override
         public void onPageScrollStateChanged(int state) {
-            mPreventExit = !mAnimator.isLeaving() && state == ViewPager.SCROLL_STATE_DRAGGING;
-            if (state == ViewPager.SCROLL_STATE_IDLE && mId != null) {
+            preventExit = !animator.isLeaving() && state == ViewPager.SCROLL_STATE_DRAGGING;
+            if (state == ViewPager.SCROLL_STATE_IDLE && id != null) {
                 switchToCurrentPage();
             }
         }
@@ -158,15 +158,15 @@ public class IntoViewPagerListener<ID> implements ViewsCoordinator.OnRequestView
         @Override
         public void onPositionUpdate(float state, boolean isLeaving) {
             if (state == 0f && isLeaving) {
-                mId = null;
+                id = null;
             }
-            if (state == 1f && isLeaving && mId != null) {
-                if (mPreventExit) {
+            if (state == 1f && isLeaving && id != null) {
+                if (preventExit) {
                     skipExit();
                 }
                 switchToCurrentPage();
             }
-            mViewPager.setVisibility(state == 0f && isLeaving ? View.INVISIBLE : View.VISIBLE);
+            viewPager.setVisibility(state == 0f && isLeaving ? View.INVISIBLE : View.VISIBLE);
         }
     }
 

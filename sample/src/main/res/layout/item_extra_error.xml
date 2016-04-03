@@ -3,7 +3,6 @@
     android:id="@+id/extra_error"
     android:layout_width="match_parent"
     android:layout_height="?actionBarSize"
-    android:drawableEnd="@drawable/ic_refresh_white_24dp"
     android:drawableRight="@drawable/ic_refresh_white_24dp"
     android:gravity="center"
     android:paddingLeft="16dp"

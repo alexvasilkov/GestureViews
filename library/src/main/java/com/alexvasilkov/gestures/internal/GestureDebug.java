@@ -2,23 +2,25 @@ package com.alexvasilkov.gestures.internal;
 
 public class GestureDebug {
 
-    private static boolean sDebugFps;
-    private static boolean sDebugAnimator;
+    private static boolean debugFps;
+    private static boolean debugAnimator;
+
+    private GestureDebug() {}
 
     public static boolean isDebugFps() {
-        return sDebugFps;
+        return debugFps;
     }
 
     public static void setDebugFps(boolean debug) {
-        sDebugFps = debug;
+        debugFps = debug;
     }
 
     public static boolean isDebugAnimator() {
-        return sDebugAnimator;
+        return debugAnimator;
     }
 
     public static void setDebugAnimator(boolean debug) {
-        sDebugAnimator = debug;
+        debugAnimator = debug;
     }
 
 }

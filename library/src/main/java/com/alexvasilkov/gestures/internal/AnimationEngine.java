@@ -8,22 +8,22 @@ public abstract class AnimationEngine implements Runnable {
 
     private static final long FRAME_TIME = 10L;
 
-    private final View mView;
-    private final Fps mFps;
+    private final View view;
+    private final Fps fps;
 
     public AnimationEngine(@NonNull View view) {
-        mView = view;
-        mFps = GestureDebug.isDebugFps() ? new Fps() : null;
+        this.view = view;
+        this.fps = GestureDebug.isDebugFps() ? new Fps() : null;
     }
 
     @Override
     public final void run() {
         boolean continueAnimation = onStep();
 
-        if (mFps != null) {
-            mFps.step();
+        if (fps != null) {
+            fps.step();
             if (!continueAnimation) {
-                mFps.stop();
+                fps.stop();
             }
         }
 
@@ -35,17 +35,17 @@ public abstract class AnimationEngine implements Runnable {
     public abstract boolean onStep();
 
     private void scheduleNextStep() {
-        mView.removeCallbacks(this);
+        view.removeCallbacks(this);
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-            mView.postDelayed(this, FRAME_TIME);
+            view.postDelayed(this, FRAME_TIME);
         } else {
-            mView.postOnAnimationDelayed(this, FRAME_TIME);
+            view.postOnAnimationDelayed(this, FRAME_TIME);
         }
     }
 
     public void start() {
-        if (mFps != null) {
-            mFps.start();
+        if (fps != null) {
+            fps.start();
         }
 
         scheduleNextStep();

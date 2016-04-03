@@ -6,7 +6,10 @@ import android.widget.ImageView;
 
 class ImageViewHelper {
 
-    private static final RectF TMP_SRC = new RectF(), TMP_DST = new RectF();
+    private static final RectF tmpSrc = new RectF();
+    private static final RectF tmpDst = new RectF();
+
+    private ImageViewHelper() {}
 
     /**
      * Helper method to calculate drawing matrix. Based on ImageView source code.
@@ -23,7 +26,8 @@ class ImageViewHelper {
                     (vheight - dheight) * 0.5f);
         } else if (ImageView.ScaleType.CENTER_CROP == type) {
             float scale;
-            float dx = 0, dy = 0;
+            float dx = 0;
+            float dy = 0;
 
             if (dwidth * vheight > vwidth * dheight) {
                 scale = (float) vheight / (float) dheight;
@@ -58,9 +62,9 @@ class ImageViewHelper {
                 outMatrix.set(imageMatrix);
             } else {
                 // Generate the required transform.
-                TMP_SRC.set(0, 0, dwidth, dheight);
-                TMP_DST.set(0, 0, vwidth, vheight);
-                outMatrix.setRectToRect(TMP_SRC, TMP_DST, scaleToFit);
+                tmpSrc.set(0, 0, dwidth, dheight);
+                tmpDst.set(0, 0, vwidth, vheight);
+                outMatrix.setRectToRect(tmpSrc, tmpDst, scaleToFit);
             }
         }
     }

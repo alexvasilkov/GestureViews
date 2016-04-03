@@ -9,9 +9,10 @@
 
     <application
         android:name=".SampleApplication"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@drawable/ic_launcher"
         android:label="GestureViews"
+        android:supportsRtl="false"
         android:theme="@style/AppTheme">
 
         <activity

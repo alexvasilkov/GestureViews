@@ -135,7 +135,7 @@
             <property name="allowOneCharVarInForLoop" value="true" />
         </module>
         <module name="MemberName">
-            <property name="format" value="^[a-z][a-z0-9][a-zA-Z0-9]*$" />
+            <property name="format" value="^([a-z][a-z0-9][a-zA-Z0-9]*)|x|y$" />
         </module>
         <module name="MethodName">
             <property name="format" value="^[a-z][a-z0-9][a-zA-Z0-9_]*$" />
@@ -144,6 +144,9 @@
             <property name="format" value="^[a-z]+(\.[a-z][a-z0-9]*)*$" />
         </module>
         <module name="ParameterName">
+            <property name="format" value="^([a-z][a-z0-9][a-zA-Z0-9]*)|x|y$" />
+        </module>
+        <module name="StaticVariableName">
             <property name="format" value="^[a-z][a-z0-9][a-zA-Z0-9]*$" />
         </module>
         <module name="TypeName" />

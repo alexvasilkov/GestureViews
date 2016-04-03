@@ -3,16 +3,17 @@ package com.alexvasilkov.gestures;
 import android.graphics.Matrix;
 
 /**
- * Represents 2d transformation state
+ * Represents 2d transformation state.
  */
 public class State {
 
     public static final float EPSILON = 0.0001f;
 
     private final Matrix matrix = new Matrix();
-    private final float[] tmp = new float[9];
+    private final float[] matrixValues = new float[9];
 
-    private float x, y;
+    private float x;
+    private float y;
     private float zoom = 1f;
     private float rotation;
 
@@ -144,27 +145,27 @@ public class State {
      * See <a href="http://stackoverflow.com/questions/4361242">here</a>.
      */
     private void updateFromMatrix(boolean updateZoom, boolean updateRotation) {
-        matrix.getValues(tmp);
-        x = tmp[2];
-        y = tmp[5];
+        matrix.getValues(matrixValues);
+        x = matrixValues[2];
+        y = matrixValues[5];
         if (updateZoom) {
-            zoom = (float) Math.hypot(tmp[1], tmp[4]);
+            zoom = (float) Math.hypot(matrixValues[1], matrixValues[4]);
         }
         if (updateRotation) {
-            rotation = (float) Math.toDegrees(Math.atan2(tmp[3], tmp[4]));
+            rotation = (float) Math.toDegrees(Math.atan2(matrixValues[3], matrixValues[4]));
         }
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
 
-        State state = (State) o;
+        State state = (State) obj;
 
         return equals(state.x, x) && equals(state.y, y)
                 && equals(state.zoom, zoom) && equals(state.rotation, rotation);
@@ -185,14 +186,15 @@ public class State {
     }
 
     /**
-     * Compares two float values, allowing small difference (see {@link #EPSILON})
+     * Compares two float values, allowing small difference (see {@link #EPSILON}).
      */
+    @SuppressWarnings("checkstyle:overloadmethodsdeclarationorder")
     public static boolean equals(float v1, float v2) {
         return compare(v1, v2) == 0;
     }
 
     /**
-     * Compares two float values, allowing small difference (see {@link #EPSILON})
+     * Compares two float values, allowing small difference (see {@link #EPSILON}).
      */
     public static int compare(float v1, float v2) {
         return v1 > v2 + EPSILON ? 1 : v1 < v2 - EPSILON ? -1 : 0;

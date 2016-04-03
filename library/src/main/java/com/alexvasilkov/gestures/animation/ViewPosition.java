@@ -29,16 +29,19 @@ import java.util.regex.Pattern;
  */
 public class ViewPosition {
 
-    private static final int[] TMP_LOCATION = new int[2];
-    private static final Matrix TMP_MATRIX = new Matrix();
-    private static final RectF TMP_SRC = new RectF(), TMP_DST = new RectF();
-
-    private static final Rect TMP_VIEW = new Rect();
-
     private static final String DELIMITER = "#";
     private static final Pattern SPLIT_PATTERN = Pattern.compile(DELIMITER);
 
-    public final Rect view, viewport, image;
+    private static final int[] tmpLocation = new int[2];
+    private static final Matrix tmpMatrix = new Matrix();
+    private static final RectF tmpSrc = new RectF();
+    private static final RectF tmpDst = new RectF();
+
+    private static final Rect tmpViewRect = new Rect();
+
+    public final Rect view;
+    public final Rect viewport;
+    public final Rect image;
 
     private ViewPosition() {
         this.view = new Rect();
@@ -61,51 +64,54 @@ public class ViewPosition {
     /**
      * @return true if view position is changed, false otherwise
      */
-    private boolean init(@NonNull View v) {
+    private boolean init(@NonNull View targetView) {
         // If view is not attached than we can't get it's position
-        if (v.getWindowToken() == null) {
+        if (targetView.getWindowToken() == null) {
             return false;
         }
 
-        TMP_VIEW.set(view);
+        tmpViewRect.set(view);
 
-        v.getLocationOnScreen(TMP_LOCATION);
+        targetView.getLocationOnScreen(tmpLocation);
 
-        view.set(0, 0, v.getWidth(), v.getHeight());
-        view.offset(TMP_LOCATION[0], TMP_LOCATION[1]);
+        view.set(0, 0, targetView.getWidth(), targetView.getHeight());
+        view.offset(tmpLocation[0], tmpLocation[1]);
 
-        viewport.set(v.getPaddingLeft(), v.getPaddingTop(),
-                v.getWidth() - v.getPaddingRight(), v.getHeight() - v.getPaddingBottom());
-        viewport.offset(TMP_LOCATION[0], TMP_LOCATION[1]);
+        viewport.set(targetView.getPaddingLeft(),
+                targetView.getPaddingTop(),
+                targetView.getWidth() - targetView.getPaddingRight(),
+                targetView.getHeight() - targetView.getPaddingBottom());
+        viewport.offset(tmpLocation[0], tmpLocation[1]);
 
-        if (v instanceof ImageView) {
-            ImageView imageView = (ImageView) v;
+        if (targetView instanceof ImageView) {
+            ImageView imageView = (ImageView) targetView;
             Drawable drawable = imageView.getDrawable();
 
             if (drawable == null) {
                 image.set(viewport);
             } else {
-                int w = drawable.getIntrinsicWidth(), h = drawable.getIntrinsicHeight();
+                int drawableWidth = drawable.getIntrinsicWidth();
+                int drawableHeight = drawable.getIntrinsicHeight();
 
                 // Getting image position within the view
                 ImageViewHelper.applyScaleType(imageView.getScaleType(),
-                        w, h, viewport.width(), viewport.height(),
-                        imageView.getImageMatrix(), TMP_MATRIX);
+                        drawableWidth, drawableHeight, viewport.width(), viewport.height(),
+                        imageView.getImageMatrix(), tmpMatrix);
 
-                TMP_SRC.set(0, 0, w, h);
-                TMP_MATRIX.mapRect(TMP_DST, TMP_SRC);
+                tmpSrc.set(0, 0, drawableWidth, drawableHeight);
+                tmpMatrix.mapRect(tmpDst, tmpSrc);
 
                 // Calculating image position on screen
-                image.left = viewport.left + (int) TMP_DST.left;
-                image.top = viewport.top + (int) TMP_DST.top;
-                image.right = viewport.left + (int) TMP_DST.right;
-                image.bottom = viewport.top + (int) TMP_DST.bottom;
+                image.left = viewport.left + (int) tmpDst.left;
+                image.top = viewport.top + (int) tmpDst.top;
+                image.right = viewport.left + (int) tmpDst.right;
+                image.bottom = viewport.top + (int) tmpDst.bottom;
             }
         } else {
             image.set(viewport);
         }
 
-        return !TMP_VIEW.equals(view);
+        return !tmpViewRect.equals(view);
     }
 
     public static ViewPosition newInstance() {

@@ -13,55 +13,56 @@ import com.alexvasilkov.gestures.transition.ViewsTransitionAnimator;
 
 public class FromListViewListener<ID> implements ViewsCoordinator.OnRequestViewListener<ID> {
 
-    private static final Rect LOCATION_PARENT = new Rect(), LOCATION = new Rect();
+    private static final Rect locationParent = new Rect();
+    private static final Rect locationChild = new Rect();
 
-    private final ListView mListView;
-    private final ViewsTracker<ID> mTracker;
-    private final ViewsTransitionAnimator<ID> mAnimator;
+    private final ListView listView;
+    private final ViewsTracker<ID> tracker;
+    private final ViewsTransitionAnimator<ID> animator;
 
-    private ID mId;
-    private boolean mScrollHalfVisibleItems;
+    private ID id;
+    private boolean scrollHalfVisibleItems;
 
     public FromListViewListener(@NonNull ListView listView,
             @NonNull ViewsTracker<ID> tracker,
             @NonNull ViewsTransitionAnimator<ID> animator) {
-        mListView = listView;
-        mTracker = tracker;
-        mAnimator = animator;
+        this.listView = listView;
+        this.tracker = tracker;
+        this.animator = animator;
 
-        mListView.setOnScrollListener(new ScrollListener());
-        mAnimator.addPositionUpdateListener(new UpdateListener());
+        this.listView.setOnScrollListener(new ScrollListener());
+        this.animator.addPositionUpdateListener(new UpdateListener());
     }
 
     @Override
     public void onRequestView(@NonNull ID id) {
         // Trying to find requested view on screen. If it is not currently on screen
         // or it is not fully visible than we should scroll to it at first.
-        mId = id;
-        int position = mTracker.getPositionForId(id);
+        this.id = id;
+        int position = tracker.getPositionForId(id);
 
         if (position == ViewsTracker.NO_POSITION) {
             return; // Nothing we can do
         }
 
-        View view = mTracker.getViewForPosition(position);
+        View view = tracker.getViewForPosition(position);
         if (view == null) {
-            mListView.setSelection(position);
+            listView.setSelection(position);
         } else {
-            mAnimator.setFromView(id, view);
+            animator.setFromView(id, view);
 
-            if (mScrollHalfVisibleItems) {
-                mListView.getGlobalVisibleRect(LOCATION_PARENT);
-                LOCATION_PARENT.left += mListView.getPaddingLeft();
-                LOCATION_PARENT.right -= mListView.getPaddingRight();
-                LOCATION_PARENT.top += mListView.getPaddingTop();
-                LOCATION_PARENT.bottom -= mListView.getPaddingBottom();
+            if (scrollHalfVisibleItems) {
+                listView.getGlobalVisibleRect(locationParent);
+                locationParent.left += listView.getPaddingLeft();
+                locationParent.right -= listView.getPaddingRight();
+                locationParent.top += listView.getPaddingTop();
+                locationParent.bottom -= listView.getPaddingBottom();
 
-                view.getGlobalVisibleRect(LOCATION);
-                if (!LOCATION_PARENT.contains(LOCATION)
-                        || view.getWidth() > LOCATION.width()
-                        || view.getHeight() > LOCATION.height()) {
-                    mListView.setSelection(position);
+                view.getGlobalVisibleRect(locationChild);
+                if (!locationParent.contains(locationChild)
+                        || view.getWidth() > locationChild.width()
+                        || view.getHeight() > locationChild.height()) {
+                    listView.setSelection(position);
                 }
             }
         }
@@ -70,14 +71,14 @@ public class FromListViewListener<ID> implements ViewsCoordinator.OnRequestViewL
     private class ScrollListener implements AbsListView.OnScrollListener {
         @Override
         public void onScroll(AbsListView view, int firstVisible, int visibleCount, int totalCount) {
-            if (mId == null) {
+            if (id == null) {
                 return; // Nothing to do
             }
             for (int position = firstVisible; position < firstVisible + visibleCount; position++) {
-                if (mId.equals(mTracker.getIdForPosition(position))) {
-                    View from = mTracker.getViewForPosition(position);
+                if (id.equals(tracker.getIdForPosition(position))) {
+                    View from = tracker.getViewForPosition(position);
                     if (from != null) {
-                        mAnimator.setFromView(mId, from);
+                        animator.setFromView(id, from);
                     }
                 }
             }
@@ -93,10 +94,10 @@ public class FromListViewListener<ID> implements ViewsCoordinator.OnRequestViewL
         @Override
         public void onPositionUpdate(float state, boolean isLeaving) {
             if (state == 0f && isLeaving) {
-                mId = null;
+                id = null;
             }
-            mListView.setVisibility(state == 1f && !isLeaving ? View.INVISIBLE : View.VISIBLE);
-            mScrollHalfVisibleItems = state == 1f; // Only scroll if we in full mode
+            listView.setVisibility(state == 1f && !isLeaving ? View.INVISIBLE : View.VISIBLE);
+            scrollHalfVisibleItems = state == 1f; // Only scroll if we in full mode
         }
     }
 

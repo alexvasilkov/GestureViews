@@ -22,52 +22,53 @@ import com.alexvasilkov.gestures.StateController;
 public class MovementBounds {
 
     // Temporary objects
-    private static final Matrix MATRIX = new Matrix();
-    private static final float[] POINT_ARR = new float[2];
-    private static final PointF POINT_F = new PointF();
+    private static final Matrix matrix = new Matrix();
+    private static final float[] pointArr = new float[2];
+    private static final PointF point = new PointF();
 
-    private static final Rect RECT_TMP = new Rect();
-    private static final RectF RECT_TMP_F = new RectF();
-    private static final RectF RECT_TMP_AREA = new RectF();
+    private static final Rect rectTmp = new Rect();
+    private static final RectF rectTmpF = new RectF();
+    private static final RectF rectTmpArea = new RectF();
 
-    private static final RectF RECT_EXT_BOUNDS = new RectF();
-    private static final Rect RECT_POS = new Rect();
-    private static final Rect RECT_MOV_AREA = new Rect();
-    private static final Point POINT_PIVOT = new Point();
+    private static final RectF rectExtBounds = new RectF();
+    private static final Rect rectPos = new Rect();
+    private static final Rect rectMovArea = new Rect();
+    private static final Point pivot = new Point();
 
     // Movement bounds parameters
-    private final RectF mBounds = new RectF();
-    private float mRotation;
-    private float mPivotX, mPivotY;
+    private final RectF bounds = new RectF();
+    private float rotation;
+    private float pivotX;
+    private float pivotY;
 
 
     /**
      * Restricts x & y coordinates to current bounds (see {@link #setup(State, Settings)}).
      */
     public PointF restrict(float x, float y, float overscrollX, float overscrollY) {
-        POINT_ARR[0] = x;
-        POINT_ARR[1] = y;
+        pointArr[0] = x;
+        pointArr[1] = y;
 
-        if (mRotation != 0f) {
+        if (rotation != 0f) {
             // Rotating given point so we can apply rectangular bounds.
-            MATRIX.setRotate(-mRotation, mPivotX, mPivotY);
-            MATRIX.mapPoints(POINT_ARR);
+            matrix.setRotate(-rotation, pivotX, pivotY);
+            matrix.mapPoints(pointArr);
         }
 
         // Applying restrictions
-        POINT_ARR[0] = StateController.restrict(POINT_ARR[0],
-                mBounds.left - overscrollX, mBounds.right + overscrollX);
-        POINT_ARR[1] = StateController.restrict(POINT_ARR[1],
-                mBounds.top - overscrollY, mBounds.bottom + overscrollY);
+        pointArr[0] = StateController.restrict(pointArr[0],
+                bounds.left - overscrollX, bounds.right + overscrollX);
+        pointArr[1] = StateController.restrict(pointArr[1],
+                bounds.top - overscrollY, bounds.bottom + overscrollY);
 
-        if (mRotation != 0f) {
+        if (rotation != 0f) {
             // Rotating restricted point back to original coordinates
-            MATRIX.setRotate(mRotation, mPivotX, mPivotY);
-            MATRIX.mapPoints(POINT_ARR);
+            matrix.setRotate(rotation, pivotX, pivotY);
+            matrix.mapPoints(pointArr);
         }
 
-        POINT_F.set(POINT_ARR[0], POINT_ARR[1]);
-        return POINT_F;
+        point.set(pointArr[0], pointArr[1]);
+        return point;
     }
 
     public PointF restrict(float x, float y) {
@@ -78,55 +79,55 @@ public class MovementBounds {
      * Note: do not store returned rect since it will be reused again later by this method.
      */
     public RectF getExternalBounds() {
-        if (mRotation == 0f) {
-            RECT_EXT_BOUNDS.set(mBounds);
+        if (rotation == 0f) {
+            rectExtBounds.set(bounds);
         } else {
-            MATRIX.setRotate(mRotation, mPivotX, mPivotY);
-            MATRIX.mapRect(RECT_EXT_BOUNDS, mBounds);
+            matrix.setRotate(rotation, pivotX, pivotY);
+            matrix.mapRect(rectExtBounds, bounds);
         }
-        return RECT_EXT_BOUNDS;
+        return rectExtBounds;
     }
 
     public void union(float x, float y) {
-        POINT_ARR[0] = x;
-        POINT_ARR[1] = y;
+        pointArr[0] = x;
+        pointArr[1] = y;
 
-        if (mRotation != 0f) {
+        if (rotation != 0f) {
             // Rotating given point so we can add it to bounds
-            MATRIX.setRotate(-mRotation, mPivotX, mPivotY);
-            MATRIX.mapPoints(POINT_ARR);
+            matrix.setRotate(-rotation, pivotX, pivotY);
+            matrix.mapPoints(pointArr);
         }
 
-        mBounds.union(POINT_ARR[0], POINT_ARR[1]);
+        bounds.union(pointArr[0], pointArr[1]);
     }
 
     /**
      * Calculating bounds for {@link State#x} & {@link State#y} values to keep image within
-     * viewport and taking image gravity into account (see {@link Settings#setGravity(int)})
+     * viewport and taking image gravity into account (see {@link Settings#setGravity(int)}).
      */
     public void setup(State state, Settings settings) {
-        RectF area = RECT_TMP_AREA;
+        RectF area = rectTmpArea;
         area.set(getMovementAreaWithGravity(settings));
         final Rect pos;
 
         if (settings.getFitMethod() == Settings.Fit.OUTSIDE) {
             // For OUTSIDE fit method we will rotate area rect instead of image rect,
             // that will help us correctly fit movement area inside image rect
-            mRotation = state.getRotation();
-            mPivotX = area.centerX();
-            mPivotY = area.centerY();
+            rotation = state.getRotation();
+            pivotX = area.centerX();
+            pivotY = area.centerY();
 
-            state.get(MATRIX);
-            MATRIX.postRotate(-mRotation, mPivotX, mPivotY);
-            pos = getPositionWithGravity(MATRIX, settings);
+            state.get(matrix);
+            matrix.postRotate(-rotation, pivotX, pivotY);
+            pos = getPositionWithGravity(matrix, settings);
 
-            MATRIX.setRotate(-mRotation, mPivotX, mPivotY);
-            MATRIX.mapRect(area);
+            matrix.setRotate(-rotation, pivotX, pivotY);
+            matrix.mapRect(area);
         } else {
-            mRotation = 0f;
+            rotation = 0f;
 
-            state.get(MATRIX);
-            pos = getPositionWithGravity(MATRIX, settings);
+            state.get(matrix);
+            pos = getPositionWithGravity(matrix, settings);
         }
 
         // Calculating movement bounds for top-left corner of the scaled image
@@ -134,23 +135,23 @@ public class MovementBounds {
         // horizontal bounds
         if (area.width() < pos.width()) {
             // image is bigger than movement area -> restricting image movement with moving area
-            mBounds.left = area.left - (pos.width() - area.width());
-            mBounds.right = area.left;
+            bounds.left = area.left - (pos.width() - area.width());
+            bounds.right = area.left;
         } else {
             // image is smaller than viewport -> positioning image according to calculated gravity
             // and restricting image movement in this direction
-            mBounds.left = mBounds.right = pos.left;
+            bounds.left = bounds.right = pos.left;
         }
 
         // vertical bounds
         if (area.height() < pos.height()) {
             // image is bigger than viewport -> restricting image movement with viewport bounds
-            mBounds.top = area.top - (pos.height() - area.height());
-            mBounds.bottom = area.top;
+            bounds.top = area.top - (pos.height() - area.height());
+            bounds.bottom = area.top;
         } else {
             // image is smaller than viewport -> positioning image according to calculated gravity
             // and restricting image movement in this direction
-            mBounds.top = mBounds.bottom = pos.top;
+            bounds.top = bounds.bottom = pos.top;
         }
 
         // We should also adjust bounds position, since top-left corner of rotated image rectangle
@@ -158,29 +159,29 @@ public class MovementBounds {
         // Note: for OUTSIDE fit method image rotation was skipped above, so we will not need
         // to adjust bounds here.
         if (settings.getFitMethod() != Settings.Fit.OUTSIDE) {
-            state.get(MATRIX);
+            state.get(matrix);
 
-            RECT_TMP_F.set(0, 0, settings.getImageW(), settings.getImageH());
-            MATRIX.mapRect(RECT_TMP_F);
+            rectTmpF.set(0, 0, settings.getImageW(), settings.getImageH());
+            matrix.mapRect(rectTmpF);
 
-            POINT_ARR[0] = POINT_ARR[1] = 0f;
-            MATRIX.mapPoints(POINT_ARR);
+            pointArr[0] = pointArr[1] = 0f;
+            matrix.mapPoints(pointArr);
 
-            mBounds.offset(POINT_ARR[0] - RECT_TMP_F.left, POINT_ARR[1] - RECT_TMP_F.top);
+            bounds.offset(pointArr[0] - rectTmpF.left, pointArr[1] - rectTmpF.top);
         }
     }
 
     public void set(MovementBounds bounds) {
-        mBounds.set(bounds.mBounds);
-        mRotation = bounds.mRotation;
-        mPivotX = bounds.mPivotX;
-        mPivotY = bounds.mPivotY;
+        this.bounds.set(bounds.bounds);
+        rotation = bounds.rotation;
+        pivotX = bounds.pivotX;
+        pivotY = bounds.pivotY;
     }
 
 
     public static void setupInitialMovement(State state, Settings settings) {
-        state.get(MATRIX);
-        Rect pos = getPositionWithGravity(MATRIX, settings);
+        state.get(matrix);
+        Rect pos = getPositionWithGravity(matrix, settings);
         state.translateTo(pos.left, pos.top);
     }
 
@@ -189,32 +190,32 @@ public class MovementBounds {
      * not taking into account image position specified by matrix.
      */
     private static Rect getPositionWithGravity(Matrix matrix, Settings settings) {
-        RECT_TMP_F.set(0, 0, settings.getImageW(), settings.getImageH());
-        matrix.mapRect(RECT_TMP_F);
-        final int w = Math.round(RECT_TMP_F.width());
-        final int h = Math.round(RECT_TMP_F.height());
+        rectTmpF.set(0, 0, settings.getImageW(), settings.getImageH());
+        matrix.mapRect(rectTmpF);
+        final int w = Math.round(rectTmpF.width());
+        final int h = Math.round(rectTmpF.height());
 
         // Calculating image position basing on gravity
-        RECT_TMP.set(0, 0, settings.getViewportW(), settings.getViewportH());
-        Gravity.apply(settings.getGravity(), w, h, RECT_TMP, RECT_POS);
+        rectTmp.set(0, 0, settings.getViewportW(), settings.getViewportH());
+        Gravity.apply(settings.getGravity(), w, h, rectTmp, rectPos);
 
-        return RECT_POS;
+        return rectPos;
     }
 
     public static Rect getMovementAreaWithGravity(Settings settings) {
         // Calculating movement area position basing on gravity
-        RECT_TMP.set(0, 0, settings.getViewportW(), settings.getViewportH());
+        rectTmp.set(0, 0, settings.getViewportW(), settings.getViewportH());
         Gravity.apply(settings.getGravity(),
-                settings.getMovementAreaW(), settings.getMovementAreaH(), RECT_TMP, RECT_MOV_AREA);
-        return RECT_MOV_AREA;
+                settings.getMovementAreaW(), settings.getMovementAreaH(), rectTmp, rectMovArea);
+        return rectMovArea;
     }
 
     public static Point getDefaultPivot(Settings settings) {
         // Calculating movement area position basing on gravity
         Rect movArea = getMovementAreaWithGravity(settings);
-        Gravity.apply(settings.getGravity(), 0, 0, movArea, RECT_TMP);
-        POINT_PIVOT.set(RECT_TMP.left, RECT_TMP.top);
-        return POINT_PIVOT;
+        Gravity.apply(settings.getGravity(), 0, 0, movArea, rectTmp);
+        pivot.set(rectTmp.left, rectTmp.top);
+        return pivot;
     }
 
 }

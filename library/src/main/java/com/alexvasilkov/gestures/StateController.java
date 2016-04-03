@@ -26,22 +26,21 @@ import com.alexvasilkov.gestures.internal.MovementBounds;
 public class StateController {
 
     // Temporary objects
-    private static final State TMP_STATE = new State();
-    private static final Matrix TMP_MATRIX = new Matrix();
-    private static final RectF TMP_RECT_F = new RectF();
-    private static final MovementBounds TMP_MOV_BOUNDS = new MovementBounds();
+    private static final State tmpState = new State();
+    private static final Matrix tmpMatrix = new Matrix();
+    private static final RectF tmpRect = new RectF();
+    private static final MovementBounds tmpMovBounds = new MovementBounds();
 
-    private final Settings mSettings;
+    private final Settings settings;
 
-    private boolean mIsResetRequired = true;
+    private boolean isResetRequired = true;
 
-    /**
-     * Values to store calculated values for min / max zoom levels
-     */
-    private float mMinZoom, mMaxZoom;
+    // Values to store calculated values for min / max zoom levels
+    private float minZoom;
+    private float maxZoom;
 
     StateController(Settings settings) {
-        mSettings = settings;
+        this.settings = settings;
     }
 
     /**
@@ -52,7 +51,7 @@ public class StateController {
      * @return {@code true} if reset was completed or {@code false} if reset is scheduled for future
      */
     boolean resetState(State state) {
-        mIsResetRequired = true;
+        isResetRequired = true;
         return updateState(state);
     }
 
@@ -63,17 +62,17 @@ public class StateController {
      * updated.
      */
     boolean updateState(State state) {
-        if (mIsResetRequired) {
+        if (isResetRequired) {
             // We can correctly reset state only when we have both image size and viewport size
             // but there can be a delay before we have all values properly set
             // (waiting for layout or waiting for image to be loaded)
             state.set(0f, 0f, 1f, 0f);
             boolean updated = adjustZoomLevels(state);
-            state.set(0f, 0f, mMinZoom, 0f);
-            MovementBounds.setupInitialMovement(state, mSettings);
+            state.set(0f, 0f, minZoom, 0f);
+            MovementBounds.setupInitialMovement(state, settings);
 
-            mIsResetRequired = !updated;
-            return !mIsResetRequired;
+            isResetRequired = !updated;
+            return !isResetRequired;
         } else {
             restrictStateBounds(state);
             return false;
@@ -84,7 +83,7 @@ public class StateController {
      * @return Min zoom level as it's used by state controller.
      */
     public float getEffectiveMinZoom() {
-        return mMinZoom;
+        return minZoom;
     }
 
     /**
@@ -93,23 +92,37 @@ public class StateController {
      */
     @SuppressWarnings("unused") // Public API
     public float getEffectiveMaxZoom() {
-        return mMaxZoom;
+        return maxZoom;
     }
 
     /**
-     * Maximizes zoom if it closer to min zoom or minimizes it if it closer to max zoom
+     * Maximizes zoom if it closer to min zoom or minimizes it if it closer to max zoom.
      *
-     * @return End state for toggle animation
+     * @return End state for toggle animation.
      */
     State toggleMinMaxZoom(State state, float pivotX, float pivotY) {
         adjustZoomLevels(state); // Calculating zoom levels
 
-        final float middleZoom = (mMinZoom + mMaxZoom) / 2f;
-        final float targetZoom = state.getZoom() < middleZoom ? mMaxZoom : mMinZoom;
+        final float middleZoom = (minZoom + maxZoom) / 2f;
+        final float targetZoom = state.getZoom() < middleZoom ? maxZoom : minZoom;
 
         State end = state.copy();
         end.zoomTo(targetZoom, pivotX, pivotY);
         return end;
+    }
+
+    /**
+     * Restricts state's translation and zoom bounds.
+     *
+     * @return End state to animate changes or null if no changes are required.
+     */
+    @Nullable
+    State restrictStateBoundsCopy(State state, State prevState, float pivotX, float pivotY,
+            boolean allowOverscroll, boolean allowOverzoom, boolean restrictRotation) {
+        tmpState.set(state);
+        boolean changed = restrictStateBounds(tmpState, prevState, pivotX, pivotY,
+                allowOverscroll, allowOverzoom, restrictRotation);
+        return changed ? tmpState.copy() : null;
     }
 
     /**
@@ -120,43 +133,29 @@ public class StateController {
     }
 
     /**
-     * Restricts state's translation and zoom bounds.
-     *
-     * @return End state to animate changes or null if no changes are required
-     */
-    @Nullable
-    State restrictStateBoundsCopy(State state, State prevState, float pivotX, float pivotY,
-            boolean allowOverscroll, boolean allowOverzoom, boolean restrictRotation) {
-        TMP_STATE.set(state);
-        boolean changed = restrictStateBounds(TMP_STATE, prevState, pivotX, pivotY,
-                allowOverscroll, allowOverzoom, restrictRotation);
-        return changed ? TMP_STATE.copy() : null;
-    }
-
-    /**
      * Restricts state's translation and zoom bounds. If {@code prevState} is not null and
      * {@code allowOverscroll (allowOverzoom)} parameter is true than resilience
      * will be applied to translation (zoom) changes if they are out of bounds.
      *
-     * @return true if state was changed, false otherwise
+     * @return true if state was changed, false otherwise.
      */
     boolean restrictStateBounds(State state, State prevState, float pivotX, float pivotY,
             boolean allowOverscroll, boolean allowOverzoom, boolean restrictRotation) {
 
-        if (!mSettings.isRestrictBounds()) {
+        if (!settings.isRestrictBounds()) {
             return false;
         }
 
         // Calculating default pivot point, if not provided
         if (Float.isNaN(pivotX) || Float.isNaN(pivotY)) {
-            Point pivot = MovementBounds.getDefaultPivot(mSettings);
+            Point pivot = MovementBounds.getDefaultPivot(settings);
             pivotX = pivot.x;
             pivotY = pivot.y;
         }
 
         boolean isStateChanged = false;
 
-        if (restrictRotation && mSettings.isRestrictRotation()) {
+        if (restrictRotation && settings.isRestrictRotation()) {
             float rotation = Math.round(state.getRotation() / 90f) * 90f;
             if (!State.equals(rotation, state.getRotation())) {
                 state.rotateTo(rotation, pivotX, pivotY);
@@ -166,9 +165,9 @@ public class StateController {
 
         adjustZoomLevels(state); // Calculating zoom levels
 
-        float overzoom = allowOverzoom ? mSettings.getOverzoomFactor() : 1f;
+        float overzoom = allowOverzoom ? settings.getOverzoomFactor() : 1f;
 
-        float zoom = restrict(state.getZoom(), mMinZoom / overzoom, mMaxZoom * overzoom);
+        float zoom = restrict(state.getZoom(), minZoom / overzoom, maxZoom * overzoom);
 
         // Applying elastic overzoom
         if (prevState != null) {
@@ -181,37 +180,37 @@ public class StateController {
         }
 
         MovementBounds bounds = getMovementBounds(state);
-        float overscrollX = allowOverscroll ? mSettings.getOverscrollDistanceX() : 0f;
-        float overscrollY = allowOverscroll ? mSettings.getOverscrollDistanceY() : 0f;
+        float overscrollX = allowOverscroll ? settings.getOverscrollDistanceX() : 0f;
+        float overscrollY = allowOverscroll ? settings.getOverscrollDistanceY() : 0f;
 
         PointF tmpPos = bounds.restrict(state.getX(), state.getY(), overscrollX, overscrollY);
-        float x = tmpPos.x;
-        float y = tmpPos.y;
+        float newX = tmpPos.x;
+        float newY = tmpPos.y;
 
-        if (zoom < mMinZoom) {
+        if (zoom < minZoom) {
             // Decreasing overscroll if zooming less than minimum zoom
-            float minZoom = mMinZoom / overzoom;
-            float factor = (zoom - minZoom) / (mMinZoom - minZoom);
+            float minZoom = this.minZoom / overzoom;
+            float factor = (zoom - minZoom) / (this.minZoom - minZoom);
             factor = (float) Math.sqrt(factor);
 
-            tmpPos = bounds.restrict(x, y);
+            tmpPos = bounds.restrict(newX, newY);
             float strictX = tmpPos.x;
             float strictY = tmpPos.y;
 
-            x = strictX + factor * (x - strictX);
-            y = strictY + factor * (y - strictY);
+            newX = strictX + factor * (newX - strictX);
+            newY = strictY + factor * (newY - strictY);
         }
 
         if (prevState != null) {
             RectF extBounds = bounds.getExternalBounds();
-            x = applyTranslationResilience(x, prevState.getX(),
+            newX = applyTranslationResilience(newX, prevState.getX(),
                     extBounds.left, extBounds.right, overscrollX);
-            y = applyTranslationResilience(y, prevState.getY(),
+            newY = applyTranslationResilience(newY, prevState.getY(),
                     extBounds.top, extBounds.bottom, overscrollY);
         }
 
-        if (!State.equals(x, state.getX()) || !State.equals(y, state.getY())) {
-            state.translateTo(x, y);
+        if (!State.equals(newX, state.getX()) || !State.equals(newY, state.getY())) {
+            state.translateTo(newX, newY);
             isStateChanged = true;
         }
 
@@ -223,15 +222,15 @@ public class StateController {
             return zoom;
         }
 
-        float minZoom = mMinZoom / overzoom;
-        float maxZoom = mMaxZoom * overzoom;
+        float minZoom = this.minZoom / overzoom;
+        float maxZoom = this.maxZoom * overzoom;
 
         float resilience = 0f;
 
-        if (zoom < mMinZoom && zoom < prevZoom) {
-            resilience = (mMinZoom - zoom) / (mMinZoom - minZoom);
-        } else if (zoom > mMaxZoom && zoom > prevZoom) {
-            resilience = (zoom - mMaxZoom) / (maxZoom - mMaxZoom);
+        if (zoom < this.minZoom && zoom < prevZoom) {
+            resilience = (this.minZoom - zoom) / (this.minZoom - minZoom);
+        } else if (zoom > this.maxZoom && zoom > prevZoom) {
+            resilience = (zoom - this.maxZoom) / (maxZoom - this.maxZoom);
         }
 
         if (resilience == 0f) {
@@ -276,8 +275,8 @@ public class StateController {
      * Do note store returned object, since it will be reused next time this method is called.
      */
     MovementBounds getMovementBounds(State state) {
-        TMP_MOV_BOUNDS.setup(state, mSettings);
-        return TMP_MOV_BOUNDS;
+        tmpMovBounds.setup(state, settings);
+        return tmpMovBounds;
     }
 
 
@@ -301,64 +300,65 @@ public class StateController {
      * false otherwise
      */
     private boolean adjustZoomLevels(State state) {
-        mMaxZoom = mSettings.getMaxZoom();
+        maxZoom = settings.getMaxZoom();
 
         float fittingZoom = 1f;
 
-        boolean isCorrectSize = mSettings.hasImageSize() && mSettings.hasViewportSize();
+        boolean isCorrectSize = settings.hasImageSize() && settings.hasViewportSize();
 
         if (isCorrectSize) {
-            float w = mSettings.getImageW(), h = mSettings.getImageH();
+            float imageWidth = settings.getImageW();
+            float imageHeight = settings.getImageH();
 
-            float areaW = mSettings.getMovementAreaW();
-            float areaH = mSettings.getMovementAreaH();
+            float areaWidth = settings.getMovementAreaW();
+            float areaHeight = settings.getMovementAreaH();
 
-            if (mSettings.getFitMethod() == Settings.Fit.OUTSIDE) {
+            if (settings.getFitMethod() == Settings.Fit.OUTSIDE) {
                 // Computing movement area size taking rotation into account. We need to inverse
                 // rotation, since it will be applied to the area, not to the image itself.
-                TMP_MATRIX.setRotate(-state.getRotation());
-                TMP_RECT_F.set(0, 0, areaW, areaH);
-                TMP_MATRIX.mapRect(TMP_RECT_F);
-                areaW = TMP_RECT_F.width();
-                areaH = TMP_RECT_F.height();
+                tmpMatrix.setRotate(-state.getRotation());
+                tmpRect.set(0, 0, areaWidth, areaHeight);
+                tmpMatrix.mapRect(tmpRect);
+                areaWidth = tmpRect.width();
+                areaHeight = tmpRect.height();
             } else {
                 // Computing image bounding size taking rotation into account.
-                TMP_MATRIX.setRotate(state.getRotation());
-                TMP_RECT_F.set(0, 0, w, h);
-                TMP_MATRIX.mapRect(TMP_RECT_F);
-                w = TMP_RECT_F.width();
-                h = TMP_RECT_F.height();
+                tmpMatrix.setRotate(state.getRotation());
+                tmpRect.set(0, 0, imageWidth, imageHeight);
+                tmpMatrix.mapRect(tmpRect);
+                imageWidth = tmpRect.width();
+                imageHeight = tmpRect.height();
             }
 
-            switch (mSettings.getFitMethod()) {
+            switch (settings.getFitMethod()) {
                 case HORIZONTAL:
-                    fittingZoom = areaW / w;
+                    fittingZoom = areaWidth / imageWidth;
                     break;
                 case VERTICAL:
-                    fittingZoom = areaH / h;
+                    fittingZoom = areaHeight / imageHeight;
                     break;
                 case OUTSIDE:
-                    fittingZoom = Math.max(areaW / w, areaH / h);
+                    fittingZoom = Math.max(areaWidth / imageWidth, areaHeight / imageHeight);
                     break;
                 case INSIDE:
                 default:
-                    fittingZoom = Math.min(areaW / w, areaH / h);
+                    fittingZoom = Math.min(areaWidth / imageWidth, areaHeight / imageHeight);
                     break;
             }
         }
 
-        if (fittingZoom > mMaxZoom) {
-            if (mSettings.isFillViewport()) {
+        if (fittingZoom > maxZoom) {
+            if (settings.isFillViewport()) {
                 // zooming to fill entire viewport
-                mMinZoom = mMaxZoom = fittingZoom;
+                minZoom = maxZoom = fittingZoom;
             } else {
                 // restricting min zoom
-                mMinZoom = mMaxZoom;
+                minZoom = maxZoom;
             }
         } else {
-            mMinZoom = fittingZoom;
-            if (!mSettings.isZoomEnabled()) {
-                mMaxZoom = mMinZoom;
+            minZoom = fittingZoom;
+            if (!settings.isZoomEnabled()) {
+                maxZoom = minZoom;
             }
         }
 

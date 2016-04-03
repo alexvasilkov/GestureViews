@@ -19,12 +19,12 @@ import com.alexvasilkov.gestures.sample.utils.GestureSettingsMenu;
 public class ImageViewSampleActivity extends BaseActivity
         implements ViewPager.OnPageChangeListener {
 
-    private Painting[] mPaintings;
+    private Painting[] paintings;
 
-    private ViewPager mViewPager;
-    private TextView mTitleView;
+    private ViewPager viewPager;
+    private TextView titleView;
 
-    private GestureSettingsMenu mSettingsMenu;
+    private GestureSettingsMenu settingsMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,36 +37,36 @@ public class ImageViewSampleActivity extends BaseActivity
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mPaintings = PaintingsHelper.list(getResources());
+        paintings = PaintingsHelper.list(getResources());
 
-        mSettingsMenu = new GestureSettingsMenu();
-        mSettingsMenu.onRestoreInstanceState(savedInstanceState);
+        settingsMenu = new GestureSettingsMenu();
+        settingsMenu.onRestoreInstanceState(savedInstanceState);
 
-        mTitleView = Views.find(this, R.id.painting_title);
+        titleView = Views.find(this, R.id.painting_title);
 
-        mViewPager = Views.find(this, R.id.paintings_view_pager);
-        mViewPager.setAdapter(new PaintingsPagerAdapter(mViewPager, mPaintings, mSettingsMenu));
-        mViewPager.addOnPageChangeListener(this);
-        mViewPager.setPageMargin(getResources().getDimensionPixelSize(R.dimen.view_pager_margin));
+        viewPager = Views.find(this, R.id.paintings_view_pager);
+        viewPager.setAdapter(new PaintingsPagerAdapter(viewPager, paintings, settingsMenu));
+        viewPager.addOnPageChangeListener(this);
+        viewPager.setPageMargin(getResources().getDimensionPixelSize(R.dimen.view_pager_margin));
         onPageSelected(0); // Manually calling for first item
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        mSettingsMenu.onSaveInstanceState(outState);
+        settingsMenu.onSaveInstanceState(outState);
         super.onSaveInstanceState(outState);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        return mSettingsMenu.onCreateOptionsMenu(menu);
+        return settingsMenu.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (mSettingsMenu.onOptionsItemSelected(item)) {
+        if (settingsMenu.onOptionsItemSelected(item)) {
             invalidateOptionsMenu();
-            mViewPager.getAdapter().notifyDataSetChanged();
+            viewPager.getAdapter().notifyDataSetChanged();
             return true;
         } else {
             return super.onOptionsItemSelected(item);
@@ -82,11 +82,11 @@ public class ImageViewSampleActivity extends BaseActivity
     public void onPageSelected(int position) {
         CharSequence title = new SpannableBuilder(this)
                 .createStyle().setFont(Typeface.DEFAULT_BOLD).apply()
-                .append(mPaintings[position].getAuthor()).append("\n")
+                .append(paintings[position].getAuthor()).append("\n")
                 .clearStyle()
-                .append(mPaintings[position].getTitle())
+                .append(paintings[position].getTitle())
                 .build();
-        mTitleView.setText(title);
+        titleView.setText(title);
     }
 
     @Override

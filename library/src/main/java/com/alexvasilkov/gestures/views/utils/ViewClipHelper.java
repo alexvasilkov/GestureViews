@@ -10,12 +10,13 @@ import com.alexvasilkov.gestures.views.interfaces.ClipView;
 
 public class ViewClipHelper implements ClipView {
 
-    private final View mView;
-    private final RectF mClipRect = new RectF(), mOldClipRect = new RectF();
-    private boolean mIsClipping;
+    private final View view;
+    private final RectF clipRect = new RectF();
+    private final RectF clipRectOld = new RectF();
+    private boolean isClipping;
 
     public ViewClipHelper(@NonNull View view) {
-        mView = view;
+        this.view = view;
     }
 
     /**
@@ -24,40 +25,40 @@ public class ViewClipHelper implements ClipView {
     @Override
     public void clipView(@Nullable RectF rect) {
         if (rect == null) {
-            if (mIsClipping) {
-                mIsClipping = false;
-                mView.invalidate();
+            if (isClipping) {
+                isClipping = false;
+                view.invalidate();
             }
         } else {
             // Setting previous clip rect
-            if (mIsClipping) {
-                mOldClipRect.set(mClipRect);
+            if (isClipping) {
+                clipRectOld.set(clipRect);
             } else {
-                mOldClipRect.set(0, 0, mView.getWidth(), mView.getHeight());
+                clipRectOld.set(0, 0, view.getWidth(), view.getHeight());
             }
 
-            mIsClipping = true;
+            isClipping = true;
 
-            mClipRect.set(rect);
+            clipRect.set(rect);
 
             // Invalidating only updated part
-            int left = (int) Math.min(mClipRect.left, mOldClipRect.left);
-            int top = (int) Math.min(mClipRect.top, mOldClipRect.top);
-            int right = (int) Math.max(mClipRect.right, mOldClipRect.right) + 1;
-            int bottom = (int) Math.max(mClipRect.bottom, mOldClipRect.bottom) + 1;
-            mView.invalidate(left, top, right, bottom);
+            int left = (int) Math.min(clipRect.left, clipRectOld.left);
+            int top = (int) Math.min(clipRect.top, clipRectOld.top);
+            int right = (int) Math.max(clipRect.right, clipRectOld.right) + 1;
+            int bottom = (int) Math.max(clipRect.bottom, clipRectOld.bottom) + 1;
+            view.invalidate(left, top, right, bottom);
         }
     }
 
     public void onPreDraw(@NonNull Canvas canvas) {
-        if (mIsClipping) {
+        if (isClipping) {
             canvas.save();
-            canvas.clipRect(mClipRect);
+            canvas.clipRect(clipRect);
         }
     }
 
     public void onPostDraw(@NonNull Canvas canvas) {
-        if (mIsClipping) {
+        if (isClipping) {
             canvas.restore();
         }
     }

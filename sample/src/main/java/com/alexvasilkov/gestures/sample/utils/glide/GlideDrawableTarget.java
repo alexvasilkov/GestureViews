@@ -8,28 +8,28 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 
-public class GlideDrawableTarget extends GlideDrawableImageViewTarget {
+class GlideDrawableTarget extends GlideDrawableImageViewTarget {
 
     private static final long NO_ANIMATION_INTERVAL = 150L;
 
-    private long mStartTime = 0L;
+    private long startTime = 0L;
 
-    public GlideDrawableTarget(ImageView view) {
+    GlideDrawableTarget(ImageView view) {
         super(view);
     }
 
     @Override
     public void onLoadStarted(Drawable placeholder) {
         super.onLoadStarted(placeholder);
-        mStartTime = SystemClock.uptimeMillis();
+        startTime = SystemClock.uptimeMillis();
     }
 
     @Override
     public void onResourceReady(GlideDrawable resource,
             GlideAnimation<? super GlideDrawable> glideAnimation) {
 
-        if (mStartTime == 0 || SystemClock.uptimeMillis() - mStartTime < NO_ANIMATION_INTERVAL) {
-            mStartTime = 0L;
+        if (startTime == 0 || SystemClock.uptimeMillis() - startTime < NO_ANIMATION_INTERVAL) {
+            startTime = 0L;
             glideAnimation = null;
         }
 
@@ -39,7 +39,7 @@ public class GlideDrawableTarget extends GlideDrawableImageViewTarget {
     @Override
     public void onLoadCleared(Drawable placeholder) {
         super.onLoadCleared(placeholder);
-        mStartTime = 0L;
+        startTime = 0L;
     }
 
 }

@@ -18,8 +18,8 @@ import java.util.Queue;
 public abstract class RecyclePagerAdapter<VH extends RecyclePagerAdapter.ViewHolder>
         extends PagerAdapter {
 
-    private final Queue<VH> mCache = new LinkedList<>();
-    private final SparseArray<VH> mAttached = new SparseArray<>();
+    private final Queue<VH> cache = new LinkedList<>();
+    private final SparseArray<VH> attached = new SparseArray<>();
 
     public abstract VH onCreateViewHolder(@NonNull ViewGroup container);
 
@@ -29,19 +29,19 @@ public abstract class RecyclePagerAdapter<VH extends RecyclePagerAdapter.ViewHol
     }
 
     /**
-     * Returns ViewHolder for given position if it exists within ViewPager, or null otherwise
+     * Returns ViewHolder for given position if it exists within ViewPager, or null otherwise.
      */
     public VH getViewHolder(int position) {
-        return mAttached.get(position);
+        return attached.get(position);
     }
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        VH holder = mCache.poll();
+        VH holder = cache.poll();
         if (holder == null) {
             holder = onCreateViewHolder(container);
         }
-        mAttached.put(position, holder);
+        attached.put(position, holder);
 
         // We should not use previous layout params, since ViewPager stores
         // important information there which cannot be reused
@@ -55,9 +55,9 @@ public abstract class RecyclePagerAdapter<VH extends RecyclePagerAdapter.ViewHol
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
         VH holder = (VH) object;
-        mAttached.remove(position);
+        attached.remove(position);
         container.removeView(holder.itemView);
-        mCache.offer(holder);
+        cache.offer(holder);
         onRecycleViewHolder(holder);
     }
 

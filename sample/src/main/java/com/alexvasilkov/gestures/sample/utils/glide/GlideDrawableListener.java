@@ -4,20 +4,18 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 
-public abstract class GlideDrawableListener implements RequestListener<String, GlideDrawable> {
+abstract class GlideDrawableListener implements RequestListener<String, GlideDrawable> {
 
     @Override
-    public boolean onException(Exception e, String url,
-            Target<GlideDrawable> target,
-            boolean isFirstResource) {
+    public boolean onException(Exception ex, String url,
+            Target<GlideDrawable> target, boolean isFirstResource) {
         onFail(url);
         return false;
     }
 
     @Override
     public boolean onResourceReady(GlideDrawable resource, String url,
-            Target<GlideDrawable> target,
-            boolean isFromMemoryCache, boolean isFirstResource) {
+            Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
         onSuccess(url);
         return false;
     }

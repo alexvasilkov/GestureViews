@@ -34,11 +34,11 @@ import com.alexvasilkov.gestures.views.utils.ViewClipHelper;
  */
 public class GestureImageView extends ImageView implements GestureView, ClipView, AnimatorView {
 
-    private GestureControllerForPager mController;
-    private final ViewClipHelper mClipHelper = new ViewClipHelper(this);
-    private final Matrix mImageMatrix = new Matrix();
+    private GestureControllerForPager controller;
+    private final ViewClipHelper clipHelper = new ViewClipHelper(this);
+    private final Matrix imageMatrix = new Matrix();
 
-    private ViewPositionAnimator mPositionAnimator;
+    private ViewPositionAnimator positionAnimator;
 
     public GestureImageView(Context context) {
         this(context, null, 0);
@@ -52,7 +52,7 @@ public class GestureImageView extends ImageView implements GestureView, ClipView
         super(context, attrs, defStyle);
 
         ensureControllerCreated();
-        mController.addOnStateChangeListener(new GestureController.OnStateChangeListener() {
+        controller.addOnStateChangeListener(new GestureController.OnStateChangeListener() {
             @Override
             public void onStateChanged(State state) {
                 applyState(state);
@@ -68,16 +68,16 @@ public class GestureImageView extends ImageView implements GestureView, ClipView
     }
 
     private void ensureControllerCreated() {
-        if (mController == null) {
-            mController = new GestureControllerForPager(this);
+        if (controller == null) {
+            controller = new GestureControllerForPager(this);
         }
     }
 
     @Override
     public void draw(@NonNull Canvas canvas) {
-        mClipHelper.onPreDraw(canvas);
+        clipHelper.onPreDraw(canvas);
         super.draw(canvas);
-        mClipHelper.onPostDraw(canvas);
+        clipHelper.onPostDraw(canvas);
     }
 
     /**
@@ -85,7 +85,7 @@ public class GestureImageView extends ImageView implements GestureView, ClipView
      */
     @Override
     public GestureControllerForPager getController() {
-        return mController;
+        return controller;
     }
 
     /**
@@ -93,10 +93,10 @@ public class GestureImageView extends ImageView implements GestureView, ClipView
      */
     @Override
     public ViewPositionAnimator getPositionAnimator() {
-        if (mPositionAnimator == null) {
-            mPositionAnimator = new ViewPositionAnimator(this);
+        if (positionAnimator == null) {
+            positionAnimator = new ViewPositionAnimator(this);
         }
-        return mPositionAnimator;
+        return positionAnimator;
     }
 
     /**
@@ -104,7 +104,7 @@ public class GestureImageView extends ImageView implements GestureView, ClipView
      */
     @Override
     public void clipView(@Nullable RectF rect) {
-        mClipHelper.clipView(rect);
+        clipHelper.clipView(rect);
     }
 
     /**
@@ -132,20 +132,20 @@ public class GestureImageView extends ImageView implements GestureView, ClipView
      */
     @Nullable
     public Bitmap crop() {
-        return CropUtils.crop(getDrawable(), mController.getState(), mController.getSettings());
+        return CropUtils.crop(getDrawable(), controller.getState(), controller.getSettings());
     }
 
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
-        return mController.onTouch(this, event);
+        return controller.onTouch(this, event);
     }
 
     @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-        mController.getSettings().setViewport(w - getPaddingLeft() - getPaddingRight(),
-                h - getPaddingTop() - getPaddingBottom());
-        mController.updateState();
+    protected void onSizeChanged(int width, int height, int oldWidth, int oldHeight) {
+        super.onSizeChanged(width, height, oldWidth, oldHeight);
+        controller.getSettings().setViewport(width - getPaddingLeft() - getPaddingRight(),
+                height - getPaddingTop() - getPaddingBottom());
+        controller.updateState();
     }
 
     @Override
@@ -154,32 +154,33 @@ public class GestureImageView extends ImageView implements GestureView, ClipView
     }
 
     @Override
-    public void setImageDrawable(Drawable dr) {
-        super.setImageDrawable(dr);
+    public void setImageDrawable(Drawable drawable) {
+        super.setImageDrawable(drawable);
 
         // Method setImageDrawable can be called from super constructor,
         // so we have to ensure controller instance is created at this point.
         ensureControllerCreated();
 
-        Settings settings = mController.getSettings();
-        int oldW = settings.getImageW(), oldH = settings.getImageH();
+        Settings settings = controller.getSettings();
+        int oldWidth = settings.getImageW();
+        int oldHeight = settings.getImageH();
 
-        if (dr == null) {
+        if (drawable == null) {
             settings.setImage(0, 0);
-        } else if (dr.getIntrinsicWidth() == -1 || dr.getIntrinsicHeight() == -1) {
+        } else if (drawable.getIntrinsicWidth() == -1 || drawable.getIntrinsicHeight() == -1) {
             settings.setImage(settings.getMovementAreaW(), settings.getMovementAreaH());
         } else {
-            settings.setImage(dr.getIntrinsicWidth(), dr.getIntrinsicHeight());
+            settings.setImage(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
         }
 
-        if (oldW != settings.getImageW() || oldH != settings.getImageH()) {
-            mController.resetState();
+        if (oldWidth != settings.getImageW() || oldHeight != settings.getImageH()) {
+            controller.resetState();
         }
     }
 
     protected void applyState(State state) {
-        state.get(mImageMatrix);
-        setImageMatrix(mImageMatrix);
+        state.get(imageMatrix);
+        setImageMatrix(imageMatrix);
     }
 
 
@@ -193,6 +194,9 @@ public class GestureImageView extends ImageView implements GestureView, ClipView
     }
 
 
+    /**
+     * @deprecated Use {@link #crop()} method instead.
+     */
     @Deprecated
     public interface OnSnapshotLoadedListener {
         void onSnapshotLoaded(Bitmap bitmap);

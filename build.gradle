@@ -37,7 +37,8 @@ allprojects {
 
         project.extensions.getByName('android').with {
             lintOptions {
-                ignore 'GoogleAppIndexingWarning', 'ContentDescription'
+                ignore 'GoogleAppIndexingWarning', 'ContentDescription',
+                        'RtlHardcoded', 'IconMissingDensityFolder'
             }
         }
     }

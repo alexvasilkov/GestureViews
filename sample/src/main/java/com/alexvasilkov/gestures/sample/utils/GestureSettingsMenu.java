@@ -20,25 +20,25 @@ public class GestureSettingsMenu implements GestureSettingsSetupListener {
     private static final float OVERSCROLL = 32f;
 
     @InstanceState
-    private boolean mIsPanEnabled = true;
+    private boolean isPanEnabled = true;
     @InstanceState
-    private boolean mIsZoomEnabled = true;
+    private boolean isZoomEnabled = true;
     @InstanceState
-    private boolean mIsRotationEnabled = false;
+    private boolean isRotationEnabled = false;
     @InstanceState
-    private boolean mIsRestrictRotation = false;
+    private boolean isRestrictRotation = false;
     @InstanceState
-    private boolean mIsOverscrollXEnabled = false;
+    private boolean isOverscrollXEnabled = false;
     @InstanceState
-    private boolean mIsOverscrollYEnabled = false;
+    private boolean isOverscrollYEnabled = false;
     @InstanceState
-    private boolean mIsOverzoomEnabled = true;
+    private boolean isOverzoomEnabled = true;
     @InstanceState
-    private boolean mIsFitViewport = true;
+    private boolean isFitViewport = true;
     @InstanceState
-    private Settings.Fit mFitMethod = Settings.Fit.INSIDE;
+    private Settings.Fit fitMethod = Settings.Fit.INSIDE;
     @InstanceState
-    private int mGravity = Gravity.CENTER;
+    private int gravity = Gravity.CENTER;
 
     public void onSaveInstanceState(Bundle outState) {
         InstanceStateManager.saveInstanceState(this, outState);
@@ -49,16 +49,16 @@ public class GestureSettingsMenu implements GestureSettingsSetupListener {
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
-        addBoolMenu(menu, mIsPanEnabled, R.string.menu_enable_pan);
-        addBoolMenu(menu, mIsZoomEnabled, R.string.menu_enable_zoom);
-        addBoolMenu(menu, mIsRotationEnabled, R.string.menu_enable_rotation);
-        addBoolMenu(menu, mIsRestrictRotation, R.string.menu_restrict_rotation);
-        addBoolMenu(menu, mIsOverscrollXEnabled, R.string.menu_enable_overscroll_x);
-        addBoolMenu(menu, mIsOverscrollYEnabled, R.string.menu_enable_overscroll_y);
-        addBoolMenu(menu, mIsOverzoomEnabled, R.string.menu_enable_overzoom);
-        addBoolMenu(menu, mIsFitViewport, R.string.menu_fit_viewport);
-        addSubMenu(menu, Settings.Fit.values(), mFitMethod, R.string.menu_fit_method);
-        addSubMenu(menu, GravityType.values(), GravityType.find(mGravity), R.string.menu_gravity);
+        addBoolMenu(menu, isPanEnabled, R.string.menu_enable_pan);
+        addBoolMenu(menu, isZoomEnabled, R.string.menu_enable_zoom);
+        addBoolMenu(menu, isRotationEnabled, R.string.menu_enable_rotation);
+        addBoolMenu(menu, isRestrictRotation, R.string.menu_restrict_rotation);
+        addBoolMenu(menu, isOverscrollXEnabled, R.string.menu_enable_overscroll_x);
+        addBoolMenu(menu, isOverscrollYEnabled, R.string.menu_enable_overscroll_y);
+        addBoolMenu(menu, isOverzoomEnabled, R.string.menu_enable_overzoom);
+        addBoolMenu(menu, isFitViewport, R.string.menu_fit_viewport);
+        addSubMenu(menu, Settings.Fit.values(), fitMethod, R.string.menu_fit_method);
+        addSubMenu(menu, GravityType.values(), GravityType.find(gravity), R.string.menu_gravity);
         return true;
     }
 
@@ -82,34 +82,34 @@ public class GestureSettingsMenu implements GestureSettingsSetupListener {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.string.menu_enable_pan:
-                mIsPanEnabled = !mIsPanEnabled;
+                isPanEnabled = !isPanEnabled;
                 break;
             case R.string.menu_enable_zoom:
-                mIsZoomEnabled = !mIsZoomEnabled;
+                isZoomEnabled = !isZoomEnabled;
                 break;
             case R.string.menu_enable_rotation:
-                mIsRotationEnabled = !mIsRotationEnabled;
+                isRotationEnabled = !isRotationEnabled;
                 break;
             case R.string.menu_restrict_rotation:
-                mIsRestrictRotation = !mIsRestrictRotation;
+                isRestrictRotation = !isRestrictRotation;
                 break;
             case R.string.menu_enable_overscroll_x:
-                mIsOverscrollXEnabled = !mIsOverscrollXEnabled;
+                isOverscrollXEnabled = !isOverscrollXEnabled;
                 break;
             case R.string.menu_enable_overscroll_y:
-                mIsOverscrollYEnabled = !mIsOverscrollYEnabled;
+                isOverscrollYEnabled = !isOverscrollYEnabled;
                 break;
             case R.string.menu_enable_overzoom:
-                mIsOverzoomEnabled = !mIsOverzoomEnabled;
+                isOverzoomEnabled = !isOverzoomEnabled;
                 break;
             case R.string.menu_fit_viewport:
-                mIsFitViewport = !mIsFitViewport;
+                isFitViewport = !isFitViewport;
                 break;
             case R.string.menu_fit_method:
-                mFitMethod = Settings.Fit.values()[item.getOrder()];
+                fitMethod = Settings.Fit.values()[item.getOrder()];
                 break;
             case R.string.menu_gravity:
-                mGravity = GravityType.values()[item.getOrder()].gravity;
+                gravity = GravityType.values()[item.getOrder()].gravity;
                 break;
             default:
                 return false;
@@ -121,21 +121,21 @@ public class GestureSettingsMenu implements GestureSettingsSetupListener {
     @Override
     public void onSetupGestureView(GestureView view) {
         Context context = ((View) view).getContext();
-        float overscrollX = mIsOverscrollXEnabled ? OVERSCROLL : 0f;
-        float overscrollY = mIsOverscrollYEnabled ? OVERSCROLL : 0f;
-        float overzoom = mIsOverzoomEnabled ? Settings.OVERZOOM_FACTOR : 1f;
+        float overscrollX = isOverscrollXEnabled ? OVERSCROLL : 0f;
+        float overscrollY = isOverscrollYEnabled ? OVERSCROLL : 0f;
+        float overzoom = isOverzoomEnabled ? Settings.OVERZOOM_FACTOR : 1f;
 
         view.getController().getSettings()
-                .setPanEnabled(mIsPanEnabled)
-                .setZoomEnabled(mIsZoomEnabled)
-                .setDoubleTapEnabled(mIsZoomEnabled)
+                .setPanEnabled(isPanEnabled)
+                .setZoomEnabled(isZoomEnabled)
+                .setDoubleTapEnabled(isZoomEnabled)
                 .setOverscrollDistance(context, overscrollX, overscrollY)
                 .setOverzoomFactor(overzoom)
-                .setRotationEnabled(mIsRotationEnabled)
-                .setRestrictRotation(mIsRestrictRotation)
-                .setFillViewport(mIsFitViewport)
-                .setFitMethod(mFitMethod)
-                .setGravity(mGravity);
+                .setRotationEnabled(isRotationEnabled)
+                .setRestrictRotation(isRestrictRotation)
+                .setFillViewport(isFitViewport)
+                .setFitMethod(fitMethod)
+                .setGravity(gravity);
     }
 
     private enum GravityType {

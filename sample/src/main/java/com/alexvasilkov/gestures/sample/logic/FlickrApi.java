@@ -19,63 +19,66 @@ public class FlickrApi {
 
     private static final String API_KEY = "7f6035774a01a39f9056d6d7bde60002";
     private static final String SEARCH_QUERY = "nature";
+    private static final String LICENCE_ID = "9"; // Public Domain Dedication (CC0)
     private static final int PER_PAGE = 30;
     private static final int MAX_PAGES = 5;
-    private static final Set<String> PHOTO_PARAMS = new HashSet<>();
+
+    private static final Set<String> photoParams = new HashSet<>();
 
     static {
-        PHOTO_PARAMS.add("url_m");
-        PHOTO_PARAMS.add("url_l");
-        PHOTO_PARAMS.add("owner_name");
+        photoParams.add("url_m");
+        photoParams.add("url_l");
+        photoParams.add("owner_name");
     }
 
-    private static final List<Photo> PHOTOS = new ArrayList<>();
-    private static final List<PhotoList> PAGES = new ArrayList<>();
+    private static final List<Photo> photos = new ArrayList<>();
+    private static final List<PhotoList> pages = new ArrayList<>();
+
+    private FlickrApi() {}
 
     @Background(singleThread = true)
     @Subscribe(LOAD_IMAGES_EVENT)
     private static synchronized EventResult loadImages(int count) throws Exception {
-        boolean hasNext = hasNext();
-
         SearchParameters params = new SearchParameters();
         params.setText(SEARCH_QUERY);
         params.setSafeSearch(Flickr.SAFETYLEVEL_SAFE);
         params.setSort(SearchParameters.RELEVANCE);
-        params.setLicense("9"); // Public Domain Dedication (CC0)
-        params.setExtras(PHOTO_PARAMS);
+        params.setLicense(LICENCE_ID);
+        params.setExtras(photoParams);
 
-        while (PHOTOS.size() < count && hasNext) {
+        boolean hasNext = hasNext();
+        while (photos.size() < count && hasNext) {
             PhotoList loaded = new Flickr(API_KEY).getPhotosInterface()
-                    .search(params, PER_PAGE, PAGES.size() + 1);
+                    .search(params, PER_PAGE, pages.size() + 1);
 
-            PAGES.add(loaded);
-            PHOTOS.addAll(loaded);
+            pages.add(loaded);
+            photos.addAll(loaded);
 
             hasNext = hasNext();
         }
 
         int resultSize;
-        if (PHOTOS.size() >= count) {
+        if (photos.size() >= count) {
             resultSize = count;
         } else {
-            resultSize = PHOTOS.size();
+            resultSize = photos.size();
         }
 
-        List<Photo> result = new ArrayList<>(PHOTOS.subList(0, resultSize));
+        List<Photo> result = new ArrayList<>(photos.subList(0, resultSize));
         if (!hasNext) {
-            hasNext = PHOTOS.size() > count;
+            hasNext = photos.size() > count;
         }
 
         return EventResult.create().result(result, hasNext).build();
     }
 
     private static boolean hasNext() {
-        if (PAGES.isEmpty()) {
+        if (pages.isEmpty()) {
             return true;
-        } else if (PAGES.size() >= MAX_PAGES) {
+        } else if (pages.size() >= MAX_PAGES) {
             return false;
         } else {
-            PhotoList page = PAGES.get(PAGES.size() - 1);
+            PhotoList page = pages.get(pages.size() - 1);
             return page.getPage() * page.getPerPage() < page.getTotal();
         }
     }

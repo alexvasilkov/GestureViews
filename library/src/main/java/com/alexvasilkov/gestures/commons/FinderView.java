@@ -36,21 +36,24 @@ public class FinderView extends View {
     public static final int DEFAULT_BORDER_COLOR = Color.WHITE;
     public static final int DEFAULT_BORDER_WIDTH = 2;
 
-    private final RectF mRect = new RectF();
-    private float mRounding = 0f;
+    private final RectF rect = new RectF();
+    private float rounding = 0f;
 
-    private final RectF mStrokeRect = new RectF();
+    private final RectF strokeRect = new RectF();
 
-    private final RectF mStartRect = new RectF(), mEndRect = new RectF();
-    private float mStartRounding, mEndRounding;
+    private final RectF startRect = new RectF();
+    private final RectF endRect = new RectF();
+    private float startRounding;
+    private float endRounding;
 
-    private final Paint mPaintStroke = new Paint(), mPaintClear = new Paint();
+    private final Paint paintStroke = new Paint();
+    private final Paint paintClear = new Paint();
 
-    private final FloatScroller mStateScroller = new FloatScroller();
-    private final AnimationEngine mAnimationEngine = new LocalAnimationEngine();
+    private final FloatScroller stateScroller = new FloatScroller();
+    private final AnimationEngine animationEngine = new LocalAnimationEngine();
 
-    private int mBackColor;
-    private Settings mSettings;
+    private int backColor;
+    private Settings settings;
 
     public FinderView(Context context) {
         this(context, null);
@@ -59,11 +62,11 @@ public class FinderView extends View {
     public FinderView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        mPaintClear.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
-        mPaintClear.setAntiAlias(true);
+        paintClear.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+        paintClear.setAntiAlias(true);
 
-        mPaintStroke.setStyle(Paint.Style.STROKE);
-        mPaintStroke.setAntiAlias(true);
+        paintStroke.setStyle(Paint.Style.STROKE);
+        paintStroke.setAntiAlias(true);
 
         // Default values
         setBackColor(DEFAULT_BACK_COLOR);
@@ -75,21 +78,21 @@ public class FinderView extends View {
      * Sets background color. Default value is {@link #DEFAULT_BACK_COLOR}.
      */
     public void setBackColor(@ColorInt int color) {
-        mBackColor = color;
+        backColor = color;
     }
 
     /**
      * Sets borders color. Default value is {@link #DEFAULT_BORDER_COLOR}.
      */
     public void setBorderColor(@ColorInt int color) {
-        mPaintStroke.setColor(color);
+        paintStroke.setColor(color);
     }
 
     /**
      * Sets borders width in pixels. Default value is {@link #DEFAULT_BORDER_WIDTH} dp.
      */
     public void setBorderWidth(float width) {
-        mPaintStroke.setStrokeWidth(width);
+        paintStroke.setStrokeWidth(width);
     }
 
     /**
@@ -104,7 +107,7 @@ public class FinderView extends View {
      * Sets settings to get movement area from.
      */
     public void setSettings(Settings settings) {
-        mSettings = settings;
+        this.settings = settings;
         update(false);
     }
 
@@ -113,60 +116,60 @@ public class FinderView extends View {
      * to apply this setting with optional animation.
      */
     public void setRounded(boolean rounded) {
-        mStartRounding = mRounding;
-        mEndRounding = rounded ? 1f : 0f;
+        startRounding = rounding;
+        endRounding = rounded ? 1f : 0f;
     }
 
     /**
      * Applies area size, area position and corners rounding with optional animation.
      */
     public void update(boolean animate) {
-        if (mSettings != null && getWidth() > 0 && getHeight() > 0) {
-            mStartRect.set(mRect);
+        if (settings != null && getWidth() > 0 && getHeight() > 0) {
+            startRect.set(rect);
 
-            mEndRect.set(MovementBounds.getMovementAreaWithGravity(mSettings));
-            mEndRect.offset(getPaddingLeft(), getPaddingTop());
+            endRect.set(MovementBounds.getMovementAreaWithGravity(settings));
+            endRect.offset(getPaddingLeft(), getPaddingTop());
 
-            mStateScroller.forceFinished();
+            stateScroller.forceFinished();
 
             if (animate) {
-                mStateScroller.startScroll(0f, 1f);
-                mAnimationEngine.start();
+                stateScroller.startScroll(0f, 1f);
+                animationEngine.start();
             } else {
-                setBounds(mEndRect, mEndRounding);
+                setBounds(endRect, endRounding);
             }
         }
     }
 
     private void setBounds(RectF rect, float rounding) {
-        mRect.set(rect);
-        mRounding = rounding;
+        this.rect.set(rect);
+        this.rounding = rounding;
 
         // We want to stroke outside of finder rectangle, while by default stroke is centered
-        mStrokeRect.set(rect);
-        float halfStroke = 0.5f * mPaintStroke.getStrokeWidth();
-        mStrokeRect.inset(-halfStroke, -halfStroke);
+        strokeRect.set(rect);
+        float halfStroke = 0.5f * paintStroke.getStrokeWidth();
+        strokeRect.inset(-halfStroke, -halfStroke);
 
         invalidate();
     }
 
     @Override
-    protected void onSizeChanged(int w, int h, int oldW, int oldH) {
+    protected void onSizeChanged(int width, int height, int oldWidth, int oldHeight) {
         update(false);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        float rx = mRounding * 0.5f * mRect.width();
-        float ry = mRounding * 0.5f * mRect.height();
+        float rx = rounding * 0.5f * rect.width();
+        float ry = rounding * 0.5f * rect.height();
 
         // Punching hole in background color requires offscreen drawing
         canvas.saveLayer(0, 0, canvas.getWidth(), canvas.getHeight(), null, 0);
-        canvas.drawColor(mBackColor);
-        canvas.drawRoundRect(mRect, rx, ry, mPaintClear);
+        canvas.drawColor(backColor);
+        canvas.drawRoundRect(rect, rx, ry, paintClear);
         canvas.restore();
 
-        canvas.drawRoundRect(mStrokeRect, rx, ry, mPaintStroke);
+        canvas.drawRoundRect(strokeRect, rx, ry, paintStroke);
     }
 
     private static void interpolate(RectF start, RectF end, RectF out, float factor) {
@@ -178,18 +181,18 @@ public class FinderView extends View {
 
 
     private class LocalAnimationEngine extends AnimationEngine {
-        public LocalAnimationEngine() {
+        LocalAnimationEngine() {
             super(FinderView.this);
         }
 
         @Override
         public boolean onStep() {
-            if (!mStateScroller.isFinished()) {
-                mStateScroller.computeScroll();
-                float state = mStateScroller.getCurr();
-                interpolate(mStartRect, mEndRect, mRect, state);
-                float rounding = StateController.interpolate(mStartRounding, mEndRounding, state);
-                setBounds(mRect, rounding);
+            if (!stateScroller.isFinished()) {
+                stateScroller.computeScroll();
+                float state = stateScroller.getCurr();
+                interpolate(startRect, endRect, rect, state);
+                float rounding = StateController.interpolate(startRounding, endRounding, state);
+                setBounds(rect, rounding);
                 return true;
             }
             return false;

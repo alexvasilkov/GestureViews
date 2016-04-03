@@ -22,6 +22,8 @@ import com.alexvasilkov.events.Events;
 import com.alexvasilkov.events.Events.Failure;
 import com.alexvasilkov.events.Events.Result;
 import com.alexvasilkov.gestures.animation.ViewPositionAnimator;
+import com.alexvasilkov.gestures.commons.DepthPageTransformer;
+import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.adapters.EndlessRecyclerAdapter;
 import com.alexvasilkov.gestures.sample.adapters.FlickrPhotoListAdapter;
@@ -29,12 +31,10 @@ import com.alexvasilkov.gestures.sample.adapters.FlickrPhotoPagerAdapter;
 import com.alexvasilkov.gestures.sample.logic.FlickrApi;
 import com.alexvasilkov.gestures.sample.utils.DecorUtils;
 import com.alexvasilkov.gestures.sample.utils.GestureSettingsMenu;
-import com.alexvasilkov.gestures.commons.DepthPageTransformer;
 import com.alexvasilkov.gestures.transition.SimpleViewsTracker;
 import com.alexvasilkov.gestures.transition.ViewsCoordinator;
 import com.alexvasilkov.gestures.transition.ViewsTransitionAnimator;
 import com.alexvasilkov.gestures.transition.ViewsTransitionBuilder;
-import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
 import com.googlecode.flickrjandroid.photos.Photo;
 
 import java.util.List;
@@ -46,33 +46,33 @@ public class AdvancedDemoActivity extends BaseActivity implements
     private static final int PAGE_SIZE = 30;
     private static final int NO_POSITION = -1;
 
-    private ViewHolder mViews;
-    private ViewsTransitionAnimator<Integer> mAnimator;
-    private FlickrPhotoListAdapter mGridAdapter;
-    private FlickrPhotoPagerAdapter mPagerAdapter;
-    private ViewPager.OnPageChangeListener mPagerListener;
-    private GestureSettingsMenu mSettingsMenu;
+    private ViewHolder views;
+    private ViewsTransitionAnimator<Integer> animator;
+    private FlickrPhotoListAdapter gridAdapter;
+    private FlickrPhotoPagerAdapter pagerAdapter;
+    private ViewPager.OnPageChangeListener pagerListener;
+    private GestureSettingsMenu settingsMenu;
 
     @InstanceState
-    private int mSavedPagerPosition = NO_POSITION;
+    private int savedPagerPosition = NO_POSITION;
     @InstanceState
-    private int mSavedGridPosition = NO_POSITION;
+    private int savedGridPosition = NO_POSITION;
     @InstanceState
-    private int mSavedGridPositionFromTop;
+    private int savedGridPositionFromTop;
     @InstanceState
-    private int mSavedPhotoCount;
+    private int savedPhotoCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_advanced_demo);
-        mViews = new ViewHolder(this);
+        views = new ViewHolder(this);
 
-        mSettingsMenu = new GestureSettingsMenu();
-        mSettingsMenu.onRestoreInstanceState(savedInstanceState);
+        settingsMenu = new GestureSettingsMenu();
+        settingsMenu.onRestoreInstanceState(savedInstanceState);
 
-        setSupportActionBar(mViews.toolbar);
+        setSupportActionBar(views.toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         initDecorMargins();
@@ -80,20 +80,15 @@ public class AdvancedDemoActivity extends BaseActivity implements
         initPager();
         initAnimator();
 
-        if (mSavedPagerPosition != NO_POSITION) {
+        if (savedPagerPosition != NO_POSITION) {
             // Photo was show in pager, we should switch to pager mode instantly
             onPositionUpdate(1f, false);
         }
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
     protected void onSaveInstanceState(Bundle outState) {
-        mSettingsMenu.onSaveInstanceState(outState);
+        settingsMenu.onSaveInstanceState(outState);
         saveScreenState();
         super.onSaveInstanceState(outState);
         clearScreenState(); // We don't want to restore state if activity instance is not destroyed
@@ -101,8 +96,8 @@ public class AdvancedDemoActivity extends BaseActivity implements
 
     @Override
     public void onBackPressed() {
-        if (!mAnimator.isLeaving()) {
-            mAnimator.exit(true);
+        if (!animator.isLeaving()) {
+            animator.exit(true);
         } else {
             super.onBackPressed();
         }
@@ -110,12 +105,12 @@ public class AdvancedDemoActivity extends BaseActivity implements
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        return mSettingsMenu.onCreateOptionsMenu(menu);
+        return settingsMenu.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (mSettingsMenu.onOptionsItemSelected(item)) {
+        if (settingsMenu.onOptionsItemSelected(item)) {
             invalidateOptionsMenu();
             return true;
         } else {
@@ -132,7 +127,7 @@ public class AdvancedDemoActivity extends BaseActivity implements
     private boolean onOptionsItemSelectedFullMode(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_crop:
-                Photo photo = mPagerAdapter.getPhoto(mViews.pager.getCurrentItem());
+                Photo photo = pagerAdapter.getPhoto(views.pager.getCurrentItem());
                 if (photo == null) {
                     return false;
                 }
@@ -145,68 +140,68 @@ public class AdvancedDemoActivity extends BaseActivity implements
 
     private void initDecorMargins() {
         // Adjusting margins and paddings to fit translucent decor
-        DecorUtils.paddingForStatusBar(mViews.toolbar, true);
-        DecorUtils.paddingForStatusBar(mViews.toolbarBack, true);
-        DecorUtils.paddingForStatusBar(mViews.pagerToolbar, true);
-        DecorUtils.marginForStatusBar(mViews.grid);
-        DecorUtils.paddingForNavBar(mViews.grid);
-        DecorUtils.marginForNavBar(mViews.pagerTitle);
+        DecorUtils.paddingForStatusBar(views.toolbar, true);
+        DecorUtils.paddingForStatusBar(views.toolbarBack, true);
+        DecorUtils.paddingForStatusBar(views.pagerToolbar, true);
+        DecorUtils.marginForStatusBar(views.grid);
+        DecorUtils.paddingForNavBar(views.grid);
+        DecorUtils.marginForNavBar(views.pagerTitle);
     }
 
     private void initGrid() {
         // Setting up images grid
         final int cols = getResources().getInteger(R.integer.images_grid_columns);
 
-        mViews.grid.setLayoutManager(new GridLayoutManager(this, cols));
-        mViews.grid.setItemAnimator(new DefaultItemAnimator());
+        views.grid.setLayoutManager(new GridLayoutManager(this, cols));
+        views.grid.setItemAnimator(new DefaultItemAnimator());
 
-        mGridAdapter = new FlickrPhotoListAdapter(this);
-        mGridAdapter.setLoadingOffset(PAGE_SIZE / 2);
-        mGridAdapter.setCallbacks(new EndlessRecyclerAdapter.LoaderCallbacks() {
+        gridAdapter = new FlickrPhotoListAdapter(this);
+        gridAdapter.setLoadingOffset(PAGE_SIZE / 2);
+        gridAdapter.setCallbacks(new EndlessRecyclerAdapter.LoaderCallbacks() {
             @Override
             public boolean canLoadNextItems() {
-                return mGridAdapter.canLoadNext();
+                return gridAdapter.canLoadNext();
             }
 
             @Override
             public void loadNextItems() {
                 // We should either load all items that were loaded before state save / restore,
                 // or next page if we already loaded all previously shown items
-                int count = Math.max(mSavedPhotoCount, mGridAdapter.getCount() + PAGE_SIZE);
+                int count = Math.max(savedPhotoCount, gridAdapter.getCount() + PAGE_SIZE);
                 Events.create(FlickrApi.LOAD_IMAGES_EVENT).param(count).post();
             }
         });
-        mViews.grid.setAdapter(mGridAdapter);
+        views.grid.setAdapter(gridAdapter);
     }
 
     @SuppressLint("PrivateResource")
     private void initPager() {
         // Setting up pager views
-        mPagerAdapter = new FlickrPhotoPagerAdapter(mViews.pager);
-        mPagerAdapter.setSetupListener(mSettingsMenu);
+        pagerAdapter = new FlickrPhotoPagerAdapter(views.pager);
+        pagerAdapter.setSetupListener(settingsMenu);
 
-        mPagerListener = new ViewPager.SimpleOnPageChangeListener() {
+        pagerListener = new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
                 onPhotoInPagerSelected(position);
             }
         };
 
-        mViews.pager.setAdapter(mPagerAdapter);
-        mViews.pager.addOnPageChangeListener(mPagerListener);
-        mViews.pager.setPageTransformer(true, new DepthPageTransformer());
+        views.pager.setAdapter(pagerAdapter);
+        views.pager.addOnPageChangeListener(pagerListener);
+        views.pager.setPageTransformer(true, new DepthPageTransformer());
 
-        mViews.pagerToolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
-        mViews.pagerToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        views.pagerToolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+        views.pagerToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(@NonNull View v) {
+            public void onClick(@NonNull View view) {
                 onBackPressed();
             }
         });
 
-        onCreateOptionsMenuFullMode(mViews.pagerToolbar.getMenu());
+        onCreateOptionsMenuFullMode(views.pagerToolbar.getMenu());
 
-        mViews.pagerToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+        views.pagerToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 return onOptionsItemSelectedFullMode(item);
@@ -215,31 +210,31 @@ public class AdvancedDemoActivity extends BaseActivity implements
     }
 
     private void initAnimator() {
-        mAnimator = new ViewsTransitionBuilder<Integer>()
-                .fromRecyclerView(mViews.grid, new SimpleViewsTracker() {
+        animator = new ViewsTransitionBuilder<Integer>()
+                .fromRecyclerView(views.grid, new SimpleViewsTracker() {
                     @Override
                     public View getViewForPosition(int position) {
                         RecyclerView.ViewHolder holder =
-                                mViews.grid.findViewHolderForLayoutPosition(position);
+                                views.grid.findViewHolderForLayoutPosition(position);
                         return holder == null ? null : FlickrPhotoListAdapter.getImage(holder);
                     }
                 })
-                .intoViewPager(mViews.pager, new SimpleViewsTracker() {
+                .intoViewPager(views.pager, new SimpleViewsTracker() {
                     @Override
                     public View getViewForPosition(int position) {
-                        RecyclePagerAdapter.ViewHolder holder = mPagerAdapter.getViewHolder(
+                        RecyclePagerAdapter.ViewHolder holder = pagerAdapter.getViewHolder(
                                 position);
                         return holder == null ? null : FlickrPhotoPagerAdapter.getImage(holder);
                     }
                 })
                 .build();
-        mAnimator.addPositionUpdateListener(this);
-        mAnimator.setReadyListener(new ViewsCoordinator.OnViewsReadyListener<Integer>() {
+        animator.addPositionUpdateListener(this);
+        animator.setReadyListener(new ViewsCoordinator.OnViewsReadyListener<Integer>() {
             @Override
             public void onViewsReady(@NonNull Integer id) {
                 // Setting image drawable from 'from' view to 'to' to prevent flickering
-                ImageView from = (ImageView) mAnimator.getFromView();
-                ImageView to = (ImageView) mAnimator.getToView();
+                ImageView from = (ImageView) animator.getFromView();
+                ImageView to = (ImageView) animator.getToView();
                 if (to.getDrawable() == null) {
                     to.setImageDrawable(from.getDrawable());
                 }
@@ -248,86 +243,86 @@ public class AdvancedDemoActivity extends BaseActivity implements
     }
 
     private void onPhotoInPagerSelected(int position) {
-        Photo photo = mPagerAdapter.getPhoto(position);
+        Photo photo = pagerAdapter.getPhoto(position);
         if (photo == null) {
-            mViews.pagerTitle.setText(null);
+            views.pagerTitle.setText(null);
         } else {
             SpannableBuilder title = new SpannableBuilder(AdvancedDemoActivity.this);
             title.append(photo.getTitle()).append("\n")
                     .createStyle().setColorResId(R.color.text_secondary_light).apply()
                     .append(R.string.photo_by).append(" ")
                     .append(photo.getOwner().getUsername());
-            mViews.pagerTitle.setText(title.build());
+            views.pagerTitle.setText(title.build());
         }
     }
 
     @Override
-    public void onPhotoClick(Photo photo, int position, ImageView image) {
-        mPagerAdapter.setActivated(true);
-        mAnimator.enter(position, true);
+    public void onPhotoClick(int position) {
+        pagerAdapter.setActivated(true);
+        animator.enter(position, true);
     }
 
     @Override
     public void onPositionUpdate(float state, boolean isLeaving) {
-        mViews.pagerBackground.setVisibility(state == 0f ? View.INVISIBLE : View.VISIBLE);
-        mViews.pagerBackground.getBackground().setAlpha((int) (255 * state));
+        views.pagerBackground.setVisibility(state == 0f ? View.INVISIBLE : View.VISIBLE);
+        views.pagerBackground.getBackground().setAlpha((int) (255 * state));
 
-        mViews.toolbar.setVisibility(state == 1f ? View.INVISIBLE : View.VISIBLE);
-        mViews.toolbar.setAlpha((float) Math.sqrt(1d - state)); // Slow down toolbar animation
+        views.toolbar.setVisibility(state == 1f ? View.INVISIBLE : View.VISIBLE);
+        views.toolbar.setAlpha((float) Math.sqrt(1d - state)); // Slow down toolbar animation
 
-        mViews.pagerToolbar.setVisibility(state == 0f ? View.INVISIBLE : View.VISIBLE);
-        mViews.pagerToolbar.setAlpha(state);
+        views.pagerToolbar.setVisibility(state == 0f ? View.INVISIBLE : View.VISIBLE);
+        views.pagerToolbar.setAlpha(state);
 
-        mViews.pagerTitle.setVisibility(state == 1f ? View.VISIBLE : View.INVISIBLE);
+        views.pagerTitle.setVisibility(state == 1f ? View.VISIBLE : View.INVISIBLE);
 
         if (isLeaving && state == 0f) {
-            mPagerAdapter.setActivated(false);
+            pagerAdapter.setActivated(false);
         }
     }
 
     private void saveScreenState() {
         clearScreenState();
 
-        mSavedPhotoCount = mGridAdapter.getCount();
+        savedPhotoCount = gridAdapter.getCount();
 
-        mSavedPagerPosition = mAnimator.isLeaving() || mPagerAdapter.getCount() == 0
-                ? NO_POSITION : mViews.pager.getCurrentItem();
+        savedPagerPosition = animator.isLeaving() || pagerAdapter.getCount() == 0
+                ? NO_POSITION : views.pager.getCurrentItem();
 
-        if (mViews.grid.getChildCount() > 0) {
-            View child = mViews.grid.getChildAt(0);
-            mSavedGridPosition = mViews.grid.getChildAdapterPosition(child);
-            mSavedGridPositionFromTop = child.getTop()
+        if (views.grid.getChildCount() > 0) {
+            View child = views.grid.getChildAt(0);
+            savedGridPosition = views.grid.getChildAdapterPosition(child);
+            savedGridPositionFromTop = child.getTop()
                     - Views.getMarginParams(child).topMargin
-                    - mViews.grid.getPaddingTop();
+                    - views.grid.getPaddingTop();
         }
     }
 
     private void clearScreenState() {
-        mSavedPhotoCount = 0;
-        mSavedPagerPosition = NO_POSITION;
-        mSavedGridPosition = NO_POSITION;
-        mSavedGridPositionFromTop = 0;
+        savedPhotoCount = 0;
+        savedPagerPosition = NO_POSITION;
+        savedGridPosition = NO_POSITION;
+        savedGridPositionFromTop = 0;
     }
 
 
     @Result(FlickrApi.LOAD_IMAGES_EVENT)
     private void onPhotosLoaded(List<Photo> photos, boolean hasMore) {
-        mGridAdapter.setPhotos(photos, hasMore);
-        mPagerAdapter.setPhotos(photos);
-        mGridAdapter.onNextItemsLoaded();
+        gridAdapter.setPhotos(photos, hasMore);
+        pagerAdapter.setPhotos(photos);
+        gridAdapter.onNextItemsLoaded();
 
         // Ensure listener called for 0 position
-        mPagerListener.onPageSelected(mViews.pager.getCurrentItem());
+        pagerListener.onPageSelected(views.pager.getCurrentItem());
 
         // Restoring saved state
-        if (mSavedPagerPosition != NO_POSITION && mSavedPagerPosition < photos.size()) {
-            mPagerAdapter.setActivated(true);
-            mAnimator.enter(mSavedPagerPosition, false);
+        if (savedPagerPosition != NO_POSITION && savedPagerPosition < photos.size()) {
+            pagerAdapter.setActivated(true);
+            animator.enter(savedPagerPosition, false);
         }
 
-        if (mSavedGridPosition != NO_POSITION && mSavedGridPosition < photos.size()) {
-            ((GridLayoutManager) mViews.grid.getLayoutManager())
-                    .scrollToPositionWithOffset(mSavedGridPosition, mSavedGridPositionFromTop);
+        if (savedGridPosition != NO_POSITION && savedGridPosition < photos.size()) {
+            ((GridLayoutManager) views.grid.getLayoutManager())
+                    .scrollToPositionWithOffset(savedGridPosition, savedGridPositionFromTop);
         }
 
         clearScreenState();
@@ -335,10 +330,10 @@ public class AdvancedDemoActivity extends BaseActivity implements
 
     @Failure(FlickrApi.LOAD_IMAGES_EVENT)
     private void onPhotosLoadFail() {
-        mGridAdapter.onNextItemsError();
+        gridAdapter.onNextItemsError();
 
         // Skipping state restoration
-        if (mSavedPagerPosition != NO_POSITION) {
+        if (savedPagerPosition != NO_POSITION) {
             // We can't show image right now, so we should return back to list
             onPositionUpdate(0f, true);
         }
@@ -348,16 +343,16 @@ public class AdvancedDemoActivity extends BaseActivity implements
 
 
     private class ViewHolder {
-        public final Toolbar toolbar;
-        public final View toolbarBack;
-        public final RecyclerView grid;
+        final Toolbar toolbar;
+        final View toolbarBack;
+        final RecyclerView grid;
 
-        public final ViewPager pager;
-        public final Toolbar pagerToolbar;
-        public final TextView pagerTitle;
-        public final View pagerBackground;
+        final ViewPager pager;
+        final Toolbar pagerToolbar;
+        final TextView pagerTitle;
+        final View pagerBackground;
 
-        public ViewHolder(Activity activity) {
+        ViewHolder(Activity activity) {
             toolbar = Views.find(activity, R.id.toolbar);
             toolbarBack = Views.find(activity, R.id.flickr_toolbar_back);
             grid = Views.find(activity, R.id.flickr_list);

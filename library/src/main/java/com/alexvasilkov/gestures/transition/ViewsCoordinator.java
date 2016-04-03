@@ -34,25 +34,28 @@ public class ViewsCoordinator<ID> {
 
     private static final String TAG = ViewsCoordinator.class.getSimpleName();
 
-    private OnRequestViewListener<ID> mFromListener, mToListener;
-    private OnViewsReadyListener<ID> mReadyListener;
+    private OnRequestViewListener<ID> fromListener;
+    private OnRequestViewListener<ID> toListener;
+    private OnViewsReadyListener<ID> readyListener;
 
-    private ID mRequestedId, mFromId, mToId;
+    private ID requestedId;
+    private ID fromId;
+    private ID toId;
 
-    private View mFromView;
-    private ViewPosition mFromPos;
-    private AnimatorView mToView;
+    private View fromView;
+    private ViewPosition fromPos;
+    private AnimatorView toView;
 
     public void setFromListener(@NonNull OnRequestViewListener<ID> listener) {
-        mFromListener = listener;
+        fromListener = listener;
     }
 
     public void setToListener(@NonNull OnRequestViewListener<ID> listener) {
-        mToListener = listener;
+        toListener = listener;
     }
 
     public void setReadyListener(@Nullable OnViewsReadyListener<ID> listener) {
-        mReadyListener = listener;
+        readyListener = listener;
     }
 
     public void request(@NonNull ID id) {
@@ -62,17 +65,17 @@ public class ViewsCoordinator<ID> {
             Log.d(TAG, "Requesting " + id);
         }
 
-        mRequestedId = id;
-        mFromListener.onRequestView(id);
-        mToListener.onRequestView(id);
+        requestedId = id;
+        fromListener.onRequestView(id);
+        toListener.onRequestView(id);
     }
 
     public View getFromView() {
-        return mFromView;
+        return fromView;
     }
 
     public ViewPosition getFromPos() {
-        return mFromPos;
+        return fromPos;
     }
 
     public void setFromView(@NonNull ID id, @NonNull View fromView) {
@@ -84,10 +87,10 @@ public class ViewsCoordinator<ID> {
     }
 
     private void setFromInternal(@NonNull ID id, View fromView, ViewPosition fromPos) {
-        if (mRequestedId == null || !mRequestedId.equals(id)) {
+        if (requestedId == null || !requestedId.equals(id)) {
             return;
         }
-        if (mFromView == fromView && mFromPos == fromPos) {
+        if (this.fromView == fromView && this.fromPos == fromPos) {
             return; // Already set
         }
 
@@ -95,21 +98,21 @@ public class ViewsCoordinator<ID> {
             Log.d(TAG, "Setting 'from' view for " + id);
         }
 
-        mFromId = id;
-        mFromView = fromView;
-        mFromPos = fromPos;
+        fromId = id;
+        this.fromView = fromView;
+        this.fromPos = fromPos;
         notifyWhenReady();
     }
 
     public AnimatorView getToView() {
-        return mToView;
+        return toView;
     }
 
     public void setToView(@NonNull ID id, @NonNull AnimatorView toView) {
-        if (mRequestedId == null || !mRequestedId.equals(id)) {
+        if (requestedId == null || !requestedId.equals(id)) {
             return;
         }
-        if (mToView == toView) {
+        if (this.toView == toView) {
             return; // Already set
         }
 
@@ -117,32 +120,32 @@ public class ViewsCoordinator<ID> {
             Log.d(TAG, "Setting 'to' view for " + id);
         }
 
-        mToId = id;
-        mToView = toView;
+        toId = id;
+        this.toView = toView;
         notifyWhenReady();
     }
 
     private void notifyWhenReady() {
-        if (mRequestedId == null || !mRequestedId.equals(mFromId) || !mRequestedId.equals(mToId)) {
+        if (requestedId == null || !requestedId.equals(fromId) || !requestedId.equals(toId)) {
             return;
         }
 
-        onViewsReady(mRequestedId);
+        onViewsReady(requestedId);
     }
 
     protected void cleanupRequest() {
-        if (mRequestedId == null) {
+        if (requestedId == null) {
             return;
         }
 
         if (GestureDebug.isDebugAnimator()) {
-            Log.d(TAG, "Cleaning up request " + mRequestedId);
+            Log.d(TAG, "Cleaning up request " + requestedId);
         }
 
-        mFromView = null;
-        mFromPos = null;
-        mToView = null;
-        mRequestedId = mFromId = mToId = null;
+        fromView = null;
+        fromPos = null;
+        toView = null;
+        requestedId = fromId = toId = null;
     }
 
     /**
@@ -156,8 +159,8 @@ public class ViewsCoordinator<ID> {
      * @see #getToView()
      */
     protected void onViewsReady(@NonNull ID id) {
-        if (mReadyListener != null) {
-            mReadyListener.onViewsReady(id);
+        if (readyListener != null) {
+            readyListener.onViewsReady(id);
         }
     }
 

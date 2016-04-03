@@ -31,17 +31,17 @@ import com.alexvasilkov.gestures.views.interfaces.GestureView;
  */
 public class GestureFrameLayout extends FrameLayout implements GestureView, AnimatorView {
 
-    private final GestureControllerForPager mController;
+    private final GestureControllerForPager controller;
 
-    private ViewPositionAnimator mPositionAnimator;
+    private ViewPositionAnimator positionAnimator;
 
-    private final Matrix mMatrix = new Matrix();
-    private final Matrix mMatrixInverse = new Matrix();
+    private final Matrix matrix = new Matrix();
+    private final Matrix matrixInverse = new Matrix();
 
-    private final RectF mTmpFloatRect = new RectF();
-    private final float[] mTmpPointArray = new float[2];
+    private final RectF tmpFloatRect = new RectF();
+    private final float[] tmpPointArray = new float[2];
 
-    private MotionEvent mCurrentMotionEvent;
+    private MotionEvent currentMotionEvent;
 
     public GestureFrameLayout(Context context) {
         this(context, null, 0);
@@ -54,8 +54,8 @@ public class GestureFrameLayout extends FrameLayout implements GestureView, Anim
     public GestureFrameLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
-        mController = new GestureControllerForPager(this);
-        mController.addOnStateChangeListener(new GestureController.OnStateChangeListener() {
+        controller = new GestureControllerForPager(this);
+        controller.addOnStateChangeListener(new GestureController.OnStateChangeListener() {
             @Override
             public void onStateChanged(State state) {
                 applyState(state);
@@ -73,7 +73,7 @@ public class GestureFrameLayout extends FrameLayout implements GestureView, Anim
      */
     @Override
     public GestureControllerForPager getController() {
-        return mController;
+        return controller;
     }
 
     /**
@@ -81,18 +81,18 @@ public class GestureFrameLayout extends FrameLayout implements GestureView, Anim
      */
     @Override
     public ViewPositionAnimator getPositionAnimator() {
-        if (mPositionAnimator == null) {
-            mPositionAnimator = new ViewPositionAnimator(this);
+        if (positionAnimator == null) {
+            positionAnimator = new ViewPositionAnimator(this);
         }
-        return mPositionAnimator;
+        return positionAnimator;
     }
 
     @Override
     public boolean dispatchTouchEvent(@NonNull MotionEvent event) {
-        mCurrentMotionEvent = event;
+        currentMotionEvent = event;
         // We should remap given event back to original coordinates
         // so children can correctly respond to it
-        MotionEvent invertedEvent = applyMatrix(event, mMatrixInverse);
+        MotionEvent invertedEvent = applyMatrix(event, matrixInverse);
         try {
             return super.dispatchTouchEvent(invertedEvent);
         } finally {
@@ -103,23 +103,23 @@ public class GestureFrameLayout extends FrameLayout implements GestureView, Anim
     @Override
     public ViewParent invalidateChildInParent(int[] location, @NonNull Rect dirty) {
         // Invalidating correct rectangle
-        applyMatrix(dirty, mMatrix);
+        applyMatrix(dirty, matrix);
         return super.invalidateChildInParent(location, dirty);
     }
 
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
         // Passing original event to controller
-        return mController.onTouch(this, mCurrentMotionEvent);
+        return controller.onTouch(this, currentMotionEvent);
     }
 
     @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
+    protected void onSizeChanged(int width, int height, int oldWidth, int oldHeight) {
+        super.onSizeChanged(width, height, oldWidth, oldHeight);
 
-        mController.getSettings().setViewport(w - getPaddingLeft() - getPaddingRight(),
-                h - getPaddingTop() - getPaddingBottom());
-        mController.updateState();
+        controller.getSettings().setViewport(width - getPaddingLeft() - getPaddingRight(),
+                height - getPaddingTop() - getPaddingBottom());
+        controller.updateState();
     }
 
     @Override
@@ -128,8 +128,8 @@ public class GestureFrameLayout extends FrameLayout implements GestureView, Anim
 
         View child = getChildCount() == 0 ? null : getChildAt(0);
         if (child != null) {
-            mController.getSettings().setImage(child.getMeasuredWidth(), child.getMeasuredHeight());
-            mController.updateState();
+            controller.getSettings().setImage(child.getMeasuredWidth(), child.getMeasuredHeight());
+            controller.updateState();
         }
     }
 
@@ -138,25 +138,25 @@ public class GestureFrameLayout extends FrameLayout implements GestureView, Anim
             int parentHeightMeasureSpec, int heightUsed) {
         final MarginLayoutParams lp = (MarginLayoutParams) child.getLayoutParams();
 
-        final int extraW = getPaddingLeft() + getPaddingRight() +
-                lp.leftMargin + lp.rightMargin + widthUsed;
-        final int extraH = getPaddingTop() + getPaddingBottom() +
-                lp.topMargin + lp.bottomMargin + heightUsed;
+        final int extraW = getPaddingLeft() + getPaddingRight()
+                + lp.leftMargin + lp.rightMargin + widthUsed;
+        final int extraH = getPaddingTop() + getPaddingBottom()
+                + lp.topMargin + lp.bottomMargin + heightUsed;
 
         child.measure(getChildMeasureSpecFixed(parentWidthMeasureSpec, extraW, lp.width),
                 getChildMeasureSpecFixed(parentHeightMeasureSpec, extraH, lp.height));
     }
 
     protected void applyState(State state) {
-        state.get(mMatrix);
-        mMatrix.invert(mMatrixInverse);
+        state.get(matrix);
+        matrix.invert(matrixInverse);
         invalidate();
     }
 
     @Override
     protected void dispatchDraw(@NonNull Canvas canvas) {
         canvas.save();
-        canvas.concat(mMatrix);
+        canvas.concat(matrix);
         super.dispatchDraw(canvas);
         canvas.restore();
     }
@@ -171,19 +171,20 @@ public class GestureFrameLayout extends FrameLayout implements GestureView, Anim
 
 
     private MotionEvent applyMatrix(MotionEvent event, Matrix matrix) {
+        tmpPointArray[0] = event.getX();
+        tmpPointArray[1] = event.getY();
+        matrix.mapPoints(tmpPointArray);
+
         MotionEvent copy = MotionEvent.obtain(event);
-        mTmpPointArray[0] = event.getX();
-        mTmpPointArray[1] = event.getY();
-        matrix.mapPoints(mTmpPointArray);
-        copy.setLocation(mTmpPointArray[0], mTmpPointArray[1]);
+        copy.setLocation(tmpPointArray[0], tmpPointArray[1]);
         return copy;
     }
 
     private void applyMatrix(Rect rect, Matrix matrix) {
-        mTmpFloatRect.set(rect.left, rect.top, rect.right, rect.bottom);
-        matrix.mapRect(mTmpFloatRect);
-        rect.set(Math.round(mTmpFloatRect.left), Math.round(mTmpFloatRect.top),
-                Math.round(mTmpFloatRect.right), Math.round(mTmpFloatRect.bottom));
+        tmpFloatRect.set(rect.left, rect.top, rect.right, rect.bottom);
+        matrix.mapRect(tmpFloatRect);
+        rect.set(Math.round(tmpFloatRect.left), Math.round(tmpFloatRect.top),
+                Math.round(tmpFloatRect.right), Math.round(tmpFloatRect.bottom));
     }
 
 

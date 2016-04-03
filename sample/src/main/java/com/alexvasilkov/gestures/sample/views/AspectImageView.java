@@ -22,30 +22,30 @@ public class AspectImageView extends ForegroundImageView {
     public AspectImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        TypedArray a = context.obtainStyledAttributes(attrs, new int[] { R.attr.aspect });
-        aspect = a.getFloat(0, aspect);
-        a.recycle();
+        TypedArray arr = context.obtainStyledAttributes(attrs, new int[]{R.attr.aspect});
+        aspect = arr.getFloat(0, aspect);
+        arr.recycle();
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int w = MeasureSpec.getSize(widthMeasureSpec);
-        int wMode = MeasureSpec.getMode(widthMeasureSpec);
-        int h = MeasureSpec.getSize(heightMeasureSpec);
-        int hMode = MeasureSpec.getMode(heightMeasureSpec);
+        int width = MeasureSpec.getSize(widthMeasureSpec);
+        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+        int height = MeasureSpec.getSize(heightMeasureSpec);
+        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
 
-        if (wMode == MeasureSpec.EXACTLY || wMode == MeasureSpec.AT_MOST) {
-            h = calculate(w, aspect, VERTICAL);
-        } else if (hMode == MeasureSpec.EXACTLY || hMode == MeasureSpec.AT_MOST) {
-            w = calculate(h, aspect, HORIZONTAL);
+        if (widthMode == MeasureSpec.EXACTLY || widthMode == MeasureSpec.AT_MOST) {
+            height = calculate(width, aspect, VERTICAL);
+        } else if (heightMode == MeasureSpec.EXACTLY || heightMode == MeasureSpec.AT_MOST) {
+            width = calculate(height, aspect, HORIZONTAL);
         } else {
             throw new IllegalArgumentException("Either width or height should have exact value");
         }
 
-        int specW = MeasureSpec.makeMeasureSpec(w, MeasureSpec.EXACTLY);
-        int specH = MeasureSpec.makeMeasureSpec(h, MeasureSpec.EXACTLY);
+        int specWidth = MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY);
+        int specHeight = MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY);
 
-        super.onMeasure(specW, specH);
+        super.onMeasure(specWidth, specHeight);
     }
 
     private int calculate(int size, float aspect, int direction) {
