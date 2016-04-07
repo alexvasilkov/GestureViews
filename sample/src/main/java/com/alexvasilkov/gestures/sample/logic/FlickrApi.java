@@ -18,7 +18,7 @@ public class FlickrApi {
     public static final String LOAD_IMAGES_EVENT = "LOAD_IMAGES_EVENT";
 
     private static final String API_KEY = "7f6035774a01a39f9056d6d7bde60002";
-    private static final String SEARCH_QUERY = "nature";
+    private static final String SEARCH_QUERY = "landscape";
     private static final String LICENCE_ID = "9"; // Public Domain Dedication (CC0)
     private static final int PER_PAGE = 30;
     private static final int MAX_PAGES = 5;
