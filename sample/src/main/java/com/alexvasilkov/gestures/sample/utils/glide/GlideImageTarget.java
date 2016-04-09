@@ -1,20 +1,22 @@
 package com.alexvasilkov.gestures.sample.utils.glide;
 
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.SystemClock;
 import android.widget.ImageView;
 
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 
-class GlideDrawableTarget extends GlideDrawableImageViewTarget {
+class GlideImageTarget extends BitmapImageViewTarget {
 
     private static final long NO_ANIMATION_INTERVAL = 150L;
 
     private long startTime = 0L;
 
-    GlideDrawableTarget(ImageView view) {
+    GlideImageTarget(ImageView view) {
         super(view);
     }
 
@@ -25,8 +27,8 @@ class GlideDrawableTarget extends GlideDrawableImageViewTarget {
     }
 
     @Override
-    public void onResourceReady(GlideDrawable resource,
-            GlideAnimation<? super GlideDrawable> glideAnimation) {
+    public void onResourceReady(Bitmap resource,
+            GlideAnimation<? super Bitmap> glideAnimation) {
 
         if (startTime == 0 || SystemClock.uptimeMillis() - startTime < NO_ANIMATION_INTERVAL) {
             startTime = 0L;

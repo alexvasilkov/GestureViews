@@ -1,21 +1,22 @@
 package com.alexvasilkov.gestures.sample.utils.glide;
 
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import android.graphics.Bitmap;
+
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 
-abstract class GlideDrawableListener implements RequestListener<String, GlideDrawable> {
+abstract class GlideDrawableListener implements RequestListener<String, Bitmap> {
 
     @Override
     public boolean onException(Exception ex, String url,
-            Target<GlideDrawable> target, boolean isFirstResource) {
+            Target<Bitmap> target, boolean isFirstResource) {
         onFail(url);
         return false;
     }
 
     @Override
-    public boolean onResourceReady(GlideDrawable resource, String url,
-            Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+    public boolean onResourceReady(Bitmap resource, String url,
+            Target<Bitmap> target, boolean isFromMemoryCache, boolean isFirstResource) {
         onSuccess(url);
         return false;
     }

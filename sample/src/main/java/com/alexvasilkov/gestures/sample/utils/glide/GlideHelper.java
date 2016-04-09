@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.ViewPropertyAnimation;
-import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.bumptech.glide.request.target.SizeReadyCallback;
 import com.googlecode.flickrjandroid.photos.Photo;
 
@@ -34,9 +34,10 @@ public class GlideHelper {
 
         Glide.with(image.getContext())
                 .load(drawableId)
+                .asBitmap()
                 .animate(ANIMATOR)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .into(new GlideDrawableImageViewTarget(image) {
+                .into(new BitmapImageViewTarget(image) {
                     @Override
                     public void getSize(final SizeReadyCallback cb) {
                         // We don't want to load very big images on devices with small screens.
@@ -54,12 +55,14 @@ public class GlideHelper {
     public static void loadFlickrThumb(@Nullable Photo photo, @NonNull final ImageView image) {
         Glide.with(image.getContext())
                 .load(photo == null ? null : photo.getMediumUrl())
+                .asBitmap()
                 .dontAnimate()
                 .thumbnail(Glide.with(image.getContext())
                         .load(photo == null ? null : photo.getThumbnailUrl())
+                        .asBitmap()
                         .animate(ANIMATOR)
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE))
-                .into(new GlideDrawableTarget(image));
+                .into(new GlideImageTarget(image));
     }
 
     public static void loadFlickrFull(@NonNull Photo photo, @NonNull final ImageView image,
@@ -70,10 +73,12 @@ public class GlideHelper {
 
         Glide.with(image.getContext())
                 .load(photoUrl)
+                .asBitmap()
                 .dontAnimate()
                 .placeholder(image.getDrawable())
                 .thumbnail(Glide.with(image.getContext())
                         .load(photo.getThumbnailUrl())
+                        .asBitmap()
                         .animate(ANIMATOR)
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE))
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
@@ -94,7 +99,7 @@ public class GlideHelper {
                         }
                     }
                 })
-                .into(new GlideDrawableTarget(image));
+                .into(new GlideImageTarget(image));
     }
 
 
