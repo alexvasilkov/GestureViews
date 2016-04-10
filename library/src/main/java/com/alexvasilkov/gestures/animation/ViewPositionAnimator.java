@@ -49,6 +49,8 @@ public class ViewPositionAnimator {
     private static final String TAG = "ViewPositionAnimator";
 
     private static final Matrix tmpMatrix = new Matrix();
+    private static final Matrix tmpMatrixInverse = new Matrix();
+    private static final float[] tmpPoint = new float[2];
 
     private final List<PositionUpdateListener> listeners = new ArrayList<>();
     private final List<PositionUpdateListener> listenersToRemove = new ArrayList<>();
@@ -528,18 +530,18 @@ public class ViewPositionAnimator {
             return;
         }
 
-        // Computing 'To' clip by getting current 'To' image rect in 'To' view coordinates
-        // (including view paddings which are not part of viewport)
-        toClip.set(0, 0, settings.getImageW(), settings.getImageH());
         toState.get(tmpMatrix);
-        tmpMatrix.mapRect(toClip);
 
-        toPivotX = toClip.centerX();
-        toPivotY = toClip.centerY();
+        // 'To' clip is a 'To' image rect in 'To' viewport coordinates
+        toClip.set(0, 0, settings.getImageW(), settings.getImageH());
 
-        int paddingLeft = toPos.viewport.left - toPos.view.left;
-        int paddingTop = toPos.viewport.top - toPos.view.top;
-        toClip.offset(paddingLeft, paddingTop);
+        // Computing pivot point as center of the image after transformation
+        tmpPoint[0] = toClip.centerX();
+        tmpPoint[1] = toClip.centerY();
+        tmpMatrix.mapPoints(tmpPoint);
+
+        toPivotX = tmpPoint[0];
+        toPivotY = tmpPoint[1];
 
         isToUpdated = true;
 
@@ -559,6 +561,10 @@ public class ViewPositionAnimator {
             return;
         }
 
+        // 'From' pivot point is a center of image in 'To' viewport coordinates
+        fromPivotX = fromPos.image.centerX() - toPos.viewport.left;
+        fromPivotY = fromPos.image.centerY() - toPos.viewport.top;
+
         // Computing starting zoom level
         float imageWidth = settings.getImageW();
         float imageHeight = settings.getImageH();
@@ -567,19 +573,18 @@ public class ViewPositionAnimator {
         float zoom = Math.max(zoomW, zoomH);
 
         // Computing 'From' image in 'To' viewport coordinates.
-        // If 'To' image have different aspect ratio it will be centered within the 'From' image.
+        // If 'To' image has different aspect ratio it will be centered within the 'From' image.
         float fromX = fromPos.image.centerX() - 0.5f * imageWidth * zoom - toPos.viewport.left;
         float fromY = fromPos.image.centerY() - 0.5f * imageHeight * zoom - toPos.viewport.top;
 
         fromState.set(fromX, fromY, zoom, 0f);
-        fromPivotX = fromPos.image.centerX() - toPos.viewport.left;
-        fromPivotY = fromPos.image.centerY() - toPos.viewport.top;
 
-        // 'From' clip is a 'From' view rect in coordinates of 'To' view.
-        fromClip.set(0, 0, fromPos.view.width(), fromPos.view.height());
-        float left = fromPos.view.left - toPos.view.left;
-        float top = fromPos.view.top - toPos.view.top;
-        fromClip.offset(left, top);
+        // 'From' clip is a 'From' view rect in coordinates of original image rect
+        fromClip.set(fromPos.view);
+        fromClip.offset(-toPos.viewport.left, -toPos.viewport.top);
+        fromState.get(tmpMatrix);
+        tmpMatrix.invert(tmpMatrixInverse);
+        tmpMatrixInverse.mapRect(fromClip);
 
         isFromUpdated = true;
 
