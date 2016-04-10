@@ -10,6 +10,6 @@ public interface ClipView {
      * <p/>
      * Pass {@code null} to turn clipping off.
      */
-    void clipView(@Nullable RectF rect);
+    void clipView(@Nullable RectF rect, float rotation);
 
 }

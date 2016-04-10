@@ -103,8 +103,8 @@ public class GestureImageView extends ImageView implements GestureView, ClipView
      * {@inheritDoc}
      */
     @Override
-    public void clipView(@Nullable RectF rect) {
-        clipHelper.clipView(rect);
+    public void clipView(@Nullable RectF rect, float rotation) {
+        clipHelper.clipView(rect, rotation);
     }
 
     /**

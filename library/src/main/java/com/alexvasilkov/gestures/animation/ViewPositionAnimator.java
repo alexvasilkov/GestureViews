@@ -49,7 +49,6 @@ public class ViewPositionAnimator {
     private static final String TAG = "ViewPositionAnimator";
 
     private static final Matrix tmpMatrix = new Matrix();
-    private static final Matrix tmpMatrixInverse = new Matrix();
     private static final float[] tmpPoint = new float[2];
 
     private final List<PositionUpdateListener> listeners = new ArrayList<>();
@@ -282,7 +281,7 @@ public class ViewPositionAnimator {
             fromView.setVisibility(View.VISIBLE); // Switching back to visible
         }
         if (toClipView != null) {
-            toClipView.clipView(null);
+            toClipView.clipView(null, 0f);
         }
 
         fromPosHolder.clear();
@@ -430,7 +429,7 @@ public class ViewPositionAnimator {
             interpolate(clipRect, fromClip, toClip, positionState);
             if (toClipView != null) {
                 boolean skipClip = positionState == 1f || (positionState == 0f && isLeaving);
-                toClipView.clipView(skipClip ? null : clipRect);
+                toClipView.clipView(skipClip ? null : clipRect, state.getRotation());
             }
         }
 
@@ -532,7 +531,7 @@ public class ViewPositionAnimator {
 
         toState.get(tmpMatrix);
 
-        // 'To' clip is a 'To' image rect in 'To' viewport coordinates
+        // 'To' clip is a 'To' image rect in 'To' view coordinates
         toClip.set(0, 0, settings.getImageW(), settings.getImageH());
 
         // Computing pivot point as center of the image after transformation
@@ -542,6 +541,11 @@ public class ViewPositionAnimator {
 
         toPivotX = tmpPoint[0];
         toPivotY = tmpPoint[1];
+
+        // Computing clip rect in 'To' view coordinates without rotation
+        tmpMatrix.postRotate(-toState.getRotation(), toPivotX, toPivotY);
+        tmpMatrix.mapRect(toClip);
+        toClip.offset(toPos.viewport.left - toPos.view.left, toPos.viewport.top - toPos.view.top);
 
         isToUpdated = true;
 
@@ -579,12 +583,9 @@ public class ViewPositionAnimator {
 
         fromState.set(fromX, fromY, zoom, 0f);
 
-        // 'From' clip is a 'From' view rect in coordinates of original image rect
+        // 'From' clip is a 'From' view rect in 'To' view coordinates
         fromClip.set(fromPos.viewport);
-        fromClip.offset(-toPos.viewport.left, -toPos.viewport.top);
-        fromState.get(tmpMatrix);
-        tmpMatrix.invert(tmpMatrixInverse);
-        tmpMatrixInverse.mapRect(fromClip);
+        fromClip.offset(-toPos.view.left, -toPos.view.top);
 
         isFromUpdated = true;
 

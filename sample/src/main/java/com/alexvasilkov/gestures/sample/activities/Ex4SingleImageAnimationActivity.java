@@ -85,6 +85,7 @@ public class Ex4SingleImageAnimationActivity extends BaseActivity {
             return true;
         } else if (settingsMenu.onOptionsItemSelected(item)) {
             invalidateOptionsMenu();
+            settingsMenu.onSetupGestureView(views.fullImage); // Updating gesture image settings
             return true;
         } else {
             return super.onOptionsItemSelected(item);
@@ -117,8 +118,7 @@ public class Ex4SingleImageAnimationActivity extends BaseActivity {
             views.fullImage.setImageDrawable(views.image.getDrawable());
         }
 
-        // Updating gesture image settings
-        settingsMenu.onSetupGestureView(views.fullImage);
+        settingsMenu.onSetupGestureView(views.fullImage); // Updating gesture image settings
         views.fullImage.getController().resetState();
 
         views.fullAnimator.enter(views.image, true);

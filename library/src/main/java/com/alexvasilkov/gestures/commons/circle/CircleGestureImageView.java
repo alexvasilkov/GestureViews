@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.Shader.TileMode;
@@ -13,15 +14,18 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 
-import com.alexvasilkov.gestures.animation.ViewPositionAnimator;
+import com.alexvasilkov.gestures.animation.ViewPositionAnimator.PositionUpdateListener;
 import com.alexvasilkov.gestures.views.GestureImageView;
 
 public class CircleGestureImageView extends GestureImageView {
 
     private static final int DEFAULT_PAINT_FLAGS = Paint.FILTER_BITMAP_FLAG | Paint.ANTI_ALIAS_FLAG;
+    private static final Matrix tmpMatrix = new Matrix();
+
+    private final Paint bitmapPaint = new Paint(DEFAULT_PAINT_FLAGS);
 
     private final RectF clipRect = new RectF();
-    private final Paint bitmapPaint = new Paint(DEFAULT_PAINT_FLAGS);
+    private float clipRotation;
 
     private boolean isCircle = true;
     private float cornersState;
@@ -37,13 +41,12 @@ public class CircleGestureImageView extends GestureImageView {
     public CircleGestureImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
-        getPositionAnimator().addPositionUpdateListener(
-                new ViewPositionAnimator.PositionUpdateListener() {
-                    @Override
-                    public void onPositionUpdate(float state, boolean isLeaving) {
-                        cornersState = state;
-                    }
-                });
+        getPositionAnimator().addPositionUpdateListener(new PositionUpdateListener() {
+            @Override
+            public void onPositionUpdate(float state, boolean isLeaving) {
+                cornersState = state;
+            }
+        });
     }
 
     @Override
@@ -54,19 +57,23 @@ public class CircleGestureImageView extends GestureImageView {
             float rx = 0.5f * clipRect.width() * (1f - cornersState);
             float ry = 0.5f * clipRect.height() * (1f - cornersState);
 
-            canvas.concat(getImageMatrix());
+            canvas.rotate(clipRotation, clipRect.centerX(), clipRect.centerY());
             canvas.drawRoundRect(clipRect, rx, ry, bitmapPaint);
+            canvas.rotate(-clipRotation, clipRect.centerX(), clipRect.centerY());
         }
     }
 
     @Override
-    public void clipView(@Nullable RectF rect) {
+    public void clipView(@Nullable RectF rect, float rotation) {
         if (rect == null) {
             clipRect.setEmpty();
         } else {
             clipRect.set(rect);
         }
-        super.clipView(rect);
+        clipRotation = rotation;
+        updateShaderMatrix();
+
+        super.clipView(rect, rotation);
     }
 
     @Override
@@ -80,20 +87,34 @@ public class CircleGestureImageView extends GestureImageView {
         setup();
     }
 
-    @SuppressWarnings("unused") // Public API
-    public boolean isCircle() {
-        return isCircle;
+    @Override
+    public void setImageMatrix(Matrix matrix) {
+        super.setImageMatrix(matrix);
+        updateShaderMatrix();
     }
 
     private void setup() {
         Bitmap bitmap = isCircle ? getBitmapFromDrawable(getDrawable()) : null;
         if (bitmap != null) {
             bitmapPaint.setShader(new BitmapShader(bitmap, TileMode.CLAMP, TileMode.CLAMP));
+            updateShaderMatrix();
         } else {
             bitmapPaint.setShader(null);
         }
 
         invalidate();
+    }
+
+    private void updateShaderMatrix() {
+        if (!clipRect.isEmpty() && bitmapPaint.getShader() != null) {
+            getController().getState().get(tmpMatrix);
+
+            // Including paddings & reverting rotation (will be applied later in draw() method)
+            tmpMatrix.postTranslate(getPaddingLeft(), getPaddingTop());
+            tmpMatrix.postRotate(-clipRotation, clipRect.centerX(), clipRect.centerY());
+
+            bitmapPaint.getShader().setLocalMatrix(tmpMatrix);
+        }
     }
 
     protected Bitmap getBitmapFromDrawable(Drawable drawable) {

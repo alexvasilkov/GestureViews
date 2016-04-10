@@ -86,11 +86,6 @@ public class CircleImageView extends ImageView {
         setup();
     }
 
-    @SuppressWarnings("unused") // Public API
-    public boolean isCircle() {
-        return isCircle;
-    }
-
     private void setup() {
         Bitmap bitmap = isCircle ? getBitmapFromDrawable(getDrawable()) : null;
 
