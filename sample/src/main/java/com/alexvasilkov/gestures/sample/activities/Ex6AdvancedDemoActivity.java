@@ -1,6 +1,5 @@
 package com.alexvasilkov.gestures.sample.activities;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -26,8 +25,8 @@ import com.alexvasilkov.gestures.commons.DepthPageTransformer;
 import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.adapters.EndlessRecyclerAdapter;
-import com.alexvasilkov.gestures.sample.adapters.FlickrPhotoListAdapter;
-import com.alexvasilkov.gestures.sample.adapters.FlickrPhotoPagerAdapter;
+import com.alexvasilkov.gestures.sample.adapters.PhotoListAdapter;
+import com.alexvasilkov.gestures.sample.adapters.PhotoPagerAdapter;
 import com.alexvasilkov.gestures.sample.logic.FlickrApi;
 import com.alexvasilkov.gestures.sample.utils.DecorUtils;
 import com.alexvasilkov.gestures.sample.utils.GestureSettingsMenu;
@@ -39,17 +38,17 @@ import com.googlecode.flickrjandroid.photos.Photo;
 
 import java.util.List;
 
-public class AdvancedDemoActivity extends BaseActivity implements
+public class Ex6AdvancedDemoActivity extends BaseActivity implements
         ViewPositionAnimator.PositionUpdateListener,
-        FlickrPhotoListAdapter.OnPhotoListener {
+        PhotoListAdapter.OnPhotoListener {
 
     private static final int PAGE_SIZE = 30;
     private static final int NO_POSITION = -1;
 
     private ViewHolder views;
     private ViewsTransitionAnimator<Integer> animator;
-    private FlickrPhotoListAdapter gridAdapter;
-    private FlickrPhotoPagerAdapter pagerAdapter;
+    private PhotoListAdapter gridAdapter;
+    private PhotoPagerAdapter pagerAdapter;
     private ViewPager.OnPageChangeListener pagerListener;
     private GestureSettingsMenu settingsMenu;
 
@@ -66,7 +65,7 @@ public class AdvancedDemoActivity extends BaseActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_advanced_demo);
+        setContentView(R.layout.activity_ex6_advanced_demo);
         views = new ViewHolder(this);
 
         settingsMenu = new GestureSettingsMenu();
@@ -131,7 +130,7 @@ public class AdvancedDemoActivity extends BaseActivity implements
                 if (photo == null) {
                     return false;
                 }
-                PhotoCropActivity.show(AdvancedDemoActivity.this, photo);
+                PhotoCropActivity.show(Ex6AdvancedDemoActivity.this, photo);
                 return true;
             default:
                 return false;
@@ -155,7 +154,7 @@ public class AdvancedDemoActivity extends BaseActivity implements
         views.grid.setLayoutManager(new GridLayoutManager(this, cols));
         views.grid.setItemAnimator(new DefaultItemAnimator());
 
-        gridAdapter = new FlickrPhotoListAdapter(this);
+        gridAdapter = new PhotoListAdapter(this);
         gridAdapter.setLoadingOffset(PAGE_SIZE / 2);
         gridAdapter.setCallbacks(new EndlessRecyclerAdapter.LoaderCallbacks() {
             @Override
@@ -174,10 +173,9 @@ public class AdvancedDemoActivity extends BaseActivity implements
         views.grid.setAdapter(gridAdapter);
     }
 
-    @SuppressLint("PrivateResource")
     private void initPager() {
         // Setting up pager views
-        pagerAdapter = new FlickrPhotoPagerAdapter(views.pager);
+        pagerAdapter = new PhotoPagerAdapter(views.pager);
         pagerAdapter.setSetupListener(settingsMenu);
 
         pagerListener = new ViewPager.SimpleOnPageChangeListener() {
@@ -191,7 +189,7 @@ public class AdvancedDemoActivity extends BaseActivity implements
         views.pager.addOnPageChangeListener(pagerListener);
         views.pager.setPageTransformer(true, new DepthPageTransformer());
 
-        views.pagerToolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+        views.pagerToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         views.pagerToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(@NonNull View view) {
@@ -216,7 +214,7 @@ public class AdvancedDemoActivity extends BaseActivity implements
                     public View getViewForPosition(int position) {
                         RecyclerView.ViewHolder holder =
                                 views.grid.findViewHolderForLayoutPosition(position);
-                        return holder == null ? null : FlickrPhotoListAdapter.getImage(holder);
+                        return holder == null ? null : PhotoListAdapter.getImage(holder);
                     }
                 })
                 .intoViewPager(views.pager, new SimpleViewsTracker() {
@@ -224,7 +222,7 @@ public class AdvancedDemoActivity extends BaseActivity implements
                     public View getViewForPosition(int position) {
                         RecyclePagerAdapter.ViewHolder holder = pagerAdapter.getViewHolder(
                                 position);
-                        return holder == null ? null : FlickrPhotoPagerAdapter.getImage(holder);
+                        return holder == null ? null : PhotoPagerAdapter.getImage(holder);
                     }
                 })
                 .build();
@@ -247,7 +245,7 @@ public class AdvancedDemoActivity extends BaseActivity implements
         if (photo == null) {
             views.pagerTitle.setText(null);
         } else {
-            SpannableBuilder title = new SpannableBuilder(AdvancedDemoActivity.this);
+            SpannableBuilder title = new SpannableBuilder(Ex6AdvancedDemoActivity.this);
             title.append(photo.getTitle()).append("\n")
                     .createStyle().setColorResId(R.color.text_secondary_light).apply()
                     .append(R.string.photo_by).append(" ")
@@ -354,13 +352,13 @@ public class AdvancedDemoActivity extends BaseActivity implements
 
         ViewHolder(Activity activity) {
             toolbar = Views.find(activity, R.id.toolbar);
-            toolbarBack = Views.find(activity, R.id.flickr_toolbar_back);
-            grid = Views.find(activity, R.id.flickr_list);
+            toolbarBack = Views.find(activity, R.id.advanced_toolbar_back);
+            grid = Views.find(activity, R.id.advanced_grid);
 
-            pager = Views.find(activity, R.id.flickr_pager);
-            pagerToolbar = Views.find(activity, R.id.flickr_full_toolbar);
-            pagerTitle = Views.find(activity, R.id.flickr_full_title);
-            pagerBackground = Views.find(activity, R.id.flickr_full_background);
+            pager = Views.find(activity, R.id.advanced_pager);
+            pagerToolbar = Views.find(activity, R.id.advanced_full_toolbar);
+            pagerTitle = Views.find(activity, R.id.advanced_full_title);
+            pagerBackground = Views.find(activity, R.id.advanced_full_background);
         }
     }
 

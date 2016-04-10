@@ -6,13 +6,13 @@ import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.views.GestureTextView;
 
-public class CustomViewSampleActivity extends BaseActivity {
+public class Ex3CustomViewSampleActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_custom_view_sample);
+        setContentView(R.layout.activity_ex3_custom_view);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         GestureTextView textView = Views.find(this, R.id.text_view);

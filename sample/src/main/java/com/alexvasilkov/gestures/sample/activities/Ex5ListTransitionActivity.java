@@ -21,7 +21,7 @@ import com.alexvasilkov.gestures.transition.SimpleViewsTracker;
 import com.alexvasilkov.gestures.transition.ViewsTransitionAnimator;
 import com.alexvasilkov.gestures.transition.ViewsTransitionBuilder;
 
-public class ListTransitionActivity extends BaseActivity implements
+public class Ex5ListTransitionActivity extends BaseActivity implements
         PaintingsListAdapter.OnPaintingListener,
         ViewPositionAnimator.PositionUpdateListener {
 
@@ -58,7 +58,7 @@ public class ListTransitionActivity extends BaseActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_list_transition);
+        setContentView(R.layout.activity_ex5_list_transition);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         views = new ViewHolder(this);

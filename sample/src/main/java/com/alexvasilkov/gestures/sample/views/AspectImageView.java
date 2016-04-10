@@ -3,10 +3,11 @@ package com.alexvasilkov.gestures.sample.views;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import android.widget.ImageView;
 
 import com.alexvasilkov.gestures.sample.R;
 
-public class AspectImageView extends ForegroundImageView {
+public class AspectImageView extends ImageView {
 
     public static final float DEFAULT_ASPECT = 16f / 9f;
 
@@ -22,7 +23,7 @@ public class AspectImageView extends ForegroundImageView {
     public AspectImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        TypedArray arr = context.obtainStyledAttributes(attrs, new int[]{R.attr.aspect});
+        TypedArray arr = context.obtainStyledAttributes(attrs, new int[] { R.attr.aspect });
         aspect = arr.getFloat(0, aspect);
         arr.recycle();
     }

@@ -76,7 +76,7 @@ public class PaintingsListAdapter extends BaseAdapter implements View.OnClickLis
         final ImageView image;
 
         ViewHolder(ViewGroup parent) {
-            itemView = Views.inflate(parent, R.layout.item_image);
+            itemView = Views.inflate(parent, R.layout.item_painting);
             image = (ImageView) itemView;
         }
     }

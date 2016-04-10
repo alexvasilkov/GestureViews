@@ -80,7 +80,7 @@ public class PaintingsLayoutsPagerAdapter
         final View button;
 
         ViewHolder(ViewGroup container) {
-            super(Views.inflate(container, R.layout.item_layout));
+            super(Views.inflate(container, R.layout.item_painting_layout));
             layout = Views.find(itemView, R.id.painting_g_layout);
             image = Views.find(layout, R.id.painting_image);
             title = Views.find(layout, R.id.painting_title);

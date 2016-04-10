@@ -4,12 +4,12 @@
     android:layout_height="match_parent">
 
     <com.alexvasilkov.gestures.views.GestureImageView
-        android:id="@+id/flickr_full_image"
+        android:id="@+id/photo_full_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
     <ProgressBar
-        android:id="@+id/flickr_full_progress"
+        android:id="@+id/photo_full_progress"
         android:layout_width="320dp"
         android:layout_height="320dp"
         android:layout_gravity="center"

@@ -26,8 +26,8 @@
         </activity>
 
         <activity
-            android:name=".activities.ImageViewSampleActivity"
-            android:label="ImageView"
+            android:name=".activities.Ex1ImageViewSampleActivity"
+            android:label="Images In Pager"
             android:theme="@style/AppTheme.Full.NoTitle.Dark">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,8 +36,8 @@
         </activity>
 
         <activity
-            android:name=".activities.FrameLayoutSampleActivity"
-            android:label="FrameLayout"
+            android:name=".activities.Ex2FrameLayoutSampleActivity"
+            android:label="Layouts In Pager"
             android:theme="@style/AppTheme.FrameLayout">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -46,7 +46,7 @@
         </activity>
 
         <activity
-            android:name=".activities.CustomViewSampleActivity"
+            android:name=".activities.Ex3CustomViewSampleActivity"
             android:label="Custom View">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -55,8 +55,8 @@
         </activity>
 
         <activity
-            android:name=".activities.ListTransitionActivity"
-            android:label="List transitions">
+            android:name=".activities.Ex4SingleImageAnimationActivity"
+            android:label="Single Image">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -64,7 +64,16 @@
         </activity>
 
         <activity
-            android:name=".activities.AdvancedDemoActivity"
+            android:name=".activities.Ex5ListTransitionActivity"
+            android:label="List Transitions">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".activities.Ex6AdvancedDemoActivity"
             android:label="Advanced Demo"
             android:theme="@style/AppTheme.Full.NoTitle">
             <intent-filter>

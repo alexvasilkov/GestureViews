@@ -15,7 +15,7 @@
         android:padding="@dimen/margin"
         android:scrollbarStyle="outsideOverlay"
         android:scrollbars="vertical"
-        tools:listitem="@layout/item_image" />
+        tools:listitem="@layout/item_painting" />
 
     <View
         android:id="@+id/transition_full_background"

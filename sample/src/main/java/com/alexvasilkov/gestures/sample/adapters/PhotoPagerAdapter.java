@@ -17,8 +17,8 @@ import com.googlecode.flickrjandroid.photos.Photo;
 
 import java.util.List;
 
-public class FlickrPhotoPagerAdapter
-        extends RecyclePagerAdapter<FlickrPhotoPagerAdapter.ViewHolder> {
+public class PhotoPagerAdapter
+        extends RecyclePagerAdapter<PhotoPagerAdapter.ViewHolder> {
 
     private static final long PROGRESS_DELAY = 300L;
 
@@ -28,7 +28,7 @@ public class FlickrPhotoPagerAdapter
 
     private boolean activated;
 
-    public FlickrPhotoPagerAdapter(ViewPager viewPager) {
+    public PhotoPagerAdapter(ViewPager viewPager) {
         this.viewPager = viewPager;
     }
 
@@ -143,9 +143,9 @@ public class FlickrPhotoPagerAdapter
         boolean gesturesDisabled;
 
         ViewHolder(ViewGroup parent) {
-            super(Views.inflate(parent, R.layout.item_flickr_full_image));
-            image = Views.find(itemView, R.id.flickr_full_image);
-            progress = Views.find(itemView, R.id.flickr_full_progress);
+            super(Views.inflate(parent, R.layout.item_photo_full));
+            image = Views.find(itemView, R.id.photo_full_image);
+            progress = Views.find(itemView, R.id.photo_full_progress);
         }
     }
 

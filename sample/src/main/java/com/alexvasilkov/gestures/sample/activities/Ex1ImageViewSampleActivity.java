@@ -16,7 +16,7 @@ import com.alexvasilkov.gestures.sample.logic.Painting;
 import com.alexvasilkov.gestures.sample.logic.PaintingsHelper;
 import com.alexvasilkov.gestures.sample.utils.GestureSettingsMenu;
 
-public class ImageViewSampleActivity extends BaseActivity
+public class Ex1ImageViewSampleActivity extends BaseActivity
         implements ViewPager.OnPageChangeListener {
 
     private Painting[] paintings;
@@ -30,7 +30,7 @@ public class ImageViewSampleActivity extends BaseActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_image_view_sample);
+        setContentView(R.layout.activity_ex1_image_view);
         setTitle(null);
 
         Toolbar toolbar = Views.find(this, R.id.toolbar);

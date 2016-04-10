@@ -4,9 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/flickr_list_margin"
     android:background="@drawable/image_background"
-    android:foreground="?selectableItemBackground"
     android:scaleType="centerCrop"
-    app:aspect="1"
+    app:aspect="2"
     tools:src="@drawable/painting_01" />

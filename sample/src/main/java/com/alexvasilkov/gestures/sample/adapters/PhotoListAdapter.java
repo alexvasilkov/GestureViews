@@ -16,8 +16,8 @@ import com.googlecode.flickrjandroid.photos.Photo;
 
 import java.util.List;
 
-public class FlickrPhotoListAdapter
-        extends DefaultEndlessRecyclerAdapter<FlickrPhotoListAdapter.ViewHolder>
+public class PhotoListAdapter
+        extends DefaultEndlessRecyclerAdapter<PhotoListAdapter.ViewHolder>
         implements View.OnClickListener {
 
     private List<Photo> photos;
@@ -25,7 +25,7 @@ public class FlickrPhotoListAdapter
 
     private final OnPhotoListener listener;
 
-    public FlickrPhotoListAdapter(OnPhotoListener listener) {
+    public PhotoListAdapter(OnPhotoListener listener) {
         super();
         this.listener = listener;
     }
@@ -98,7 +98,7 @@ public class FlickrPhotoListAdapter
         final ImageView image;
 
         ViewHolder(ViewGroup parent) {
-            super(Views.inflate(parent, R.layout.item_flickr_image));
+            super(Views.inflate(parent, R.layout.item_photo));
             image = (ImageView) itemView;
         }
     }

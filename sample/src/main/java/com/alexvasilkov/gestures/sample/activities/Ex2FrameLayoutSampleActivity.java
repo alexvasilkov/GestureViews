@@ -12,7 +12,7 @@ import com.alexvasilkov.gestures.sample.logic.Painting;
 import com.alexvasilkov.gestures.sample.logic.PaintingsHelper;
 import com.alexvasilkov.gestures.sample.utils.GestureSettingsMenu;
 
-public class FrameLayoutSampleActivity extends BaseActivity {
+public class Ex2FrameLayoutSampleActivity extends BaseActivity {
 
     private ViewPager viewPager;
     private GestureSettingsMenu settingsMenu;
@@ -21,7 +21,7 @@ public class FrameLayoutSampleActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_frame_layout_sample);
+        setContentView(R.layout.activity_ex2_frame_layout);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         settingsMenu = new GestureSettingsMenu();
