@@ -580,7 +580,7 @@ public class ViewPositionAnimator {
         fromState.set(fromX, fromY, zoom, 0f);
 
         // 'From' clip is a 'From' view rect in coordinates of original image rect
-        fromClip.set(fromPos.view);
+        fromClip.set(fromPos.viewport);
         fromClip.offset(-toPos.viewport.left, -toPos.viewport.top);
         fromState.get(tmpMatrix);
         tmpMatrix.invert(tmpMatrixInverse);
