@@ -30,6 +30,7 @@ import com.alexvasilkov.gestures.views.interfaces.AnimatorView;
  * {@link #setToView(Object, AnimatorView)} methods. When both views are ready method
  * {@link OnViewsReadyListener#onViewsReady(Object)} will be triggered.
  */
+@SuppressWarnings("WeakerAccess") // Public API (methods)
 public class ViewsCoordinator<ID> {
 
     private static final String TAG = ViewsCoordinator.class.getSimpleName();

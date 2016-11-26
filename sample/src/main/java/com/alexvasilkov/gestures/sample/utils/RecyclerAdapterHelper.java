@@ -55,7 +55,7 @@ public class RecyclerAdapterHelper {
             current++;
         }
 
-        // If no common items, than no animation is needed
+        // If no common items, then no animation is needed
         if (!hasCommonItems) {
             adapter.notifyDataSetChanged();
         }

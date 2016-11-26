@@ -16,7 +16,7 @@ import com.alexvasilkov.gestures.StateController;
  * provided by {@link Settings#getGravity()} method.
  * <p/>
  * Movement bounds can be represented using regular rectangle most of the time. But if fit method
- * is set to {@link Settings.Fit#OUTSIDE} and image has rotation != 0 than movement bounds will be
+ * is set to {@link Settings.Fit#OUTSIDE} and image has rotation != 0 then movement bounds will be
  * a rotated rectangle. That will complicate restrictions logic a bit.
  */
 public class MovementBounds {

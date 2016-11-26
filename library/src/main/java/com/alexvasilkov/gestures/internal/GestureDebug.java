@@ -7,6 +7,7 @@ public class GestureDebug {
 
     private GestureDebug() {}
 
+    @SuppressWarnings("WeakerAccess") // Public API (kinda)
     public static boolean isDebugFps() {
         return debugFps;
     }

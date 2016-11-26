@@ -12,7 +12,6 @@ public class SampleApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        Events.init(this);
         Events.register(FlickrApi.class);
 
         GestureDebug.setDebugFps(true);

@@ -135,7 +135,8 @@ public class RotationGestureDetector {
     /**
      * Returns {@code true} if a rotation gesture is in progress.
      */
-    @SuppressWarnings("unused") // To keep similar to standard ScaleGestureDetector
+    @SuppressWarnings({ "unused", "WeakerAccess" })
+    // To keep similar to standard ScaleGestureDetector
     public boolean isInProgress() {
         return isInProgress;
     }
@@ -175,9 +176,7 @@ public class RotationGestureDetector {
 
 
     /**
-     * The listener for receiving notifications when gestures occur. If you want to listen for all
-     * the different gestures then implement this interface. If you only want to listen for a
-     * subset it might be easier to extend {@link SimpleOnRotationGestureListener}.
+     * The listener for receiving notifications when gestures occur.
      * <p/>
      * An application will receive events in the following order:
      * <ul>
@@ -221,32 +220,6 @@ public class RotationGestureDetector {
          * about event state.
          */
         void onRotationEnd(RotationGestureDetector detector);
-    }
-
-    /**
-     * A convenience class to extend when you only want to listen for a subset of rotation-related
-     * events. This implements all methods in {@link OnRotationGestureListener} but does nothing.
-     * {@link OnRotationGestureListener#onRotate(RotationGestureDetector)} returns {@code false}
-     * so that a subclass can retrieve the accumulated rotation factor in an overridden
-     * onRotationEnd. {@link OnRotationGestureListener#onRotationBegin(RotationGestureDetector)}
-     * returns {@code true}.
-     */
-    public static class SimpleOnRotationGestureListener implements OnRotationGestureListener {
-
-        @Override
-        public boolean onRotate(RotationGestureDetector detector) {
-            return false;
-        }
-
-        @Override
-        public boolean onRotationBegin(RotationGestureDetector detector) {
-            return true;
-        }
-
-        @Override
-        public void onRotationEnd(RotationGestureDetector detector) {
-            // Intentionally empty
-        }
     }
 
 }

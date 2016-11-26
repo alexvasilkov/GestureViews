@@ -23,7 +23,7 @@ class ViewPositionHolder implements ViewTreeObserver.OnPreDrawListener {
         return true;
     }
 
-    public void init(@NonNull View view, @NonNull OnViewPositionChangeListener listener) {
+    void init(@NonNull View view, @NonNull OnViewPositionChangeListener listener) {
         this.view = view;
         this.listener = listener;
 
@@ -33,7 +33,7 @@ class ViewPositionHolder implements ViewTreeObserver.OnPreDrawListener {
         }
     }
 
-    public void clear() {
+    void clear() {
         if (view != null) {
             view.getViewTreeObserver().removeOnPreDrawListener(this);
         }
@@ -47,7 +47,7 @@ class ViewPositionHolder implements ViewTreeObserver.OnPreDrawListener {
         isPaused = false;
     }
 
-    public void pause(boolean paused) {
+    void pause(boolean paused) {
         if (isPaused == paused) {
             return;
         }
@@ -75,7 +75,7 @@ class ViewPositionHolder implements ViewTreeObserver.OnPreDrawListener {
         }
     }
 
-    public interface OnViewPositionChangeListener {
+    interface OnViewPositionChangeListener {
         void onViewPositionChanged(@NonNull ViewPosition position);
     }
 

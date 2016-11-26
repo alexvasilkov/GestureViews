@@ -119,7 +119,7 @@ public class GestureController implements View.OnTouchListener {
      * <p/>
      * See also {@link GestureController.OnGestureListener}
      */
-    @SuppressWarnings("unused") // Public API
+    @SuppressWarnings({ "unused", "WeakerAccess" }) // Public API
     public void setOnGesturesListener(@Nullable OnGestureListener listener) {
         gestureListener = listener;
     }
@@ -138,7 +138,7 @@ public class GestureController implements View.OnTouchListener {
      * <p/>
      * See also {@link #addOnStateChangeListener(OnStateChangeListener)}
      */
-    @SuppressWarnings("unused") // Public API
+    @SuppressWarnings({ "unused", "WeakerAccess" }) // Public API
     public void removeOnStateChangeListener(OnStateChangeListener listener) {
         stateListeners.remove(listener);
     }
@@ -148,7 +148,7 @@ public class GestureController implements View.OnTouchListener {
      * <p/>
      * See also {@link GestureController.OnGestureListener#onLongPress(android.view.MotionEvent)}
      */
-    @SuppressWarnings("unused") // Public API
+    @SuppressWarnings({ "unused", "WeakerAccess" }) // Public API
     public void setLongPressEnabled(boolean enabled) {
         gestureDetector.setIsLongpressEnabled(enabled);
     }
@@ -178,6 +178,7 @@ public class GestureController implements View.OnTouchListener {
     /**
      * Returns state controller that can be used externally.
      */
+    @SuppressWarnings("WeakerAccess") // Public API
     public StateController getStateController() {
         return stateController;
     }
@@ -230,6 +231,7 @@ public class GestureController implements View.OnTouchListener {
      * @return {@code true} if animation started, {@code false} otherwise. Animation may
      * not be started if image already withing bounds.
      */
+    @SuppressWarnings("WeakerAccess") // Public API
     public boolean animateKeepInBounds() {
         return animateStateTo(state, true);
     }
@@ -274,10 +276,12 @@ public class GestureController implements View.OnTouchListener {
         return true;
     }
 
+    @SuppressWarnings("WeakerAccess") // Public API
     public boolean isAnimatingState() {
         return !stateScroller.isFinished();
     }
 
+    @SuppressWarnings("WeakerAccess") // Public API
     public boolean isAnimatingFling() {
         return !flingScroller.isFinished();
     }
@@ -287,6 +291,7 @@ public class GestureController implements View.OnTouchListener {
         return isAnimatingState() || isAnimatingFling();
     }
 
+    @SuppressWarnings("WeakerAccess") // Public API
     public void stopStateAnimation() {
         if (isAnimatingState()) {
             stateScroller.forceFinished();
@@ -294,6 +299,7 @@ public class GestureController implements View.OnTouchListener {
         }
     }
 
+    @SuppressWarnings("WeakerAccess") // Public API
     public void stopFlingAnimation() {
         if (isAnimatingFling()) {
             flingScroller.forceFinished(true);
@@ -306,17 +312,19 @@ public class GestureController implements View.OnTouchListener {
         stopFlingAnimation();
     }
 
-    @SuppressWarnings("UnusedParameters") // Public API (can be overridden)
+    @SuppressWarnings({ "UnusedParameters", "WeakerAccess" }) // Public API (can be overridden)
     protected void onStateAnimationFinished(boolean forced) {
         isAnimatingInBounds = false;
     }
 
+    @SuppressWarnings("WeakerAccess") // Public API (can be overridden)
     protected void onFlingAnimationFinished(boolean forced) {
         if (!forced) {
             animateKeepInBounds();
         }
     }
 
+    @SuppressWarnings("WeakerAccess") // Public API (can be overridden)
     protected void notifyStateUpdated() {
         prevState.set(state);
         for (OnStateChangeListener listener : stateListeners) {
@@ -324,6 +332,7 @@ public class GestureController implements View.OnTouchListener {
         }
     }
 
+    @SuppressWarnings("WeakerAccess") // Public API (can be overridden)
     protected void notifyStateReset() {
         for (OnStateChangeListener listener : stateListeners) {
             listener.onStateReset(prevState, state);
@@ -398,10 +407,12 @@ public class GestureController implements View.OnTouchListener {
         }
     }
 
+    @SuppressWarnings("WeakerAccess") // Public API (can be overridden)
     protected boolean onSingleTapUp(@NonNull MotionEvent event) {
         return gestureListener != null && gestureListener.onSingleTapUp(event);
     }
 
+    @SuppressWarnings("WeakerAccess") // Public API (can be overridden)
     protected void onLongPress(@NonNull MotionEvent event) {
         if (gestureListener != null) {
             gestureListener.onLongPress(event);
@@ -473,6 +484,7 @@ public class GestureController implements View.OnTouchListener {
     /**
      * @return true if state was changed, false otherwise.
      */
+    @SuppressWarnings("WeakerAccess") // Public API (can be overridden)
     protected boolean onFlingScroll(int dx, int dy) {
         float prevX = state.getX();
         float prevY = state.getY();
@@ -489,6 +501,7 @@ public class GestureController implements View.OnTouchListener {
         return !State.equals(prevX, toX) || !State.equals(prevY, toY);
     }
 
+    @SuppressWarnings("WeakerAccess") // Public API (can be overridden)
     protected boolean onSingleTapConfirmed(MotionEvent event) {
         return gestureListener != null && gestureListener.onSingleTapConfirmed(event);
     }
@@ -522,6 +535,7 @@ public class GestureController implements View.OnTouchListener {
         return isScaleDetected;
     }
 
+    @SuppressWarnings("WeakerAccess") // Public API (can be overridden)
     protected boolean onScale(ScaleGestureDetector detector) {
         if (settings.isZoomEnabled() && !isAnimatingState()) {
             if (detector.getCurrentSpan() > zoomGestureMinSpan) {
@@ -535,7 +549,7 @@ public class GestureController implements View.OnTouchListener {
         return true;
     }
 
-    @SuppressWarnings("UnusedParameters") // Public API (can be overridden)
+    @SuppressWarnings({ "UnusedParameters", "WeakerAccess" }) // Public API (can be overridden)
     protected void onScaleEnd(ScaleGestureDetector detector) {
         isScaleDetected = false;
         isRestrictZoomRequested = true;
@@ -545,6 +559,7 @@ public class GestureController implements View.OnTouchListener {
         return settings.isRotationEnabled();
     }
 
+    @SuppressWarnings("WeakerAccess") // Public API (can be overridden)
     protected boolean onRotate(RotationGestureDetector detector) {
         if (settings.isRotationEnabled() && !isAnimatingState()) {
             pivotX = detector.getFocusX();
@@ -556,7 +571,7 @@ public class GestureController implements View.OnTouchListener {
         return true;
     }
 
-    @SuppressWarnings("UnusedParameters") // Public API (can be overridden)
+    @SuppressWarnings({ "UnusedParameters", "WeakerAccess" }) // Public API (can be overridden)
     protected void onRotationEnd(RotationGestureDetector detector) {
         isRestrictRotationRequested = true;
     }
@@ -629,6 +644,7 @@ public class GestureController implements View.OnTouchListener {
     /**
      * Listener for different touch events.
      */
+    @SuppressWarnings("WeakerAccess") // Public API
     public interface OnGestureListener {
         /**
          * See {@link GestureDetector.OnGestureListener#onDown(MotionEvent)}.
@@ -673,6 +689,7 @@ public class GestureController implements View.OnTouchListener {
     /**
      * Simple implementation of {@link GestureController.OnGestureListener}.
      */
+    @SuppressWarnings("WeakerAccess") // Public API
     public static class SimpleOnGestureListener implements OnGestureListener {
         /**
          * {@inheritDoc}

@@ -106,7 +106,7 @@ public class IntoViewPagerListener<ID> implements ViewsCoordinator.OnRequestView
         }
 
         // Trying to find view for currently shown page.
-        // If it is not a selected page than we should scroll to it at first.
+        // If it is not a selected page then we should scroll to it at first.
         this.id = id;
         int position = tracker.getPositionForId(id);
 

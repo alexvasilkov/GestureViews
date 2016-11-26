@@ -5,6 +5,7 @@ import android.graphics.Matrix;
 /**
  * Represents 2d transformation state.
  */
+@SuppressWarnings("WeakerAccess") // Public API (fields and methods)
 public class State {
 
     public static final float EPSILON = 0.0001f;

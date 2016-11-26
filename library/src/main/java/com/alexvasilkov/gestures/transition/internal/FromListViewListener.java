@@ -37,7 +37,7 @@ public class FromListViewListener<ID> implements ViewsCoordinator.OnRequestViewL
     @Override
     public void onRequestView(@NonNull ID id) {
         // Trying to find requested view on screen. If it is not currently on screen
-        // or it is not fully visible than we should scroll to it at first.
+        // or it is not fully visible then we should scroll to it at first.
         this.id = id;
         int position = tracker.getPositionForId(id);
 

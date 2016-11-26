@@ -33,6 +33,7 @@ public class ViewsTransitionAnimator<ID> extends ViewsCoordinator<ID> {
     private boolean exitRequested;
     private boolean exitWithAnimation;
 
+    @SuppressWarnings("WeakerAccess") // Public API
     public ViewsTransitionAnimator() {
         addPositionUpdateListener(new PositionUpdateListener() {
             @Override
@@ -97,8 +98,8 @@ public class ViewsTransitionAnimator<ID> extends ViewsCoordinator<ID> {
      * Means that animation direction is from final (to) position back to initial (from) position.
      */
     public boolean isLeaving() {
-        return enterId == null || exitRequested
-                || (getToView() != null && getToView().getPositionAnimator().isLeaving());
+        return exitRequested || enterId == null || (isReady
+                && getToView() != null && getToView().getPositionAnimator().isLeaving());
     }
 
     @Override
@@ -107,9 +108,11 @@ public class ViewsTransitionAnimator<ID> extends ViewsCoordinator<ID> {
             return;
         }
 
+        boolean wasReady = isReady;
+
         super.setFromView(id, fromView);
 
-        if (isReady) {
+        if (wasReady) {
             if (GestureDebug.isDebugAnimator()) {
                 Log.d(TAG, "Updating 'from' view for " + enterId);
             }
@@ -123,9 +126,11 @@ public class ViewsTransitionAnimator<ID> extends ViewsCoordinator<ID> {
             return;
         }
 
+        boolean wasReady = isReady;
+
         super.setFromPos(id, fromPos);
 
-        if (isReady) {
+        if (wasReady) {
             if (GestureDebug.isDebugAnimator()) {
                 Log.d(TAG, "Updating 'from' pos for " + enterId);
             }

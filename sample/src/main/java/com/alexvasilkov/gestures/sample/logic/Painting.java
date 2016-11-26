@@ -7,7 +7,7 @@ public class Painting {
     private final String title;
     private final String link;
 
-    public Painting(int imageId, String author, String title, String link) {
+    Painting(int imageId, String author, String title, String link) {
         this.author = author;
         this.imageId = imageId;
         this.title = title;

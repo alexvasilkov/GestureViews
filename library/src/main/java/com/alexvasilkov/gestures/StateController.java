@@ -82,15 +82,16 @@ public class StateController {
     /**
      * @return Min zoom level as it's used by state controller.
      */
+    @SuppressWarnings("WeakerAccess") // Public API
     public float getEffectiveMinZoom() {
         return minZoom;
     }
 
     /**
      * @return Max zoom level as it's used by state controller.
-     * Note, that it may be different than {@link Settings#getMaxZoom()}.
+     * Note, that it may be different from {@link Settings#getMaxZoom()}.
      */
-    @SuppressWarnings("unused") // Public API
+    @SuppressWarnings({ "unused", "WeakerAccess" }) // Public API
     public float getEffectiveMaxZoom() {
         return maxZoom;
     }
@@ -128,13 +129,13 @@ public class StateController {
     /**
      * Restricts state's translation and zoom bounds, disallowing overscroll / overzoom.
      */
-    boolean restrictStateBounds(State state) {
+    private boolean restrictStateBounds(State state) {
         return restrictStateBounds(state, null, Float.NaN, Float.NaN, false, false, true);
     }
 
     /**
      * Restricts state's translation and zoom bounds. If {@code prevState} is not null and
-     * {@code allowOverscroll (allowOverzoom)} parameter is true than resilience
+     * {@code allowOverscroll (allowOverzoom)} parameter is true then resilience
      * will be applied to translation (zoom) changes if they are out of bounds.
      *
      * @return true if state was changed, false otherwise.
@@ -282,13 +283,13 @@ public class StateController {
 
     /**
      * Returns area in which {@link State#getX()} & {@link State#getY()} values can change.
-     * Note, that this is different than {@link Settings#setMovementArea(int, int)} which defines
+     * Note, that this is different from {@link Settings#setMovementArea(int, int)} which defines
      * part of the viewport in which image can move.
      *
      * @param out Result will be stored in this rect.
      * @param state State for which to calculate bounds.
      */
-    @SuppressWarnings("unused") // Public API
+    @SuppressWarnings({ "unused", "WeakerAccess" }) // Public API
     public void getEffectiveMovementArea(RectF out, State state) {
         out.set(getMovementBounds(state).getExternalBounds());
     }
@@ -373,6 +374,7 @@ public class StateController {
      * Interpolates from start state to end state by given factor (from 0 to 1),
      * storing result into out state.
      */
+    @SuppressWarnings("WeakerAccess") // Public API
     public static void interpolate(State out, State start, State end, float factor) {
         interpolate(out, start, start.getX(), start.getY(), end, end.getX(), end.getY(), factor);
     }
@@ -422,8 +424,22 @@ public class StateController {
         out.translateBy(dx, dy);
     }
 
+    /**
+     * Interpolates from start value to the end one by given factor (from 0 to 1).
+     */
     public static float interpolate(float start, float end, float factor) {
         return start + (end - start) * factor;
+    }
+
+    /**
+     * Interpolates from start rect to the end rect by given factor (from 0 to 1),
+     * storing result into out rect.
+     */
+    public static void interpolate(RectF out, RectF start, RectF end, float factor) {
+        out.left = interpolate(start.left, end.left, factor);
+        out.top = interpolate(start.top, end.top, factor);
+        out.right = interpolate(start.right, end.right, factor);
+        out.bottom = interpolate(start.bottom, end.bottom, factor);
     }
 
 }

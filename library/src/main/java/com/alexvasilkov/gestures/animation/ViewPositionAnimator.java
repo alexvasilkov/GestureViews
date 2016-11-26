@@ -35,7 +35,7 @@ import java.util.List;
  * can have different aspects (e.g. animating from square thumb view with scale type
  * {@link ScaleType#CENTER_CROP} to rectangular full image view).
  * <p/>
- * To use this class first create an instance and than call {@link #enter(View, boolean)}.<br/>
+ * To use this class first create an instance and then call {@link #enter(View, boolean)}.<br/>
  * Alternatively you can manually pass initial view position using
  * {@link #enter(ViewPosition, boolean)} method. <br/>
  * To exit back to initial view call {@link #exit(boolean)} method.<br/>
@@ -57,7 +57,7 @@ public class ViewPositionAnimator {
 
     private long duration = FloatScroller.DEFAULT_DURATION;
 
-    private final FloatScroller dtateScroller = new FloatScroller();
+    private final FloatScroller stateScroller = new FloatScroller();
     private final AnimationEngine animationEngine;
 
     private final GestureController toController;
@@ -378,8 +378,8 @@ public class ViewPositionAnimator {
 
         float durationFraction = isLeaving ? positionState : 1f - positionState;
 
-        dtateScroller.startScroll(positionState, isLeaving ? 0f : 1f);
-        dtateScroller.setDuration((long) (duration * durationFraction));
+        stateScroller.startScroll(positionState, isLeaving ? 0f : 1f);
+        stateScroller.setDuration((long) (duration * durationFraction));
         animationEngine.start();
         onAnimationStarted();
     }
@@ -387,12 +387,17 @@ public class ViewPositionAnimator {
     /**
      * Stops current animation, if any.
      */
+    @SuppressWarnings("WeakerAccess") // Public API
     public void stopAnimation() {
-        dtateScroller.forceFinished();
+        stateScroller.forceFinished();
         onAnimationStopped();
     }
 
     private void applyPositionState() {
+        if (!isActivated) {
+            return;
+        }
+
         if (isApplyingPositionState) {
             // Excluding possible nested calls, scheduling sequential call instead
             isApplyingPositionStateScheduled = true;
@@ -426,7 +431,7 @@ public class ViewPositionAnimator {
 
             toController.updateState();
 
-            interpolate(clipRect, fromClip, toClip, positionState);
+            StateController.interpolate(clipRect, fromClip, toClip, positionState);
             if (toClipView != null) {
                 boolean skipClip = positionState == 1f || (positionState == 0f && isLeaving);
                 toClipView.clipView(skipClip ? null : clipRect, state.getRotation());
@@ -594,17 +599,6 @@ public class ViewPositionAnimator {
         }
     }
 
-    /**
-     * Interpolates from start rect to the end rect by given factor (from 0 to 1),
-     * storing result into out rect.
-     */
-    private static void interpolate(RectF out, RectF start, RectF end, float factor) {
-        out.left = StateController.interpolate(start.left, end.left, factor);
-        out.top = StateController.interpolate(start.top, end.top, factor);
-        out.right = StateController.interpolate(start.right, end.right, factor);
-        out.bottom = StateController.interpolate(start.bottom, end.bottom, factor);
-    }
-
 
     private class LocalAnimationEngine extends AnimationEngine {
         LocalAnimationEngine(@NonNull View view) {
@@ -613,12 +607,12 @@ public class ViewPositionAnimator {
 
         @Override
         public boolean onStep() {
-            if (!dtateScroller.isFinished()) {
-                dtateScroller.computeScroll();
-                positionState = dtateScroller.getCurr();
+            if (!stateScroller.isFinished()) {
+                stateScroller.computeScroll();
+                positionState = stateScroller.getCurr();
                 applyPositionState();
 
-                if (dtateScroller.isFinished()) {
+                if (stateScroller.isFinished()) {
                     onAnimationStopped();
                 }
 

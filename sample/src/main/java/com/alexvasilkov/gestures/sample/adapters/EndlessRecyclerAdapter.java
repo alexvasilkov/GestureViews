@@ -20,11 +20,11 @@ public abstract class EndlessRecyclerAdapter<VH extends RecyclerView.ViewHolder>
     private LoaderCallbacks callbacks;
     private int loadingOffset = 0;
 
-    public final boolean isLoading() {
+    final boolean isLoading() {
         return isLoading;
     }
 
-    public final boolean isError() {
+    final boolean isError() {
         return isError;
     }
 
@@ -36,7 +36,7 @@ public abstract class EndlessRecyclerAdapter<VH extends RecyclerView.ViewHolder>
         this.loadingOffset = loadingOffset;
     }
 
-    public void loadNextItems() {
+    private void loadNextItems() {
         if (!isLoading && !isError && callbacks != null && callbacks.canLoadNextItems()) {
             isLoading = true;
             onLoadingStateChanged();
@@ -44,7 +44,7 @@ public abstract class EndlessRecyclerAdapter<VH extends RecyclerView.ViewHolder>
         }
     }
 
-    public void reloadNextItemsIfError() {
+    void reloadNextItemsIfError() {
         if (isError) {
             isError = false;
             onLoadingStateChanged();

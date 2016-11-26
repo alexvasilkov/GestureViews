@@ -27,6 +27,7 @@ import java.util.regex.Pattern;
  * You can also serialize and deserialize this class to string using {@link #pack()} and
  * {@link #unpack(String)} methods. This can be useful to pass view position between activities.
  */
+@SuppressWarnings("WeakerAccess") // Public API (fields and methods)
 public class ViewPosition {
 
     private static final String DELIMITER = "#";
@@ -65,7 +66,7 @@ public class ViewPosition {
      * @return true if view position is changed, false otherwise
      */
     private boolean init(@NonNull View targetView) {
-        // If view is not attached than we can't get it's position
+        // If view is not attached then we can't get it's position
         if (targetView.getWindowToken() == null) {
             return false;
         }

@@ -172,13 +172,6 @@ public class FinderView extends View {
         canvas.drawRoundRect(strokeRect, rx, ry, paintStroke);
     }
 
-    private static void interpolate(RectF start, RectF end, RectF out, float factor) {
-        out.left = StateController.interpolate(start.left, end.left, factor);
-        out.top = StateController.interpolate(start.top, end.top, factor);
-        out.right = StateController.interpolate(start.right, end.right, factor);
-        out.bottom = StateController.interpolate(start.bottom, end.bottom, factor);
-    }
-
 
     private class LocalAnimationEngine extends AnimationEngine {
         LocalAnimationEngine() {
@@ -190,7 +183,7 @@ public class FinderView extends View {
             if (!stateScroller.isFinished()) {
                 stateScroller.computeScroll();
                 float state = stateScroller.getCurr();
-                interpolate(startRect, endRect, rect, state);
+                StateController.interpolate(startRect, endRect, rect, state);
                 float rounding = StateController.interpolate(startRounding, endRounding, state);
                 setBounds(rect, rounding);
                 return true;

@@ -59,7 +59,7 @@ public class FloatScroller {
      *
      * @see android.widget.Scroller#abortAnimation()
      */
-    @SuppressWarnings("unused") // To keep similar to standard Scroller
+    @SuppressWarnings({ "unused", "WeakerAccess" }) // To keep similar to standard Scroller
     public void abortAnimation() {
         finished = true;
         currValue = finalValue;

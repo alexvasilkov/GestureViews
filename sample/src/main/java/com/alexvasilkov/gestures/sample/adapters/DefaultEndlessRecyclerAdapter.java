@@ -12,7 +12,7 @@ import com.alexvasilkov.gestures.sample.R;
 
 import java.util.List;
 
-public abstract class DefaultEndlessRecyclerAdapter<VH extends RecyclerView.ViewHolder>
+abstract class DefaultEndlessRecyclerAdapter<VH extends RecyclerView.ViewHolder>
         extends EndlessRecyclerAdapter<RecyclerView.ViewHolder> {
 
     private static final int EXTRA_LOADING_TYPE = Integer.MAX_VALUE;
@@ -94,7 +94,7 @@ public abstract class DefaultEndlessRecyclerAdapter<VH extends RecyclerView.View
         return type;
     }
 
-    @SuppressWarnings("UnusedParameters")
+    @SuppressWarnings({ "UnusedParameters", "WeakerAccess" }) // Public API (may be reused)
     protected int getViewType(int position) {
         return 0;
     }
