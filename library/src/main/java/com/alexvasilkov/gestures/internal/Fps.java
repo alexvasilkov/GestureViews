@@ -7,8 +7,8 @@ class Fps {
 
     private static final String TAG = "GestureFps";
 
-    private static final long WARNING_TIME = 17L; // About 60 fps
-    private static final long ERROR_TIME = 33L; // About 30 fps
+    private static final long WARNING_TIME = 20L; // Dropping less than 60 fps in average
+    private static final long ERROR_TIME = 40L; // Dropping less than 30 fps in average
 
     private long frameStart;
     private long animationStart;
@@ -23,8 +23,8 @@ class Fps {
 
     void stop() {
         if (GestureDebug.isDebugFps() && framesCount > 0) {
-            long time = SystemClock.uptimeMillis() - animationStart;
-            Log.d(TAG, "Average FPS: " + (1000 * framesCount / time));
+            int time = (int) (SystemClock.uptimeMillis() - animationStart);
+            Log.d(TAG, "Average FPS: " + Math.round(1000f * framesCount / time));
         }
     }
 
