@@ -99,7 +99,7 @@ public class GestureControllerForPager extends GestureController {
         if (viewPager == null) {
             return super.onTouch(view, event);
         } else {
-            // Getting motiona event in pager coordinates
+            // Getting motion event in pager coordinates
             MotionEvent pagerEvent = MotionEvent.obtain(event);
             transformToPagerEvent(pagerEvent, view, viewPager);
 
@@ -404,11 +404,11 @@ public class GestureControllerForPager extends GestureController {
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private static void transformMatrixToPager(Matrix matrix, View view, ViewPager pager) {
-        View parent = (View) view.getParent();
-        if (parent != null && parent != pager) {
-            transformMatrixToPager(matrix, parent, pager);
-        }
-        if (parent != null) {
+        if (view.getParent() instanceof View) {
+            View parent = (View) view.getParent();
+            if (parent != pager) {
+                transformMatrixToPager(matrix, parent, pager);
+            }
             matrix.preTranslate(-parent.getScrollX(), -parent.getScrollY());
         }
 
