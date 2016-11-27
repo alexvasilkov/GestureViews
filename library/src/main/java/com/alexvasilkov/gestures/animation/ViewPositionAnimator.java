@@ -55,8 +55,6 @@ public class ViewPositionAnimator {
     private final List<PositionUpdateListener> listenersToRemove = new ArrayList<>();
     private boolean iteratingListeners;
 
-    private long duration = FloatScroller.DEFAULT_DURATION;
-
     private final FloatScroller stateScroller = new FloatScroller();
     private final AnimationEngine animationEngine;
 
@@ -318,14 +316,22 @@ public class ViewPositionAnimator {
         listenersToRemove.clear();
     }
 
+    /**
+     * @deprecated Use {@link Settings#getAnimationsDuration()} instead.
+     */
+    @Deprecated
     @SuppressWarnings("unused") // Public API
     public long getDuration() {
-        return duration;
+        return toController.getSettings().getAnimationsDuration();
     }
 
+    /**
+     * @deprecated Use {@link Settings#setAnimationsDuration(long)} instead.
+     */
+    @Deprecated
     @SuppressWarnings("unused") // Public API
     public void setDuration(long duration) {
-        this.duration = duration;
+        toController.getSettings().setAnimationsDuration(duration);
     }
 
     /**
@@ -376,10 +382,11 @@ public class ViewPositionAnimator {
     private void startAnimationInternal() {
         stopAnimation();
 
+        long duration = toController.getSettings().getAnimationsDuration();
         float durationFraction = isLeaving ? positionState : 1f - positionState;
 
-        stateScroller.startScroll(positionState, isLeaving ? 0f : 1f);
         stateScroller.setDuration((long) (duration * durationFraction));
+        stateScroller.startScroll(positionState, isLeaving ? 0f : 1f);
         animationEngine.start();
         onAnimationStarted();
     }

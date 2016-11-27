@@ -19,9 +19,10 @@
     <string name="menu_enable_overscroll_x">Overscroll X</string>
     <string name="menu_enable_overscroll_y">Overscroll Y</string>
     <string name="menu_enable_overzoom">Overzoom</string>
-    <string name="menu_fit_viewport">Fit viewport</string>
+    <string name="menu_fill_viewport">Fill viewport</string>
     <string name="menu_fit_method">Fit method</string>
     <string name="menu_gravity">Gravity</string>
+    <string name="menu_enable_slow">Slow animations</string>
 
     <string name="menu_crop_rect">Rectangle</string>
     <string name="menu_crop_square">Square</string>

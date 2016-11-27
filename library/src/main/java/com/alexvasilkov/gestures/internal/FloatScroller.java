@@ -10,7 +10,7 @@ import android.view.animation.Interpolator;
  */
 public class FloatScroller {
 
-    public static final int DEFAULT_DURATION = 250;
+    private static final long DEFAULT_DURATION = 250L;
 
     private final Interpolator interpolator;
 

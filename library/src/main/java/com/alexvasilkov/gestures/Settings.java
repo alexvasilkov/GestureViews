@@ -18,6 +18,7 @@ public class Settings {
 
     public static final float MAX_ZOOM = 2f;
     public static final float OVERZOOM_FACTOR = 2f;
+    public static final long ANIMATIONS_DURATION = 250L;
 
     /*
      * Viewport area.
@@ -105,6 +106,11 @@ public class Settings {
      * Whether image transformations should be kept in bounds or not.
      */
     private boolean isRestrictBounds = true;
+
+    /*
+     * Whether image transformations should be kept in bounds or not.
+     */
+    private long animationsDuration = ANIMATIONS_DURATION;
 
     Settings() {
         // Package private constructor
@@ -256,8 +262,8 @@ public class Settings {
      * <p/>
      * Default value is false.
      */
-    public Settings setRestrictRotation(boolean isRestrictRotation) {
-        this.isRestrictRotation = isRestrictRotation;
+    public Settings setRestrictRotation(boolean restrict) {
+        isRestrictRotation = restrict;
         return this;
     }
 
@@ -302,11 +308,18 @@ public class Settings {
      * <p/>
      * Default value is true.
      */
-    public Settings setRestrictBounds(boolean isRestrictBounds) {
-        this.isRestrictBounds = isRestrictBounds;
+    public Settings setRestrictBounds(boolean restrict) {
+        isRestrictBounds = restrict;
         return this;
     }
 
+    public Settings setAnimationsDuration(long duration) {
+        if (duration <= 0L) {
+            throw new IllegalArgumentException("Animations duration should be > 0");
+        }
+        animationsDuration = duration;
+        return this;
+    }
 
     // --------------
     //  Getters
@@ -391,6 +404,11 @@ public class Settings {
     public boolean isRestrictBounds() {
         return isRestrictBounds;
     }
+
+    public long getAnimationsDuration() {
+        return animationsDuration;
+    }
+
 
     /**
      * Whether at least one of pan, zoom, rotation or double tap are enabled or not.

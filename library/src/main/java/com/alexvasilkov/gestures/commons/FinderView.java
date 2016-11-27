@@ -133,6 +133,7 @@ public class FinderView extends View {
             stateScroller.forceFinished();
 
             if (animate) {
+                stateScroller.setDuration(settings.getAnimationsDuration());
                 stateScroller.startScroll(0f, 1f);
                 animationEngine.start();
             } else {
@@ -183,7 +184,7 @@ public class FinderView extends View {
             if (!stateScroller.isFinished()) {
                 stateScroller.computeScroll();
                 float state = stateScroller.getCurr();
-                StateController.interpolate(startRect, endRect, rect, state);
+                StateController.interpolate(rect, startRect, endRect, state);
                 float rounding = StateController.interpolate(startRounding, endRounding, state);
                 setBounds(rect, rounding);
                 return true;

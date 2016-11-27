@@ -270,6 +270,7 @@ public class GestureController implements View.OnTouchListener {
         isAnimatingInBounds = keepInBounds;
         stateStart.set(state);
         stateEnd.set(endStateRestricted);
+        stateScroller.setDuration(settings.getAnimationsDuration());
         stateScroller.startScroll(0f, 1f);
         animationEngine.start();
 

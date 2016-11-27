@@ -18,6 +18,7 @@ import com.alexvasilkov.gestures.views.interfaces.GestureView;
 public class GestureSettingsMenu implements GestureSettingsSetupListener {
 
     private static final float OVERSCROLL = 32f;
+    private static final long SLOW_ANIMATIONS = 1500L;
 
     @InstanceState
     private boolean isPanEnabled = true;
@@ -34,11 +35,13 @@ public class GestureSettingsMenu implements GestureSettingsSetupListener {
     @InstanceState
     private boolean isOverzoomEnabled = true;
     @InstanceState
-    private boolean isFitViewport = true;
+    private boolean isFillViewport = true;
     @InstanceState
     private Settings.Fit fitMethod = Settings.Fit.INSIDE;
     @InstanceState
     private int gravity = Gravity.CENTER;
+    @InstanceState
+    private boolean isSlow = false;
 
     public void onSaveInstanceState(Bundle outState) {
         InstanceStateManager.saveInstanceState(this, outState);
@@ -56,9 +59,10 @@ public class GestureSettingsMenu implements GestureSettingsSetupListener {
         addBoolMenu(menu, isOverscrollXEnabled, R.string.menu_enable_overscroll_x);
         addBoolMenu(menu, isOverscrollYEnabled, R.string.menu_enable_overscroll_y);
         addBoolMenu(menu, isOverzoomEnabled, R.string.menu_enable_overzoom);
-        addBoolMenu(menu, isFitViewport, R.string.menu_fit_viewport);
+        addBoolMenu(menu, isFillViewport, R.string.menu_fill_viewport);
         addSubMenu(menu, Settings.Fit.values(), fitMethod, R.string.menu_fit_method);
         addSubMenu(menu, GravityType.values(), GravityType.find(gravity), R.string.menu_gravity);
+        addBoolMenu(menu, isSlow, R.string.menu_enable_slow);
         return true;
     }
 
@@ -102,14 +106,17 @@ public class GestureSettingsMenu implements GestureSettingsSetupListener {
             case R.string.menu_enable_overzoom:
                 isOverzoomEnabled = !isOverzoomEnabled;
                 break;
-            case R.string.menu_fit_viewport:
-                isFitViewport = !isFitViewport;
+            case R.string.menu_fill_viewport:
+                isFillViewport = !isFillViewport;
                 break;
             case R.string.menu_fit_method:
                 fitMethod = Settings.Fit.values()[item.getOrder()];
                 break;
             case R.string.menu_gravity:
                 gravity = GravityType.values()[item.getOrder()].gravity;
+                break;
+            case R.string.menu_enable_slow:
+                isSlow = !isSlow;
                 break;
             default:
                 return false;
@@ -133,9 +140,10 @@ public class GestureSettingsMenu implements GestureSettingsSetupListener {
                 .setOverzoomFactor(overzoom)
                 .setRotationEnabled(isRotationEnabled)
                 .setRestrictRotation(isRestrictRotation)
-                .setFillViewport(isFitViewport)
+                .setFillViewport(isFillViewport)
                 .setFitMethod(fitMethod)
-                .setGravity(gravity);
+                .setGravity(gravity)
+                .setAnimationsDuration(isSlow ? SLOW_ANIMATIONS : Settings.ANIMATIONS_DURATION);
     }
 
     private enum GravityType {
