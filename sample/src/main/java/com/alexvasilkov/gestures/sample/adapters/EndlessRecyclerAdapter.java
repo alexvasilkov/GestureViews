@@ -80,7 +80,14 @@ public abstract class EndlessRecyclerAdapter<VH extends RecyclerView.ViewHolder>
             int total = getItemCount();
 
             if (lastVisiblePos >= total - loadingOffset) {
-                loadNextItems();
+                // We need to use runnable, since recycler view does not like when we are notifying
+                // about changes during scroll callback.
+                recyclerView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        loadNextItems();
+                    }
+                });
             }
         }
     }
