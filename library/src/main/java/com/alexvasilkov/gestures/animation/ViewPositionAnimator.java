@@ -13,10 +13,10 @@ import com.alexvasilkov.gestures.GestureController;
 import com.alexvasilkov.gestures.GestureControllerForPager;
 import com.alexvasilkov.gestures.Settings;
 import com.alexvasilkov.gestures.State;
-import com.alexvasilkov.gestures.StateController;
 import com.alexvasilkov.gestures.internal.AnimationEngine;
-import com.alexvasilkov.gestures.internal.FloatScroller;
 import com.alexvasilkov.gestures.internal.GestureDebug;
+import com.alexvasilkov.gestures.utils.FloatScroller;
+import com.alexvasilkov.gestures.utils.MathUtils;
 import com.alexvasilkov.gestures.views.GestureImageView;
 import com.alexvasilkov.gestures.views.interfaces.ClipView;
 import com.alexvasilkov.gestures.views.interfaces.GestureView;
@@ -319,8 +319,8 @@ public class ViewPositionAnimator {
     /**
      * @deprecated Use {@link Settings#getAnimationsDuration()} instead.
      */
-    @Deprecated
     @SuppressWarnings("unused") // Public API
+    @Deprecated
     public long getDuration() {
         return toController.getSettings().getAnimationsDuration();
     }
@@ -328,8 +328,8 @@ public class ViewPositionAnimator {
     /**
      * @deprecated Use {@link Settings#setAnimationsDuration(long)} instead.
      */
-    @Deprecated
     @SuppressWarnings("unused") // Public API
+    @Deprecated
     public void setDuration(long duration) {
         toController.getSettings().setAnimationsDuration(duration);
     }
@@ -433,12 +433,12 @@ public class ViewPositionAnimator {
         if (isToUpdated && isFromUpdated) {
             State state = toController.getState();
 
-            StateController.interpolate(state, fromState, fromPivotX, fromPivotY,
+            MathUtils.interpolate(state, fromState, fromPivotX, fromPivotY,
                     toState, toPivotX, toPivotY, positionState);
 
             toController.updateState();
 
-            StateController.interpolate(clipRect, fromClip, toClip, positionState);
+            MathUtils.interpolate(clipRect, fromClip, toClip, positionState);
             if (toClipView != null) {
                 boolean skipClip = positionState == 1f || (positionState == 0f && isLeaving);
                 toClipView.clipView(skipClip ? null : clipRect, state.getRotation());

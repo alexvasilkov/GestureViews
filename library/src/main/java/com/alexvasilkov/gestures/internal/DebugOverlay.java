@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.TypedValue;
 import android.view.View;
@@ -13,6 +14,7 @@ import com.alexvasilkov.gestures.GestureController;
 import com.alexvasilkov.gestures.GestureController.StateSource;
 import com.alexvasilkov.gestures.Settings;
 import com.alexvasilkov.gestures.animation.ViewPositionAnimator;
+import com.alexvasilkov.gestures.utils.GravityUtils;
 import com.alexvasilkov.gestures.views.interfaces.AnimatorView;
 import com.alexvasilkov.gestures.views.interfaces.GestureView;
 
@@ -24,7 +26,8 @@ public class DebugOverlay {
     private static final float TEXT_SIZE = 16f;
 
     private static final Paint paint = new Paint();
-    private static final RectF rect = new RectF();
+    private static final RectF rectF = new RectF();
+    private static final Rect rect = new Rect();
     private static final Matrix matrix = new Matrix();
 
     private static Field stateSourceField;
@@ -44,11 +47,12 @@ public class DebugOverlay {
         paint.setStrokeWidth(stroke);
 
         // Viewport
-        rect.set(0f, 0f, settings.getViewportW(), settings.getViewportH());
+        rectF.set(0f, 0f, settings.getViewportW(), settings.getViewportH());
         drawRect(canvas, Color.GRAY, top, left);
 
         // Movement area
-        rect.set(MovementBounds.getMovementAreaWithGravity(settings));
+        GravityUtils.getMovementAreaPosition(settings, rect);
+        rectF.set(rect);
         drawRect(canvas, Color.GREEN, top, left);
 
         // Image bounds with rotation
@@ -56,16 +60,16 @@ public class DebugOverlay {
         canvas.translate(left, top);
         controller.getState().get(matrix);
         canvas.concat(matrix);
-        rect.set(0f, 0f, settings.getImageW(), settings.getImageH());
+        rectF.set(0f, 0f, settings.getImageW(), settings.getImageH());
         paint.setStrokeWidth(stroke / controller.getState().getZoom());
         drawRect(canvas, Color.YELLOW, 0, 0);
         paint.setStrokeWidth(stroke);
         canvas.restore();
 
         // Image bounds
-        rect.set(0f, 0f, settings.getImageW(), settings.getImageH());
+        rectF.set(0f, 0f, settings.getImageW(), settings.getImageH());
         controller.getState().get(matrix);
-        matrix.mapRect(rect);
+        matrix.mapRect(rectF);
         drawRect(canvas, Color.RED, top, left);
 
         // State source
@@ -89,10 +93,10 @@ public class DebugOverlay {
 
     private static void drawRect(Canvas canvas, int color, int top, int left) {
         float strokeHalf = paint.getStrokeWidth() * 0.5f;
-        rect.offset(left, top);
-        rect.inset(strokeHalf, strokeHalf);
+        rectF.offset(left, top);
+        rectF.inset(strokeHalf, strokeHalf);
         paint.setColor(color);
-        canvas.drawRect(rect, paint);
+        canvas.drawRect(rectF, paint);
     }
 
     private static float toPixels(Context context, float value) {

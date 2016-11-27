@@ -19,13 +19,13 @@ import com.alexvasilkov.gestures.GestureControllerForPager;
 import com.alexvasilkov.gestures.Settings;
 import com.alexvasilkov.gestures.State;
 import com.alexvasilkov.gestures.animation.ViewPositionAnimator;
-import com.alexvasilkov.gestures.internal.CropUtils;
 import com.alexvasilkov.gestures.internal.DebugOverlay;
 import com.alexvasilkov.gestures.internal.GestureDebug;
+import com.alexvasilkov.gestures.utils.ClipHelper;
+import com.alexvasilkov.gestures.utils.CropUtils;
 import com.alexvasilkov.gestures.views.interfaces.AnimatorView;
 import com.alexvasilkov.gestures.views.interfaces.ClipView;
 import com.alexvasilkov.gestures.views.interfaces.GestureView;
-import com.alexvasilkov.gestures.views.utils.ViewClipHelper;
 
 /**
  * {@link ImageView} implementation controlled by {@link GestureController}
@@ -37,7 +37,7 @@ import com.alexvasilkov.gestures.views.utils.ViewClipHelper;
 public class GestureImageView extends ImageView implements GestureView, ClipView, AnimatorView {
 
     private GestureControllerForPager controller;
-    private final ViewClipHelper clipHelper = new ViewClipHelper(this);
+    private final ClipHelper clipHelper = new ClipHelper(this);
     private final Matrix imageMatrix = new Matrix();
 
     private ViewPositionAnimator positionAnimator;

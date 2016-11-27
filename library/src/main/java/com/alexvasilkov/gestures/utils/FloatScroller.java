@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.internal;
+package com.alexvasilkov.gestures.utils;
 
 import android.os.SystemClock;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -35,7 +35,7 @@ public class FloatScroller {
         interpolator = new AccelerateDecelerateInterpolator();
     }
 
-    @SuppressWarnings("unused") // To keep similar to standard Scroller
+    @SuppressWarnings("unused") // Public API
     public long getDuration() {
         return duration;
     }
@@ -59,7 +59,7 @@ public class FloatScroller {
      *
      * @see android.widget.Scroller#abortAnimation()
      */
-    @SuppressWarnings({ "unused", "WeakerAccess" }) // To keep similar to standard Scroller
+    @SuppressWarnings({ "unused", "WeakerAccess" }) // Public API
     public void abortAnimation() {
         finished = true;
         currValue = finalValue;

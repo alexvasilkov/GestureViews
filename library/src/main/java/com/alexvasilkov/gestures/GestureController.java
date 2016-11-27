@@ -12,10 +12,11 @@ import android.view.ViewConfiguration;
 import android.widget.OverScroller;
 
 import com.alexvasilkov.gestures.internal.AnimationEngine;
-import com.alexvasilkov.gestures.internal.FloatScroller;
 import com.alexvasilkov.gestures.internal.MovementBounds;
 import com.alexvasilkov.gestures.internal.detectors.RotationGestureDetector;
 import com.alexvasilkov.gestures.internal.detectors.ScaleGestureDetectorFixed;
+import com.alexvasilkov.gestures.utils.FloatScroller;
+import com.alexvasilkov.gestures.utils.MathUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +52,9 @@ import java.util.List;
 public class GestureController implements View.OnTouchListener {
 
     private static final float FLING_COEFFICIENT = 0.9f;
+
+    // Temporary objects
+    private static final PointF tmpPointF = new PointF();
 
     // Control constants converted to pixels
     private final int touchSlop;
@@ -474,8 +478,7 @@ public class GestureController implements View.OnTouchListener {
         }
 
         if (isScrollDetected) {
-            // Only scrolling if we are not zoomed less than min zoom, or if state is not restricted
-            float minZoom = stateController.getEffectiveMinZoom();
+            float minZoom = stateController.getMinZoom(state);
             boolean isZoomedOut = State.compare(state.getZoom(), minZoom) < 0;
             if (!isZoomedOut || !settings.isRestrictBounds()) {
                 state.translateBy(-dx, -dy);
@@ -496,8 +499,8 @@ public class GestureController implements View.OnTouchListener {
         stopFlingAnimation();
 
         // Fling bounds including current position
-        flingBounds.set(stateController.getMovementBounds(state));
-        flingBounds.union(state.getX(), state.getY());
+        flingBounds.setup(state, settings);
+        flingBounds.extend(state.getX(), state.getY());
 
         flingScroller.fling(
                 Math.round(state.getX()), Math.round(state.getY()),
@@ -533,9 +536,9 @@ public class GestureController implements View.OnTouchListener {
         float toY = prevY + dy;
 
         if (settings.isRestrictBounds()) {
-            PointF pos = flingBounds.restrict(toX, toY);
-            toX = pos.x;
-            toY = pos.y;
+            flingBounds.restrict(toX, toY, tmpPointF);
+            toX = tmpPointF.x;
+            toY = tmpPointF.y;
         }
 
         state.translateTo(toX, toY);
@@ -652,7 +655,7 @@ public class GestureController implements View.OnTouchListener {
             if (isAnimatingState()) {
                 stateScroller.computeScroll();
                 float factor = stateScroller.getCurr();
-                StateController.interpolate(state, stateStart, stateEnd, factor);
+                MathUtils.interpolate(state, stateStart, stateEnd, factor);
                 shouldProceed = true;
 
                 if (!isAnimatingState()) {

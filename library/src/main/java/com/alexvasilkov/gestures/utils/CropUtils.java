@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.internal;
+package com.alexvasilkov.gestures.utils;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -28,7 +28,8 @@ public class CropUtils {
         int height = Math.round(settings.getMovementAreaH() / zoom);
 
         // Crop area coordinates within viewport
-        Rect pos = MovementBounds.getMovementAreaWithGravity(settings);
+        Rect pos = new Rect();
+        GravityUtils.getMovementAreaPosition(settings, pos);
 
         Matrix matrix = new Matrix();
         state.get(matrix);

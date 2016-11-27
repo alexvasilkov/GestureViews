@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.views.utils;
+package com.alexvasilkov.gestures.utils;
 
 import android.graphics.Canvas;
 import android.graphics.Matrix;
@@ -9,7 +9,20 @@ import android.view.View;
 
 import com.alexvasilkov.gestures.views.interfaces.ClipView;
 
-public class ViewClipHelper implements ClipView {
+/**
+ * Helper class to implement view clipping (with {@link ClipView} interface).
+ *
+ * Usage: call {@link #clipView(RectF, float)} method when needed and override
+ * {@link View#draw(Canvas)} method:
+ * <pre>{@code
+ *   public void draw(Canvas canvas) {
+ *       clipHelper.onPreDraw(canvas);
+ *       super.draw(canvas);
+ *       clipHelper.onPostDraw(canvas);
+ *   }
+ * }</pre>
+ */
+public class ClipHelper implements ClipView {
 
     private static final Matrix tmpMatrix = new Matrix();
 
@@ -23,7 +36,7 @@ public class ViewClipHelper implements ClipView {
     private final RectF clipBounds = new RectF();
     private final RectF clipBoundsOld = new RectF();
 
-    public ViewClipHelper(@NonNull View view) {
+    public ClipHelper(@NonNull View view) {
         this.view = view;
     }
 

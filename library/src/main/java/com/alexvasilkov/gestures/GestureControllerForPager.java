@@ -22,6 +22,12 @@ public class GestureControllerForPager extends GestureController {
     private static final float SCROLL_THRESHOLD = 15f;
     private static final float OVERSCROLL_THRESHOLD_FACTOR = 4f;
 
+    // Temporary objects
+    private static final int[] tmpLocation = new int[2];
+    private static final Matrix tmpMatrix = new Matrix();
+    private static final RectF tmpRectF = new RectF();
+
+
     /**
      * Because ViewPager will immediately return true from onInterceptTouchEvent() method during
      * settling animation, we will have no chance to prevent it from doing this.
@@ -51,9 +57,6 @@ public class GestureControllerForPager extends GestureController {
             return true; // We should skip view pager touches to prevent some subtle bugs
         }
     };
-
-    private static final int[] locationTmp = new int[2];
-    private static final Matrix matrixTmp = new Matrix();
 
     private final int touchSlop;
 
@@ -206,10 +209,10 @@ public class GestureControllerForPager extends GestureController {
         }
 
         final State state = getState();
-        final RectF movBounds = getStateController().getMovementBounds(state).getExternalBounds();
+        getStateController().getMovementArea(state, tmpRectF);
 
-        float pagerDx = splitPagerScroll(dx, state, movBounds);
-        pagerDx = skipPagerMovement(pagerDx, state, movBounds);
+        float pagerDx = splitPagerScroll(dx, state, tmpRectF);
+        pagerDx = skipPagerMovement(pagerDx, state, tmpRectF);
         float viewDx = dx - pagerDx;
 
         // Applying pager scroll
@@ -274,7 +277,7 @@ public class GestureControllerForPager extends GestureController {
             overscrollThreshold = (state.getY() - movBounds.bottom) / overscrollDist;
         }
 
-        float minZoom = getStateController().getEffectiveMinZoom();
+        float minZoom = getStateController().getMinZoom(state);
         float zoomThreshold = minZoom == 0f ? 0f : state.getZoom() / minZoom - 1f;
 
         float pagerThreshold = Math.max(overscrollThreshold, zoomThreshold);
@@ -388,14 +391,14 @@ public class GestureControllerForPager extends GestureController {
 
     private static void transformToPagerEvent(MotionEvent event, View view, ViewPager pager) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            matrixTmp.reset();
-            transformMatrixToPager(matrixTmp, view, pager);
-            event.transform(matrixTmp);
+            tmpMatrix.reset();
+            transformMatrixToPager(tmpMatrix, view, pager);
+            event.transform(tmpMatrix);
         } else {
-            view.getLocationOnScreen(locationTmp);
-            event.offsetLocation(locationTmp[0], locationTmp[1]);
-            pager.getLocationOnScreen(locationTmp);
-            event.offsetLocation(-locationTmp[0], -locationTmp[1]);
+            view.getLocationOnScreen(tmpLocation);
+            event.offsetLocation(tmpLocation[0], tmpLocation[1]);
+            pager.getLocationOnScreen(tmpLocation);
+            event.offsetLocation(-tmpLocation[0], -tmpLocation[1]);
         }
     }
 

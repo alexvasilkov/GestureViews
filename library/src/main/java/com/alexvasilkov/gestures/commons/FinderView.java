@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.support.annotation.ColorInt;
 import android.util.AttributeSet;
@@ -13,10 +14,10 @@ import android.util.TypedValue;
 import android.view.View;
 
 import com.alexvasilkov.gestures.Settings;
-import com.alexvasilkov.gestures.StateController;
 import com.alexvasilkov.gestures.internal.AnimationEngine;
-import com.alexvasilkov.gestures.internal.FloatScroller;
-import com.alexvasilkov.gestures.internal.MovementBounds;
+import com.alexvasilkov.gestures.utils.FloatScroller;
+import com.alexvasilkov.gestures.utils.GravityUtils;
+import com.alexvasilkov.gestures.utils.MathUtils;
 import com.alexvasilkov.gestures.views.GestureImageView;
 
 /**
@@ -35,6 +36,9 @@ public class FinderView extends View {
     public static final int DEFAULT_BACK_COLOR = Color.argb(128, 0, 0, 0);
     public static final int DEFAULT_BORDER_COLOR = Color.WHITE;
     public static final int DEFAULT_BORDER_WIDTH = 2;
+
+    // Temporary objects
+    private static final Rect tmpRect = new Rect();
 
     private final RectF rect = new RectF();
     private float rounding = 0f;
@@ -127,7 +131,8 @@ public class FinderView extends View {
         if (settings != null && getWidth() > 0 && getHeight() > 0) {
             startRect.set(rect);
 
-            endRect.set(MovementBounds.getMovementAreaWithGravity(settings));
+            GravityUtils.getMovementAreaPosition(settings, tmpRect);
+            endRect.set(tmpRect);
             endRect.offset(getPaddingLeft(), getPaddingTop());
 
             stateScroller.forceFinished();
@@ -184,8 +189,8 @@ public class FinderView extends View {
             if (!stateScroller.isFinished()) {
                 stateScroller.computeScroll();
                 float state = stateScroller.getCurr();
-                StateController.interpolate(rect, startRect, endRect, state);
-                float rounding = StateController.interpolate(startRounding, endRounding, state);
+                MathUtils.interpolate(rect, startRect, endRect, state);
+                float rounding = MathUtils.interpolate(startRounding, endRounding, state);
                 setBounds(rect, rounding);
                 return true;
             }
