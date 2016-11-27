@@ -23,7 +23,7 @@ public class Ex4SingleImageAnimationActivity extends BaseActivity {
     private GestureSettingsMenu settingsMenu;
 
     @InstanceState
-    private boolean isCircleImages;
+    private boolean isCircleImage = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +39,7 @@ public class Ex4SingleImageAnimationActivity extends BaseActivity {
 
         initViews();
 
-        setCircleImages(isCircleImages);
+        setCircleImage(isCircleImage);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class Ex4SingleImageAnimationActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuItem shape;
-        if (isCircleImages) {
+        if (isCircleImage) {
             shape = menu.add(Menu.NONE, R.id.menu_crop_square, 0, R.string.menu_crop_square);
             shape.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
             shape.setIcon(R.drawable.ic_crop_square_white_24dp);
@@ -76,11 +76,11 @@ public class Ex4SingleImageAnimationActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_crop_square) {
-            setCircleImages(false);
+            setCircleImage(false);
             invalidateOptionsMenu();
             return true;
         } else if (item.getItemId() == R.id.menu_crop_circle) {
-            setCircleImages(true);
+            setCircleImage(true);
             invalidateOptionsMenu();
             return true;
         } else if (settingsMenu.onOptionsItemSelected(item)) {
@@ -124,8 +124,8 @@ public class Ex4SingleImageAnimationActivity extends BaseActivity {
         views.fullAnimator.enter(views.image, true);
     }
 
-    private void setCircleImages(boolean isCircle) {
-        isCircleImages = isCircle;
+    private void setCircleImage(boolean isCircle) {
+        isCircleImage = isCircle;
         views.image.setCircle(isCircle);
         views.fullImage.setCircle(isCircle);
     }
