@@ -14,7 +14,6 @@ public class ScaleGestureDetectorFixed extends ScaleGestureDetector {
 
     private float currY;
     private float prevY;
-    private float lastScaleFactor;
 
     public ScaleGestureDetectorFixed(Context context, OnScaleGestureListener listener) {
         super(context, listener);
@@ -41,7 +40,6 @@ public class ScaleGestureDetectorFixed extends ScaleGestureDetector {
 
         if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
             prevY = event.getY();
-            lastScaleFactor = 1f;
         }
 
         return result;
@@ -57,15 +55,15 @@ public class ScaleGestureDetectorFixed extends ScaleGestureDetector {
     @Override
     public float getScaleFactor() {
         float factor = super.getScaleFactor();
-        float lastFactor = lastScaleFactor;
-        lastScaleFactor = factor;
 
         if (isInDoubleTapMode()) {
+            // We will filter buggy factors which may appear when crossing focus point.
+            // We will also filter factors which are too far from 1, to make scaling smoother.
             return (currY > prevY && factor > 1f) || (currY < prevY && factor < 1f)
-                    ? factor : lastFactor;
+                    ? Math.max(0.8f, Math.min(factor, 1.25f)) : 1f;
+        } else {
+            return factor;
         }
-
-        return factor;
     }
 
 }

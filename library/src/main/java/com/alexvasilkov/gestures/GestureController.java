@@ -4,8 +4,6 @@ import android.content.Context;
 import android.graphics.PointF;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.DisplayMetrics;
-import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -52,11 +50,9 @@ import java.util.List;
  */
 public class GestureController implements View.OnTouchListener {
 
-    private static final float ZOOM_GESTURE_MIN_SPAN_DP = 20f;
     private static final float FLING_COEFFICIENT = 0.9f;
 
     // Control constants converted to pixels
-    private final float zoomGestureMinSpan;
     private final int touchSlop;
     private final int minVelocity;
     private final int maxVelocity;
@@ -99,10 +95,7 @@ public class GestureController implements View.OnTouchListener {
     private final StateController stateController;
 
     public GestureController(@NonNull View view) {
-        Context context = view.getContext();
-        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-        zoomGestureMinSpan = TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP, ZOOM_GESTURE_MIN_SPAN_DP, metrics);
+        final Context context = view.getContext();
 
         settings = new Settings();
         stateController = new StateController(settings);
@@ -586,12 +579,10 @@ public class GestureController implements View.OnTouchListener {
     @SuppressWarnings("WeakerAccess") // Public API (can be overridden)
     protected boolean onScale(ScaleGestureDetector detector) {
         if (settings.isZoomEnabled() && !isAnimatingState()) {
-            if (detector.getCurrentSpan() > zoomGestureMinSpan) {
-                pivotX = detector.getFocusX();
-                pivotY = detector.getFocusY();
-                state.zoomBy(detector.getScaleFactor(), pivotX, pivotY);
-                isStateChangedDuringTouch = true;
-            }
+            pivotX = detector.getFocusX();
+            pivotY = detector.getFocusY();
+            state.zoomBy(detector.getScaleFactor(), pivotX, pivotY);
+            isStateChangedDuringTouch = true;
         }
 
         return true;
