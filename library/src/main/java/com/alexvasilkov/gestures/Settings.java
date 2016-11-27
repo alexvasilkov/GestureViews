@@ -19,89 +19,89 @@ public class Settings {
     public static final float MAX_ZOOM = 2f;
     public static final float OVERZOOM_FACTOR = 2f;
 
-    /**
+    /*
      * Viewport area.
      */
     private int viewportW;
     private int viewportH;
 
-    /**
-     * Moving area.
+    /*
+     * Movement area.
      */
     private int movementAreaW;
     private int movementAreaH;
 
     private boolean isMovementAreaSpecified;
 
-    /**
+    /*
      * Image size.
      */
     private int imageW;
     private int imageH;
 
-    /**
+    /*
      * Max zoom level, default value is {@link #MAX_ZOOM}.
      */
     private float maxZoom = MAX_ZOOM;
 
-    /**
+    /*
      * Overzoom factor.
      */
     private float overzoomFactor = OVERZOOM_FACTOR;
 
-    /**
+    /*
      * Overscroll distance.
      */
     private float overscrollDistanceX;
     private float overscrollDistanceY;
 
-    /**
+    /*
      * If isFillViewport = true small image will be scaled to fit entire viewport
      * even if it will require zoom level above max zoom level.
      */
     private boolean isFillViewport = false;
 
-    /**
+    /*
      * Image gravity inside viewport area.
      */
     private int gravity = Gravity.CENTER;
 
-    /**
+    /*
      * Initial fitting within viewport area.
      */
     private Fit fitMethod = Fit.INSIDE;
 
-    /**
+    /*
      * Whether panning is enabled or not.
      */
     private boolean isPanEnabled = true;
 
-    /**
+    /*
      * Whether zooming is enabled or not.
      */
     private boolean isZoomEnabled = true;
 
-    /**
+    /*
      * Whether rotation gesture is enabled or not.
      */
     private boolean isRotationEnabled = false;
 
-    /**
+    /*
      * Whether image rotation should stick to 90 degrees or can be free.
      */
     private boolean isRestrictRotation = false;
 
-    /**
+    /*
      * Whether zooming by double tap is enabled or not.
      */
     private boolean isDoubleTapEnabled = true;
 
-    /**
+    /*
      * Counter for gestures disable calls.
      */
     private int gesturesDisableCount;
 
-    /**
+    /*
      * Whether image transformations should be kept in bounds or not.
      */
     private boolean isRestrictBounds = true;

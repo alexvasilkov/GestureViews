@@ -55,8 +55,8 @@ public class GestureController implements View.OnTouchListener {
     // Control constants converted to pixels
     private final float zoomGestureMinSpan;
     private final int touchSlop;
-    private final int minimumVelocity;
-    private final int maximumVelocity;
+    private final int minVelocity;
+    private final int maxVelocity;
 
     private final List<OnStateChangeListener> stateListeners = new ArrayList<>();
     private OnGestureListener gestureListener;
@@ -81,12 +81,12 @@ public class GestureController implements View.OnTouchListener {
     private final FloatScroller stateScroller;
 
     private final MovementBounds flingBounds = new MovementBounds();
-    private final State prevState = new State();
     private final State stateStart = new State();
     private final State stateEnd = new State();
 
     private final Settings settings;
     private final State state = new State();
+    private final State prevState = new State();
     private final StateController stateController;
 
     public GestureController(@NonNull View view) {
@@ -110,8 +110,8 @@ public class GestureController implements View.OnTouchListener {
 
         final ViewConfiguration configuration = ViewConfiguration.get(context);
         touchSlop = configuration.getScaledTouchSlop();
-        minimumVelocity = configuration.getScaledMinimumFlingVelocity();
-        maximumVelocity = configuration.getScaledMaximumFlingVelocity();
+        minVelocity = configuration.getScaledMinimumFlingVelocity();
+        maxVelocity = configuration.getScaledMaximumFlingVelocity();
     }
 
     /**
@@ -252,16 +252,16 @@ public class GestureController implements View.OnTouchListener {
             return false;
         }
 
-        State endStateFixed = null;
+        State endStateRestricted = null;
         if (keepInBounds) {
-            endStateFixed = stateController.restrictStateBoundsCopy(
+            endStateRestricted = stateController.restrictStateBoundsCopy(
                     endState, prevState, pivotX, pivotY, false, false, true);
         }
-        if (endStateFixed == null) {
-            endStateFixed = endState;
+        if (endStateRestricted == null) {
+            endStateRestricted = endState;
         }
 
-        if (endStateFixed.equals(state)) {
+        if (endStateRestricted.equals(state)) {
             return false; // Nothing to animate
         }
 
@@ -269,7 +269,7 @@ public class GestureController implements View.OnTouchListener {
 
         isAnimatingInBounds = keepInBounds;
         stateStart.set(state);
-        stateEnd.set(endStateFixed);
+        stateEnd.set(endStateRestricted);
         stateScroller.startScroll(0f, 1f);
         animationEngine.start();
 
@@ -472,10 +472,10 @@ public class GestureController implements View.OnTouchListener {
     }
 
     private int limitFlingVelocity(float velocity) {
-        if (Math.abs(velocity) < minimumVelocity) {
+        if (Math.abs(velocity) < minVelocity) {
             return 0;
-        } else if (Math.abs(velocity) >= maximumVelocity) {
-            return (int) Math.signum(velocity) * maximumVelocity;
+        } else if (Math.abs(velocity) >= maxVelocity) {
+            return (int) Math.signum(velocity) * maxVelocity;
         } else {
             return Math.round(velocity);
         }

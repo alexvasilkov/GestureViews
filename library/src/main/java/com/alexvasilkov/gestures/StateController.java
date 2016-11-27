@@ -74,7 +74,8 @@ public class StateController {
             isResetRequired = !updated;
             return !isResetRequired;
         } else {
-            restrictStateBounds(state);
+            // Restricts state's translation and zoom bounds, disallowing overscroll / overzoom.
+            restrictStateBounds(state, state, Float.NaN, Float.NaN, false, false, true);
             return false;
         }
     }
@@ -124,13 +125,6 @@ public class StateController {
         boolean changed = restrictStateBounds(tmpState, prevState, pivotX, pivotY,
                 allowOverscroll, allowOverzoom, restrictRotation);
         return changed ? tmpState.copy() : null;
-    }
-
-    /**
-     * Restricts state's translation and zoom bounds, disallowing overscroll / overzoom.
-     */
-    private boolean restrictStateBounds(State state) {
-        return restrictStateBounds(state, null, Float.NaN, Float.NaN, false, false, true);
     }
 
     /**
@@ -237,9 +231,8 @@ public class StateController {
         if (resilience == 0f) {
             return zoom;
         } else {
-            float factor = zoom / prevZoom;
-            factor += (float) Math.sqrt(resilience) * (1f - factor);
-            return prevZoom * factor;
+            resilience = (float) Math.sqrt(resilience);
+            return zoom + resilience * (prevZoom - zoom);
         }
     }
 
@@ -265,9 +258,8 @@ public class StateController {
             if (resilience > 1f) {
                 resilience = 1f;
             }
-            float delta = value - prevValue;
-            delta *= (1f - (float) Math.sqrt(resilience));
-            return prevValue + delta;
+            resilience = (float) Math.sqrt(resilience);
+            return value - resilience * (value - prevValue);
         }
     }
 
