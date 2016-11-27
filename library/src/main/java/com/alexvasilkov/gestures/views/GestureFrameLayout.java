@@ -17,6 +17,8 @@ import com.alexvasilkov.gestures.GestureController;
 import com.alexvasilkov.gestures.GestureControllerForPager;
 import com.alexvasilkov.gestures.State;
 import com.alexvasilkov.gestures.animation.ViewPositionAnimator;
+import com.alexvasilkov.gestures.internal.DebugOverlay;
+import com.alexvasilkov.gestures.internal.GestureDebug;
 import com.alexvasilkov.gestures.views.interfaces.AnimatorView;
 import com.alexvasilkov.gestures.views.interfaces.GestureView;
 
@@ -159,6 +161,10 @@ public class GestureFrameLayout extends FrameLayout implements GestureView, Anim
         canvas.concat(matrix);
         super.dispatchDraw(canvas);
         canvas.restore();
+
+        if (GestureDebug.isDrawDebugOverlay()) {
+            DebugOverlay.drawDebug(this, canvas);
+        }
     }
 
     @Override

@@ -12,6 +12,7 @@ import android.view.View;
 import com.alexvasilkov.android.commons.state.InstanceState;
 import com.alexvasilkov.android.commons.state.InstanceStateManager;
 import com.alexvasilkov.gestures.Settings;
+import com.alexvasilkov.gestures.internal.GestureDebug;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.views.interfaces.GestureView;
 
@@ -63,6 +64,7 @@ public class GestureSettingsMenu implements GestureSettingsSetupListener {
         addSubMenu(menu, Settings.Fit.values(), fitMethod, R.string.menu_fit_method);
         addSubMenu(menu, GravityType.values(), GravityType.find(gravity), R.string.menu_gravity);
         addBoolMenu(menu, isSlow, R.string.menu_enable_slow);
+        addBoolMenu(menu, GestureDebug.isDrawDebugOverlay(), R.string.menu_enable_overlay);
         return true;
     }
 
@@ -117,6 +119,9 @@ public class GestureSettingsMenu implements GestureSettingsSetupListener {
                 break;
             case R.string.menu_enable_slow:
                 isSlow = !isSlow;
+                break;
+            case R.string.menu_enable_overlay:
+                GestureDebug.setDrawDebugOverlay(!GestureDebug.isDrawDebugOverlay());
                 break;
             default:
                 return false;

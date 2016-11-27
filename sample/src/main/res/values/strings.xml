@@ -23,6 +23,7 @@
     <string name="menu_fit_method">Fit method</string>
     <string name="menu_gravity">Gravity</string>
     <string name="menu_enable_slow">Slow animations</string>
+    <string name="menu_enable_overlay">Debug overlay</string>
 
     <string name="menu_crop_rect">Rectangle</string>
     <string name="menu_crop_square">Square</string>

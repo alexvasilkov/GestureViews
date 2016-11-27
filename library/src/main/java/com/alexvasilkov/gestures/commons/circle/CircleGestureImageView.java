@@ -15,6 +15,8 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 
 import com.alexvasilkov.gestures.animation.ViewPositionAnimator.PositionUpdateListener;
+import com.alexvasilkov.gestures.internal.DebugOverlay;
+import com.alexvasilkov.gestures.internal.GestureDebug;
 import com.alexvasilkov.gestures.views.GestureImageView;
 
 public class CircleGestureImageView extends GestureImageView {
@@ -60,6 +62,10 @@ public class CircleGestureImageView extends GestureImageView {
             canvas.rotate(clipRotation, clipRect.centerX(), clipRect.centerY());
             canvas.drawRoundRect(clipRect, rx, ry, bitmapPaint);
             canvas.rotate(-clipRotation, clipRect.centerX(), clipRect.centerY());
+
+            if (GestureDebug.isDrawDebugOverlay()) {
+                DebugOverlay.drawDebug(this, canvas);
+            }
         }
     }
 

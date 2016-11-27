@@ -20,6 +20,8 @@ import com.alexvasilkov.gestures.Settings;
 import com.alexvasilkov.gestures.State;
 import com.alexvasilkov.gestures.animation.ViewPositionAnimator;
 import com.alexvasilkov.gestures.internal.CropUtils;
+import com.alexvasilkov.gestures.internal.DebugOverlay;
+import com.alexvasilkov.gestures.internal.GestureDebug;
 import com.alexvasilkov.gestures.views.interfaces.AnimatorView;
 import com.alexvasilkov.gestures.views.interfaces.ClipView;
 import com.alexvasilkov.gestures.views.interfaces.GestureView;
@@ -78,6 +80,10 @@ public class GestureImageView extends ImageView implements GestureView, ClipView
         clipHelper.onPreDraw(canvas);
         super.draw(canvas);
         clipHelper.onPostDraw(canvas);
+
+        if (GestureDebug.isDrawDebugOverlay()) {
+            DebugOverlay.drawDebug(this, canvas);
+        }
     }
 
     /**
