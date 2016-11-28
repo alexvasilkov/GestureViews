@@ -72,6 +72,7 @@ public class PhotoCropActivity extends BaseActivity {
         GestureController controller = imageView.getController();
 
         // Setting cropping area
+        controller.getSettings().setRestrictBounds(false);
         controller.getSettings().setMovementArea(finderWidth, finderHeight);
 
         if (animate) {
