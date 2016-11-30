@@ -191,7 +191,7 @@ public class State {
      */
     @SuppressWarnings("checkstyle:overloadmethodsdeclarationorder")
     public static boolean equals(float v1, float v2) {
-        return compare(v1, v2) == 0;
+        return v1 >= v2 - EPSILON && v1 <= v2 + EPSILON;
     }
 
     /**
