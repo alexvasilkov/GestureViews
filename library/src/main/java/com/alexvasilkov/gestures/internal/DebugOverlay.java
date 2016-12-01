@@ -41,7 +41,7 @@ public class DebugOverlay {
         final Context context = view.getContext();
         final int top = view.getPaddingTop();
         final int left = view.getPaddingLeft();
-        final float stroke = toPixels(context, STROKE_WIDTH);
+        final float stroke = UnitsUtils.toPixels(context, STROKE_WIDTH);
 
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(stroke);
@@ -75,7 +75,7 @@ public class DebugOverlay {
         // State source
         float pos = animator.getPositionState();
         if (pos == 1f || (pos == 0f && animator.isLeaving())) {
-            paint.setTextSize(toPixels(context, TEXT_SIZE));
+            paint.setTextSize(UnitsUtils.toPixels(context, TEXT_SIZE));
             paint.setTextAlign(Paint.Align.CENTER);
             paint.setStyle(Paint.Style.FILL);
             paint.setColor(Color.CYAN);
@@ -98,12 +98,6 @@ public class DebugOverlay {
         paint.setColor(color);
         canvas.drawRect(rectF, paint);
     }
-
-    private static float toPixels(Context context, float value) {
-        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value,
-                context.getResources().getDisplayMetrics());
-    }
-
 
     private static StateSource getStateSource(GestureController controller) {
         // We can't have public API for state source in GestureController,

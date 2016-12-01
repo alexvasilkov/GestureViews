@@ -2,9 +2,9 @@ package com.alexvasilkov.gestures;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.TypedValue;
 import android.view.Gravity;
 
+import com.alexvasilkov.gestures.internal.UnitsUtils;
 import com.alexvasilkov.gestures.views.interfaces.GestureView;
 
 /**
@@ -191,8 +191,9 @@ public class Settings {
      * Same as {@link #setOverscrollDistance(float, float)} but accepts distance in DP.
      */
     public Settings setOverscrollDistance(Context context, float distanceXDp, float distanceYDp) {
-        return setOverscrollDistance(toPixels(context, distanceXDp),
-                toPixels(context, distanceYDp));
+        return setOverscrollDistance(
+                UnitsUtils.toPixels(context, distanceXDp),
+                UnitsUtils.toPixels(context, distanceYDp));
     }
 
     /**
@@ -314,8 +315,8 @@ public class Settings {
     }
 
     public Settings setAnimationsDuration(long duration) {
-        if (duration <= 0L) {
-            throw new IllegalArgumentException("Animations duration should be > 0");
+        if (duration < 0L) {
+            throw new IllegalArgumentException("Animations duration should be >= 0");
         }
         animationsDuration = duration;
         return this;
@@ -448,11 +449,6 @@ public class Settings {
          * Fit image width or image height inside viewport area, so the entire viewport is filled.
          */
         OUTSIDE
-    }
-
-    private static float toPixels(Context context, float value) {
-        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value,
-                context.getResources().getDisplayMetrics());
     }
 
 }

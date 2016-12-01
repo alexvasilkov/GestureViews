@@ -15,6 +15,7 @@ import android.view.View;
 
 import com.alexvasilkov.gestures.Settings;
 import com.alexvasilkov.gestures.internal.AnimationEngine;
+import com.alexvasilkov.gestures.internal.UnitsUtils;
 import com.alexvasilkov.gestures.utils.FloatScroller;
 import com.alexvasilkov.gestures.utils.GravityUtils;
 import com.alexvasilkov.gestures.utils.MathUtils;
@@ -35,7 +36,7 @@ public class FinderView extends View {
 
     public static final int DEFAULT_BACK_COLOR = Color.argb(128, 0, 0, 0);
     public static final int DEFAULT_BORDER_COLOR = Color.WHITE;
-    public static final int DEFAULT_BORDER_WIDTH = 2;
+    public static final float DEFAULT_BORDER_WIDTH = 2f;
 
     // Temporary objects
     private static final Rect tmpRect = new Rect();
@@ -104,7 +105,7 @@ public class FinderView extends View {
      * Default value is {@link #DEFAULT_BORDER_WIDTH} dp.
      */
     public void setBorderWidth(int unit, float width) {
-        setBorderWidth(TypedValue.applyDimension(unit, width, getResources().getDisplayMetrics()));
+        setBorderWidth(UnitsUtils.toPixels(getContext(), unit, width));
     }
 
     /**
