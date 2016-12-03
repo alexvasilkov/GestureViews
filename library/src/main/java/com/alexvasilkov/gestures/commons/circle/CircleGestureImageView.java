@@ -17,6 +17,7 @@ import android.util.AttributeSet;
 import com.alexvasilkov.gestures.animation.ViewPositionAnimator.PositionUpdateListener;
 import com.alexvasilkov.gestures.internal.DebugOverlay;
 import com.alexvasilkov.gestures.internal.GestureDebug;
+import com.alexvasilkov.gestures.utils.MathUtils;
 import com.alexvasilkov.gestures.views.GestureImageView;
 
 public class CircleGestureImageView extends GestureImageView {
@@ -45,8 +46,9 @@ public class CircleGestureImageView extends GestureImageView {
 
         getPositionAnimator().addPositionUpdateListener(new PositionUpdateListener() {
             @Override
-            public void onPositionUpdate(float state, boolean isLeaving) {
-                cornersState = state;
+            public void onPositionUpdate(float position, boolean isLeaving) {
+                float interpolatedPosition = position / getPositionAnimator().getToPosition();
+                cornersState = MathUtils.restrict(interpolatedPosition, 0f, 1f);
             }
         });
     }

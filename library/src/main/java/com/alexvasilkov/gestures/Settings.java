@@ -98,17 +98,22 @@ public class Settings {
     private boolean isDoubleTapEnabled = true;
 
     /*
-     * Counter for gestures disable calls.
+     * Whether to detect and animate exit from gesture views.
+     */
+    private boolean isExitEnabled = true;
+
+    /*
+     * Counter for gestures disabling calls.
      */
     private int gesturesDisableCount;
 
     /*
-     * Whether image transformations should be kept in bounds or not.
+     * Counter for bounds disabling calls.
      */
-    private boolean isRestrictBounds = true;
+    private int boundsDisableCount;
 
     /*
-     * Whether image transformations should be kept in bounds or not.
+     * Duration of animations.
      */
     private long animationsDuration = ANIMATIONS_DURATION;
 
@@ -279,11 +284,21 @@ public class Settings {
     }
 
     /**
+     * Sets whether to detect and animate exit from gesture views.
+     * <p/>
+     * Default value is true.
+     */
+    public Settings setExitEnabled(boolean enabled) {
+        isExitEnabled = enabled;
+        return this;
+    }
+
+    /**
      * Disable all gestures.<br/>
      * Calls to this method are counted, so if you called it N times
      * you should call {@link #enableGestures()} N times to re-enable all gestures.
      * <p/>
-     * Useful when you need temporary disable touch gestures during animation or image loading.
+     * Useful when you need to temporary disable touch gestures during animation or image loading.
      * <p/>
      * See also {@link #enableGestures()}
      */
@@ -305,12 +320,41 @@ public class Settings {
     }
 
     /**
-     * Sets whether image transformations should be kept in bounds or not.
+     * Disable bounds restrictions.<br/>
+     * Calls to this method are counted, so if you called it N times
+     * you should call {@link #enableBounds()} N times to re-enable bounds restrictions.
      * <p/>
-     * Default value is true.
+     * Useful when you need to temporary disable bounds restrictions during animation.
+     * <p/>
+     * See also {@link #enableBounds()}
      */
+    public Settings disableBounds() {
+        boundsDisableCount++;
+        return this;
+    }
+
+    /**
+     * Re-enable bounds restrictions disabled by {@link #disableBounds()} method.<br/>
+     * Calls to this method are counted, so if you called {@link #disableBounds()} N times
+     * you should call this method N times to re-enable bounds restrictions.
+     * <p/>
+     * See also {@link #disableBounds()}
+     */
+    public Settings enableBounds() {
+        boundsDisableCount--;
+        return this;
+    }
+
+    /**
+     * @deprecated Use {@link #disableBounds()} and {@link #enableBounds()} methods instead.
+     */
+    @SuppressWarnings("unused") // Public API
+    @Deprecated
     public Settings setRestrictBounds(boolean restrict) {
-        isRestrictBounds = restrict;
+        boundsDisableCount += restrict ? -1 : 1;
+        if (boundsDisableCount < 0) { // In case someone explicitly used this method during setup
+            boundsDisableCount = 0;
+        }
         return this;
     }
 
@@ -398,12 +442,16 @@ public class Settings {
         return isGesturesEnabled() && isDoubleTapEnabled;
     }
 
+    public boolean isExitEnabled() {
+        return isGesturesEnabled() && isExitEnabled;
+    }
+
     public boolean isGesturesEnabled() {
         return gesturesDisableCount <= 0;
     }
 
     public boolean isRestrictBounds() {
-        return isRestrictBounds;
+        return boundsDisableCount <= 0;
     }
 
     public long getAnimationsDuration() {

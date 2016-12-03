@@ -75,11 +75,11 @@ public class ViewPositionAnimator {
 
     private View fromView;
 
-    private boolean origRestrictBoundsFlag;
-
     private boolean isActivated = false;
 
-    private float positionState = 0f;
+    private float toPosition = 1f;
+    private float position = 0f;
+
     private boolean isLeaving = true; // Leaving by default
     private boolean isAnimating = false;
     private boolean isApplyingPositionState;
@@ -133,7 +133,7 @@ public class ViewPositionAnimator {
                     Log.d(TAG, "State reset in listener: " + newState);
                 }
 
-                resetToState();
+                setToState(newState, 1f); // We have to reset full state
                 applyPositionState();
             }
         });
@@ -204,17 +204,17 @@ public class ViewPositionAnimator {
     /**
      * Updates position of initial view in case it was changed.
      */
-    public void update(@NonNull ViewPosition fromPos) {
-        if (this.fromPos == null) {
+    public void update(@NonNull ViewPosition from) {
+        if (fromPos == null) {
             throw new IllegalStateException("Animation was not started using "
                     + "enter(ViewPosition, boolean) method, cannot update 'from' position");
         }
 
         if (GestureDebug.isDebugAnimator()) {
-            Log.d(TAG, "Updating view position: " + fromPos.pack());
+            Log.d(TAG, "Updating view position: " + from.pack());
         }
 
-        updateInternal(fromPos);
+        updateInternal(from);
     }
 
     /**
@@ -229,16 +229,20 @@ public class ViewPositionAnimator {
             throw new IllegalStateException("You should call enter(...) before calling exit(...)");
         }
 
-        if (!isAnimating) {
-            resetToState(); // Only resetting if not animating
+        // Resetting 'to' position if not animating exit already
+        if (!(isAnimating && position <= toPosition)) {
+            setToState(toController.getState(), position);
         }
 
         // Starting animation from current position or applying initial state without animation
-        setState(withAnimation ? positionState : 0f, true, withAnimation);
+        setState(withAnimation ? position : 0f, true, withAnimation);
     }
 
     private void enterInternal(boolean withAnimation) {
         isActivated = true;
+
+        toController.updateState(); // Ensure we are animating to correct state
+        setToState(toController.getState(), 1f); // We are always entering to full mode
 
         // Starting animation from initial position or applying final state without animation
         setState(withAnimation ? 0f : 1f, false, withAnimation);
@@ -251,23 +255,24 @@ public class ViewPositionAnimator {
         }
 
         cleanup();
-        resetToState();
+        requestUpdateFromState();
 
         fromView = from;
         fromPosHolder.init(from, fromPositionListener);
-        from.setVisibility(View.INVISIBLE); // We don't want to have duplicate view during animation
+        from.setVisibility(View.INVISIBLE); // We don't want duplicate view during animation
     }
 
-    private void updateInternal(@NonNull ViewPosition fromPos) {
+    private void updateInternal(@NonNull ViewPosition from) {
         if (!isActivated) {
             throw new IllegalStateException(
                     "You should call enter(...) before calling update(...)");
         }
 
         cleanup();
-        resetToState();
+        requestUpdateFromState();
 
-        this.fromPos = fromPos;
+        fromPos = from;
+        applyPositionState();
     }
 
     private void cleanup() {
@@ -334,12 +339,29 @@ public class ViewPositionAnimator {
         toController.getSettings().setAnimationsDuration(duration);
     }
 
+
     /**
-     * @return Current position state within range {@code [0, 1]}, where {@code 0} is for
+     * @return Target (to) position as set by {@link #setToState(State, float)}.
+     * Maybe useful to determine real animation position during exit gesture.
+     * <p/>
+     * I.e. {@link #getPositionState()} / {@link #getToPosition()} (changes from 0 to ∞)
+     * represents interpolated position used to calculate intermediate state and bounds.
+     */
+    @SuppressWarnings("JavaDoc") // We really need this method to point to itself
+    public float getToPosition() {
+        return toPosition;
+    }
+
+    /**
+     * @return Current position within range {@code [0, 1]}, where {@code 0} is for
      * initial (from) position and {@code 1} is for final (to) position.
+     * <p/>
+     * Note, that final position can be changed by {@link #setToState(State, float)}, so if you
+     * need to have real value of final position (instead of {@code 1}) then you need to use
+     * {@link #getToPosition()} method.
      */
     public float getPositionState() {
-        return positionState;
+        return position;
     }
 
     /**
@@ -350,6 +372,35 @@ public class ViewPositionAnimator {
         return isLeaving;
     }
 
+
+    /**
+     * Specifies target (to) state and it's position which will be used to interpolate
+     * current state for intermediate positions (i.e. during animation or exit gesture).<br/>
+     * This allows you to set up correct state without changing current position
+     * ({@link #getPositionState()}).
+     * <p/>
+     * Only use this method if you understand what you do.
+     *
+     * @see #getToPosition()
+     */
+    public void setToState(State state, @FloatRange(from = 0f, to = 1f) float position) {
+        if (position <= 0) {
+            throw new IllegalArgumentException("'To' position cannot be <= 0");
+        }
+        if (position > 1f) {
+            throw new IllegalArgumentException("'To' position cannot be > 1");
+        }
+
+        if (GestureDebug.isDebugAnimator()) {
+            Log.d(TAG, "State reset: " + state + " at " + position);
+        }
+
+        toPosition = position;
+        toState.set(state);
+        requestUpdateToState();
+        requestUpdateFromState();
+    }
+
     /**
      * Stops current animation and sets position state to particular values.
      * <p/>
@@ -357,47 +408,20 @@ public class ViewPositionAnimator {
      * it will cleanup all internal stuff. So you will need to call {@link #enter(View, boolean)}
      * or {@link #enter(ViewPosition, boolean)} again in order to continue using animator.
      */
-    public void setState(@FloatRange(from = 0f, to = 1f) float state,
-            boolean isLeaving, boolean isAnimating) {
+    public void setState(@FloatRange(from = 0f, to = 1f) float pos,
+            boolean leaving, boolean animate) {
+        if (!isActivated) {
+            throw new IllegalStateException(
+                    "You should call enter(...) before calling setState(...)");
+        }
+
         stopAnimation();
-        positionState = state;
-        this.isLeaving = isLeaving;
-        if (isAnimating) {
+        position = pos;
+        isLeaving = leaving;
+        if (animate) {
             startAnimationInternal();
         }
         applyPositionState();
-    }
-
-    /**
-     * Whether view position animation is in progress or not.
-     */
-    public boolean isAnimating() {
-        return isAnimating;
-    }
-
-    /**
-     * Starts animation from current position state ({@link #getPositionState()}) and in current
-     * direction ({@link #isLeaving()}).
-     */
-    private void startAnimationInternal() {
-        stopAnimation();
-
-        long duration = toController.getSettings().getAnimationsDuration();
-        float durationFraction = isLeaving ? positionState : 1f - positionState;
-
-        stateScroller.setDuration((long) (duration * durationFraction));
-        stateScroller.startScroll(positionState, isLeaving ? 0f : 1f);
-        animationEngine.start();
-        onAnimationStarted();
-    }
-
-    /**
-     * Stops current animation, if any.
-     */
-    @SuppressWarnings("WeakerAccess") // Public API
-    public void stopAnimation() {
-        stateScroller.forceFinished();
-        onAnimationStopped();
     }
 
     private void applyPositionState() {
@@ -413,7 +437,7 @@ public class ViewPositionAnimator {
         isApplyingPositionState = true;
 
         // We do not need to update while 'to' view is fully visible or fully closed
-        boolean paused = isLeaving ? positionState == 0f : positionState == 1f;
+        boolean paused = isLeaving ? position == 0f : position == 1f;
         fromPosHolder.pause(paused);
         toPosHolder.pause(paused);
 
@@ -426,21 +450,22 @@ public class ViewPositionAnimator {
         }
 
         if (GestureDebug.isDebugAnimator()) {
-            Log.d(TAG, "Applying state: " + positionState + " / " + isLeaving
+            Log.d(TAG, "Applying state: " + position + " / " + isLeaving
                     + ", 'to' ready = " + isToUpdated + ", 'from' ready = " + isFromUpdated);
         }
 
-        if (isToUpdated && isFromUpdated) {
+        boolean canUpdate = position < toPosition || (isAnimating && position == toPosition);
+        if (isToUpdated && isFromUpdated && canUpdate) {
             State state = toController.getState();
 
             MathUtils.interpolate(state, fromState, fromPivotX, fromPivotY,
-                    toState, toPivotX, toPivotY, positionState);
+                    toState, toPivotX, toPivotY, position / toPosition);
 
             toController.updateState();
 
-            MathUtils.interpolate(clipRect, fromClip, toClip, positionState);
+            MathUtils.interpolate(clipRect, fromClip, toClip, position / toPosition);
             if (toClipView != null) {
-                boolean skipClip = positionState == 1f || (positionState == 0f && isLeaving);
+                boolean skipClip = position >= toPosition || (position == 0f && isLeaving);
                 toClipView.clipView(skipClip ? null : clipRect, state.getRotation());
             }
         }
@@ -450,12 +475,12 @@ public class ViewPositionAnimator {
             if (isApplyingPositionStateScheduled) {
                 break; // No need to call listeners anymore
             }
-            listeners.get(i).onPositionUpdate(positionState, isLeaving);
+            listeners.get(i).onPositionUpdate(position, isLeaving);
         }
         iteratingListeners = false;
         ensurePositionUpdateListenersRemoved();
 
-        if (positionState == 0f && isLeaving) {
+        if (position == 0f && isLeaving) {
             cleanup();
             isActivated = false;
             toController.resetState(); // Switching to initial state
@@ -469,6 +494,39 @@ public class ViewPositionAnimator {
         }
     }
 
+
+    /**
+     * Whether view position animation is in progress or not.
+     */
+    public boolean isAnimating() {
+        return isAnimating;
+    }
+
+    /**
+     * Starts animation from current position ({@link #position}) in current
+     * direction ({@link #isLeaving}).
+     */
+    private void startAnimationInternal() {
+        long duration = toController.getSettings().getAnimationsDuration();
+        float durationFraction = toPosition == 1f
+                ? (isLeaving ? position : 1f - position)
+                : (isLeaving ? position / toPosition : (1f - position) / (1f - toPosition));
+
+        stateScroller.setDuration((long) (duration * durationFraction));
+        stateScroller.startScroll(position, isLeaving ? 0f : 1f);
+        animationEngine.start();
+        onAnimationStarted();
+    }
+
+    /**
+     * Stops current animation, if any.
+     */
+    @SuppressWarnings("WeakerAccess") // Public API
+    public void stopAnimation() {
+        stateScroller.forceFinished();
+        onAnimationStopped();
+    }
+
     private void onAnimationStarted() {
         if (isAnimating) {
             return;
@@ -479,11 +537,9 @@ public class ViewPositionAnimator {
             Log.d(TAG, "Animation started");
         }
 
-        // Saving bounds restrictions states
-        origRestrictBoundsFlag = toController.getSettings().isRestrictBounds();
         // Disabling bounds restrictions & any gestures
-        toController.getSettings().setRestrictBounds(false).disableGestures();
-        // Stopping all currently playing animations
+        toController.getSettings().disableBounds().disableGestures();
+        // Stopping all currently playing state animations
         toController.stopAllAnimations();
 
         // Disabling ViewPager scroll
@@ -503,23 +559,12 @@ public class ViewPositionAnimator {
         }
 
         // Restoring original settings
-        toController.getSettings().setRestrictBounds(origRestrictBoundsFlag).enableGestures();
-        toController.updateState();
+        toController.getSettings().enableBounds().enableGestures();
 
         // Enabling ViewPager scroll
         if (toController instanceof GestureControllerForPager) {
             ((GestureControllerForPager) toController).disableViewPager(false);
         }
-    }
-
-    private void resetToState() {
-        if (GestureDebug.isDebugAnimator()) {
-            Log.d(TAG, "State reset internal: " + toController.getState());
-        }
-
-        toState.set(toController.getState());
-        requestUpdateToState();
-        requestUpdateFromState();
     }
 
     private void requestUpdateToState() {
@@ -616,7 +661,7 @@ public class ViewPositionAnimator {
         public boolean onStep() {
             if (!stateScroller.isFinished()) {
                 stateScroller.computeScroll();
-                positionState = stateScroller.getCurr();
+                position = stateScroller.getCurr();
                 applyPositionState();
 
                 if (stateScroller.isFinished()) {

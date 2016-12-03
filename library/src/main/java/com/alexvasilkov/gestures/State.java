@@ -8,7 +8,7 @@ import android.graphics.Matrix;
 @SuppressWarnings("WeakerAccess") // Public API (fields and methods)
 public class State {
 
-    public static final float EPSILON = 0.0001f;
+    public static final float EPSILON = 0.001f;
 
     private final Matrix matrix = new Matrix();
     private final float[] matrixValues = new float[9];

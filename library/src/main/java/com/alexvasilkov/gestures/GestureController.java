@@ -12,6 +12,7 @@ import android.view.ViewConfiguration;
 import android.widget.OverScroller;
 
 import com.alexvasilkov.gestures.internal.AnimationEngine;
+import com.alexvasilkov.gestures.internal.ExitController;
 import com.alexvasilkov.gestures.internal.MovementBounds;
 import com.alexvasilkov.gestures.internal.detectors.RotationGestureDetector;
 import com.alexvasilkov.gestures.internal.detectors.ScaleGestureDetectorFixed;
@@ -97,6 +98,7 @@ public class GestureController implements View.OnTouchListener {
     private final State state = new State();
     private final State prevState = new State();
     private final StateController stateController;
+    private final ExitController exitController;
 
     public GestureController(@NonNull View view) {
         final Context context = view.getContext();
@@ -110,6 +112,8 @@ public class GestureController implements View.OnTouchListener {
         gestureDetector.setIsLongpressEnabled(false);
         scaleDetector = new ScaleGestureDetectorFixed(context, internalListener);
         rotateDetector = new RotationGestureDetector(context, internalListener);
+
+        exitController = new ExitController(view, this);
 
         flingScroller = new OverScroller(context);
         stateScroller = new FloatScroller();
@@ -393,6 +397,12 @@ public class GestureController implements View.OnTouchListener {
 
         notifyStateSourceChanged();
 
+        if (exitController.isExitDetected()) {
+            if (!state.equals(prevState)) {
+                notifyStateUpdated();
+            }
+        }
+
         if (isStateChangedDuringTouch) {
             isStateChangedDuringTouch = false;
 
@@ -408,9 +418,11 @@ public class GestureController implements View.OnTouchListener {
             isRestrictZoomRequested = false;
             isRestrictRotationRequested = false;
 
-            State restrictedState = stateController.restrictStateBoundsCopy(
-                    state, prevState, pivotX, pivotY, true, false, true);
-            animateStateTo(restrictedState, false);
+            if (!exitController.isExitDetected()) {
+                State restrictedState = stateController.restrictStateBoundsCopy(
+                        state, prevState, pivotX, pivotY, true, false, true);
+                animateStateTo(restrictedState, false);
+            }
         }
 
         if (viewportEvent.getActionMasked() == MotionEvent.ACTION_UP
@@ -438,6 +450,8 @@ public class GestureController implements View.OnTouchListener {
         isScrollDetected = false;
         isScaleDetected = false;
         isRotationDetected = false;
+
+        exitController.onUpOrCancel();
 
         if (!isAnimatingFling() && !isAnimatingInBounds) {
             animateKeepInBounds();
@@ -467,6 +481,11 @@ public class GestureController implements View.OnTouchListener {
             return false;
         }
 
+        boolean scrollConsumed = exitController.onScroll(-dy);
+        if (scrollConsumed) {
+            return true;
+        }
+
         if (!isScrollDetected) {
             isScrollDetected = Math.abs(e2.getX() - e1.getX()) > touchSlop
                     || Math.abs(e2.getY() - e1.getY()) > touchSlop;
@@ -494,6 +513,11 @@ public class GestureController implements View.OnTouchListener {
 
         if (!settings.isPanEnabled() || isAnimatingState()) {
             return false;
+        }
+
+        boolean flingConsumed = exitController.onFling();
+        if (flingConsumed) {
+            return true;
         }
 
         stopFlingAnimation();
@@ -576,46 +600,74 @@ public class GestureController implements View.OnTouchListener {
 
     protected boolean onScaleBegin(ScaleGestureDetector detector) {
         isScaleDetected = settings.isZoomEnabled();
+        if (isScaleDetected) {
+            exitController.onScaleBegin();
+        }
         return isScaleDetected;
     }
 
     @SuppressWarnings("WeakerAccess") // Public API (can be overridden)
     protected boolean onScale(ScaleGestureDetector detector) {
-        if (settings.isZoomEnabled() && !isAnimatingState()) {
-            pivotX = detector.getFocusX();
-            pivotY = detector.getFocusY();
-            state.zoomBy(detector.getScaleFactor(), pivotX, pivotY);
-            isStateChangedDuringTouch = true;
+        if (!settings.isZoomEnabled() || isAnimatingState()) {
+            return false; // Ignoring scroll if animation is in progress
         }
+
+        final float scaleFactor = detector.getScaleFactor();
+
+        boolean scaleConsumed = exitController.onScale(scaleFactor);
+        if (scaleConsumed) {
+            return true;
+        }
+
+        pivotX = detector.getFocusX();
+        pivotY = detector.getFocusY();
+        state.zoomBy(scaleFactor, pivotX, pivotY);
+        isStateChangedDuringTouch = true;
 
         return true;
     }
 
     @SuppressWarnings({ "UnusedParameters", "WeakerAccess" }) // Public API (can be overridden)
     protected void onScaleEnd(ScaleGestureDetector detector) {
+        if (isScaleDetected) {
+            exitController.onScaleEnd();
+        }
         isScaleDetected = false;
         isRestrictZoomRequested = true;
     }
 
     protected boolean onRotationBegin(RotationGestureDetector detector) {
         isRotationDetected = settings.isRotationEnabled();
+        if (isRotationDetected) {
+            exitController.onRotationBegin();
+        }
         return isRotationDetected;
     }
 
     @SuppressWarnings("WeakerAccess") // Public API (can be overridden)
     protected boolean onRotate(RotationGestureDetector detector) {
-        if (settings.isRotationEnabled() && !isAnimatingState()) {
-            pivotX = detector.getFocusX();
-            pivotY = detector.getFocusY();
-            state.rotateBy(detector.getRotationDelta(), pivotX, pivotY);
-            isStateChangedDuringTouch = true;
+        if (!settings.isRotationEnabled() || isAnimatingState()) {
+            return false;
         }
+
+        boolean rotateConsumed = exitController.onRotate();
+        if (rotateConsumed) {
+            return true;
+        }
+
+        pivotX = detector.getFocusX();
+        pivotY = detector.getFocusY();
+        state.rotateBy(detector.getRotationDelta(), pivotX, pivotY);
+        isStateChangedDuringTouch = true;
 
         return true;
     }
 
     @SuppressWarnings({ "UnusedParameters", "WeakerAccess" }) // Public API (can be overridden)
     protected void onRotationEnd(RotationGestureDetector detector) {
+        if (isRotationDetected) {
+            exitController.onRotationEnd();
+        }
         isRotationDetected = false;
         isRestrictRotationRequested = true;
     }
