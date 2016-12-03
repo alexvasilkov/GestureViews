@@ -14,7 +14,7 @@ import com.alexvasilkov.gestures.views.interfaces.AnimatorView;
 
 public class ExitController {
 
-    private static final float SCROLL_FACTOR = 2f;
+    private static final float SCROLL_FACTOR = 0.5f;
     private static final float SCROLL_THRESHOLD = 30f;
 
     private static final float ZOOM_FACTOR = 0.75f;
@@ -91,9 +91,15 @@ public class ExitController {
                 scrollDirection = Math.signum(dy);
             }
 
-            // Updating exit state depending on the amount scrolled in relation to total height
-            final float height = controller.getSettings().getMovementAreaH();
-            final float total = scrollDirection * height / SCROLL_FACTOR;
+            // Gradually decreasing scrolled distance when scrolling beyond exit point
+            if (exitState < EXIT_THRESHOLD && Math.signum(dy) == scrollDirection) {
+                dy *= exitState / EXIT_THRESHOLD;
+            }
+
+            // Updating exit state depending on the amount scrolled in relation to total space
+            final float total = scrollDirection * SCROLL_FACTOR * Math.max(
+                    controller.getSettings().getMovementAreaW(),
+                    controller.getSettings().getMovementAreaH());
 
             exitState = 1f - (controller.getState().getY() + dy - initialY) / total;
             exitState = MathUtils.restrict(exitState, MIN_EXIT_STATE, 1f);
