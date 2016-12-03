@@ -36,6 +36,8 @@ public class GestureSettingsMenu implements GestureSettingsSetupListener {
     @InstanceState
     private boolean isOverzoomEnabled = true;
     @InstanceState
+    private boolean isExitEnabled = true;
+    @InstanceState
     private boolean isFillViewport = true;
     @InstanceState
     private Settings.Fit fitMethod = Settings.Fit.INSIDE;
@@ -60,6 +62,7 @@ public class GestureSettingsMenu implements GestureSettingsSetupListener {
         addBoolMenu(menu, isOverscrollXEnabled, R.string.menu_enable_overscroll_x);
         addBoolMenu(menu, isOverscrollYEnabled, R.string.menu_enable_overscroll_y);
         addBoolMenu(menu, isOverzoomEnabled, R.string.menu_enable_overzoom);
+        addBoolMenu(menu, isExitEnabled, R.string.menu_enable_exit);
         addBoolMenu(menu, isFillViewport, R.string.menu_fill_viewport);
         addSubMenu(menu, Settings.Fit.values(), fitMethod, R.string.menu_fit_method);
         addSubMenu(menu, GravityType.values(), GravityType.find(gravity), R.string.menu_gravity);
@@ -108,6 +111,9 @@ public class GestureSettingsMenu implements GestureSettingsSetupListener {
             case R.string.menu_enable_overzoom:
                 isOverzoomEnabled = !isOverzoomEnabled;
                 break;
+            case R.string.menu_enable_exit:
+                isExitEnabled = !isExitEnabled;
+                break;
             case R.string.menu_fill_viewport:
                 isFillViewport = !isFillViewport;
                 break;
@@ -141,10 +147,11 @@ public class GestureSettingsMenu implements GestureSettingsSetupListener {
                 .setPanEnabled(isPanEnabled)
                 .setZoomEnabled(isZoomEnabled)
                 .setDoubleTapEnabled(isZoomEnabled)
-                .setOverscrollDistance(context, overscrollX, overscrollY)
-                .setOverzoomFactor(overzoom)
                 .setRotationEnabled(isRotationEnabled)
                 .setRestrictRotation(isRestrictRotation)
+                .setOverscrollDistance(context, overscrollX, overscrollY)
+                .setOverzoomFactor(overzoom)
+                .setExitEnabled(isExitEnabled)
                 .setFillViewport(isFillViewport)
                 .setFitMethod(fitMethod)
                 .setGravity(gravity)
