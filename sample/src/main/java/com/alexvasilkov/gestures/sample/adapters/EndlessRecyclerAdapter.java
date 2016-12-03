@@ -30,6 +30,7 @@ public abstract class EndlessRecyclerAdapter<VH extends RecyclerView.ViewHolder>
 
     public void setCallbacks(LoaderCallbacks callbacks) {
         this.callbacks = callbacks;
+        loadNextItems();
     }
 
     public void setLoadingOffset(int loadingOffset) {
