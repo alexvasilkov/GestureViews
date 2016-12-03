@@ -87,12 +87,12 @@ public class FromRecyclerViewListener<ID> implements ViewsCoordinator.OnRequestV
 
     private class UpdateListener implements ViewPositionAnimator.PositionUpdateListener {
         @Override
-        public void onPositionUpdate(float state, boolean isLeaving) {
-            if (state == 0f && isLeaving) {
+        public void onPositionUpdate(float position, boolean isLeaving) {
+            if (position == 0f && isLeaving) {
                 id = null;
             }
-            recyclerView.setVisibility(state == 1f && !isLeaving ? View.INVISIBLE : View.VISIBLE);
-            scrollHalfVisibleItems = state == 1f; // Only scroll if we in full mode
+            recyclerView.setVisibility(position == 1f && !isLeaving ? View.INVISIBLE : View.VISIBLE);
+            scrollHalfVisibleItems = position == 1f; // Only scroll if we in full mode
         }
     }
 

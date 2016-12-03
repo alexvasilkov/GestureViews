@@ -37,8 +37,8 @@ public class ViewsTransitionAnimator<ID> extends ViewsCoordinator<ID> {
     public ViewsTransitionAnimator() {
         addPositionUpdateListener(new PositionUpdateListener() {
             @Override
-            public void onPositionUpdate(float state, boolean isLeaving) {
-                if (state == 0f && isLeaving) {
+            public void onPositionUpdate(float position, boolean isLeaving) {
+                if (position == 0f && isLeaving) {
                     clear();
                 }
             }
@@ -223,7 +223,7 @@ public class ViewsTransitionAnimator<ID> extends ViewsCoordinator<ID> {
             animator.removePositionUpdateListener(listener);
         }
 
-        if (!animator.isLeaving() || animator.getPositionState() != 0f) {
+        if (!animator.isLeaving() || animator.getPosition() != 0f) {
             if (GestureDebug.isDebugAnimator()) {
                 Log.d(TAG, "Exiting from cleaned animator for " + enterId);
             }
@@ -236,7 +236,7 @@ public class ViewsTransitionAnimator<ID> extends ViewsCoordinator<ID> {
      * Replaces old animator with new one preserving state.
      */
     private void swapAnimator(ViewPositionAnimator old, ViewPositionAnimator next) {
-        final float state = old.getPositionState();
+        final float position = old.getPosition();
         final boolean isLeaving = old.isLeaving();
         final boolean isAnimating = old.isAnimating();
 
@@ -254,7 +254,7 @@ public class ViewsTransitionAnimator<ID> extends ViewsCoordinator<ID> {
 
         initAnimator(next);
 
-        next.setState(state, isLeaving, isAnimating);
+        next.setState(position, isLeaving, isAnimating);
     }
 
     private void clear() {

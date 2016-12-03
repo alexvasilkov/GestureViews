@@ -115,9 +115,9 @@ public class Ex5ListTransitionActivity extends BaseActivity implements
     }
 
     @Override
-    public void onPositionUpdate(float state, boolean isLeaving) {
-        views.background.setVisibility(state == 0f ? View.INVISIBLE : View.VISIBLE);
-        views.background.getBackground().setAlpha((int) (255 * state));
+    public void onPositionUpdate(float position, boolean isLeaving) {
+        views.background.setVisibility(position == 0f ? View.INVISIBLE : View.VISIBLE);
+        views.background.getBackground().setAlpha((int) (255 * position));
     }
 
 

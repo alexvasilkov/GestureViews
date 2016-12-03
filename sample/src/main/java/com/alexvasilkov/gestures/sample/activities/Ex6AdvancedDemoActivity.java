@@ -261,19 +261,19 @@ public class Ex6AdvancedDemoActivity extends BaseActivity implements
     }
 
     @Override
-    public void onPositionUpdate(float state, boolean isLeaving) {
-        views.pagerBackground.setVisibility(state == 0f ? View.INVISIBLE : View.VISIBLE);
-        views.pagerBackground.getBackground().setAlpha((int) (255 * state));
+    public void onPositionUpdate(float position, boolean isLeaving) {
+        views.pagerBackground.setVisibility(position == 0f ? View.INVISIBLE : View.VISIBLE);
+        views.pagerBackground.getBackground().setAlpha((int) (255 * position));
 
-        views.toolbar.setVisibility(state == 1f ? View.INVISIBLE : View.VISIBLE);
-        views.toolbar.setAlpha((float) Math.sqrt(1d - state)); // Slow down toolbar animation
+        views.toolbar.setVisibility(position == 1f ? View.INVISIBLE : View.VISIBLE);
+        views.toolbar.setAlpha((float) Math.sqrt(1d - position)); // Slow down toolbar animation
 
-        views.pagerToolbar.setVisibility(state == 0f ? View.INVISIBLE : View.VISIBLE);
-        views.pagerToolbar.setAlpha(state);
+        views.pagerToolbar.setVisibility(position == 0f ? View.INVISIBLE : View.VISIBLE);
+        views.pagerToolbar.setAlpha(position);
 
-        views.pagerTitle.setVisibility(state == 1f ? View.VISIBLE : View.INVISIBLE);
+        views.pagerTitle.setVisibility(position == 1f ? View.VISIBLE : View.INVISIBLE);
 
-        if (isLeaving && state == 0f) {
+        if (isLeaving && position == 0f) {
             pagerAdapter.setActivated(false);
         }
     }

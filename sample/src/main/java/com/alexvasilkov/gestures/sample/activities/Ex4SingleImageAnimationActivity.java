@@ -105,8 +105,8 @@ public class Ex4SingleImageAnimationActivity extends BaseActivity {
 
         views.fullAnimator.addPositionUpdateListener(new PositionUpdateListener() {
             @Override
-            public void onPositionUpdate(float state, boolean isLeaving) {
-                views.fullImage.setVisibility(state == 0f && isLeaving
+            public void onPositionUpdate(float position, boolean isLeaving) {
+                views.fullImage.setVisibility(position == 0f && isLeaving
                         ? View.INVISIBLE : View.VISIBLE);
             }
         });

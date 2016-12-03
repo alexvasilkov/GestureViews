@@ -70,7 +70,7 @@ public class DebugOverlay {
         drawRect(canvas, rectF, Color.RED, stroke);
 
         // State source
-        float pos = animator.getPositionState();
+        float pos = animator.getPosition();
         if (pos == 1f || (pos == 0f && animator.isLeaving())) {
             final StateSource source = getStateSource(controller);
 

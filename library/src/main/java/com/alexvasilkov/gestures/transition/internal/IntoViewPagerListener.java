@@ -93,7 +93,7 @@ public class IntoViewPagerListener<ID> implements ViewsCoordinator.OnRequestView
             return;
         }
         ViewPositionAnimator animator = this.animator.getToView().getPositionAnimator();
-        if (animator.isLeaving() && animator.getPositionState() == 1f) {
+        if (animator.isLeaving() && animator.getPosition() == 1f) {
             animator.setState(1f, false, false);
         }
     }
@@ -156,17 +156,17 @@ public class IntoViewPagerListener<ID> implements ViewsCoordinator.OnRequestView
 
     private class UpdateListener implements ViewPositionAnimator.PositionUpdateListener {
         @Override
-        public void onPositionUpdate(float state, boolean isLeaving) {
-            if (state == 0f && isLeaving) {
+        public void onPositionUpdate(float position, boolean isLeaving) {
+            if (position == 0f && isLeaving) {
                 id = null;
             }
-            if (state == 1f && isLeaving && id != null) {
+            if (position == 1f && isLeaving && id != null) {
                 if (preventExit) {
                     skipExit();
                 }
                 switchToCurrentPage();
             }
-            viewPager.setVisibility(state == 0f && isLeaving ? View.INVISIBLE : View.VISIBLE);
+            viewPager.setVisibility(position == 0f && isLeaving ? View.INVISIBLE : View.VISIBLE);
         }
     }
 

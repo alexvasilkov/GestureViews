@@ -76,8 +76,8 @@ public class PhotoPagerAdapter
         holder.image.getPositionAnimator().addPositionUpdateListener(
                 new ViewPositionAnimator.PositionUpdateListener() {
                     @Override
-                    public void onPositionUpdate(float state, boolean isLeaving) {
-                        holder.progress.setVisibility(state == 1f ? View.VISIBLE : View.INVISIBLE);
+                    public void onPositionUpdate(float position, boolean isLeaving) {
+                        holder.progress.setVisibility(position == 1f ? View.VISIBLE : View.INVISIBLE);
                     }
                 });
         return holder;

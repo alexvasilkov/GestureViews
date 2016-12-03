@@ -55,7 +55,7 @@ public class ViewPositionAnimator {
     private final List<PositionUpdateListener> listenersToRemove = new ArrayList<>();
     private boolean iteratingListeners;
 
-    private final FloatScroller stateScroller = new FloatScroller();
+    private final FloatScroller positionScroller = new FloatScroller();
     private final AnimationEngine animationEngine;
 
     private final GestureController toController;
@@ -82,8 +82,8 @@ public class ViewPositionAnimator {
 
     private boolean isLeaving = true; // Leaving by default
     private boolean isAnimating = false;
-    private boolean isApplyingPositionState;
-    private boolean isApplyingPositionStateScheduled;
+    private boolean isApplyingPosition;
+    private boolean isApplyingPositionScheduled;
 
     // Marks that update for 'From' or 'To' is needed
     private boolean isFromUpdated;
@@ -102,7 +102,7 @@ public class ViewPositionAnimator {
 
                     fromPos = position;
                     requestUpdateFromState();
-                    applyPositionState();
+                    applyCurrentPosition();
                 }
             };
 
@@ -134,7 +134,7 @@ public class ViewPositionAnimator {
                 }
 
                 setToState(newState, 1f); // We have to reset full state
-                applyPositionState();
+                applyCurrentPosition();
             }
         });
 
@@ -148,7 +148,7 @@ public class ViewPositionAnimator {
                 toPos = position;
                 requestUpdateToState();
                 requestUpdateFromState(); // Depends on 'to' position
-                applyPositionState();
+                applyCurrentPosition();
             }
         });
     }
@@ -272,7 +272,7 @@ public class ViewPositionAnimator {
         requestUpdateFromState();
 
         fromPos = from;
-        applyPositionState();
+        applyCurrentPosition();
     }
 
     private void cleanup() {
@@ -344,7 +344,7 @@ public class ViewPositionAnimator {
      * @return Target (to) position as set by {@link #setToState(State, float)}.
      * Maybe useful to determine real animation position during exit gesture.
      * <p/>
-     * I.e. {@link #getPositionState()} / {@link #getToPosition()} (changes from 0 to ∞)
+     * I.e. {@link #getPosition()} / {@link #getToPosition()} (changes from 0 to ∞)
      * represents interpolated position used to calculate intermediate state and bounds.
      */
     @SuppressWarnings("JavaDoc") // We really need this method to point to itself
@@ -360,6 +360,15 @@ public class ViewPositionAnimator {
      * need to have real value of final position (instead of {@code 1}) then you need to use
      * {@link #getToPosition()} method.
      */
+    public float getPosition() {
+        return position;
+    }
+
+    /**
+     * @deprecated Use {@link #getPosition()} method instead.
+     */
+    @SuppressWarnings("unused") // Public API
+    @Deprecated
     public float getPositionState() {
         return position;
     }
@@ -377,7 +386,7 @@ public class ViewPositionAnimator {
      * Specifies target (to) state and it's position which will be used to interpolate
      * current state for intermediate positions (i.e. during animation or exit gesture).<br/>
      * This allows you to set up correct state without changing current position
-     * ({@link #getPositionState()}).
+     * ({@link #getPosition()}).
      * <p/>
      * Only use this method if you understand what you do.
      *
@@ -421,20 +430,20 @@ public class ViewPositionAnimator {
         if (animate) {
             startAnimationInternal();
         }
-        applyPositionState();
+        applyCurrentPosition();
     }
 
-    private void applyPositionState() {
+    private void applyCurrentPosition() {
         if (!isActivated) {
             return;
         }
 
-        if (isApplyingPositionState) {
+        if (isApplyingPosition) {
             // Excluding possible nested calls, scheduling sequential call instead
-            isApplyingPositionStateScheduled = true;
+            isApplyingPositionScheduled = true;
             return;
         }
-        isApplyingPositionState = true;
+        isApplyingPosition = true;
 
         // We do not need to update while 'to' view is fully visible or fully closed
         boolean paused = isLeaving ? position == 0f : position == 1f;
@@ -472,7 +481,7 @@ public class ViewPositionAnimator {
 
         iteratingListeners = true;
         for (int i = 0, size = listeners.size(); i < size; i++) {
-            if (isApplyingPositionStateScheduled) {
+            if (isApplyingPositionScheduled) {
                 break; // No need to call listeners anymore
             }
             listeners.get(i).onPositionUpdate(position, isLeaving);
@@ -486,11 +495,11 @@ public class ViewPositionAnimator {
             toController.resetState(); // Switching to initial state
         }
 
-        isApplyingPositionState = false;
+        isApplyingPosition = false;
 
-        if (isApplyingPositionStateScheduled) {
-            isApplyingPositionStateScheduled = false;
-            applyPositionState();
+        if (isApplyingPositionScheduled) {
+            isApplyingPositionScheduled = false;
+            applyCurrentPosition();
         }
     }
 
@@ -512,8 +521,8 @@ public class ViewPositionAnimator {
                 ? (isLeaving ? position : 1f - position)
                 : (isLeaving ? position / toPosition : (1f - position) / (1f - toPosition));
 
-        stateScroller.setDuration((long) (duration * durationFraction));
-        stateScroller.startScroll(position, isLeaving ? 0f : 1f);
+        positionScroller.setDuration((long) (duration * durationFraction));
+        positionScroller.startScroll(position, isLeaving ? 0f : 1f);
         animationEngine.start();
         onAnimationStarted();
     }
@@ -523,7 +532,7 @@ public class ViewPositionAnimator {
      */
     @SuppressWarnings("WeakerAccess") // Public API
     public void stopAnimation() {
-        stateScroller.forceFinished();
+        positionScroller.forceFinished();
         onAnimationStopped();
     }
 
@@ -659,12 +668,12 @@ public class ViewPositionAnimator {
 
         @Override
         public boolean onStep() {
-            if (!stateScroller.isFinished()) {
-                stateScroller.computeScroll();
-                position = stateScroller.getCurr();
-                applyPositionState();
+            if (!positionScroller.isFinished()) {
+                positionScroller.computeScroll();
+                position = positionScroller.getCurr();
+                applyCurrentPosition();
 
-                if (stateScroller.isFinished()) {
+                if (positionScroller.isFinished()) {
                     onAnimationStopped();
                 }
 
@@ -677,12 +686,12 @@ public class ViewPositionAnimator {
 
     public interface PositionUpdateListener {
         /**
-         * @param state Position state within range {@code [0, 1]}, where {@code 0} is for
+         * @param position Position within range {@code [0, 1]}, where {@code 0} is for
          * initial (from) position and {@code 1} is for final (to) position.
          * @param isLeaving {@code false} if transitioning from initial to final position
          * (entering) or {@code true} for reverse transition.
          */
-        void onPositionUpdate(float state, boolean isLeaving);
+        void onPositionUpdate(float position, boolean isLeaving);
     }
 
 }
