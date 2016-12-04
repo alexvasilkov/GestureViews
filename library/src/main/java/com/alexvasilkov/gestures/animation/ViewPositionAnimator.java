@@ -297,7 +297,7 @@ public class ViewPositionAnimator {
      * Adds listener to the set of position updates listeners that will be notified during
      * any position changes.
      */
-    public void addPositionUpdateListener(PositionUpdateListener listener) {
+    public void addPositionUpdateListener(@NonNull PositionUpdateListener listener) {
         listeners.add(listener);
         listenersToRemove.remove(listener);
     }
@@ -308,7 +308,7 @@ public class ViewPositionAnimator {
      * Note, this method may be called inside listener's callback without throwing
      * {@link IndexOutOfBoundsException}.
      */
-    public void removePositionUpdateListener(PositionUpdateListener listener) {
+    public void removePositionUpdateListener(@NonNull PositionUpdateListener listener) {
         if (iteratingListeners) {
             listenersToRemove.add(listener);
         } else {

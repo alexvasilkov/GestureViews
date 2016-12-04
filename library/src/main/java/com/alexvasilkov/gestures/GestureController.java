@@ -149,7 +149,7 @@ public class GestureController implements View.OnTouchListener {
      *
      * @see OnStateChangeListener
      */
-    public void addOnStateChangeListener(OnStateChangeListener listener) {
+    public void addOnStateChangeListener(@NonNull OnStateChangeListener listener) {
         stateListeners.add(listener);
     }
 

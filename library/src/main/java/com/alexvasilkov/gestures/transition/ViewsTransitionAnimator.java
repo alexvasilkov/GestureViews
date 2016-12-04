@@ -192,7 +192,7 @@ public class ViewsTransitionAnimator<ID> extends ViewsCoordinator<ID> {
      *
      * @see ViewPositionAnimator#addPositionUpdateListener(PositionUpdateListener)
      */
-    public void addPositionUpdateListener(PositionUpdateListener listener) {
+    public void addPositionUpdateListener(@NonNull PositionUpdateListener listener) {
         listeners.add(listener);
         if (isReady) {
             getToView().getPositionAnimator().addPositionUpdateListener(listener);
@@ -205,7 +205,7 @@ public class ViewsTransitionAnimator<ID> extends ViewsCoordinator<ID> {
      * @see ViewPositionAnimator#removePositionUpdateListener(PositionUpdateListener)
      */
     @SuppressWarnings("unused") // Public API
-    public void removePositionUpdateListener(PositionUpdateListener listener) {
+    public void removePositionUpdateListener(@NonNull PositionUpdateListener listener) {
         listeners.remove(listener);
         if (isReady) {
             getToView().getPositionAnimator().removePositionUpdateListener(listener);
