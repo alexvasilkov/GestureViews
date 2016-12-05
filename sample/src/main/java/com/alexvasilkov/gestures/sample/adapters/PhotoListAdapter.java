@@ -35,7 +35,7 @@ public class PhotoListAdapter
         this.photos = photos;
         this.hasMore = hasMore;
 
-        RecyclerAdapterHelper.notifyChanges(this, old, photos, false);
+        RecyclerAdapterHelper.notifyChanges(this, old, photos);
     }
 
     @Override
