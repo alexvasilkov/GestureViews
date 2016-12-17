@@ -41,7 +41,8 @@ public class FromRecyclerViewListener<ID> implements ViewsCoordinator.OnRequestV
         int position = tracker.getPositionForId(id);
 
         if (position == ViewsTracker.NO_POSITION) {
-            return; // Nothing we can do
+            animator.setFromNone(id);
+            return;
         }
 
         View view = tracker.getViewForPosition(position);
@@ -87,12 +88,12 @@ public class FromRecyclerViewListener<ID> implements ViewsCoordinator.OnRequestV
 
     private class UpdateListener implements ViewPositionAnimator.PositionUpdateListener {
         @Override
-        public void onPositionUpdate(float position, boolean isLeaving) {
-            if (position == 0f && isLeaving) {
+        public void onPositionUpdate(float pos, boolean isLeaving) {
+            if (pos == 0f && isLeaving) {
                 id = null;
             }
-            recyclerView.setVisibility(position == 1f && !isLeaving ? View.INVISIBLE : View.VISIBLE);
-            scrollHalfVisibleItems = position == 1f; // Only scroll if we in full mode
+            recyclerView.setVisibility(pos == 1f && !isLeaving ? View.INVISIBLE : View.VISIBLE);
+            scrollHalfVisibleItems = pos == 1f; // Only scroll if we in full mode
         }
     }
 

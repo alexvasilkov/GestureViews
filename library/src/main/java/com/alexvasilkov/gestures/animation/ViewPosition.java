@@ -1,6 +1,7 @@
 package com.alexvasilkov.gestures.animation;
 
 import android.graphics.Matrix;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
@@ -137,6 +138,15 @@ public class ViewPosition {
      */
     public static boolean apply(@NonNull ViewPosition pos, @NonNull View view) {
         return pos.init(view);
+    }
+
+    /**
+     * Computes minimal view position for given point.
+     */
+    public static void apply(@NonNull ViewPosition pos, @NonNull Point point) {
+        pos.view.set(point.x, point.y, point.x + 1, point.y + 1);
+        pos.viewport.set(pos.view);
+        pos.image.set(pos.view);
     }
 
     /**

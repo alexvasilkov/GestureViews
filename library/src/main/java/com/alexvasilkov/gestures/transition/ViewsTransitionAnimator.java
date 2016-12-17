@@ -103,6 +103,15 @@ public class ViewsTransitionAnimator<ID> extends ViewsCoordinator<ID> {
     }
 
     @Override
+    public void setFromNone(@NonNull ID id) {
+        if (enterId == null || !enterId.equals(id)) {
+            return;
+        }
+
+        super.setFromNone(id);
+    }
+
+    @Override
     public void setFromView(@NonNull ID id, @NonNull View fromView) {
         if (enterId == null || !enterId.equals(id)) {
             return;
@@ -178,6 +187,8 @@ public class ViewsTransitionAnimator<ID> extends ViewsCoordinator<ID> {
                 getToView().getPositionAnimator().enter(getFromView(), enterWithAnimation);
             } else if (getFromPos() != null) {
                 getToView().getPositionAnimator().enter(getFromPos(), enterWithAnimation);
+            } else {
+                getToView().getPositionAnimator().enter(enterWithAnimation);
             }
 
             exitIfRequested();

@@ -73,17 +73,18 @@ public class IntoViewPagerListener<ID> implements ViewsCoordinator.OnRequestView
         if (id != null && currentId != null && !id.equals(currentId)) {
             // Saving current state
             AnimatorView toView = animator.getToView();
-            ViewPositionAnimator animator = toView == null ? null : toView.getPositionAnimator();
-            boolean isLeaving = animator != null && animator.isLeaving();
-            boolean isAnimating = animator != null && animator.isAnimating();
+            ViewPositionAnimator toAnimator = toView == null ? null : toView.getPositionAnimator();
+            boolean isLeaving = toAnimator != null && toAnimator.isLeaving();
+            float position = toAnimator == null ? 0f : toAnimator.getPosition();
+            boolean isAnimating = toAnimator != null && toAnimator.isAnimating();
 
             // Switching to new page, preventing exit of previous page
             skipExit();
-            this.animator.enter(currentId, false);
+            animator.enter(currentId, false);
 
-            // Applying saved state
-            if (isLeaving) {
-                this.animator.exit(isAnimating);
+            // If exit animation was in place we should continue it
+            if (isLeaving && position > 0f) {
+                animator.exit(isAnimating);
             }
         }
     }
@@ -92,9 +93,9 @@ public class IntoViewPagerListener<ID> implements ViewsCoordinator.OnRequestView
         if (animator.getToView() == null) {
             return;
         }
-        ViewPositionAnimator animator = this.animator.getToView().getPositionAnimator();
-        if (animator.isLeaving() && animator.getPosition() == 1f) {
-            animator.setState(1f, false, false);
+        ViewPositionAnimator toAnimator = animator.getToView().getPositionAnimator();
+        if (toAnimator.isLeaving() && toAnimator.getPosition() == 1f) {
+            toAnimator.setState(1f, false, false);
         }
     }
 

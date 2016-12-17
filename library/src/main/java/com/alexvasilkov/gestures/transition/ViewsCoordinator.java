@@ -87,11 +87,15 @@ public class ViewsCoordinator<ID> {
         setFromInternal(id, null, fromPos);
     }
 
+    public void setFromNone(@NonNull ID id) {
+        setFromInternal(id, null, null);
+    }
+
     private void setFromInternal(@NonNull ID id, View fromView, ViewPosition fromPos) {
         if (requestedId == null || !requestedId.equals(id)) {
             return;
         }
-        if (this.fromView == fromView && this.fromPos == fromPos) {
+        if (this.fromView == fromView && fromView != null) {
             return; // Already set
         }
 

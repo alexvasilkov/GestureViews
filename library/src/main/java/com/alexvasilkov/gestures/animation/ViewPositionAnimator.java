@@ -1,9 +1,11 @@
 package com.alexvasilkov.gestures.animation;
 
 import android.graphics.Matrix;
+import android.graphics.Point;
 import android.graphics.RectF;
 import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -16,6 +18,7 @@ import com.alexvasilkov.gestures.State;
 import com.alexvasilkov.gestures.internal.AnimationEngine;
 import com.alexvasilkov.gestures.internal.GestureDebug;
 import com.alexvasilkov.gestures.utils.FloatScroller;
+import com.alexvasilkov.gestures.utils.GravityUtils;
 import com.alexvasilkov.gestures.utils.MathUtils;
 import com.alexvasilkov.gestures.views.GestureImageView;
 import com.alexvasilkov.gestures.views.interfaces.ClipView;
@@ -49,7 +52,8 @@ public class ViewPositionAnimator {
     private static final String TAG = "ViewPositionAnimator";
 
     private static final Matrix tmpMatrix = new Matrix();
-    private static final float[] tmpPoint = new float[2];
+    private static final float[] tmpPointArr = new float[2];
+    private static final Point tmpPoint = new Point();
 
     private final List<PositionUpdateListener> listeners = new ArrayList<>();
     private final List<PositionUpdateListener> listenersToRemove = new ArrayList<>();
@@ -72,6 +76,7 @@ public class ViewPositionAnimator {
     private final RectF clipRect = new RectF();
     private ViewPosition fromPos;
     private ViewPosition toPos;
+    private boolean fromNonePos;
 
     private View fromView;
 
@@ -154,6 +159,22 @@ public class ViewPositionAnimator {
     }
 
     /**
+     * Starts 'enter' animation from no specific position (position will be calculated based on
+     * gravity set in {@link Settings}).
+     * <p/>
+     * <b>Note, that in most cases you should use {@link #enter(View, boolean)} or
+     * {@link #enter(ViewPosition, boolean)} methods instead.</b>
+     */
+    public void enter(boolean withAnimation) {
+        if (GestureDebug.isDebugAnimator()) {
+            Log.d(TAG, "Entering from none position, with animation = " + withAnimation);
+        }
+
+        enterInternal(withAnimation);
+        updateInternal((ViewPosition) null);
+    }
+
+    /**
      * Starts 'enter' animation from {@code from} view to {@code to}.
      * <p/>
      * Note, if {@code from} view was changed (i.e. during list adapter refresh) you should
@@ -172,8 +193,7 @@ public class ViewPositionAnimator {
      * Starts 'enter' animation from {@code from} position to {@code to} view.
      * <p/>
      * Note, if {@code from} view position was changed (i.e. during list adapter refresh) you
-     * should
-     * update to new view using {@link #update(ViewPosition)} method.
+     * should update to new view using {@link #update(ViewPosition)} method.
      */
     public void enter(@NonNull ViewPosition fromPos, boolean withAnimation) {
         if (GestureDebug.isDebugAnimator()) {
@@ -189,11 +209,6 @@ public class ViewPositionAnimator {
      * the same since animator should automatically detect view position changes.
      */
     public void update(@NonNull View from) {
-        if (fromView == null) {
-            throw new IllegalStateException("Animation was not started using "
-                    + "enter(View, boolean) method, cannot update 'from' view");
-        }
-
         if (GestureDebug.isDebugAnimator()) {
             Log.d(TAG, "Updating view");
         }
@@ -205,11 +220,6 @@ public class ViewPositionAnimator {
      * Updates position of initial view in case it was changed.
      */
     public void update(@NonNull ViewPosition from) {
-        if (fromPos == null) {
-            throw new IllegalStateException("Animation was not started using "
-                    + "enter(ViewPosition, boolean) method, cannot update 'from' position");
-        }
-
         if (GestureDebug.isDebugAnimator()) {
             Log.d(TAG, "Updating view position: " + from.pack());
         }
@@ -262,7 +272,7 @@ public class ViewPositionAnimator {
         from.setVisibility(View.INVISIBLE); // We don't want duplicate view during animation
     }
 
-    private void updateInternal(@NonNull ViewPosition from) {
+    private void updateInternal(@Nullable ViewPosition from) {
         if (!isActivated) {
             throw new IllegalStateException(
                     "You should call enter(...) before calling update(...)");
@@ -272,6 +282,7 @@ public class ViewPositionAnimator {
         requestUpdateFromState();
 
         fromPos = from;
+        fromNonePos = from == null;
         applyCurrentPosition();
     }
 
@@ -290,6 +301,7 @@ public class ViewPositionAnimator {
         fromPosHolder.clear();
         fromView = null;
         fromPos = null;
+        fromNonePos = false;
         isFromUpdated = isToUpdated = false;
     }
 
@@ -601,12 +613,12 @@ public class ViewPositionAnimator {
         toClip.set(0, 0, settings.getImageW(), settings.getImageH());
 
         // Computing pivot point as center of the image after transformation
-        tmpPoint[0] = toClip.centerX();
-        tmpPoint[1] = toClip.centerY();
-        tmpMatrix.mapPoints(tmpPoint);
+        tmpPointArr[0] = toClip.centerX();
+        tmpPointArr[1] = toClip.centerY();
+        tmpMatrix.mapPoints(tmpPointArr);
 
-        toPivotX = tmpPoint[0];
-        toPivotY = tmpPoint[1];
+        toPivotX = tmpPointArr[0];
+        toPivotY = tmpPointArr[1];
 
         // Computing clip rect in 'To' view coordinates without rotation
         tmpMatrix.postRotate(-toState.getRotation(), toPivotX, toPivotY);
@@ -626,6 +638,14 @@ public class ViewPositionAnimator {
         }
 
         Settings settings = toController == null ? null : toController.getSettings();
+
+        if (fromNonePos && settings != null && toPos != null) {
+            fromPos = fromPos == null ? ViewPosition.newInstance() : fromPos;
+
+            GravityUtils.getDefaultPivot(settings, tmpPoint);
+            tmpPoint.offset(toPos.view.left, toPos.view.top); // Ensure we're in correct coordinates
+            ViewPosition.apply(fromPos, tmpPoint);
+        }
 
         if (toPos == null || fromPos == null || settings == null || !settings.hasImageSize()) {
             return;
