@@ -13,6 +13,11 @@
         <item name="colorControlHighlight">?colorPrimary</item>
     </style>
 
+    <style name="AppTheme.Transparent">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
     <style name="AppTheme.Full" />
 
     <style name="AppTheme.Full.NoTitle">
