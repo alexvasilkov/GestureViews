@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.alexvasilkov.android.commons.utils.Views;
-import com.alexvasilkov.gestures.animation.ViewPositionAnimator;
+import com.alexvasilkov.gestures.animation.ViewPositionAnimator.PositionUpdateListener;
 import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.utils.GestureSettingsSetupListener;
@@ -73,13 +73,12 @@ public class PhotoPagerAdapter
         }
 
         holder.image.getController().enableScrollInViewPager(viewPager);
-        holder.image.getPositionAnimator().addPositionUpdateListener(
-                new ViewPositionAnimator.PositionUpdateListener() {
-                    @Override
-                    public void onPositionUpdate(float position, boolean isLeaving) {
-                        holder.progress.setVisibility(position == 1f ? View.VISIBLE : View.INVISIBLE);
-                    }
-                });
+        holder.image.getPositionAnimator().addPositionUpdateListener(new PositionUpdateListener() {
+            @Override
+            public void onPositionUpdate(float position, boolean isLeaving) {
+                holder.progress.setVisibility(position == 1f ? View.VISIBLE : View.INVISIBLE);
+            }
+        });
         return holder;
     }
 
