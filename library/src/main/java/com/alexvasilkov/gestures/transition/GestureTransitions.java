@@ -27,15 +27,6 @@ public class GestureTransitions<ID> {
         return builder;
     }
 
-    public static <ID> GestureTransitions<ID> fromNone() {
-        return from(new RequestListener<ID>() {
-            @Override
-            public void onRequestView(@NonNull ID id) {
-                getAnimator().setFromNone(id);
-            }
-        });
-    }
-
     public static <ID> GestureTransitions<ID> from(@NonNull final View view) {
         return from(new RequestListener<ID>() {
             @Override
@@ -55,6 +46,16 @@ public class GestureTransitions<ID> {
             @NonNull ListView listView,
             @NonNull ViewsTracker<ID> tracker) {
         return from(new FromListViewListener<>(listView, tracker));
+    }
+
+    @SuppressWarnings("unused") // Public API
+    public static <ID> GestureTransitions<ID> fromNone() {
+        return from(new RequestListener<ID>() {
+            @Override
+            public void onRequestView(@NonNull ID id) {
+                getAnimator().setFromNone(id);
+            }
+        });
     }
 
 
