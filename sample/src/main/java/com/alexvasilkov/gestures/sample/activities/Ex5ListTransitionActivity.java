@@ -17,9 +17,9 @@ import com.alexvasilkov.gestures.sample.adapters.PaintingsPagerAdapter;
 import com.alexvasilkov.gestures.sample.logic.Painting;
 import com.alexvasilkov.gestures.sample.logic.PaintingsHelper;
 import com.alexvasilkov.gestures.sample.utils.GestureSettingsMenu;
+import com.alexvasilkov.gestures.transition.GestureTransitions;
 import com.alexvasilkov.gestures.transition.SimpleViewsTracker;
 import com.alexvasilkov.gestures.transition.ViewsTransitionAnimator;
-import com.alexvasilkov.gestures.transition.ViewsTransitionBuilder;
 
 public class Ex5ListTransitionActivity extends BaseActivity implements
         PaintingsListAdapter.OnPaintingListener,
@@ -29,29 +29,6 @@ public class Ex5ListTransitionActivity extends BaseActivity implements
     private GestureSettingsMenu settingsMenu;
     private PaintingsPagerAdapter pagerAdapter;
     private ViewsTransitionAnimator<Integer> animator;
-
-
-    private final SimpleViewsTracker pagerTracker = new SimpleViewsTracker() {
-        @Override
-        public View getViewForPosition(int position) {
-            RecyclePagerAdapter.ViewHolder holder = pagerAdapter.getViewHolder(position);
-            return holder == null ? null : PaintingsPagerAdapter.getImage(holder);
-        }
-    };
-
-    private final SimpleViewsTracker listTracker = new SimpleViewsTracker() {
-        @Override
-        public View getViewForPosition(int position) {
-            int first = views.list.getFirstVisiblePosition();
-            int last = views.list.getLastVisiblePosition();
-            if (position < first || position > last) {
-                return null;
-            } else {
-                View itemView = views.list.getChildAt(position - first);
-                return PaintingsListAdapter.getImage(itemView);
-            }
-        }
-    };
 
 
     @Override
@@ -71,10 +48,32 @@ public class Ex5ListTransitionActivity extends BaseActivity implements
         views.pager.setAdapter(pagerAdapter);
         views.pager.setPageMargin(getResources().getDimensionPixelSize(R.dimen.view_pager_margin));
 
-        animator = new ViewsTransitionBuilder<Integer>()
-                .fromListView(views.list, listTracker)
-                .intoViewPager(views.pager, pagerTracker)
-                .build();
+
+        final SimpleViewsTracker listViewTracker = new SimpleViewsTracker() {
+            @Override
+            public View getViewForPosition(int position) {
+                int first = views.list.getFirstVisiblePosition();
+                int last = views.list.getLastVisiblePosition();
+                if (position < first || position > last) {
+                    return null;
+                } else {
+                    View itemView = views.list.getChildAt(position - first);
+                    return PaintingsListAdapter.getImage(itemView);
+                }
+            }
+        };
+
+        final SimpleViewsTracker pagerViewTracker = new SimpleViewsTracker() {
+            @Override
+            public View getViewForPosition(int position) {
+                RecyclePagerAdapter.ViewHolder holder = pagerAdapter.getViewHolder(position);
+                return holder == null ? null : PaintingsPagerAdapter.getImage(holder);
+            }
+        };
+
+        animator = GestureTransitions
+                .from(views.list, listViewTracker)
+                .into(views.pager, pagerViewTracker);
         animator.addPositionUpdateListener(this);
     }
 

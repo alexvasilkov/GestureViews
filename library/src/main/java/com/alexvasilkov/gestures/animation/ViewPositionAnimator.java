@@ -5,7 +5,6 @@ import android.graphics.Point;
 import android.graphics.RectF;
 import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -156,6 +155,10 @@ public class ViewPositionAnimator {
                 applyCurrentPosition();
             }
         });
+
+        // Position updates are paused by default, until animation is started
+        fromPosHolder.pause(true);
+        toPosHolder.pause(true);
     }
 
     /**
@@ -171,7 +174,7 @@ public class ViewPositionAnimator {
         }
 
         enterInternal(withAnimation);
-        updateInternal((ViewPosition) null);
+        updateInternal();
     }
 
     /**
@@ -228,6 +231,18 @@ public class ViewPositionAnimator {
     }
 
     /**
+     * Updates position of initial view to no specific position, in case 'to' view is not available
+     * anymore.
+     */
+    public void updateToNone() {
+        if (GestureDebug.isDebugAnimator()) {
+            Log.d(TAG, "Updating view to no specific position");
+        }
+
+        updateInternal();
+    }
+
+    /**
      * Starts 'exit' animation from {@code to} view back to {@code from}.
      */
     public void exit(boolean withAnimation) {
@@ -259,20 +274,25 @@ public class ViewPositionAnimator {
     }
 
     private void updateInternal(@NonNull View from) {
-        if (!isActivated) {
-            throw new IllegalStateException(
-                    "You should call enter(...) before calling update(...)");
-        }
-
-        cleanup();
-        requestUpdateFromState();
-
+        cleanBeforeUpdateInternal();
         fromView = from;
         fromPosHolder.init(from, fromPositionListener);
         from.setVisibility(View.INVISIBLE); // We don't want duplicate view during animation
     }
 
-    private void updateInternal(@Nullable ViewPosition from) {
+    private void updateInternal(@NonNull ViewPosition from) {
+        cleanBeforeUpdateInternal();
+        fromPos = from;
+        applyCurrentPosition();
+    }
+
+    private void updateInternal() {
+        cleanBeforeUpdateInternal();
+        fromNonePos = true;
+        applyCurrentPosition();
+    }
+
+    private void cleanBeforeUpdateInternal() {
         if (!isActivated) {
             throw new IllegalStateException(
                     "You should call enter(...) before calling update(...)");
@@ -280,10 +300,6 @@ public class ViewPositionAnimator {
 
         cleanup();
         requestUpdateFromState();
-
-        fromPos = from;
-        fromNonePos = from == null;
-        applyCurrentPosition();
     }
 
     private void cleanup() {

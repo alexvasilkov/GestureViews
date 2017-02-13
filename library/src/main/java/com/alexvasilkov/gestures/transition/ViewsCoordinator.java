@@ -60,6 +60,13 @@ public class ViewsCoordinator<ID> {
     }
 
     public void request(@NonNull ID id) {
+        if (fromListener == null) {
+            throw new RuntimeException("'from' listener is not set");
+        }
+        if (toListener == null) {
+            throw new RuntimeException("'to' listener is not set");
+        }
+
         cleanupRequest();
 
         if (GestureDebug.isDebugAnimator()) {
@@ -71,22 +78,51 @@ public class ViewsCoordinator<ID> {
         toListener.onRequestView(id);
     }
 
+    public ID getRequestedId() {
+        return requestedId;
+    }
+
+
+    /**
+     * @return 'From' view, if set.<br/>
+     * Note, that once {@link #onViewsReady(Object)} is called both this method and
+     * {@link #getFromPos()} may still return null, see {@link #setFromNone(Object)}.
+     */
     public View getFromView() {
         return fromView;
     }
 
+    /**
+     * @return 'From' position, if set.<br/>
+     * Note, that once {@link #onViewsReady(Object)} is called, both this method and
+     * {@link #getFromView()} may still return null, see {@link #setFromNone(Object)}.
+     */
     public ViewPosition getFromPos() {
         return fromPos;
     }
+
+    /**
+     * @return 'To' view, if set. Will not be null once {@link #onViewsReady(Object)} is called,
+     * but before new request ({@link #request(Object)}).
+     */
+    public AnimatorView getToView() {
+        return toView;
+    }
+
 
     public void setFromView(@NonNull ID id, @NonNull View fromView) {
         setFromInternal(id, fromView, null);
     }
 
+    @SuppressWarnings("unused") // Public API
     public void setFromPos(@NonNull ID id, @NonNull ViewPosition fromPos) {
         setFromInternal(id, null, fromPos);
     }
 
+    /**
+     * Notifies that 'from' view is ready even if there is no such view. Can be used in cases when
+     * we know that there will be no 'from' view, but animation should be started anyway.
+     */
     public void setFromNone(@NonNull ID id) {
         setFromInternal(id, null, null);
     }
@@ -103,15 +139,18 @@ public class ViewsCoordinator<ID> {
             Log.d(TAG, "Setting 'from' view for " + id);
         }
 
+        onFromViewChanged(fromView, fromPos);
+
         fromId = id;
         this.fromView = fromView;
         this.fromPos = fromPos;
         notifyWhenReady();
     }
 
-    public AnimatorView getToView() {
-        return toView;
+    protected void onFromViewChanged(@Nullable View fromView, @Nullable ViewPosition fromPos) {
+        // Can be overridden to setup views
     }
+
 
     public void setToView(@NonNull ID id, @NonNull AnimatorView toView) {
         if (requestedId == null || !requestedId.equals(id)) {
@@ -125,32 +164,26 @@ public class ViewsCoordinator<ID> {
             Log.d(TAG, "Setting 'to' view for " + id);
         }
 
+        onToViewChanged(this.toView, toView);
+
         toId = id;
         this.toView = toView;
         notifyWhenReady();
     }
 
-    private void notifyWhenReady() {
-        if (requestedId == null || !requestedId.equals(fromId) || !requestedId.equals(toId)) {
-            return;
-        }
-
-        onViewsReady(requestedId);
+    protected void onToViewChanged(@Nullable AnimatorView old, @NonNull AnimatorView view) {
+        // Can be overridden to setup views
     }
 
-    protected void cleanupRequest() {
-        if (requestedId == null) {
-            return;
-        }
 
-        if (GestureDebug.isDebugAnimator()) {
-            Log.d(TAG, "Cleaning up request " + requestedId);
-        }
+    public boolean isReady() {
+        return requestedId != null && requestedId.equals(fromId) && requestedId.equals(toId);
+    }
 
-        fromView = null;
-        fromPos = null;
-        toView = null;
-        requestedId = fromId = toId = null;
+    private void notifyWhenReady() {
+        if (isReady()) {
+            onViewsReady(requestedId);
+        }
     }
 
     /**
@@ -167,6 +200,21 @@ public class ViewsCoordinator<ID> {
         if (readyListener != null) {
             readyListener.onViewsReady(id);
         }
+    }
+
+    protected void cleanupRequest() {
+        if (requestedId == null) {
+            return;
+        }
+
+        if (GestureDebug.isDebugAnimator()) {
+            Log.d(TAG, "Cleaning up request " + requestedId);
+        }
+
+        fromView = null;
+        fromPos = null;
+        toView = null;
+        requestedId = fromId = toId = null;
     }
 
 

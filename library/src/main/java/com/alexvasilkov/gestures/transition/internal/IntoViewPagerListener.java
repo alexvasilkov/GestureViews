@@ -6,8 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.alexvasilkov.gestures.animation.ViewPositionAnimator;
+import com.alexvasilkov.gestures.animation.ViewPositionAnimator.PositionUpdateListener;
 import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
-import com.alexvasilkov.gestures.transition.ViewsCoordinator;
 import com.alexvasilkov.gestures.transition.ViewsTracker;
 import com.alexvasilkov.gestures.transition.ViewsTransitionAnimator;
 import com.alexvasilkov.gestures.views.interfaces.AnimatorView;
@@ -17,30 +17,65 @@ import com.alexvasilkov.gestures.views.interfaces.AnimatorView;
  * <p/>
  * It works best with {@link RecyclePagerAdapter} as ViewPager adapter.
  */
-public class IntoViewPagerListener<ID> implements ViewsCoordinator.OnRequestViewListener<ID> {
+public class IntoViewPagerListener<ID> extends ViewsTransitionAnimator.RequestListener<ID> {
 
     private final ViewPager viewPager;
     private final ViewsTracker<ID> tracker;
-    private final ViewsTransitionAnimator<ID> animator;
-    private ID id;
 
     private boolean preventExit;
 
-    public IntoViewPagerListener(@NonNull ViewPager viewPager,
-            @NonNull ViewsTracker<ID> tracker,
-            @NonNull ViewsTransitionAnimator<ID> animator) {
+    public IntoViewPagerListener(ViewPager viewPager, ViewsTracker<ID> tracker) {
         this.viewPager = viewPager;
         this.tracker = tracker;
-        this.animator = animator;
 
         viewPager.setVisibility(View.GONE); // We do not need to initialize ViewPager on startup
         viewPager.addOnPageChangeListener(new PagerListener());
         viewPager.setOnHierarchyChangeListener(new ChildStateListener());
+    }
 
-        animator.addPositionUpdateListener(new UpdateListener());
+    @Override
+    protected void initAnimator(ViewsTransitionAnimator<ID> animator) {
+        super.initAnimator(animator);
+
+        animator.addPositionUpdateListener(new PositionUpdateListener() {
+            @Override
+            public void onPositionUpdate(float pos, boolean isLeaving) {
+                if (pos == 1f && isLeaving && getAnimator().getRequestedId() != null) {
+                    if (preventExit) {
+                        skipExit();
+                    }
+                    switchToCurrentPage();
+                }
+
+                viewPager.setVisibility(pos == 0f && isLeaving ? View.INVISIBLE : View.VISIBLE);
+            }
+        });
+    }
+
+    @Override
+    public void onRequestView(@NonNull ID id) {
+        // Requesting ViewPager layout if it was in 'gone' state
+        if (viewPager.getVisibility() == View.GONE) {
+            viewPager.setVisibility(View.INVISIBLE);
+        }
+
+        // Trying to find view for currently shown page.
+        // If it is not a selected page then we should scroll to it at first.
+        int position = tracker.getPositionForId(id);
+
+        if (position == ViewsTracker.NO_POSITION) {
+            return; // Nothing we can do
+        }
+
+        if (viewPager.getCurrentItem() == position) {
+            applyCurrentPage();
+        } else {
+            viewPager.setCurrentItem(position, false);
+        }
     }
 
     private void applyCurrentPage() {
+        final ID id = getAnimator().getRequestedId();
         if (id == null) {
             return;
         }
@@ -57,7 +92,7 @@ public class IntoViewPagerListener<ID> implements ViewsCoordinator.OnRequestView
 
         View view = tracker.getViewForPosition(current); // View may be null
         if (view instanceof AnimatorView) {
-            animator.setToView(id, (AnimatorView) view);
+            getAnimator().setToView(id, (AnimatorView) view);
         } else if (view != null) {
             throw new IllegalArgumentException("View for " + id + " should be AnimatorView");
         }
@@ -68,11 +103,13 @@ public class IntoViewPagerListener<ID> implements ViewsCoordinator.OnRequestView
             return;
         }
 
+        final ID id = getAnimator().getRequestedId();
+        final ID currentId = tracker.getIdForPosition(viewPager.getCurrentItem());
+
         // If user scrolled to new page we should silently switch views
-        ID currentId = tracker.getIdForPosition(viewPager.getCurrentItem());
         if (id != null && currentId != null && !id.equals(currentId)) {
             // Saving current state
-            AnimatorView toView = animator.getToView();
+            AnimatorView toView = getAnimator().getToView();
             ViewPositionAnimator toAnimator = toView == null ? null : toView.getPositionAnimator();
             boolean isLeaving = toAnimator != null && toAnimator.isLeaving();
             float position = toAnimator == null ? 0f : toAnimator.getPosition();
@@ -80,45 +117,21 @@ public class IntoViewPagerListener<ID> implements ViewsCoordinator.OnRequestView
 
             // Switching to new page, preventing exit of previous page
             skipExit();
-            animator.enter(currentId, false);
+            getAnimator().enter(currentId, false);
 
             // If exit animation was in place we should continue it
             if (isLeaving && position > 0f) {
-                animator.exit(isAnimating);
+                getAnimator().exit(isAnimating);
             }
         }
     }
 
     private void skipExit() {
-        if (animator.getToView() == null) {
-            return;
-        }
-        ViewPositionAnimator toAnimator = animator.getToView().getPositionAnimator();
-        if (toAnimator.isLeaving() && toAnimator.getPosition() == 1f) {
-            toAnimator.setState(1f, false, false);
-        }
-    }
-
-    @Override
-    public void onRequestView(@NonNull ID id) {
-        // Requesting ViewPager layout if it was in 'gone' state
-        if (viewPager.getVisibility() == View.GONE) {
-            viewPager.setVisibility(View.INVISIBLE);
-        }
-
-        // Trying to find view for currently shown page.
-        // If it is not a selected page then we should scroll to it at first.
-        this.id = id;
-        int position = tracker.getPositionForId(id);
-
-        if (position == ViewsTracker.NO_POSITION) {
-            return; // Nothing we can do
-        }
-
-        if (viewPager.getCurrentItem() == position) {
-            applyCurrentPage();
-        } else {
-            viewPager.setCurrentItem(position, false);
+        if (getAnimator().getToView() != null) {
+            ViewPositionAnimator toAnimator = getAnimator().getToView().getPositionAnimator();
+            if (toAnimator.isLeaving() && toAnimator.getPosition() == 1f) {
+                toAnimator.setState(1f, false, false);
+            }
         }
     }
 
@@ -136,8 +149,9 @@ public class IntoViewPagerListener<ID> implements ViewsCoordinator.OnRequestView
 
         @Override
         public void onPageScrollStateChanged(int state) {
-            preventExit = !animator.isLeaving() && state == ViewPager.SCROLL_STATE_DRAGGING;
-            if (state == ViewPager.SCROLL_STATE_IDLE && id != null) {
+            preventExit = state == ViewPager.SCROLL_STATE_DRAGGING && !getAnimator().isLeaving();
+
+            if (state == ViewPager.SCROLL_STATE_IDLE && getAnimator().getRequestedId() != null) {
                 switchToCurrentPage();
             }
         }
@@ -152,22 +166,6 @@ public class IntoViewPagerListener<ID> implements ViewsCoordinator.OnRequestView
         @Override
         public void onChildViewRemoved(View parent, View child) {
             // No-op
-        }
-    }
-
-    private class UpdateListener implements ViewPositionAnimator.PositionUpdateListener {
-        @Override
-        public void onPositionUpdate(float position, boolean isLeaving) {
-            if (position == 0f && isLeaving) {
-                id = null;
-            }
-            if (position == 1f && isLeaving && id != null) {
-                if (preventExit) {
-                    skipExit();
-                }
-                switchToCurrentPage();
-            }
-            viewPager.setVisibility(position == 0f && isLeaving ? View.INVISIBLE : View.VISIBLE);
         }
     }
 

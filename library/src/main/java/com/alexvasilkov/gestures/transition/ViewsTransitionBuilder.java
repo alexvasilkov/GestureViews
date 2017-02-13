@@ -9,25 +9,30 @@ import com.alexvasilkov.gestures.transition.internal.FromListViewListener;
 import com.alexvasilkov.gestures.transition.internal.FromRecyclerViewListener;
 import com.alexvasilkov.gestures.transition.internal.IntoViewPagerListener;
 
+/**
+ * @deprecated Use {@link GestureTransitions} instead.
+ */
+@SuppressWarnings({ "deprecation", "unused", "WeakerAccess" })
+@Deprecated
 public class ViewsTransitionBuilder<ID> {
 
     private final ViewsTransitionAnimator<ID> animator = new ViewsTransitionAnimator<>();
 
     public ViewsTransitionBuilder<ID> fromRecyclerView(@NonNull RecyclerView recyclerView,
             @NonNull ViewsTracker<ID> tracker) {
-        animator.setFromListener(new FromRecyclerViewListener<>(recyclerView, tracker, animator));
+        animator.setFromListener(new FromRecyclerViewListener<>(recyclerView, tracker));
         return this;
     }
 
     public ViewsTransitionBuilder<ID> fromListView(@NonNull ListView listView,
             @NonNull ViewsTracker<ID> tracker) {
-        animator.setFromListener(new FromListViewListener<>(listView, tracker, animator));
+        animator.setFromListener(new FromListViewListener<>(listView, tracker));
         return this;
     }
 
     public ViewsTransitionBuilder<ID> intoViewPager(@NonNull ViewPager viewPager,
             @NonNull ViewsTracker<ID> helper) {
-        animator.setToListener(new IntoViewPagerListener<>(viewPager, helper, animator));
+        animator.setToListener(new IntoViewPagerListener<>(viewPager, helper));
         return this;
     }
 
