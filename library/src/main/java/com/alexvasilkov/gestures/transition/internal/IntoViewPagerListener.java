@@ -86,7 +86,12 @@ public class IntoViewPagerListener<ID> extends ViewsTransitionAnimator.RequestLi
         int current = viewPager.getCurrentItem();
         int position = tracker.getPositionForId(id);
 
-        if (position == ViewsTracker.NO_POSITION || current != position) {
+        if (position == ViewsTracker.NO_POSITION) {
+            switchToCurrentPage();
+            return;
+        }
+
+        if (current != position) {
             return;
         }
 
