@@ -67,7 +67,10 @@ public class PhotoPagerAdapter
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup container) {
         final ViewHolder holder = new ViewHolder(container);
 
-        holder.image.getController().getSettings().setMaxZoom(3f);
+        holder.image.getController().getSettings()
+            .setMaxZoom(10f)
+            .setDoubleTapZoom(3f);
+
         if (setupListener != null) {
             setupListener.onSetupGestureView(holder.image);
         }

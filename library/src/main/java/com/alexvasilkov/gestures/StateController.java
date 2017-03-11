@@ -90,7 +90,7 @@ public class StateController {
     State toggleMinMaxZoom(State state, float pivotX, float pivotY) {
         ZoomBounds zoomBounds = getZoomBounds(state);
         final float minZoom = zoomBounds.getMinZoom();
-        final float maxZoom = zoomBounds.getMaxZoom();
+        final float maxZoom = settings.getDoubleTapZoom() > 0f ? settings.getDoubleTapZoom() : zoomBounds.getMaxZoom();
 
         final float middleZoom = (minZoom + maxZoom) / 2f;
         final float targetZoom = state.getZoom() < middleZoom ? maxZoom : minZoom;
