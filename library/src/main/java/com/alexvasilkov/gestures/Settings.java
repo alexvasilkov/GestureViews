@@ -46,6 +46,11 @@ public class Settings {
     private float maxZoom = MAX_ZOOM;
 
     /*
+     * Double tap zoom level, default value is -1. Defaults to {@link #maxZoom} if < 0.
+     */
+    private float doubleTapZoom = -1f;
+
+    /*
      * Overzoom factor.
      */
     private float overzoomFactor = OVERZOOM_FACTOR;
@@ -161,6 +166,16 @@ public class Settings {
      */
     public Settings setMaxZoom(float maxZoom) {
         this.maxZoom = maxZoom;
+        return this;
+    }
+
+    /**
+     * Setting double tap zoom level. Defaults to {@link #maxZoom} if < 0.
+     * <p/>
+     * Default value is -1.
+     */
+    public Settings setDoubleTapZoom(float doubleTapZoom){
+        this.doubleTapZoom = doubleTapZoom;
         return this;
     }
 
@@ -396,6 +411,10 @@ public class Settings {
 
     public float getMaxZoom() {
         return maxZoom;
+    }
+
+    public float getDoubleTapZoom() {
+        return doubleTapZoom;
     }
 
     public float getOverzoomFactor() {
