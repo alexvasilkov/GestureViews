@@ -4,11 +4,11 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ListView;
 
-import com.alexvasilkov.gestures.transition.ViewsTracker;
+import com.alexvasilkov.gestures.transition.tracker.FromTracker;
 
 public class FromListViewListener<ID> extends FromBaseListener<ListView, ID> {
 
-    public FromListViewListener(ListView listView, final ViewsTracker<ID> tracker) {
+    public FromListViewListener(ListView listView, final FromTracker<ID> tracker) {
         super(listView, tracker);
 
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
@@ -17,9 +17,9 @@ public class FromListViewListener<ID> extends FromBaseListener<ListView, ID> {
                 final ID id = getAnimator() == null ? null : getAnimator().getRequestedId();
 
                 if (id != null) {
-                    int position = tracker.getPositionForId(id);
+                    int position = tracker.getPositionById(id);
                     if (position >= firstVisible && position < firstVisible + visibleCount) {
-                        View from = tracker.getViewForPosition(position);
+                        View from = tracker.getViewById(id);
                         if (from != null) {
                             getAnimator().setFromView(id, from);
                         }

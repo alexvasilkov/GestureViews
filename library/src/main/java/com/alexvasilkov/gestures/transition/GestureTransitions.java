@@ -10,13 +10,17 @@ import com.alexvasilkov.gestures.transition.ViewsTransitionAnimator.RequestListe
 import com.alexvasilkov.gestures.transition.internal.FromListViewListener;
 import com.alexvasilkov.gestures.transition.internal.FromRecyclerViewListener;
 import com.alexvasilkov.gestures.transition.internal.IntoViewPagerListener;
+import com.alexvasilkov.gestures.transition.tracker.FromTracker;
+import com.alexvasilkov.gestures.transition.tracker.IntoTracker;
 import com.alexvasilkov.gestures.views.interfaces.AnimatorView;
 
-// Temporary suppressing setFromListener / setToListener deprecation warnings,
-// until these methods are made package local.
-@SuppressWarnings("deprecation")
+/**
+ * Transition animation builder.
+ */
 public class GestureTransitions<ID> {
 
+    // ViewsTransitionAnimator' public constructor is temporary deprecated
+    @SuppressWarnings("deprecation")
     private final ViewsTransitionAnimator<ID> animator = new ViewsTransitionAnimator<>();
 
     private GestureTransitions() {}
@@ -38,13 +42,13 @@ public class GestureTransitions<ID> {
 
     public static <ID> GestureTransitions<ID> from(
             @NonNull RecyclerView recyclerView,
-            @NonNull ViewsTracker<ID> tracker) {
+            @NonNull FromTracker<ID> tracker) {
         return from(new FromRecyclerViewListener<>(recyclerView, tracker));
     }
 
     public static <ID> GestureTransitions<ID> from(
             @NonNull ListView listView,
-            @NonNull ViewsTracker<ID> tracker) {
+            @NonNull FromTracker<ID> tracker) {
         return from(new FromListViewListener<>(listView, tracker));
     }
 
@@ -75,8 +79,8 @@ public class GestureTransitions<ID> {
 
     public ViewsTransitionAnimator<ID> into(
             @NonNull ViewPager viewPager,
-            @NonNull ViewsTracker<ID> helper) {
-        return into(new IntoViewPagerListener<>(viewPager, helper));
+            @NonNull IntoTracker<ID> tracker) {
+        return into(new IntoViewPagerListener<>(viewPager, tracker));
     }
 
 }

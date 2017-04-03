@@ -4,11 +4,11 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.OnChildAttachStateChangeListener;
 import android.view.View;
 
-import com.alexvasilkov.gestures.transition.ViewsTracker;
+import com.alexvasilkov.gestures.transition.tracker.FromTracker;
 
 public class FromRecyclerViewListener<ID> extends FromBaseListener<RecyclerView, ID> {
 
-    public FromRecyclerViewListener(final RecyclerView recycler, final ViewsTracker<ID> tracker) {
+    public FromRecyclerViewListener(final RecyclerView recycler, final FromTracker<ID> tracker) {
         super(recycler, tracker);
 
         recycler.addOnChildAttachStateChangeListener(new OnChildAttachStateChangeListener() {
@@ -18,9 +18,9 @@ public class FromRecyclerViewListener<ID> extends FromBaseListener<RecyclerView,
 
                 if (id != null) {
                     int position = recycler.getChildAdapterPosition(view);
-                    int positionById = tracker.getPositionForId(id);
+                    int positionById = tracker.getPositionById(id);
                     if (position == positionById) {
-                        View from = tracker.getViewForPosition(position);
+                        View from = tracker.getViewById(id);
                         if (from != null) {
                             getAnimator().setFromView(id, from);
                         }

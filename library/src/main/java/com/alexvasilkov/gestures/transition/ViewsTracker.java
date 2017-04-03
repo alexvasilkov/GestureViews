@@ -3,6 +3,15 @@ package com.alexvasilkov.gestures.transition;
 import android.support.annotation.NonNull;
 import android.view.View;
 
+import com.alexvasilkov.gestures.transition.tracker.FromTracker;
+import com.alexvasilkov.gestures.transition.tracker.IntoTracker;
+
+/**
+ * @deprecated Use {@link GestureTransitions} class with {@link FromTracker} and
+ * {@link IntoTracker} instead.
+ */
+@SuppressWarnings({ "WeakerAccess", "unused" }) // Class is left for compatibility
+@Deprecated
 public interface ViewsTracker<ID> {
 
     int NO_POSITION = -1;

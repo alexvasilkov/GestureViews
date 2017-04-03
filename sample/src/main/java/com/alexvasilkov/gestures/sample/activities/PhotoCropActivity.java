@@ -93,7 +93,7 @@ public class PhotoCropActivity extends BaseActivity {
     private void setFinderShape(FinderShape shape) {
         finderShape = shape;
         applyFinderShape(true);
-        invalidateOptionsMenu();
+        supportInvalidateOptionsMenu();
     }
 
     @Override

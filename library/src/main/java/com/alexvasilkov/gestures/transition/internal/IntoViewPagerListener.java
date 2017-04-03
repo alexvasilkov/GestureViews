@@ -8,8 +8,8 @@ import android.view.ViewGroup;
 import com.alexvasilkov.gestures.animation.ViewPositionAnimator;
 import com.alexvasilkov.gestures.animation.ViewPositionAnimator.PositionUpdateListener;
 import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
-import com.alexvasilkov.gestures.transition.ViewsTracker;
 import com.alexvasilkov.gestures.transition.ViewsTransitionAnimator;
+import com.alexvasilkov.gestures.transition.tracker.IntoTracker;
 import com.alexvasilkov.gestures.views.interfaces.AnimatorView;
 
 /**
@@ -20,11 +20,11 @@ import com.alexvasilkov.gestures.views.interfaces.AnimatorView;
 public class IntoViewPagerListener<ID> extends ViewsTransitionAnimator.RequestListener<ID> {
 
     private final ViewPager viewPager;
-    private final ViewsTracker<ID> tracker;
+    private final IntoTracker<ID> tracker;
 
     private boolean preventExit;
 
-    public IntoViewPagerListener(ViewPager viewPager, ViewsTracker<ID> tracker) {
+    public IntoViewPagerListener(ViewPager viewPager, IntoTracker<ID> tracker) {
         this.viewPager = viewPager;
         this.tracker = tracker;
 
@@ -61,9 +61,9 @@ public class IntoViewPagerListener<ID> extends ViewsTransitionAnimator.RequestLi
 
         // Trying to find view for currently shown page.
         // If it is not a selected page then we should scroll to it at first.
-        int position = tracker.getPositionForId(id);
+        int position = tracker.getPositionById(id);
 
-        if (position == ViewsTracker.NO_POSITION) {
+        if (position == IntoTracker.NO_POSITION) {
             return; // Nothing we can do
         }
 
@@ -83,19 +83,18 @@ public class IntoViewPagerListener<ID> extends ViewsTransitionAnimator.RequestLi
             return;
         }
 
-        int current = viewPager.getCurrentItem();
-        int position = tracker.getPositionForId(id);
+        final int position = tracker.getPositionById(id);
 
-        if (position == ViewsTracker.NO_POSITION) {
+        if (position == IntoTracker.NO_POSITION) {
             switchToCurrentPage();
             return;
         }
 
-        if (current != position) {
+        if (position != viewPager.getCurrentItem()) {
             return;
         }
 
-        View view = tracker.getViewForPosition(current); // View may be null
+        final View view = tracker.getViewById(id); // View may be null
         if (view instanceof AnimatorView) {
             getAnimator().setToView(id, (AnimatorView) view);
         } else if (view != null) {
@@ -109,7 +108,7 @@ public class IntoViewPagerListener<ID> extends ViewsTransitionAnimator.RequestLi
         }
 
         final ID id = getAnimator().getRequestedId();
-        final ID currentId = tracker.getIdForPosition(viewPager.getCurrentItem());
+        final ID currentId = tracker.getIdByPosition(viewPager.getCurrentItem());
 
         // If user scrolled to new page we should silently switch views
         if (id != null && currentId != null && !id.equals(currentId)) {

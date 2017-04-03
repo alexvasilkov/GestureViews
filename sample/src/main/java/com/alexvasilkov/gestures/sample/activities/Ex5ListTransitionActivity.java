@@ -18,8 +18,8 @@ import com.alexvasilkov.gestures.sample.logic.Painting;
 import com.alexvasilkov.gestures.sample.logic.PaintingsHelper;
 import com.alexvasilkov.gestures.sample.utils.GestureSettingsMenu;
 import com.alexvasilkov.gestures.transition.GestureTransitions;
-import com.alexvasilkov.gestures.transition.SimpleViewsTracker;
 import com.alexvasilkov.gestures.transition.ViewsTransitionAnimator;
+import com.alexvasilkov.gestures.transition.tracker.SimpleTracker;
 
 public class Ex5ListTransitionActivity extends BaseActivity implements
         PaintingsListAdapter.OnPaintingListener,
@@ -49,9 +49,9 @@ public class Ex5ListTransitionActivity extends BaseActivity implements
         views.pager.setPageMargin(getResources().getDimensionPixelSize(R.dimen.view_pager_margin));
 
 
-        final SimpleViewsTracker listViewTracker = new SimpleViewsTracker() {
+        final SimpleTracker listTracker = new SimpleTracker() {
             @Override
-            public View getViewForPosition(int position) {
+            public View getViewAt(int position) {
                 int first = views.list.getFirstVisiblePosition();
                 int last = views.list.getLastVisiblePosition();
                 if (position < first || position > last) {
@@ -63,17 +63,15 @@ public class Ex5ListTransitionActivity extends BaseActivity implements
             }
         };
 
-        final SimpleViewsTracker pagerViewTracker = new SimpleViewsTracker() {
+        final SimpleTracker pagerTracker = new SimpleTracker() {
             @Override
-            public View getViewForPosition(int position) {
+            public View getViewAt(int position) {
                 RecyclePagerAdapter.ViewHolder holder = pagerAdapter.getViewHolder(position);
                 return holder == null ? null : PaintingsPagerAdapter.getImage(holder);
             }
         };
 
-        animator = GestureTransitions
-                .from(views.list, listViewTracker)
-                .into(views.pager, pagerViewTracker);
+        animator = GestureTransitions.from(views.list, listTracker).into(views.pager, pagerTracker);
         animator.addPositionUpdateListener(this);
     }
 
@@ -100,7 +98,7 @@ public class Ex5ListTransitionActivity extends BaseActivity implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (settingsMenu.onOptionsItemSelected(item)) {
-            invalidateOptionsMenu();
+            supportInvalidateOptionsMenu();
             views.pager.getAdapter().notifyDataSetChanged();
             return true;
         } else {

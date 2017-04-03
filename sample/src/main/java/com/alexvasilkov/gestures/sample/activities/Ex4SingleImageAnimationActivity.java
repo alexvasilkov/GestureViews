@@ -9,17 +9,19 @@ import android.view.View;
 
 import com.alexvasilkov.android.commons.state.InstanceState;
 import com.alexvasilkov.android.commons.utils.Views;
-import com.alexvasilkov.gestures.animation.ViewPositionAnimator;
 import com.alexvasilkov.gestures.animation.ViewPositionAnimator.PositionUpdateListener;
 import com.alexvasilkov.gestures.commons.circle.CircleGestureImageView;
 import com.alexvasilkov.gestures.commons.circle.CircleImageView;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.utils.GestureSettingsMenu;
 import com.alexvasilkov.gestures.sample.utils.glide.GlideHelper;
+import com.alexvasilkov.gestures.transition.GestureTransitions;
+import com.alexvasilkov.gestures.transition.ViewsTransitionAnimator;
 
 public class Ex4SingleImageAnimationActivity extends BaseActivity {
 
     private ViewHolder views;
+    private ViewsTransitionAnimator animator;
     private GestureSettingsMenu settingsMenu;
 
     @InstanceState
@@ -50,8 +52,8 @@ public class Ex4SingleImageAnimationActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        if (!views.fullAnimator.isLeaving()) {
-            views.fullAnimator.exit(true);
+        if (!animator.isLeaving()) {
+            animator.exit(true);
         } else {
             super.onBackPressed();
         }
@@ -77,14 +79,14 @@ public class Ex4SingleImageAnimationActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_crop_square) {
             setCircleImage(false);
-            invalidateOptionsMenu();
+            supportInvalidateOptionsMenu();
             return true;
         } else if (item.getItemId() == R.id.menu_crop_circle) {
             setCircleImage(true);
-            invalidateOptionsMenu();
+            supportInvalidateOptionsMenu();
             return true;
         } else if (settingsMenu.onOptionsItemSelected(item)) {
-            invalidateOptionsMenu();
+            supportInvalidateOptionsMenu();
             settingsMenu.onSetupGestureView(views.fullImage); // Updating gesture image settings
             return true;
         } else {
@@ -103,7 +105,9 @@ public class Ex4SingleImageAnimationActivity extends BaseActivity {
             }
         });
 
-        views.fullAnimator.addPositionUpdateListener(new PositionUpdateListener() {
+        animator = GestureTransitions.from(views.image).into(views.fullImage);
+
+        animator.addPositionUpdateListener(new PositionUpdateListener() {
             @Override
             public void onPositionUpdate(float position, boolean isLeaving) {
                 views.fullImage.setVisibility(position == 0f && isLeaving
@@ -121,7 +125,7 @@ public class Ex4SingleImageAnimationActivity extends BaseActivity {
         settingsMenu.onSetupGestureView(views.fullImage); // Updating gesture image settings
         views.fullImage.getController().resetState();
 
-        views.fullAnimator.enter(views.image, true);
+        animator.enterSingle(true);
     }
 
     private void setCircleImage(boolean isCircle) {
@@ -134,12 +138,10 @@ public class Ex4SingleImageAnimationActivity extends BaseActivity {
     private class ViewHolder {
         final CircleImageView image;
         final CircleGestureImageView fullImage;
-        final ViewPositionAnimator fullAnimator;
 
         ViewHolder(Activity activity) {
             image = Views.find(activity, R.id.single_image);
             fullImage = Views.find(activity, R.id.single_image_full);
-            fullAnimator = fullImage.getPositionAnimator();
         }
     }
 

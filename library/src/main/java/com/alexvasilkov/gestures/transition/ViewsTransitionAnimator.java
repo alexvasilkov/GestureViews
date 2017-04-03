@@ -9,6 +9,8 @@ import com.alexvasilkov.gestures.animation.ViewPosition;
 import com.alexvasilkov.gestures.animation.ViewPositionAnimator;
 import com.alexvasilkov.gestures.animation.ViewPositionAnimator.PositionUpdateListener;
 import com.alexvasilkov.gestures.internal.GestureDebug;
+import com.alexvasilkov.gestures.transition.tracker.FromTracker;
+import com.alexvasilkov.gestures.transition.tracker.IntoTracker;
 import com.alexvasilkov.gestures.views.interfaces.AnimatorView;
 
 import java.util.ArrayList;
@@ -23,6 +25,8 @@ import java.util.List;
  */
 public class ViewsTransitionAnimator<ID> extends ViewsCoordinator<ID> {
 
+    private static final Object NONE = new Object();
+
     private static final String TAG = ViewsTransitionAnimator.class.getSimpleName();
 
     private final List<PositionUpdateListener> listeners = new ArrayList<>();
@@ -33,7 +37,11 @@ public class ViewsTransitionAnimator<ID> extends ViewsCoordinator<ID> {
     private boolean exitRequested;
     private boolean exitWithAnimation;
 
+    /**
+     * @deprecated Use {@link GestureTransitions} instead.
+     */
     @SuppressWarnings("WeakerAccess") // Public API
+    @Deprecated
     public ViewsTransitionAnimator() {
         addPositionUpdateListener(new PositionUpdateListener() {
             @Override
@@ -57,6 +65,20 @@ public class ViewsTransitionAnimator<ID> extends ViewsCoordinator<ID> {
 
         enterWithAnimation = withAnimation;
         request(id);
+    }
+
+    /**
+     * Similar to {@link #enter(Object, boolean) enter(ID, boolean)} but starts entering from no
+     * specific id.<br/>
+     * <b>Do not use this method if you are actually going to use items ids in {@link FromTracker}
+     * or {@link IntoTracker}.</b><p/>
+     * Can be used if your have single 'from' item with no specific id, like:<br/>
+     * {@code GestureTransitions.from(imageView).into(gestureImageView).enterSingle(true)}
+     */
+    @SuppressWarnings("unchecked")
+    public void enterSingle(boolean withAnimation) {
+        // Passing 'NONE' Object instead of ID. Will fail if ID will be actually used.
+        enter((ID) NONE, withAnimation);
     }
 
     /**

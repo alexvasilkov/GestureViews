@@ -5,9 +5,9 @@ import android.support.annotation.NonNull;
 import android.view.View;
 
 import com.alexvasilkov.gestures.animation.ViewPositionAnimator.PositionUpdateListener;
-import com.alexvasilkov.gestures.transition.ViewsTracker;
 import com.alexvasilkov.gestures.transition.ViewsTransitionAnimator;
 import com.alexvasilkov.gestures.transition.ViewsTransitionAnimator.RequestListener;
+import com.alexvasilkov.gestures.transition.tracker.FromTracker;
 
 abstract class FromBaseListener<P extends View, ID> extends RequestListener<ID> {
 
@@ -15,10 +15,10 @@ abstract class FromBaseListener<P extends View, ID> extends RequestListener<ID> 
     private static final Rect locationChild = new Rect();
 
     private final P parentView;
-    private final ViewsTracker<ID> tracker;
+    private final FromTracker<ID> tracker;
     private boolean scrollHalfVisibleItems;
 
-    FromBaseListener(P parentView, ViewsTracker<ID> tracker) {
+    FromBaseListener(P parentView, FromTracker<ID> tracker) {
         this.parentView = parentView;
         this.tracker = tracker;
     }
@@ -43,14 +43,14 @@ abstract class FromBaseListener<P extends View, ID> extends RequestListener<ID> 
     public void onRequestView(@NonNull ID id) {
         // Trying to find requested view on screen. If it is not currently on screen
         // or it is not fully visible then we should scroll to it at first.
-        int position = tracker.getPositionForId(id);
+        int position = tracker.getPositionById(id);
 
-        if (position == ViewsTracker.NO_POSITION) {
+        if (position == FromTracker.NO_POSITION) {
             getAnimator().setFromNone(id);
             return;
         }
 
-        View view = tracker.getViewForPosition(position);
+        View view = tracker.getViewById(id);
         if (view == null) {
             scrollToPosition(parentView, position);
         } else {

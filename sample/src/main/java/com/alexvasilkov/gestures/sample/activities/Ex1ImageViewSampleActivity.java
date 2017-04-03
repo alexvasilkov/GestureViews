@@ -65,7 +65,7 @@ public class Ex1ImageViewSampleActivity extends BaseActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (settingsMenu.onOptionsItemSelected(item)) {
-            invalidateOptionsMenu();
+            supportInvalidateOptionsMenu();
             viewPager.getAdapter().notifyDataSetChanged();
             return true;
         } else {

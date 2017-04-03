@@ -31,9 +31,9 @@ import com.alexvasilkov.gestures.sample.logic.FlickrApi;
 import com.alexvasilkov.gestures.sample.utils.DecorUtils;
 import com.alexvasilkov.gestures.sample.utils.GestureSettingsMenu;
 import com.alexvasilkov.gestures.transition.GestureTransitions;
-import com.alexvasilkov.gestures.transition.SimpleViewsTracker;
 import com.alexvasilkov.gestures.transition.ViewsCoordinator;
 import com.alexvasilkov.gestures.transition.ViewsTransitionAnimator;
+import com.alexvasilkov.gestures.transition.tracker.SimpleTracker;
 import com.googlecode.flickrjandroid.photos.Photo;
 
 import java.util.List;
@@ -110,7 +110,7 @@ public class Ex6AdvancedDemoActivity extends BaseActivity implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (settingsMenu.onOptionsItemSelected(item)) {
-            invalidateOptionsMenu();
+            supportInvalidateOptionsMenu();
             return true;
         } else {
             return super.onOptionsItemSelected(item);
@@ -208,25 +208,23 @@ public class Ex6AdvancedDemoActivity extends BaseActivity implements
     }
 
     private void initAnimator() {
-        final SimpleViewsTracker gridViewTracker = new SimpleViewsTracker() {
+        final SimpleTracker gridTracker = new SimpleTracker() {
             @Override
-            public View getViewForPosition(int pos) {
+            public View getViewAt(int pos) {
                 RecyclerView.ViewHolder holder = views.grid.findViewHolderForLayoutPosition(pos);
                 return holder == null ? null : PhotoListAdapter.getImage(holder);
             }
         };
 
-        final SimpleViewsTracker pagerViewTracker = new SimpleViewsTracker() {
+        final SimpleTracker pagerTracker = new SimpleTracker() {
             @Override
-            public View getViewForPosition(int pos) {
+            public View getViewAt(int pos) {
                 RecyclePagerAdapter.ViewHolder holder = pagerAdapter.getViewHolder(pos);
                 return holder == null ? null : PhotoPagerAdapter.getImage(holder);
             }
         };
 
-        animator = GestureTransitions
-                .from(views.grid, gridViewTracker)
-                .into(views.pager, pagerViewTracker);
+        animator = GestureTransitions.from(views.grid, gridTracker).into(views.pager, pagerTracker);
 
         animator.addPositionUpdateListener(this);
         animator.setReadyListener(new ViewsCoordinator.OnViewsReadyListener<Integer>() {
