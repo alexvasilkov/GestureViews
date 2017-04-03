@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.alexvasilkov.gestures.animation.ViewPosition;
 import com.alexvasilkov.gestures.animation.ViewPositionAnimator;
@@ -219,6 +220,15 @@ public class ViewsTransitionAnimator<ID> extends ViewsCoordinator<ID> {
             }
 
             exitIfRequested();
+        }
+
+        if (getFromView() instanceof ImageView && getToView() instanceof ImageView) {
+            // Pre-setting 'to' image with 'from' image to prevent flickering
+            ImageView from = (ImageView) getFromView();
+            ImageView to = (ImageView) getToView();
+            if (to.getDrawable() == null) {
+                to.setImageDrawable(from.getDrawable());
+            }
         }
 
         super.onViewsReady(id);

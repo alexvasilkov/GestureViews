@@ -11,7 +11,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alexvasilkov.android.commons.state.InstanceState;
@@ -31,7 +30,6 @@ import com.alexvasilkov.gestures.sample.logic.FlickrApi;
 import com.alexvasilkov.gestures.sample.utils.DecorUtils;
 import com.alexvasilkov.gestures.sample.utils.GestureSettingsMenu;
 import com.alexvasilkov.gestures.transition.GestureTransitions;
-import com.alexvasilkov.gestures.transition.ViewsCoordinator;
 import com.alexvasilkov.gestures.transition.ViewsTransitionAnimator;
 import com.alexvasilkov.gestures.transition.tracker.SimpleTracker;
 import com.googlecode.flickrjandroid.photos.Photo;
@@ -80,7 +78,7 @@ public class Ex6AdvancedDemoActivity extends BaseActivity implements
         initAnimator();
 
         if (savedPagerPosition != NO_POSITION) {
-            // Photo was show in pager, we should switch to pager mode instantly
+            // Photo was shown in pager, we should switch to pager mode instantly
             onPositionUpdate(1f, false);
         }
     }
@@ -225,19 +223,7 @@ public class Ex6AdvancedDemoActivity extends BaseActivity implements
         };
 
         animator = GestureTransitions.from(views.grid, gridTracker).into(views.pager, pagerTracker);
-
         animator.addPositionUpdateListener(this);
-        animator.setReadyListener(new ViewsCoordinator.OnViewsReadyListener<Integer>() {
-            @Override
-            public void onViewsReady(@NonNull Integer id) {
-                // Setting image drawable from 'from' view to 'to' to prevent flickering
-                ImageView from = (ImageView) animator.getFromView();
-                ImageView to = (ImageView) animator.getToView();
-                if (to.getDrawable() == null) {
-                    to.setImageDrawable(from.getDrawable());
-                }
-            }
-        });
     }
 
     private void onPhotoInPagerSelected(int position) {
