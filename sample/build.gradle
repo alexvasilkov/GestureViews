@@ -9,13 +9,13 @@ apply plugin: 'com.alexvasilkov.sign'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion '25.0.1'
+    buildToolsVersion '25.0.2'
 
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 25
-        versionCode 12
-        versionName '2.2.0'
+        versionCode 13
+        versionName '2.3.0'
     }
 
     signingConfigs {
@@ -41,9 +41,9 @@ android {
 dependencies {
     compile project(':library')
 
-    compile 'com.android.support:support-v4:25.0.1'
-    compile 'com.android.support:appcompat-v7:25.0.1'
-    compile 'com.android.support:recyclerview-v7:25.0.1'
+    compile 'com.android.support:support-v4:25.3.1'
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:recyclerview-v7:25.3.1'
 
     compile 'com.github.bumptech.glide:glide:3.7.0'
 

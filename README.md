@@ -39,7 +39,7 @@ easier for developers to integrate it into their apps.
 
 Add dependency to your `build.gradle` file:
 
-    compile 'com.alexvasilkov:gesture-views:2.2.0'
+    compile 'com.alexvasilkov:gesture-views:2.3.0'
 
 Note: min SDK version for library is 9, but it was tested mainly on 15+.
 
@@ -68,7 +68,7 @@ Note: min SDK version for library is 9, but it was tested mainly on 15+.
 [mvn-url]: https://maven-badges.herokuapp.com/maven-central/com.alexvasilkov/gesture-views
 [mvn-img]: https://img.shields.io/maven-central/v/com.alexvasilkov/gesture-views.svg?style=flat-square
 
-[size-url]: http://www.methodscount.com/?lib=com.alexvasilkov%3Agesture-views%3A2.2.0
+[size-url]: http://www.methodscount.com/?lib=com.alexvasilkov%3Agesture-views%3A2.3.0
 [size-img]: https://img.shields.io/badge/Methods%20and%20size-960%20%7C%20124%20KB-e91e63.svg?style=flat-square
 
 [javadoc-url]: http://javadoc.io/doc/com.alexvasilkov/gesture-views
