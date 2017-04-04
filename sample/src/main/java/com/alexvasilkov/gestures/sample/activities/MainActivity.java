@@ -1,10 +1,8 @@
 package com.alexvasilkov.gestures.sample.activities;
 
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -30,7 +28,7 @@ public class MainActivity extends BaseActivity {
 
         RecyclerView recyclerView = Views.find(this, R.id.main_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new SampleAdapter(this, getActivitiesList()));
+        recyclerView.setAdapter(new SampleAdapter(getActivitiesList()));
     }
 
     private void onItemClicked(ActivityInfo info) {
@@ -60,14 +58,12 @@ public class MainActivity extends BaseActivity {
         return list;
     }
 
-    private static class SampleAdapter extends RecyclerView.Adapter<SampleAdapter.ViewHolder> {
 
-        private final PackageManager packageManager;
+    private class SampleAdapter extends RecyclerView.Adapter<SampleAdapter.ViewHolder> {
+
         private final List<ActivityInfo> list;
 
-        SampleAdapter(Context context, List<ActivityInfo> list) {
-            super();
-            packageManager = context.getPackageManager();
+        SampleAdapter(List<ActivityInfo> list) {
             this.list = list;
         }
 
@@ -79,7 +75,7 @@ public class MainActivity extends BaseActivity {
         @Override
         public void onBindViewHolder(ViewHolder viewHolder, int position) {
             viewHolder.info = list.get(position);
-            viewHolder.text.setText(viewHolder.info.loadLabel(packageManager));
+            viewHolder.text.setText(viewHolder.info.loadLabel(getPackageManager()));
         }
 
         @Override
@@ -87,7 +83,7 @@ public class MainActivity extends BaseActivity {
             return list == null ? 0 : list.size();
         }
 
-        static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
             final TextView text;
             ActivityInfo info;
 
@@ -99,7 +95,7 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onClick(@NonNull View view) {
-                ((MainActivity) view.getContext()).onItemClicked(info);
+                onItemClicked(info);
             }
         }
 
