@@ -282,7 +282,7 @@ public class StateController {
      */
     @SuppressWarnings({ "unused", "WeakerAccess" }) // Public API
     public float getMaxZoom(State state) {
-        return getZoomBounds(state).getMinZoom();
+        return getZoomBounds(state).getMaxZoom();
     }
 
     /**
