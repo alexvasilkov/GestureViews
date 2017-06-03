@@ -16,7 +16,8 @@ import java.util.regex.Pattern;
  * Helper class to compute and store view position used for transitions.
  * <p/>
  * It consists of {@link #view} rectangle, {@link #viewport} rectangle (view rectangle minus
- * paddings) and {@link #image} rectangle (position of the underlying image taking into account
+ * padding), {@link #visible} rectangle (part of viewport which is visible on screen)
+ * and {@link #image} rectangle (position of the underlying image taking into account
  * {@link ImageView#getScaleType()}, or same as {@link #viewport} if view is not an
  * {@link ImageView} or if {@link ImageView#getDrawable()} is {@code null}).
  * All positions are in screen coordinates.
@@ -43,23 +44,28 @@ public class ViewPosition {
 
     public final Rect view;
     public final Rect viewport;
+    public final Rect visible;
     public final Rect image;
 
     private ViewPosition() {
         this.view = new Rect();
         this.viewport = new Rect();
+        this.visible = new Rect();
         this.image = new Rect();
     }
 
-    private ViewPosition(@NonNull Rect view, @NonNull Rect viewport, @NonNull Rect image) {
+    private ViewPosition(@NonNull Rect view, @NonNull Rect viewport,
+            @NonNull Rect visible, @NonNull Rect image) {
         this.view = view;
         this.viewport = viewport;
+        this.visible = visible;
         this.image = image;
     }
 
     public void set(@NonNull ViewPosition pos) {
         this.view.set(pos.view);
         this.viewport.set(pos.viewport);
+        this.visible.set(pos.visible);
         this.image.set(pos.image);
     }
 
@@ -85,6 +91,12 @@ public class ViewPosition {
                 targetView.getHeight() - targetView.getPaddingBottom());
         viewport.offset(tmpLocation[0], tmpLocation[1]);
 
+        boolean isVisible = targetView.getGlobalVisibleRect(visible);
+        if (!isVisible) {
+            // Assuming we are starting from center of invisible view
+            visible.set(view.centerX(), view.centerY(), view.centerX() + 1, view.centerY() + 1);
+        }
+
         if (targetView instanceof ImageView) {
             ImageView imageView = (ImageView) targetView;
             Drawable drawable = imageView.getDrawable();
@@ -92,15 +104,15 @@ public class ViewPosition {
             if (drawable == null) {
                 image.set(viewport);
             } else {
-                int drawableWidth = drawable.getIntrinsicWidth();
-                int drawableHeight = drawable.getIntrinsicHeight();
+                final int drawableWidth = drawable.getIntrinsicWidth();
+                final int drawableHeight = drawable.getIntrinsicHeight();
 
                 // Getting image position within the view
                 ImageViewHelper.applyScaleType(imageView.getScaleType(),
                         drawableWidth, drawableHeight, viewport.width(), viewport.height(),
                         imageView.getImageMatrix(), tmpMatrix);
 
-                tmpSrc.set(0, 0, drawableWidth, drawableHeight);
+                tmpSrc.set(0f, 0f, drawableWidth, drawableHeight);
                 tmpMatrix.mapRect(tmpDst, tmpSrc);
 
                 // Calculating image position on screen
@@ -146,6 +158,7 @@ public class ViewPosition {
     public static void apply(@NonNull ViewPosition pos, @NonNull Point point) {
         pos.view.set(point.x, point.y, point.x + 1, point.y + 1);
         pos.viewport.set(pos.view);
+        pos.visible.set(pos.view);
         pos.image.set(pos.view);
     }
 
@@ -157,8 +170,11 @@ public class ViewPosition {
     public String pack() {
         String viewStr = view.flattenToString();
         String viewportStr = viewport.flattenToString();
+        String visibleStr = visible.flattenToString();
         String imageStr = image.flattenToString();
-        return TextUtils.join(DELIMITER, new String[] { viewStr, viewportStr, imageStr });
+        return TextUtils.join(DELIMITER, new String[] {
+                viewStr, viewportStr, visibleStr, imageStr
+        });
     }
 
     /**
@@ -167,19 +183,20 @@ public class ViewPosition {
     @SuppressWarnings("unused") // Public API
     public static ViewPosition unpack(String str) {
         String[] parts = TextUtils.split(str, SPLIT_PATTERN);
-        if (parts.length != 3) {
+        if (parts.length != 4) {
             throw new IllegalArgumentException("Wrong ViewPosition string: " + str);
         }
 
         Rect view = Rect.unflattenFromString(parts[0]);
         Rect viewport = Rect.unflattenFromString(parts[1]);
-        Rect image = Rect.unflattenFromString(parts[2]);
+        Rect visible = Rect.unflattenFromString(parts[2]);
+        Rect image = Rect.unflattenFromString(parts[3]);
 
         if (view == null || viewport == null || image == null) {
             throw new IllegalArgumentException("Wrong ViewPosition string: " + str);
         }
 
-        return new ViewPosition(view, viewport, image);
+        return new ViewPosition(view, viewport, visible, image);
     }
 
 }

@@ -15,12 +15,7 @@
         android:scrollbars="vertical"
         tools:listitem="@layout/item_photo" />
 
-    <!-- Next view is only used to smoother toolbar fading -->
-
-    <View
-        android:id="@+id/advanced_toolbar_back"
-        style="@style/App.Toolbar"
-        android:background="@color/window_background_dark_2" />
+    <android.support.v7.widget.Toolbar style="@style/App.Toolbar" />
 
     <View
         android:id="@+id/advanced_full_background"
@@ -33,8 +28,6 @@
         android:id="@+id/advanced_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
-    <android.support.v7.widget.Toolbar style="@style/App.Toolbar" />
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/advanced_full_toolbar"

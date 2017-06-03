@@ -138,7 +138,6 @@ public class Ex6AdvancedDemoActivity extends BaseActivity implements
     private void initDecorMargins() {
         // Adjusting margins and paddings to fit translucent decor
         DecorUtils.paddingForStatusBar(views.toolbar, true);
-        DecorUtils.paddingForStatusBar(views.toolbarBack, true);
         DecorUtils.paddingForStatusBar(views.pagerToolbar, true);
         DecorUtils.marginForStatusBar(views.grid);
         DecorUtils.paddingForNavBar(views.grid);
@@ -251,9 +250,6 @@ public class Ex6AdvancedDemoActivity extends BaseActivity implements
         views.pagerBackground.setVisibility(position == 0f ? View.INVISIBLE : View.VISIBLE);
         views.pagerBackground.getBackground().setAlpha((int) (255 * position));
 
-        views.toolbar.setVisibility(position == 1f ? View.INVISIBLE : View.VISIBLE);
-        views.toolbar.setAlpha((float) Math.sqrt(1d - position)); // Slow down toolbar animation
-
         views.pagerToolbar.setVisibility(position == 0f ? View.INVISIBLE : View.VISIBLE);
         views.pagerToolbar.setAlpha(position);
 
@@ -328,7 +324,6 @@ public class Ex6AdvancedDemoActivity extends BaseActivity implements
 
     private class ViewHolder {
         final Toolbar toolbar;
-        final View toolbarBack;
         final RecyclerView grid;
 
         final ViewPager pager;
@@ -338,7 +333,6 @@ public class Ex6AdvancedDemoActivity extends BaseActivity implements
 
         ViewHolder(Activity activity) {
             toolbar = Views.find(activity, R.id.toolbar);
-            toolbarBack = Views.find(activity, R.id.advanced_toolbar_back);
             grid = Views.find(activity, R.id.advanced_grid);
 
             pager = Views.find(activity, R.id.advanced_pager);

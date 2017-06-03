@@ -20,6 +20,7 @@ import com.alexvasilkov.gestures.utils.FloatScroller;
 import com.alexvasilkov.gestures.utils.GravityUtils;
 import com.alexvasilkov.gestures.utils.MathUtils;
 import com.alexvasilkov.gestures.views.GestureImageView;
+import com.alexvasilkov.gestures.views.interfaces.ClipBounds;
 import com.alexvasilkov.gestures.views.interfaces.ClipView;
 import com.alexvasilkov.gestures.views.interfaces.GestureView;
 
@@ -63,6 +64,7 @@ public class ViewPositionAnimator {
 
     private final GestureController toController;
     private final ClipView toClipView;
+    private final ClipBounds toClipBounds;
 
     private final State fromState = new State();
     private final State toState = new State();
@@ -72,7 +74,9 @@ public class ViewPositionAnimator {
     private float toPivotY;
     private final RectF fromClip = new RectF();
     private final RectF toClip = new RectF();
-    private final RectF clipRect = new RectF();
+    private final RectF fromBoundsClip = new RectF();
+    private final RectF toBoundsClip = new RectF();
+    private final RectF clipRectTmp = new RectF();
     private ViewPosition fromPos;
     private ViewPosition toPos;
     private boolean fromNonePos;
@@ -118,6 +122,7 @@ public class ViewPositionAnimator {
 
         View toView = (View) to;
         toClipView = to instanceof ClipView ? (ClipView) to : null;
+        toClipBounds = to instanceof ClipBounds ? (ClipBounds) to : null;
         animationEngine = new LocalAnimationEngine(toView);
 
         toController = to.getController();
@@ -500,10 +505,18 @@ public class ViewPositionAnimator {
 
             toController.updateState();
 
-            MathUtils.interpolate(clipRect, fromClip, toClip, position / toPosition);
+            final boolean skipClip = position >= toPosition || (position == 0f && isLeaving);
+            final float clipPosition = position / toPosition;
+
             if (toClipView != null) {
-                boolean skipClip = position >= toPosition || (position == 0f && isLeaving);
-                toClipView.clipView(skipClip ? null : clipRect, state.getRotation());
+                MathUtils.interpolate(clipRectTmp, fromClip, toClip, clipPosition);
+                toClipView.clipView(skipClip ? null : clipRectTmp, state.getRotation());
+            }
+            if (toClipBounds != null) {
+                // Bounds clipping should stay longer in 'From' state
+                final float boundsClipPos = clipPosition * clipPosition;
+                MathUtils.interpolate(clipRectTmp, fromBoundsClip, toBoundsClip, boundsClipPos);
+                toClipBounds.clipBounds(skipClip ? null : clipRectTmp);
             }
         }
 
@@ -641,6 +654,9 @@ public class ViewPositionAnimator {
         tmpMatrix.mapRect(toClip);
         toClip.offset(toPos.viewport.left - toPos.view.left, toPos.viewport.top - toPos.view.top);
 
+        // 'To' bounds clip is entire 'To' view rect in 'To' view coordinates
+        toBoundsClip.set(0f, 0f, toPos.view.width(), toPos.view.height());
+
         isToUpdated = true;
 
         if (GestureDebug.isDebugAnimator()) {
@@ -685,14 +701,36 @@ public class ViewPositionAnimator {
 
         fromState.set(fromX, fromY, zoom, 0f);
 
-        // 'From' clip is a 'From' view rect in 'To' view coordinates
+        // 'From' clip is 'From' view rect in 'To' view coordinates
         fromClip.set(fromPos.viewport);
         fromClip.offset(-toPos.view.left, -toPos.view.top);
+
+        // 'From' bounds clip is a part of 'To' view which considered to be visible.
+        // Meaning that if 'From' view is truncated in any direction this clipping should be
+        // animated, otherwise it will look like part of 'From' view is instantly becoming visible.
+        fromBoundsClip.set(0f, 0f, toPos.view.width(), toPos.view.height());
+        fromBoundsClip.left = compareAndSetClipBound(
+                fromBoundsClip.left, fromPos.view.left, fromPos.visible.left, toPos.view.left);
+        fromBoundsClip.top = compareAndSetClipBound(
+                fromBoundsClip.top, fromPos.view.top, fromPos.visible.top, toPos.view.top);
+        fromBoundsClip.right = compareAndSetClipBound(
+                fromBoundsClip.right, fromPos.view.right, fromPos.visible.right, toPos.view.left);
+        fromBoundsClip.bottom = compareAndSetClipBound(
+                fromBoundsClip.bottom, fromPos.view.bottom, fromPos.visible.bottom, toPos.view.top);
 
         isFromUpdated = true;
 
         if (GestureDebug.isDebugAnimator()) {
             Log.d(TAG, "'From' state updated");
+        }
+    }
+
+    private float compareAndSetClipBound(float origBound, int viewPos, int visiblePos, int offset) {
+        // Comparing allowing slack of 1 pixel
+        if (-1 <= viewPos - visiblePos && viewPos - visiblePos <= 1) {
+            return origBound; // View is fully visible in this direction, no extra bounds
+        } else {
+            return visiblePos - offset; // Returning 'From' view bound in 'To' view coordinates
         }
     }
 

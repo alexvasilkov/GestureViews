@@ -24,6 +24,7 @@ import com.alexvasilkov.gestures.internal.GestureDebug;
 import com.alexvasilkov.gestures.utils.ClipHelper;
 import com.alexvasilkov.gestures.utils.CropUtils;
 import com.alexvasilkov.gestures.views.interfaces.AnimatorView;
+import com.alexvasilkov.gestures.views.interfaces.ClipBounds;
 import com.alexvasilkov.gestures.views.interfaces.ClipView;
 import com.alexvasilkov.gestures.views.interfaces.GestureView;
 
@@ -34,10 +35,12 @@ import com.alexvasilkov.gestures.views.interfaces.GestureView;
  * View position can be animated with {@link ViewPositionAnimator}
  * ({@link #getPositionAnimator()}).
  */
-public class GestureImageView extends ImageView implements GestureView, ClipView, AnimatorView {
+public class GestureImageView extends ImageView
+        implements GestureView, ClipView, ClipBounds, AnimatorView {
 
     private GestureControllerForPager controller;
-    private final ClipHelper clipHelper = new ClipHelper(this);
+    private final ClipHelper clipViewHelper = new ClipHelper(this);
+    private final ClipHelper clipBoundsHelper = new ClipHelper(this);
     private final Matrix imageMatrix = new Matrix();
 
     private ViewPositionAnimator positionAnimator;
@@ -77,9 +80,11 @@ public class GestureImageView extends ImageView implements GestureView, ClipView
 
     @Override
     public void draw(@NonNull Canvas canvas) {
-        clipHelper.onPreDraw(canvas);
+        clipBoundsHelper.onPreDraw(canvas);
+        clipViewHelper.onPreDraw(canvas);
         super.draw(canvas);
-        clipHelper.onPostDraw(canvas);
+        clipViewHelper.onPostDraw(canvas);
+        clipBoundsHelper.onPostDraw(canvas);
 
         if (GestureDebug.isDrawDebugOverlay()) {
             DebugOverlay.drawDebug(this, canvas);
@@ -110,7 +115,12 @@ public class GestureImageView extends ImageView implements GestureView, ClipView
      */
     @Override
     public void clipView(@Nullable RectF rect, float rotation) {
-        clipHelper.clipView(rect, rotation);
+        clipViewHelper.clipView(rect, rotation);
+    }
+
+    @Override
+    public void clipBounds(@Nullable RectF rect) {
+        clipBoundsHelper.clipView(rect, 0f);
     }
 
     /**
@@ -203,6 +213,7 @@ public class GestureImageView extends ImageView implements GestureView, ClipView
     /**
      * @deprecated Use {@link #crop()} method instead.
      */
+    @SuppressWarnings("WeakerAccess") // Public API
     @Deprecated
     public interface OnSnapshotLoadedListener {
         void onSnapshotLoaded(Bitmap bitmap);

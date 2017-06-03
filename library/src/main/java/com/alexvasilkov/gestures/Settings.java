@@ -373,6 +373,9 @@ public class Settings {
         return this;
     }
 
+    /**
+     * Duration of animations.
+     */
     public Settings setAnimationsDuration(long duration) {
         if (duration < 0L) {
             throw new IllegalArgumentException("Animations duration should be >= 0");

@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 
+import com.alexvasilkov.gestures.State;
 import com.alexvasilkov.gestures.views.interfaces.ClipView;
 
 /**
@@ -63,12 +64,14 @@ public class ClipHelper implements ClipView {
             clipRect.set(rect);
             clipRotation = rotation;
 
-            // Computing upper bounds of clipping rect after rotation
+            // Computing upper bounds of clipping rect after rotation (if any)
             clipBounds.set(clipRect);
-            tmpMatrix.setRotate(rotation, clipRect.centerX(), clipRect.centerY());
-            tmpMatrix.mapRect(clipBounds);
+            if (!State.equals(rotation, 0f)) {
+                tmpMatrix.setRotate(rotation, clipRect.centerX(), clipRect.centerY());
+                tmpMatrix.mapRect(clipBounds);
+            }
 
-            // Invalidating only updated part
+            // Invalidating only updated part (min area holding both new and old clip bounds)
             int left = (int) Math.min(clipBounds.left, clipBoundsOld.left);
             int top = (int) Math.min(clipBounds.top, clipBoundsOld.top);
             int right = (int) Math.max(clipBounds.right, clipBoundsOld.right) + 1;
@@ -81,11 +84,15 @@ public class ClipHelper implements ClipView {
         if (isClipping) {
             canvas.save();
 
-            // Note, that prior Android 4.3 (18) canvas matrix is not correctly applied to
-            // clip rect, clip rect will be set to its upper bound, which is good enough for us.
-            canvas.rotate(clipRotation, clipRect.centerX(), clipRect.centerY());
-            canvas.clipRect(clipRect);
-            canvas.rotate(-clipRotation, clipRect.centerX(), clipRect.centerY());
+            if (State.equals(clipRotation, 0f)) {
+                canvas.clipRect(clipRect);
+            } else {
+                // Note, that prior Android 4.3 (18) canvas matrix is not correctly applied to
+                // clip rect, clip rect will be set to its upper bound, which is good enough for us.
+                canvas.rotate(clipRotation, clipRect.centerX(), clipRect.centerY());
+                canvas.clipRect(clipRect);
+                canvas.rotate(-clipRotation, clipRect.centerX(), clipRect.centerY());
+            }
         }
     }
 
