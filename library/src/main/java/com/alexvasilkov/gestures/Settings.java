@@ -170,7 +170,8 @@ public class Settings {
     }
 
     /**
-     * Setting double tap zoom level. Defaults to {@link #maxZoom} if <= 0.
+     * Setting double tap zoom level, should not be greater than {@link #getMaxZoom()}.
+     * Defaults to {@link #getMaxZoom()} if <= 0.
      * <p/>
      * Default value is -1.
      */
