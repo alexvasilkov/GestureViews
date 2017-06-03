@@ -8,7 +8,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 
-import com.alexvasilkov.android.commons.utils.Views;
+import com.alexvasilkov.android.commons.ui.Views;
 
 public class DecorUtils {
 

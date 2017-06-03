@@ -2,7 +2,7 @@ package com.alexvasilkov.gestures.sample.activities;
 
 import android.os.Bundle;
 
-import com.alexvasilkov.android.commons.utils.Views;
+import com.alexvasilkov.android.commons.ui.Views;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.views.GestureTextView;
 

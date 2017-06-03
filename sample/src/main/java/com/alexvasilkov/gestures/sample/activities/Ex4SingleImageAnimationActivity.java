@@ -8,7 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.alexvasilkov.android.commons.state.InstanceState;
-import com.alexvasilkov.android.commons.utils.Views;
+import com.alexvasilkov.android.commons.ui.Views;
 import com.alexvasilkov.gestures.animation.ViewPositionAnimator.PositionUpdateListener;
 import com.alexvasilkov.gestures.commons.circle.CircleGestureImageView;
 import com.alexvasilkov.gestures.commons.circle.CircleImageView;

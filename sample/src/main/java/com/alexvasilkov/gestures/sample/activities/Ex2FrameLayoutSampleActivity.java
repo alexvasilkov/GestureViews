@@ -5,7 +5,7 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.alexvasilkov.android.commons.utils.Views;
+import com.alexvasilkov.android.commons.ui.Views;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.adapters.PaintingsLayoutsPagerAdapter;
 import com.alexvasilkov.gestures.sample.logic.Painting;

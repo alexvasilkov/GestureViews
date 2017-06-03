@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.view.ViewTreeObserver.OnPreDrawListener;
 
-import com.alexvasilkov.android.commons.utils.Views;
+import com.alexvasilkov.android.commons.ui.Views;
 import com.alexvasilkov.events.Events;
 import com.alexvasilkov.gestures.animation.ViewPosition;
 import com.alexvasilkov.gestures.animation.ViewPositionAnimator.PositionUpdateListener;

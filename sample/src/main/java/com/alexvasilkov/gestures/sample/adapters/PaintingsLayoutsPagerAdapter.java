@@ -8,9 +8,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.alexvasilkov.android.commons.nav.Navigate;
 import com.alexvasilkov.android.commons.texts.SpannableBuilder;
-import com.alexvasilkov.android.commons.utils.Intents;
-import com.alexvasilkov.android.commons.utils.Views;
+import com.alexvasilkov.android.commons.ui.Views;
 import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.logic.Painting;
@@ -69,7 +69,7 @@ public class PaintingsLayoutsPagerAdapter
 
     @Override
     public void onClick(@NonNull View view) {
-        Intents.get(view.getContext()).openWebBrowser((String) view.getTag());
+        Navigate.from(view.getContext()).external().browser().url((String) view.getTag()).start();
     }
 
     static class ViewHolder extends RecyclePagerAdapter.ViewHolder {
