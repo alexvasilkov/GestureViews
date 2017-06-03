@@ -20,11 +20,11 @@ android {
 
     signingConfigs {
         debug {
-            storeFile file('debug.keystore')
+            storeFile file('debug.jks')
         }
         release {
-            storeFile file("gesture-views-release-key.keystore")
-            keyAlias "release"
+            storeFile file("upload.jks")
+            keyAlias "upload"
         }
     }
 
