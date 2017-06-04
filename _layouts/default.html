@@ -11,16 +11,18 @@
   </head>
   <body>
     <section class="page-header">
-      <h1 class="project-name">{{ site.title | default: site.github.repository_name }}</h1>
-      <h2 class="project-tagline">{{ site.description | default: site.github.project_tagline }}</h2>
-      <a href="{{ site.github.repository_url }}" class="btn">View on GitHub</a>
+      <section class="page-header-inner">
+        <h1 class="project-name">{{ site.title | default: site.github.repository_name }}</h1>
+        <h2 class="project-tagline">{{ site.description | default: site.github.project_tagline }}</h2>
+        <a href="{{ site.github.repository_url }}" class="btn"><img src="/assets/img/icon-github.png" /></a>
+      </section>
     </section>
 
     <section class="main-content">
       {{ content }}
 
       <footer class="site-footer">
-        <span class="site-footer-owner"><a href="https://github.com/alexvasilkov">Alex Vasilkov</a>, 2017</span>
+        <span class="site-footer-owner"><a href="https://github.com/alexvasilkov">Alex Vasilkov</a></span>
       </footer>
     </section>
 
