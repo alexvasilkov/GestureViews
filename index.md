@@ -1,7 +1,3 @@
-# GestureViews #
-
-ImageView and FrameLayout with gestures control and position animation.
-
 Main goal of this library is to make images viewing process as smooth as possible and to make it
 easier for developers to integrate it into their apps.
 
