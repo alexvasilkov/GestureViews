@@ -39,6 +39,10 @@ public class AspectImageView extends AppCompatImageView {
             height = calculate(width, aspect, VERTICAL);
         } else if (heightMode == MeasureSpec.EXACTLY || heightMode == MeasureSpec.AT_MOST) {
             width = calculate(height, aspect, HORIZONTAL);
+        } else if (width != 0) {
+            height = calculate(width, aspect, VERTICAL);
+        } else if (height != 0) {
+            width = calculate(height, aspect, HORIZONTAL);
         } else {
             throw new IllegalArgumentException("Either width or height should have exact value");
         }

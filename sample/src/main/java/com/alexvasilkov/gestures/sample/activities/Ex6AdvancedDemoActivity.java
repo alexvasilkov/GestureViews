@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -149,7 +148,6 @@ public class Ex6AdvancedDemoActivity extends BaseActivity implements
         final int cols = getResources().getInteger(R.integer.images_grid_columns);
 
         views.grid.setLayoutManager(new GridLayoutManager(this, cols));
-        views.grid.setItemAnimator(new DefaultItemAnimator());
 
         gridAdapter = new PhotoListAdapter(this);
         gridAdapter.setLoadingOffset(PAGE_SIZE / 2);

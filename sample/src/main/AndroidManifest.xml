@@ -97,6 +97,16 @@
             android:theme="@style/AppTheme.Transparent" />
 
         <activity
+            android:name=".ui.ex8.Ex8ComplexListActivity"
+            android:label="Complex list animation"
+            android:theme="@style/AppTheme.Full.NoTitle">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
             android:name=".activities.PhotoCropActivity"
             android:label="Rotate &amp; crop"
             android:theme="@style/AppTheme.Full.NoTitle.Dark" />
