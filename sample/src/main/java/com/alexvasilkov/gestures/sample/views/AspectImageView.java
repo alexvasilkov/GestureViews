@@ -2,12 +2,12 @@ package com.alexvasilkov.gestures.sample.views;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
-import android.widget.ImageView;
 
 import com.alexvasilkov.gestures.sample.R;
 
-public class AspectImageView extends ImageView {
+public class AspectImageView extends AppCompatImageView {
 
     public static final float DEFAULT_ASPECT = 16f / 9f;
 
