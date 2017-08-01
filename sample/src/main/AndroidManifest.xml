@@ -107,6 +107,15 @@
         </activity>
 
         <activity
+            android:name=".ui.ex9.ImageMarkerActivity"
+            android:label="Image marker">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
             android:name=".activities.PhotoCropActivity"
             android:label="Rotate &amp; crop"
             android:theme="@style/AppTheme.Full.NoTitle.Dark" />
