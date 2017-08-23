@@ -5,16 +5,17 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import com.alexvasilkov.gestures.sample.R;
-import com.alexvasilkov.gestures.sample.activities.BaseActivity;
-import com.alexvasilkov.gestures.sample.utils.GestureSettingsMenu;
+import com.alexvasilkov.gestures.sample.ui.base.BaseExampleActivity;
 
-public class ImageMarkerActivity extends BaseActivity {
+/**
+ * This example demonstrates how to show markers on the image pinned to particular image
+ * points.<br/>
+ * See also {@link MarkerGestureImageView}.
+ */
+public class ImageMarkerActivity extends BaseExampleActivity {
 
-    private GestureSettingsMenu settingsMenu;
     private MarkerGestureImageView imageView;
 
     @Override
@@ -51,32 +52,13 @@ public class ImageMarkerActivity extends BaseActivity {
                 .setMode(Marker.Mode.STICK) // Icon will be zoomed / rotated along with the image
         );
 
-        // General options
-        settingsMenu = new GestureSettingsMenu();
-        settingsMenu.onRestoreInstanceState(savedInstanceState);
-        settingsMenu.onSetupGestureView(imageView);
+        // Applying general options
+        getSettingsListener().onSetupGestureView(imageView);
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        settingsMenu.onSaveInstanceState(outState);
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        return settingsMenu.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (settingsMenu.onOptionsItemSelected(item)) {
-            supportInvalidateOptionsMenu();
-            settingsMenu.onSetupGestureView(imageView);
-            return true;
-        } else {
-            return super.onOptionsItemSelected(item);
-        }
+    protected void onSettingsChanged() {
+        getSettingsListener().onSetupGestureView(imageView);
     }
 
 }

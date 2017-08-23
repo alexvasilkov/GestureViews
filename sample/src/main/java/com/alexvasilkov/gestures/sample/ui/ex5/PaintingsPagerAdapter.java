@@ -1,48 +1,30 @@
-package com.alexvasilkov.gestures.sample.ui.ex8;
+package com.alexvasilkov.gestures.sample.ui.ex5;
 
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.view.ViewGroup;
 
 import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
+import com.alexvasilkov.gestures.sample.logic.Painting;
 import com.alexvasilkov.gestures.sample.ui.base.settings.SettingsSetupListener;
 import com.alexvasilkov.gestures.sample.utils.glide.GlideHelper;
 import com.alexvasilkov.gestures.views.GestureImageView;
 
-class PagerAdapter extends RecyclePagerAdapter<PagerAdapter.ViewHolder> {
+class PaintingsPagerAdapter extends RecyclePagerAdapter<PaintingsPagerAdapter.ViewHolder> {
 
     private final ViewPager viewPager;
+    private final Painting[] paintings;
     private final SettingsSetupListener setupListener;
 
-    private int[] images;
-    private boolean activated;
-
-    PagerAdapter(ViewPager pager, SettingsSetupListener listener) {
+    PaintingsPagerAdapter(ViewPager pager, Painting[] paintings, SettingsSetupListener listener) {
         this.viewPager = pager;
+        this.paintings = paintings;
         this.setupListener = listener;
-    }
-
-    void setImages(int[] images) {
-        this.images = images;
-        notifyDataSetChanged();
-    }
-
-    /**
-     * To prevent ViewPager from holding heavy views (with bitmaps)  while it is not showing
-     * we may just pretend there are no items in this adapter ("activate" = false).
-     * But once we need to run opening animation we should "activate" this adapter again.<br/>
-     * Adapter is not activated by default.
-     */
-    void setActivated(boolean activated) {
-        if (this.activated != activated) {
-            this.activated = activated;
-            notifyDataSetChanged();
-        }
     }
 
     @Override
     public int getCount() {
-        return !activated || images == null ? 0 : images.length;
+        return paintings.length;
     }
 
     @Override
@@ -57,7 +39,7 @@ class PagerAdapter extends RecyclePagerAdapter<PagerAdapter.ViewHolder> {
         if (setupListener != null) {
             setupListener.onSetupGestureView(holder.image);
         }
-        GlideHelper.loadResource(images[position], holder.image);
+        GlideHelper.loadResource(paintings[position].imageId, holder.image);
     }
 
     static GestureImageView getImage(RecyclePagerAdapter.ViewHolder holder) {
