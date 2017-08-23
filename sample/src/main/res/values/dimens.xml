@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <dimen name="margin">16dp</dimen>
-
     <dimen name="flickr_list_margin">4dp</dimen>
 
     <dimen name="view_pager_margin">12dp</dimen>
