@@ -56,6 +56,7 @@ public class GestureController implements View.OnTouchListener {
 
     // Temporary objects
     private static final PointF tmpPointF = new PointF();
+    private static final float[] tmpPointArr = new float[2];
 
     // Control constants converted to pixels
     private final int touchSlop;
@@ -79,6 +80,8 @@ public class GestureController implements View.OnTouchListener {
 
     private float pivotX = Float.NaN;
     private float pivotY = Float.NaN;
+    private float endPivotX = Float.NaN;
+    private float endPivotY = Float.NaN;
 
     private boolean isStateChangedDuringTouch;
     private boolean isRestrictZoomRequested;
@@ -290,6 +293,16 @@ public class GestureController implements View.OnTouchListener {
         isAnimatingInBounds = keepInBounds;
         stateStart.set(state);
         stateEnd.set(endStateRestricted);
+
+        // Computing new position of pivot point for correct state interpolation
+        if (!Float.isNaN(pivotX) && !Float.isNaN(pivotY)) {
+            tmpPointArr[0] = pivotX;
+            tmpPointArr[1] = pivotY;
+            MathUtils.computeNewPosition(tmpPointArr, stateStart, stateEnd);
+            endPivotX = tmpPointArr[0];
+            endPivotY = tmpPointArr[1];
+        }
+
         stateScroller.setDuration(settings.getAnimationsDuration());
         stateScroller.startScroll(0f, 1f);
         animationEngine.start();
@@ -338,6 +351,8 @@ public class GestureController implements View.OnTouchListener {
     @SuppressWarnings({ "UnusedParameters", "WeakerAccess" }) // Public API (can be overridden)
     protected void onStateAnimationFinished(boolean forced) {
         isAnimatingInBounds = false;
+        pivotX = Float.NaN;
+        pivotY = Float.NaN;
         notifyStateSourceChanged();
     }
 
@@ -707,7 +722,15 @@ public class GestureController implements View.OnTouchListener {
             if (isAnimatingState()) {
                 stateScroller.computeScroll();
                 float factor = stateScroller.getCurr();
-                MathUtils.interpolate(state, stateStart, stateEnd, factor);
+
+                if (Float.isNaN(pivotX) || Float.isNaN(pivotY)
+                        || Float.isNaN(endPivotX) || Float.isNaN(endPivotY)) {
+                    MathUtils.interpolate(state, stateStart, stateEnd, factor);
+                } else {
+                    MathUtils.interpolate(state, stateStart, pivotX, pivotY,
+                            stateEnd, endPivotX, endPivotY, factor);
+                }
+
                 shouldProceed = true;
 
                 if (!isAnimatingState()) {

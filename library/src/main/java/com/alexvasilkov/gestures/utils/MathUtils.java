@@ -1,10 +1,15 @@
 package com.alexvasilkov.gestures.utils;
 
+import android.graphics.Matrix;
 import android.graphics.RectF;
+import android.support.annotation.Size;
 
 import com.alexvasilkov.gestures.State;
 
 public class MathUtils {
+
+    private static final Matrix tmpMatrix = new Matrix();
+    private static final Matrix tmpMatrixInverse = new Matrix();
 
     private MathUtils() {}
 
@@ -85,6 +90,15 @@ public class MathUtils {
         float dx = interpolate(0, endPivotX - startPivotX, factor);
         float dy = interpolate(0, endPivotY - startPivotY, factor);
         out.translateBy(dx, dy);
+    }
+
+    public static void computeNewPosition(@Size(2) float[] point,
+            State initialState, State finalState) {
+        initialState.get(tmpMatrix);
+        tmpMatrix.invert(tmpMatrixInverse);
+        tmpMatrixInverse.mapPoints(point);
+        finalState.get(tmpMatrix);
+        tmpMatrix.mapPoints(point);
     }
 
 }
