@@ -114,6 +114,12 @@ public class GestureControllerForPager extends GestureController {
         }
     }
 
+    @Override
+    protected boolean shouldDisallowInterceptTouch(MotionEvent event) {
+        // If ViewPager is set then we'll always disallow touch interception
+        return viewPager != null || super.shouldDisallowInterceptTouch(event);
+    }
+
     private void handleTouch(MotionEvent event) {
         switch (event.getActionMasked()) {
             case MotionEvent.ACTION_POINTER_DOWN:
@@ -132,8 +138,6 @@ public class GestureControllerForPager extends GestureController {
         if (viewPager == null) {
             return super.onDown(event);
         }
-
-        viewPager.requestDisallowInterceptTouchEvent(true);
 
         isSkipViewPager = false;
         isViewPagerInterceptedScroll = false;

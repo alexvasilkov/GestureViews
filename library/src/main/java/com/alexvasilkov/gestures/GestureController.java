@@ -2,6 +2,7 @@ package com.alexvasilkov.gestures;
 
 import android.content.Context;
 import android.graphics.PointF;
+import android.graphics.RectF;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.GestureDetector;
@@ -9,6 +10,7 @@ import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.ViewConfiguration;
+import android.view.ViewParent;
 import android.widget.OverScroller;
 
 import com.alexvasilkov.gestures.internal.AnimationEngine;
@@ -56,6 +58,7 @@ public class GestureController implements View.OnTouchListener {
 
     // Temporary objects
     private static final PointF tmpPointF = new PointF();
+    private static final RectF tmpRectF = new RectF();
     private static final float[] tmpPointArr = new float[2];
 
     // Control constants converted to pixels
@@ -74,6 +77,7 @@ public class GestureController implements View.OnTouchListener {
     private final ScaleGestureDetector scaleDetector;
     private final RotationGestureDetector rotateDetector;
 
+    private boolean isInterceptTouchDisallowed;
     private boolean isScrollDetected;
     private boolean isScaleDetected;
     private boolean isRotationDetected;
@@ -446,12 +450,53 @@ public class GestureController implements View.OnTouchListener {
             notifyStateSourceChanged();
         }
 
+        if (!isInterceptTouchDisallowed && shouldDisallowInterceptTouch(viewportEvent)) {
+            isInterceptTouchDisallowed = true;
+
+            final ViewParent parent = view.getParent();
+            if (parent != null) {
+                parent.requestDisallowInterceptTouchEvent(true);
+            }
+        }
+
         viewportEvent.recycle();
 
         return result;
     }
 
+    protected boolean shouldDisallowInterceptTouch(MotionEvent event) {
+        if (exitController.isExitDetected()) {
+            return true;
+        }
+
+        switch (event.getActionMasked()) {
+            case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_MOVE: {
+                // If view can be panned then parent should not intercept touch events.
+                // We should check it on DOWN event since parent may quickly take control over us
+                // in case of a very fast MOVE action.
+                stateController.getMovementArea(state, tmpRectF);
+                final boolean isPannable = State.compare(tmpRectF.width(), 0f) > 0
+                        || State.compare(tmpRectF.height(), 0f) > 0;
+
+                if (settings.isPanEnabled() && (isPannable) || !settings.isRestrictBounds()) {
+                    return true;
+                }
+                break;
+            }
+            case MotionEvent.ACTION_POINTER_DOWN: {
+                // If view can be zoomed or rotated then parent should not intercept touch events.
+                return settings.isZoomEnabled() || settings.isRotationEnabled();
+            }
+            default:
+        }
+
+        return false;
+    }
+
     protected boolean onDown(@NonNull MotionEvent event) {
+        isInterceptTouchDisallowed = false;
+
         stopFlingAnimation();
 
         if (gestureListener != null) {
