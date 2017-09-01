@@ -15,6 +15,7 @@ import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.logic.Painting;
 import com.alexvasilkov.gestures.sample.ui.base.settings.SettingsSetupListener;
+import com.alexvasilkov.gestures.sample.utils.glide.GlideHelper;
 import com.alexvasilkov.gestures.views.GestureFrameLayout;
 import com.bumptech.glide.Glide;
 
@@ -50,9 +51,7 @@ class LayoutsPagerAdapter extends RecyclePagerAdapter<LayoutsPagerAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         setupListener.onSetupGestureView(holder.layout);
 
-        Glide.with(holder.image.getContext())
-                .load(paintings[position].imageId)
-                .into(holder.image);
+        GlideHelper.loadResource(paintings[position].imageId, holder.image);
 
         final CharSequence titleText = new SpannableBuilder(holder.itemView.getContext())
                 .createStyle().setFont(Typeface.DEFAULT_BOLD).apply()

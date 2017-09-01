@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
 import com.alexvasilkov.gestures.sample.logic.Painting;
 import com.alexvasilkov.gestures.sample.ui.base.settings.SettingsSetupListener;
+import com.alexvasilkov.gestures.sample.utils.glide.GlideHelper;
 import com.alexvasilkov.gestures.views.GestureImageView;
 import com.bumptech.glide.Glide;
 
@@ -38,9 +39,7 @@ class ImagesPagerAdapter extends RecyclePagerAdapter<ImagesPagerAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         setupListener.onSetupGestureView(holder.image);
 
-        Glide.with(holder.image.getContext())
-                .load(paintings[position].imageId)
-                .into(holder.image);
+        GlideHelper.loadResource(paintings[position].imageId, holder.image);
     }
 
     @Override

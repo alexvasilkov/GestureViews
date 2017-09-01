@@ -35,7 +35,7 @@ public class GlideHelper {
         Glide.with(image.getContext())
                 .load(drawableId)
                 .asBitmap()
-                .dontAnimate()
+                .animate(ANIMATOR)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(new BitmapImageViewTarget(image) {
                     @Override
