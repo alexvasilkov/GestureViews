@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.ui.ex6.adapter;
+package com.alexvasilkov.gestures.sample.ui.demo.adapter;
 
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
@@ -149,7 +149,7 @@ public class PhotoPagerAdapter extends RecyclePagerAdapter<PhotoPagerAdapter.Vie
         boolean gesturesDisabled;
 
         ViewHolder(ViewGroup parent) {
-            super(Views.inflate(parent, R.layout.ex6_item_photo_full));
+            super(Views.inflate(parent, R.layout.demo_item_photo_full));
             image = Views.find(itemView, R.id.photo_full_image);
             progress = Views.find(itemView, R.id.photo_full_progress);
         }

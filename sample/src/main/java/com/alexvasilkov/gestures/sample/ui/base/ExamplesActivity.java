@@ -18,13 +18,14 @@ import com.alexvasilkov.gestures.sample.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends BaseActivity {
+public class ExamplesActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.main_screen);
+        setContentView(R.layout.examples_screen);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         RecyclerView recyclerView = Views.find(this, R.id.main_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -88,7 +89,7 @@ public class MainActivity extends BaseActivity {
             ActivityInfo info;
 
             ViewHolder(ViewGroup parent) {
-                super(Views.inflate(parent, R.layout.main_list_item));
+                super(Views.inflate(parent, R.layout.examples_list_item));
                 text = (TextView) itemView;
                 itemView.setOnClickListener(this);
             }

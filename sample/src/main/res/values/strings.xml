@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="app_name" translatable="false">Gesty</string>
+
+    <string name="demo_title">Demo</string>
+    <string name="examples_title">Examples</string>
+
     <string name="button_crop">Crop</string>
     <string name="button_wiki_art">WikiArt</string>
 

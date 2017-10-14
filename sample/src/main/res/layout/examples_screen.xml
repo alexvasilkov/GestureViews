@@ -9,4 +9,4 @@
     android:paddingBottom="16dp"
     android:paddingTop="16dp"
     android:scrollbars="vertical"
-    tools:context=".ui.base.MainActivity" />
+    tools:context=".ui.base.ExamplesActivity" />

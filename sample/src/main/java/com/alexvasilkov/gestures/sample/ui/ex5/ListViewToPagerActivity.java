@@ -12,7 +12,7 @@ import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.logic.Painting;
 import com.alexvasilkov.gestures.sample.logic.Paintings;
 import com.alexvasilkov.gestures.sample.ui.base.BaseExampleActivity;
-import com.alexvasilkov.gestures.sample.ui.ex6.AdvancedAnimationDemoActivity;
+import com.alexvasilkov.gestures.sample.ui.demo.DemoActivity;
 import com.alexvasilkov.gestures.transition.GestureTransitions;
 import com.alexvasilkov.gestures.transition.ViewsTransitionAnimator;
 import com.alexvasilkov.gestures.transition.tracker.SimpleTracker;
@@ -20,7 +20,7 @@ import com.alexvasilkov.gestures.transition.tracker.SimpleTracker;
 /**
  * This example demonstrates images animation from ListView into ViewPager.<br/>
  * Note, that it is advised to use RecyclerView instead of ListView in most cases.
- * RecyclerView usage is almost the same. See also {@link AdvancedAnimationDemoActivity}.
+ * RecyclerView usage is almost the same. See also {@link DemoActivity}.
  */
 public class ListViewToPagerActivity extends BaseExampleActivity
         implements PaintingsListAdapter.OnPaintingListener {

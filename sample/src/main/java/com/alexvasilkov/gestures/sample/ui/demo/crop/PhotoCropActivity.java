@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.ui.ex6.crop;
+package com.alexvasilkov.gestures.sample.ui.demo.crop;
 
 import android.content.Context;
 import android.content.Intent;
@@ -41,7 +41,7 @@ public class PhotoCropActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.ex6_crop_screen);
+        setContentView(R.layout.demo_crop_screen);
 
         Toolbar toolbar = Views.find(this, R.id.toolbar);
         setSupportActionBar(toolbar);

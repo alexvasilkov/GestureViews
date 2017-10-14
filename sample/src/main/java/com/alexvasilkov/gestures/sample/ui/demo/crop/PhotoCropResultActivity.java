@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.ui.ex6.crop;
+package com.alexvasilkov.gestures.sample.ui.demo.crop;
 
 import android.content.Context;
 import android.content.Intent;
@@ -29,7 +29,7 @@ public class PhotoCropResultActivity extends BaseActivity {
             return;
         }
 
-        setContentView(R.layout.ex6_crop_result_screen);
+        setContentView(R.layout.demo_crop_result_screen);
 
         Toolbar toolbar = Views.find(this, R.id.toolbar);
         setSupportActionBar(toolbar);

@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.ui.ex6.utils;
+package com.alexvasilkov.gestures.sample.ui.demo.utils;
 
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;

@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.ui.ex6.adapter;
+package com.alexvasilkov.gestures.sample.ui.demo.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;

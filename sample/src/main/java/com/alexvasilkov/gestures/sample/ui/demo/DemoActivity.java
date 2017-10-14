@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.ui.ex6;
+package com.alexvasilkov.gestures.sample.ui.demo;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -24,12 +24,12 @@ import com.alexvasilkov.gestures.commons.FinderView;
 import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.ui.base.BaseExampleActivity;
+import com.alexvasilkov.gestures.sample.ui.demo.adapter.EndlessRecyclerAdapter;
+import com.alexvasilkov.gestures.sample.ui.demo.adapter.PhotoListAdapter;
+import com.alexvasilkov.gestures.sample.ui.demo.adapter.PhotoPagerAdapter;
+import com.alexvasilkov.gestures.sample.ui.demo.crop.PhotoCropActivity;
+import com.alexvasilkov.gestures.sample.ui.demo.logic.FlickrApi;
 import com.alexvasilkov.gestures.sample.ui.ex5.ListViewToPagerActivity;
-import com.alexvasilkov.gestures.sample.ui.ex6.adapter.EndlessRecyclerAdapter;
-import com.alexvasilkov.gestures.sample.ui.ex6.adapter.PhotoListAdapter;
-import com.alexvasilkov.gestures.sample.ui.ex6.adapter.PhotoPagerAdapter;
-import com.alexvasilkov.gestures.sample.ui.ex6.crop.PhotoCropActivity;
-import com.alexvasilkov.gestures.sample.ui.ex6.logic.FlickrApi;
 import com.alexvasilkov.gestures.sample.utils.DecorUtils;
 import com.alexvasilkov.gestures.transition.GestureTransitions;
 import com.alexvasilkov.gestures.transition.ViewsTransitionAnimator;
@@ -45,7 +45,7 @@ import java.util.List;
  * It also shows how to implement image cropping ({@link PhotoCropActivity}) using
  * {@link FinderView} widget.
  */
-public class AdvancedAnimationDemoActivity extends BaseExampleActivity implements
+public class DemoActivity extends BaseExampleActivity implements
         ViewPositionAnimator.PositionUpdateListener,
         PhotoListAdapter.OnPhotoListener {
 
@@ -71,7 +71,7 @@ public class AdvancedAnimationDemoActivity extends BaseExampleActivity implement
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.ex6_screen);
+        setContentView(R.layout.demo_screen);
         views = new ViewHolder(this);
 
         setSupportActionBar(views.toolbar);
@@ -122,7 +122,7 @@ public class AdvancedAnimationDemoActivity extends BaseExampleActivity implement
                 if (photo == null) {
                     return false;
                 }
-                PhotoCropActivity.show(AdvancedAnimationDemoActivity.this, photo);
+                PhotoCropActivity.show(DemoActivity.this, photo);
                 return true;
             default:
                 return false;
@@ -223,7 +223,7 @@ public class AdvancedAnimationDemoActivity extends BaseExampleActivity implement
         if (photo == null) {
             views.pagerTitle.setText(null);
         } else {
-            SpannableBuilder title = new SpannableBuilder(AdvancedAnimationDemoActivity.this);
+            SpannableBuilder title = new SpannableBuilder(DemoActivity.this);
             title.append(photo.getTitle()).append("\n")
                     .createStyle().setColorResId(R.color.text_secondary_light).apply()
                     .append(R.string.photo_by).append(" ")

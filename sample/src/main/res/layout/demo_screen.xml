@@ -14,7 +14,7 @@
         android:padding="@dimen/flickr_list_margin"
         android:scrollbarStyle="outsideOverlay"
         android:scrollbars="vertical"
-        tools:listitem="@layout/ex6_item_photo" />
+        tools:listitem="@layout/demo_item_photo" />
 
     <android.support.v7.widget.Toolbar style="@style/App.Toolbar" />
 

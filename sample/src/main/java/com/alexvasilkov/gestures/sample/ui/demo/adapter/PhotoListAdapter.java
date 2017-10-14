@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.ui.ex6.adapter;
+package com.alexvasilkov.gestures.sample.ui.demo.adapter;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.alexvasilkov.android.commons.ui.Views;
 import com.alexvasilkov.gestures.sample.R;
-import com.alexvasilkov.gestures.sample.ui.ex6.utils.RecyclerAdapterHelper;
+import com.alexvasilkov.gestures.sample.ui.demo.utils.RecyclerAdapterHelper;
 import com.alexvasilkov.gestures.sample.utils.glide.GlideHelper;
 import com.bumptech.glide.Glide;
 import com.googlecode.flickrjandroid.photos.Photo;
@@ -97,7 +97,7 @@ public class PhotoListAdapter extends DefaultEndlessRecyclerAdapter<PhotoListAda
         final ImageView image;
 
         ViewHolder(ViewGroup parent) {
-            super(Views.inflate(parent, R.layout.ex6_item_photo));
+            super(Views.inflate(parent, R.layout.demo_item_photo));
             image = (ImageView) itemView;
         }
     }

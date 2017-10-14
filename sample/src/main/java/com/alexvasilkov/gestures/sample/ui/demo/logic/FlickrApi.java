@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.ui.ex6.logic;
+package com.alexvasilkov.gestures.sample.ui.demo.logic;
 
 import com.alexvasilkov.events.EventResult;
 import com.alexvasilkov.events.Events.Background;

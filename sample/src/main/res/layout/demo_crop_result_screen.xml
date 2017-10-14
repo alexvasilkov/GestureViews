@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.ex6.crop.PhotoCropResultActivity">
+    tools:context=".ui.demo.crop.PhotoCropResultActivity">
 
     <com.alexvasilkov.gestures.views.GestureImageView
         android:id="@+id/cropped_image"

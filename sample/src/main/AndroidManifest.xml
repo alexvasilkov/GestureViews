@@ -13,19 +13,33 @@
         android:name=".SampleApplication"
         android:allowBackup="false"
         android:icon="@drawable/ic_launcher"
-        android:label="GestureViews"
+        android:label="@string/app_name"
         android:supportsRtl="false"
         android:theme="@style/AppTheme">
 
         <activity
+            android:name=".ui.base.StartActivity"
+            android:theme="@style/AppTheme.Start" />
+
+        <activity-alias
             android:name=".ui.base.MainActivity"
-            android:label="Gesture Views">
+            android:targetActivity=".ui.base.StartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
+        </activity-alias>
+
+        <activity
+            android:name=".ui.base.ExamplesActivity"
+            android:label="@string/examples_title" />
+
+        <activity
+            android:name=".ui.demo.DemoActivity"
+            android:label="@string/demo_title"
+            android:theme="@style/AppTheme.Full.NoTitle" />
+
 
         <activity
             android:name=".ui.ex1.ImagesInPagerActivity"
@@ -75,22 +89,12 @@
         </activity>
 
         <activity
-            android:name=".ui.ex6.AdvancedAnimationDemoActivity"
-            android:label="Advanced demo"
-            android:theme="@style/AppTheme.Full.NoTitle">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".ui.ex6.crop.PhotoCropActivity"
+            android:name=".ui.demo.crop.PhotoCropActivity"
             android:label="Rotate &amp; crop"
             android:theme="@style/AppTheme.Full.NoTitle.Dark" />
 
         <activity
-            android:name=".ui.ex6.crop.PhotoCropResultActivity"
+            android:name=".ui.demo.crop.PhotoCropResultActivity"
             android:label="Cropped"
             android:theme="@style/AppTheme.Full.NoTitle.Dark" />
 

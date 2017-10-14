@@ -29,4 +29,8 @@
         <item name="android:windowBackground">@color/window_background_dark</item>
     </style>
 
+    <style name="AppTheme.Start" parent="AppTheme.Full.NoTitle">
+        <item name="android:windowBackground">@drawable/start_background</item>
+    </style>
+
 </resources>

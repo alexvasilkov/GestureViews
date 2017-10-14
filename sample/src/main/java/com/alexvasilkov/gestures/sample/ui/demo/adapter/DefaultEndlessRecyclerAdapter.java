@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.ui.ex6.adapter;
+package com.alexvasilkov.gestures.sample.ui.demo.adapter;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
@@ -161,7 +161,7 @@ abstract class DefaultEndlessRecyclerAdapter<VH extends RecyclerView.ViewHolder>
         final TextView loading;
 
         LoadingViewHolder(ViewGroup parent) {
-            super(Views.inflate(parent, R.layout.ex6_item_extra_loading));
+            super(Views.inflate(parent, R.layout.demo_item_extra_loading));
             loading = Views.find(itemView, R.id.extra_loading_text);
         }
     }
@@ -170,7 +170,7 @@ abstract class DefaultEndlessRecyclerAdapter<VH extends RecyclerView.ViewHolder>
         final TextView error;
 
         ErrorViewHolder(ViewGroup parent, final EndlessRecyclerAdapter<?> adapter) {
-            super(Views.inflate(parent, R.layout.ex6_item_extra_error));
+            super(Views.inflate(parent, R.layout.demo_item_extra_error));
             error = Views.find(itemView, R.id.extra_error);
             error.setOnClickListener(new View.OnClickListener() {
                 @Override

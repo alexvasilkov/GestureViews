@@ -17,10 +17,20 @@
         <item name="android:background">@android:color/transparent</item>
     </style>
 
-    <style name="App.Button" />
+    <style name="App.Button" parent="Widget.AppCompat.Button" />
 
-    <style name="App.Button.Error" parent="Widget.AppCompat.Button">
+    <style name="App.Button.Error">
         <item name="colorButtonNormal">@color/error_color</item>
+    </style>
+
+    <style name="App.Button.Accent">
+        <item name="android:theme">@style/App.AccentButtonTheme</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Widget.Button.Inverse
+        </item>
+    </style>
+
+    <style name="App.AccentButtonTheme">
+        <item name="colorButtonNormal">?colorAccent</item>
     </style>
 
 </resources>
