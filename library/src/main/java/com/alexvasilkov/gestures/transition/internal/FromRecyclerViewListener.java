@@ -1,5 +1,6 @@
 package com.alexvasilkov.gestures.transition.internal;
 
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.OnChildAttachStateChangeListener;
 import android.view.View;
@@ -36,8 +37,26 @@ public class FromRecyclerViewListener<ID> extends FromBaseListener<RecyclerView,
     }
 
     @Override
-    void scrollToPosition(RecyclerView parentView, int pos) {
-        parentView.smoothScrollToPosition(pos);
+    void scrollToPosition(RecyclerView parent, int pos) {
+        if (parent.getLayoutManager() instanceof LinearLayoutManager) {
+            // Centering item in its parent
+            final LinearLayoutManager manager = (LinearLayoutManager) parent.getLayoutManager();
+            final boolean isHorizontal = manager.getOrientation() == LinearLayoutManager.HORIZONTAL;
+
+            int offset = isHorizontal
+                    ? (parent.getWidth() - parent.getPaddingLeft() - parent.getPaddingRight()) / 2
+                    : (parent.getHeight() - parent.getPaddingTop() - parent.getPaddingBottom()) / 2;
+
+            final RecyclerView.ViewHolder holder = parent.findViewHolderForAdapterPosition(pos);
+            if (holder != null) {
+                final View view = holder.itemView;
+                offset -= isHorizontal ? view.getWidth() / 2 : view.getHeight() / 2;
+            }
+
+            manager.scrollToPositionWithOffset(pos, offset);
+        } else {
+            parent.scrollToPosition(pos);
+        }
     }
 
 }
