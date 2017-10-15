@@ -14,9 +14,7 @@ import com.alexvasilkov.gestures.animation.ViewPositionAnimator;
 import com.alexvasilkov.gestures.commons.DepthPageTransformer;
 import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
 import com.alexvasilkov.gestures.sample.R;
-import com.alexvasilkov.gestures.sample.ui.base.BaseActivity;
 import com.alexvasilkov.gestures.sample.ui.base.BaseExampleActivity;
-import com.alexvasilkov.gestures.sample.ui.base.settings.SettingsMenu;
 import com.alexvasilkov.gestures.sample.utils.DecorUtils;
 import com.alexvasilkov.gestures.transition.GestureTransitions;
 import com.alexvasilkov.gestures.transition.ViewsTransitionAnimator;
@@ -140,6 +138,15 @@ public class ComplexListActivity extends BaseExampleActivity
 
         if (isLeaving && position == 0f) {
             pagerAdapter.setActivated(false);
+        }
+
+        // Fading out images without "from" position
+        if (animator.getFromView() == null && isLeaving) {
+            float toPosition = animator.getToView() == null
+                    ? 1f : animator.getToView().getPositionAnimator().getToPosition();
+            views.pager.setAlpha(position / toPosition);
+        } else {
+            views.pager.setAlpha(1f);
         }
     }
 
