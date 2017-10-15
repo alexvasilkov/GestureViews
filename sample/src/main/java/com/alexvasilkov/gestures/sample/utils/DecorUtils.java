@@ -48,7 +48,7 @@ public class DecorUtils {
     }
 
 
-    private static boolean isCanHaveTransparentDecor() {
+    public static boolean isCanHaveTransparentDecor() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
     }
 

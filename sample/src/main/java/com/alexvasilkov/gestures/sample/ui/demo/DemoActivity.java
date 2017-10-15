@@ -116,7 +116,9 @@ public class DemoActivity extends BaseExampleActivity implements PhotoListAdapte
      * Adjusting margins and paddings to fit translucent decor.
      */
     private void initDecorMargins() {
-        Views.getParams(views.appBar).height += DecorUtils.getStatusBarHeight(this);
+        if (DecorUtils.isCanHaveTransparentDecor()) {
+            Views.getParams(views.appBar).height += DecorUtils.getStatusBarHeight(this);
+        }
         DecorUtils.paddingForStatusBar(views.toolbar, true);
         DecorUtils.paddingForStatusBar(views.pagerToolbar, true);
         DecorUtils.paddingForStatusBar(views.fullImageToolbar, true);
@@ -362,9 +364,11 @@ public class DemoActivity extends BaseExampleActivity implements PhotoListAdapte
      * Shows or hides system UI (status bar and navigation bar).
      */
     private void showSystemUi(boolean show) {
-        int flags = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN;
+        int flags = 0;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            flags |= View.SYSTEM_UI_FLAG_IMMERSIVE;
+            flags = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_IMMERSIVE;
         }
 
         getWindow().getDecorView().setSystemUiVisibility(show ? 0 : flags);

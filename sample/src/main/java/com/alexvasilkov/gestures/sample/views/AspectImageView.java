@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
+import android.util.Log;
 
 import com.alexvasilkov.gestures.sample.R;
 
@@ -44,7 +45,8 @@ public class AspectImageView extends AppCompatImageView {
         } else if (height != 0) {
             width = calculate(height, aspect, HORIZONTAL);
         } else {
-            throw new IllegalArgumentException("Either width or height should have exact value");
+            Log.e(AspectImageView.class.getSimpleName(),
+                    "Either width or height should have exact value");
         }
 
         int specWidth = MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY);

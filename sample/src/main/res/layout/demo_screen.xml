@@ -23,7 +23,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:collapsedTitleGravity="start"
-                app:contentScrim="?attr/colorPrimary"
+                app:contentScrim="@color/primary_2"
                 app:expandedTitleGravity="center_horizontal|bottom"
                 app:expandedTitleMarginBottom="16dp"
                 app:expandedTitleTextAppearance="@style/App.Demo.ExpandedTitle"

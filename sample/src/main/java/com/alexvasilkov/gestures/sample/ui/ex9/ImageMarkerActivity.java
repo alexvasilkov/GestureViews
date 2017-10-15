@@ -27,6 +27,7 @@ public class ImageMarkerActivity extends BaseExampleActivity {
         imageView.getController().getSettings().setMaxZoom(4f);
 
         setContentView(imageView);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Getting tinted icon drawable
         Drawable icon = ContextCompat.getDrawable(this, R.drawable.ic_pin_white_48dp);
