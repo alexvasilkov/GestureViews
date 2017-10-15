@@ -18,10 +18,9 @@ public class CircleImageView extends ImageView {
     private static final int DEFAULT_PAINT_FLAGS = Paint.FILTER_BITMAP_FLAG | Paint.ANTI_ALIAS_FLAG;
     private static final Matrix tmpMatrix = new Matrix();
 
-    private final Paint bitmapPaint = new Paint(DEFAULT_PAINT_FLAGS);
-    private final RectF rect = new RectF();
-
-    private boolean isCircle = true;
+    private Paint bitmapPaint;
+    private RectF rect;
+    private boolean isCircle;
 
     public CircleImageView(Context context) {
         this(context, null, 0);
@@ -33,6 +32,15 @@ public class CircleImageView extends ImageView {
 
     public CircleImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        init();
+    }
+
+    private void init() {
+        if (bitmapPaint == null) {
+            bitmapPaint = new Paint(DEFAULT_PAINT_FLAGS);
+            rect = new RectF();
+            isCircle = true;
+        }
     }
 
     @Override
@@ -54,6 +62,8 @@ public class CircleImageView extends ImageView {
 
     @Override
     protected void onDraw(Canvas canvas) {
+        init();
+
         if (bitmapPaint.getShader() == null) {
             super.onDraw(canvas);
         } else {
@@ -87,6 +97,8 @@ public class CircleImageView extends ImageView {
     }
 
     private void setup() {
+        init();
+
         Bitmap bitmap = isCircle ? getBitmapFromDrawable(getDrawable()) : null;
 
         if (bitmap != null) {
