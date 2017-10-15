@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name" translatable="false">Gesty</string>
+    <string name="app_name" translatable="false">GestureViews</string>
 
-    <string name="demo_title">Demo</string>
+    <string name="start_demo">Demo</string>
+    <string name="start_examples">@string/examples_title</string>
+
+    <string name="demo_title">Landscapes</string>
     <string name="examples_title">Examples</string>
 
     <string name="button_crop">Crop</string>

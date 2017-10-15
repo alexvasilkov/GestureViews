@@ -43,7 +43,7 @@
         android:layout_marginLeft="32dp"
         android:layout_marginRight="32dp"
         android:layout_marginTop="16dp"
-        android:text="@string/demo_title" />
+        android:text="@string/start_demo" />
 
     <Button
         android:id="@+id/start_examples"
@@ -52,7 +52,7 @@
         android:layout_marginLeft="32dp"
         android:layout_marginRight="32dp"
         android:layout_marginTop="8dp"
-        android:text="@string/examples_title" />
+        android:text="@string/start_examples" />
 
     <View
         android:layout_width="0dp"

@@ -17,6 +17,13 @@
         <item name="android:background">@android:color/transparent</item>
     </style>
 
+    <style name="App.ToolbarShadow">
+        <item name="android:layout_marginTop">?actionBarSize</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/shadow</item>
+        <item name="android:background">@drawable/shadow_top</item>
+    </style>
+
     <style name="App.Button" parent="Widget.AppCompat.Button" />
 
     <style name="App.Button.Error">
@@ -31,6 +38,13 @@
 
     <style name="App.AccentButtonTheme">
         <item name="colorButtonNormal">?colorAccent</item>
+    </style>
+
+
+    <style name="App.Demo" />
+
+    <style name="App.Demo.ExpandedTitle" parent="TextAppearance.AppCompat.Title">
+        <item name="android:textSize">24sp</item>
     </style>
 
 </resources>

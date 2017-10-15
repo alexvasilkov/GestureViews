@@ -16,7 +16,7 @@ public class DecorUtils {
 
     public static void paddingForStatusBar(View view, boolean isFixedSize) {
         if (isCanHaveTransparentDecor()) {
-            int height = getStratusBarHeight(view.getContext());
+            int height = getStatusBarHeight(view.getContext());
 
             view.setPadding(view.getPaddingLeft(), view.getPaddingTop() + height,
                     view.getPaddingRight(), view.getPaddingBottom());
@@ -29,7 +29,7 @@ public class DecorUtils {
 
     public static void marginForStatusBar(View view) {
         if (isCanHaveTransparentDecor()) {
-            Views.getMarginParams(view).topMargin += getStratusBarHeight(view.getContext());
+            Views.getMarginParams(view).topMargin += getStatusBarHeight(view.getContext());
         }
     }
 
@@ -52,7 +52,7 @@ public class DecorUtils {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
     }
 
-    private static int getStratusBarHeight(Context context) {
+    public static int getStatusBarHeight(Context context) {
         return getDimenSize(context, "status_bar_height");
     }
 

@@ -1,42 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".ui.demo.DemoActivity">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/advanced_grid"
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/demo_coordinator"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="?actionBarSize"
-        android:clipToPadding="false"
-        android:padding="@dimen/flickr_list_margin"
-        android:scrollbarStyle="outsideOverlay"
-        android:scrollbars="vertical"
-        tools:listitem="@layout/demo_item_photo" />
+        android:layout_height="match_parent">
 
-    <android.support.v7.widget.Toolbar style="@style/App.Toolbar" />
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/demo_app_bar"
+            android:layout_width="match_parent"
+            android:layout_height="192dp"
+            android:background="@drawable/demo_top_background"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+            <android.support.design.widget.CollapsingToolbarLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:collapsedTitleGravity="start"
+                app:contentScrim="?attr/colorPrimary"
+                app:expandedTitleGravity="center_horizontal|bottom"
+                app:expandedTitleMarginBottom="16dp"
+                app:expandedTitleTextAppearance="@style/App.Demo.ExpandedTitle"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
+
+                <android.support.v7.widget.Toolbar
+                    style="@style/App.Toolbar.Transparent"
+                    app:layout_collapseMode="pin"
+                    app:titleMarginStart="0dp" />
+
+                <FrameLayout
+                    android:layout_width="128dp"
+                    android:layout_height="128dp"
+                    android:layout_gravity="center_horizontal|bottom"
+                    android:layout_marginBottom="48dp"
+                    android:background="@drawable/demo_circle_border"
+                    android:padding="1dp"
+                    app:layout_collapseMode="parallax"
+                    app:layout_collapseParallaxMultiplier="-0.5">
+
+                    <com.alexvasilkov.gestures.commons.circle.CircleImageView
+                        android:id="@+id/demo_app_bar_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/landscape_painting" />
+
+                </FrameLayout>
+
+            </android.support.design.widget.CollapsingToolbarLayout>
+
+        </android.support.design.widget.AppBarLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/demo_grid"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:padding="@dimen/demo_list_margin"
+            android:scrollbarStyle="outsideOverlay"
+            android:scrollbars="vertical"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:listitem="@layout/demo_item_photo" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_anchor="@id/demo_app_bar"
+            app:layout_anchorGravity="bottom">
+
+            <View
+                style="@style/App.ToolbarShadow"
+                android:layout_marginTop="@dimen/shadow" />
+
+        </FrameLayout>
+
+    </android.support.design.widget.CoordinatorLayout>
 
     <View
-        android:id="@+id/advanced_full_background"
+        android:id="@+id/demo_full_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/window_background_dark_2"
         android:visibility="invisible" />
 
     <android.support.v4.view.ViewPager
-        android:id="@+id/advanced_pager"
+        android:id="@+id/demo_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/advanced_full_toolbar"
+        android:id="@+id/demo_pager_toolbar"
         style="@style/App.Toolbar.Transparent"
         android:visibility="invisible" />
 
     <TextView
-        android:id="@+id/advanced_full_title"
+        android:id="@+id/demo_pager_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
@@ -45,6 +109,17 @@
         android:shadowRadius="4"
         android:textColor="@color/text_primary_light"
         android:textSize="16sp"
+        android:visibility="invisible" />
+
+    <com.alexvasilkov.gestures.commons.circle.CircleGestureImageView
+        android:id="@+id/demo_full_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible" />
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/demo_full_image_toolbar"
+        style="@style/App.Toolbar.Transparent"
         android:visibility="invisible" />
 
 </merge>

@@ -6,6 +6,7 @@ import com.alexvasilkov.events.Events.Subscribe;
 import com.googlecode.flickrjandroid.Flickr;
 import com.googlecode.flickrjandroid.photos.Photo;
 import com.googlecode.flickrjandroid.photos.PhotoList;
+import com.googlecode.flickrjandroid.photos.PhotosInterface;
 import com.googlecode.flickrjandroid.photos.SearchParameters;
 
 import java.util.ArrayList;
@@ -47,10 +48,10 @@ public class FlickrApi {
         params.setExtras(photoParams);
 
         boolean hasNext = hasNext();
-        while (photos.size() < count && hasNext) {
-            PhotoList loaded = new Flickr(API_KEY).getPhotosInterface()
-                    .search(params, PER_PAGE, pages.size() + 1);
 
+        final PhotosInterface flickrPhotos = new Flickr(API_KEY).getPhotosInterface();
+        while (photos.size() < count && hasNext) {
+            final PhotoList loaded = flickrPhotos.search(params, PER_PAGE, pages.size() + 1);
             pages.add(loaded);
             photos.addAll(loaded);
 

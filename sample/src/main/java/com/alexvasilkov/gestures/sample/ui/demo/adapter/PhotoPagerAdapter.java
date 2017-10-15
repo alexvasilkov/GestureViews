@@ -2,10 +2,12 @@ package com.alexvasilkov.gestures.sample.ui.demo.adapter;
 
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.alexvasilkov.android.commons.ui.Views;
+import com.alexvasilkov.gestures.GestureController.SimpleOnGestureListener;
 import com.alexvasilkov.gestures.animation.ViewPositionAnimator.PositionUpdateListener;
 import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
 import com.alexvasilkov.gestures.sample.R;
@@ -24,8 +26,19 @@ public class PhotoPagerAdapter extends RecyclePagerAdapter<PhotoPagerAdapter.Vie
     private final ViewPager viewPager;
     private List<Photo> photos;
     private SettingsSetupListener setupListener;
+    private ImageClickListener clickListener;
 
     private boolean activated;
+
+    private SimpleOnGestureListener gesturesListener = new SimpleOnGestureListener() {
+        @Override
+        public boolean onSingleTapConfirmed(@NonNull MotionEvent event) {
+            if (clickListener != null) {
+                clickListener.onFullImageClick();
+            }
+            return true;
+        }
+    };
 
     public PhotoPagerAdapter(ViewPager viewPager) {
         this.viewPager = viewPager;
@@ -42,6 +55,10 @@ public class PhotoPagerAdapter extends RecyclePagerAdapter<PhotoPagerAdapter.Vie
 
     public void setSetupListener(SettingsSetupListener listener) {
         setupListener = listener;
+    }
+
+    public void setImageClickListener(ImageClickListener clickListener) {
+        this.clickListener = clickListener;
     }
 
     /**
@@ -69,6 +86,8 @@ public class PhotoPagerAdapter extends RecyclePagerAdapter<PhotoPagerAdapter.Vie
         holder.image.getController().getSettings()
                 .setMaxZoom(10f)
                 .setDoubleTapZoom(3f);
+
+        holder.image.getController().setOnGesturesListener(gesturesListener);
 
         if (setupListener != null) {
             setupListener.onSetupGestureView(holder.image);
@@ -153,6 +172,10 @@ public class PhotoPagerAdapter extends RecyclePagerAdapter<PhotoPagerAdapter.Vie
             image = Views.find(itemView, R.id.photo_full_image);
             progress = Views.find(itemView, R.id.photo_full_progress);
         }
+    }
+
+    public interface ImageClickListener {
+        void onFullImageClick();
     }
 
 }
