@@ -239,10 +239,6 @@ public class ViewsTransitionAnimator<ID> extends ViewsCoordinator<ID> {
         if (getToView() != null) {
             cleanupAnimator(getToView().getPositionAnimator());
         }
-        // Clean up full image
-        if (getToView() instanceof ImageView) {
-            ((ImageView) getToView()).setImageDrawable(null);
-        }
 
         isEntered = false;
         exitRequested = false;
