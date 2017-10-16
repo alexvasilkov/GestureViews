@@ -15,7 +15,7 @@
         <android.support.design.widget.AppBarLayout
             android:id="@+id/demo_app_bar"
             android:layout_width="match_parent"
-            android:layout_height="192dp"
+            android:layout_height="172dp"
             android:background="@drawable/demo_top_background"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
@@ -23,9 +23,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:collapsedTitleGravity="start"
-                app:contentScrim="@color/primary_2"
-                app:expandedTitleGravity="center_horizontal|bottom"
-                app:expandedTitleMarginBottom="16dp"
+                app:expandedTitleMarginStart="72dp"
                 app:expandedTitleTextAppearance="@style/App.Demo.ExpandedTitle"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
@@ -35,12 +33,13 @@
                     app:titleMarginStart="0dp" />
 
                 <FrameLayout
-                    android:layout_width="128dp"
-                    android:layout_height="128dp"
-                    android:layout_gravity="center_horizontal|bottom"
-                    android:layout_marginBottom="48dp"
+                    android:layout_width="112dp"
+                    android:layout_height="112dp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="24dp"
+                    android:layout_marginLeft="40dp"
                     android:background="@drawable/demo_circle_border"
-                    android:padding="1dp"
+                    android:padding="1.5dp"
                     app:layout_collapseMode="parallax"
                     app:layout_collapseParallaxMultiplier="-0.5">
 
@@ -52,6 +51,32 @@
                         android:src="@drawable/landscape_painting" />
 
                 </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="112dp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="24dp"
+                    android:layout_marginLeft="168dp"
+                    android:layout_marginRight="16dp"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical"
+                    app:layout_collapseMode="parallax"
+                    app:layout_collapseParallaxMultiplier="-0.5">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/demo_headline"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/demo_subhead"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+                </LinearLayout>
 
             </android.support.design.widget.CollapsingToolbarLayout>
 

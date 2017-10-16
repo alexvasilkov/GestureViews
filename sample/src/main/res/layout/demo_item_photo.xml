@@ -11,4 +11,4 @@
     android:padding="1dp"
     android:scaleType="centerCrop"
     app:aspect="1"
-    tools:src="@drawable/painting_01" />
+    tools:src="@drawable/landscape_painting" />
