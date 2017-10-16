@@ -23,21 +23,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:collapsedTitleGravity="start"
-                app:expandedTitleMarginStart="72dp"
-                app:expandedTitleTextAppearance="@style/App.Demo.ExpandedTitle"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
+                app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+                app:titleEnabled="false">
 
                 <android.support.v7.widget.Toolbar
                     style="@style/App.Toolbar.Transparent"
-                    app:layout_collapseMode="pin"
-                    app:titleMarginStart="0dp" />
+                    app:layout_collapseMode="pin" />
 
                 <FrameLayout
                     android:layout_width="112dp"
                     android:layout_height="112dp"
                     android:layout_gravity="bottom"
                     android:layout_marginBottom="24dp"
-                    android:layout_marginLeft="40dp"
+                    android:layout_marginLeft="48dp"
                     android:background="@drawable/demo_circle_border"
                     android:padding="1.5dp"
                     app:layout_collapseMode="parallax"
@@ -57,7 +55,7 @@
                     android:layout_height="112dp"
                     android:layout_gravity="bottom"
                     android:layout_marginBottom="24dp"
-                    android:layout_marginLeft="168dp"
+                    android:layout_marginLeft="174dp"
                     android:layout_marginRight="16dp"
                     android:gravity="center_vertical"
                     android:orientation="vertical"

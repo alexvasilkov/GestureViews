@@ -76,6 +76,7 @@ public class DemoActivity extends BaseExampleActivity implements PhotoListAdapte
 
         setSupportActionBar(views.toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         initDecorMargins();
         initTopImage();

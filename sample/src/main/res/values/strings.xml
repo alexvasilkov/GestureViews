@@ -3,10 +3,9 @@
 
     <string name="app_name" translatable="false">GestureViews</string>
 
-    <string name="start_demo">@string/demo_title</string>
+    <string name="start_demo">Demo</string>
     <string name="start_examples">@string/examples_title</string>
 
-    <string name="demo_title">Demo</string>
     <string name="demo_headline">Landscapes</string>
     <string name="demo_subhead">Powered by Flickr</string>
     <string name="examples_title">Examples</string>

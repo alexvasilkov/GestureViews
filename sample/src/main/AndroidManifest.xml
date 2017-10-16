@@ -37,7 +37,6 @@
 
         <activity
             android:name=".ui.demo.DemoActivity"
-            android:label="@string/demo_title"
             android:theme="@style/AppTheme.Full.NoTitle" />
 
 
