@@ -15,12 +15,12 @@
 
     <ImageView
         android:id="@+id/single_image"
-        android:layout_width="96dp"
-        android:layout_height="96dp"
+        android:layout_width="144dp"
+        android:layout_height="144dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="56dp"
         android:scaleType="centerCrop"
-        tools:src="@drawable/painting_05" />
+        tools:src="@drawable/painting_03" />
 
     <View
         android:id="@+id/single_image_back"
