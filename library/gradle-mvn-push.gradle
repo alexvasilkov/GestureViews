@@ -107,7 +107,7 @@ afterEvaluate { project ->
 
     task javadocs(type: Javadoc) {
         source = android.sourceSets.main.java.sourceFiles
-        classpath = files(android.bootClasspath)
+        classpath += files(android.bootClasspath)
         exclude "**/internal/**"
         title "${POM_NAME} ${VERSION_NAME} API"
         options {
@@ -137,12 +137,5 @@ afterEvaluate { project ->
         archives jar
         archives sourcesJar
         archives javadocsJar
-    }
-
-    // Excluding aar artifacts from uploading
-    configurations.archives.artifacts.with { archives ->
-        for (def iter = archives.iterator(); iter.hasNext();) {
-            if (iter.next().file =~ 'aar') iter.remove();
-        }
     }
 }
