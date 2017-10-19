@@ -32,17 +32,27 @@
         </activity-alias>
 
         <activity
-            android:name=".ui.base.ExamplesActivity"
-            android:label="@string/examples_title" />
-
-        <activity
             android:name=".ui.demo.DemoActivity"
             android:theme="@style/AppTheme.Full.NoTitle" />
 
 
         <activity
-            android:name=".ui.ex1.ImagesInPagerActivity"
-            android:label="Images in ViewPager"
+            android:name=".ui.ex.ExamplesActivity"
+            android:label="@string/examples_title" />
+
+        <activity
+            android:name=".ui.ex.image.ImageViewerActivity"
+            android:label="GestureImageView"
+            android:theme="@style/AppTheme.Full.NoTitle.Dark">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ui.ex.pager.ViewPagerActivity"
+            android:label="ViewPager integration"
             android:theme="@style/AppTheme.Full.NoTitle.Dark">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

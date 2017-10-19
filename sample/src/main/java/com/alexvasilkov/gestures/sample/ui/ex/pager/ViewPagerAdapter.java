@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.ui.ex1;
+package com.alexvasilkov.gestures.sample.ui.ex.pager;
 
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
@@ -6,20 +6,21 @@ import android.view.ViewGroup;
 
 import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
 import com.alexvasilkov.gestures.sample.logic.Painting;
+import com.alexvasilkov.gestures.sample.logic.Paintings;
 import com.alexvasilkov.gestures.sample.ui.base.settings.SettingsSetupListener;
 import com.alexvasilkov.gestures.sample.utils.glide.GlideHelper;
 import com.alexvasilkov.gestures.views.GestureImageView;
 import com.bumptech.glide.Glide;
 
-class ImagesPagerAdapter extends RecyclePagerAdapter<ImagesPagerAdapter.ViewHolder> {
+class ViewPagerAdapter extends RecyclePagerAdapter<ViewPagerAdapter.ViewHolder> {
 
     private final ViewPager viewPager;
     private final Painting[] paintings;
     private final SettingsSetupListener setupListener;
 
-    ImagesPagerAdapter(ViewPager pager, Painting[] paintings, SettingsSetupListener listener) {
+    ViewPagerAdapter(ViewPager pager, SettingsSetupListener listener) {
         this.viewPager = pager;
-        this.paintings = paintings;
+        this.paintings = Paintings.list(pager.getResources());
         this.setupListener = listener;
     }
 
@@ -31,12 +32,22 @@ class ImagesPagerAdapter extends RecyclePagerAdapter<ImagesPagerAdapter.ViewHold
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup container) {
         final ViewHolder holder = new ViewHolder(container);
+
+        // Applying custom settings
+        holder.image.getController().getSettings()
+                .setMaxZoom(6f)
+                .setDoubleTapZoom(3f);
+
+        // Enabling smooth scrolling when image panning turns into ViewPager scrolling.
+        // Otherwise ViewPager scrolling will only be possible when image is in zoomed out state.
         holder.image.getController().enableScrollInViewPager(viewPager);
+
         return holder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        // Applying settings from toolbar menu, see BaseExampleActivity
         setupListener.onSetupGestureView(holder.image);
 
         GlideHelper.loadResource(paintings[position].imageId, holder.image);

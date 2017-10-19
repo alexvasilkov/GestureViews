@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.ui.base;
+package com.alexvasilkov.gestures.sample.ui.ex;
 
 import android.content.ComponentName;
 import android.content.Intent;
@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.alexvasilkov.android.commons.ui.Views;
 import com.alexvasilkov.gestures.sample.R;
+import com.alexvasilkov.gestures.sample.ui.base.BaseActivity;
 
 import java.util.ArrayList;
 import java.util.List;

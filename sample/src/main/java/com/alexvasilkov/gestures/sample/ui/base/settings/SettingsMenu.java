@@ -26,9 +26,9 @@ public class SettingsMenu implements SettingsSetupListener {
     @InstanceState
     private boolean isZoomEnabled = true;
     @InstanceState
-    private boolean isRotationEnabled = true;
+    private boolean isRotationEnabled = false;
     @InstanceState
-    private boolean isRestrictRotation = true;
+    private boolean isRestrictRotation = false;
     @InstanceState
     private boolean isOverscrollXEnabled = false;
     @InstanceState

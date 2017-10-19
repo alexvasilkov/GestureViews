@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <com.alexvasilkov.gestures.views.GestureImageView
+        android:id="@+id/image_viewer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/painting_02" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
+        <android.support.v7.widget.Toolbar style="@style/App.Toolbar.Transparent" />
+
+    </FrameLayout>
+
+</merge>

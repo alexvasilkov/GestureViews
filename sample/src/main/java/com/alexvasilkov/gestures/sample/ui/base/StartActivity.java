@@ -10,6 +10,7 @@ import com.alexvasilkov.android.commons.ui.Views;
 import com.alexvasilkov.gestures.sample.BuildConfig;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.ui.demo.DemoActivity;
+import com.alexvasilkov.gestures.sample.ui.ex.ExamplesActivity;
 
 public class StartActivity extends BaseActivity implements View.OnClickListener {
 
