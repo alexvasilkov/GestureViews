@@ -3,7 +3,6 @@ package com.alexvasilkov.gestures.sample.ui.ex.pager;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 
-import com.alexvasilkov.android.commons.ui.Views;
 import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.ui.base.BaseExampleActivity;
@@ -28,9 +27,10 @@ public class ViewPagerActivity extends BaseExampleActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.pager_screen);
+        setTitle(null);
 
         // Initializing ViewPager
-        viewPager = Views.find(this, R.id.pager);
+        viewPager = findViewById(R.id.pager);
         viewPager.setAdapter(new ViewPagerAdapter(viewPager, getSettingsListener()));
         viewPager.setPageMargin(getResources().getDimensionPixelSize(R.dimen.view_pager_margin));
     }

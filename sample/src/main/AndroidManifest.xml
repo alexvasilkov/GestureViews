@@ -61,6 +61,24 @@
         </activity>
 
         <activity
+            android:name=".ui.ex.single.SingleImageAnimationActivity"
+            android:label="Single image animation">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ui.ex.single.round.RoundImageAnimationActivity"
+            android:label="Round image animation">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
             android:name=".ui.ex2.LayoutsInPagerActivity"
             android:label="Layouts in ViewPager"
             android:theme="@style/AppTheme.FrameLayout">
@@ -73,15 +91,6 @@
         <activity
             android:name=".ui.ex3.CustomViewActivity"
             android:label="Custom view">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".ui.ex4.SingleImageAnimationActivity"
-            android:label="Single image animation">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

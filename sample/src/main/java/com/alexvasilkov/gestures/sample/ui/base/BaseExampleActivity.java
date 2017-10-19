@@ -28,9 +28,8 @@ public abstract class BaseExampleActivity extends BaseActivity {
         final Toolbar toolbar = Views.find(this, R.id.toolbar);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            setTitle(null);
         }
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override

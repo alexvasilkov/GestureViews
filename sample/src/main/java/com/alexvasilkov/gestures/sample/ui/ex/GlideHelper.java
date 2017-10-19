@@ -15,6 +15,7 @@ import com.bumptech.glide.request.transition.TransitionFactory;
 
 public class GlideHelper {
 
+    // View fading animation. Note that default cross-fade animation may be buggy
     private static final Transition<Drawable> TRANSITION = new Transition<Drawable>() {
         @Override
         public boolean transition(Drawable current, ViewAdapter adapter) {
@@ -29,13 +30,14 @@ public class GlideHelper {
         }
     };
 
+    // Animation factory that will skip fading animation for images loaded from memory cache
     private static final TransitionFactory<Drawable> TRANSITION_FACTORY =
             new TransitionFactory<Drawable>() {
                 @Override
                 public Transition<Drawable> build(DataSource dataSource, boolean isFirstResource) {
                     // Do not animate if image is loaded from memory
-                    return dataSource != DataSource.MEMORY_CACHE
-                            ? TRANSITION : NoTransition.<Drawable>get();
+                    return dataSource == DataSource.MEMORY_CACHE
+                            ? NoTransition.<Drawable>get() : TRANSITION;
                 }
             };
 
@@ -57,7 +59,9 @@ public class GlideHelper {
     }
 
     public static void clear(ImageView view) {
+        // Clearing current Glide request (if any)
         Glide.with(view).clear(view);
+        // Cleaning up resources
         view.setImageDrawable(null);
     }
 
