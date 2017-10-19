@@ -419,6 +419,15 @@ public class DemoActivity extends BaseExampleActivity implements PhotoListAdapte
      */
     @Result(FlickrApi.LOAD_IMAGES_EVENT)
     private void onPhotosLoaded(List<Photo> photos, boolean hasMore) {
+        // RecyclerView will continue scrolling when new items are added, we need to stop it.
+        // Seems like this buggy behavior was introduced in support library v26.0.x
+        final boolean onBottom =
+                views.grid.findViewHolderForAdapterPosition(gridAdapter.getCount() - 1) != null;
+        if (onBottom) {
+            views.grid.stopScroll();
+        }
+
+        // Setting new photos list
         gridAdapter.setPhotos(photos, hasMore);
         pagerAdapter.setPhotos(photos);
         gridAdapter.onNextItemsLoaded();

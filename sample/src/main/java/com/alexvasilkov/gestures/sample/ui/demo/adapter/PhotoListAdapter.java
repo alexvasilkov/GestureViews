@@ -9,9 +9,8 @@ import android.widget.TextView;
 
 import com.alexvasilkov.android.commons.ui.Views;
 import com.alexvasilkov.gestures.sample.R;
+import com.alexvasilkov.gestures.sample.ui.demo.utils.DemoGlideHelper;
 import com.alexvasilkov.gestures.sample.ui.demo.utils.RecyclerAdapterHelper;
-import com.alexvasilkov.gestures.sample.utils.glide.GlideHelper;
-import com.bumptech.glide.Glide;
 import com.googlecode.flickrjandroid.photos.Photo;
 
 import java.util.List;
@@ -57,7 +56,7 @@ public class PhotoListAdapter extends DefaultEndlessRecyclerAdapter<PhotoListAda
     protected void onBindHolder(ViewHolder holder, int position) {
         Photo photo = photos.get(position);
         holder.image.setTag(R.id.tag_item, photo);
-        GlideHelper.loadFlickrThumb(photo, holder.image);
+        DemoGlideHelper.loadFlickrThumb(photo, holder.image);
     }
 
     @Override
@@ -74,7 +73,7 @@ public class PhotoListAdapter extends DefaultEndlessRecyclerAdapter<PhotoListAda
     public void onViewRecycled(RecyclerView.ViewHolder holder) {
         super.onViewRecycled(holder);
         if (holder instanceof ViewHolder) {
-            Glide.clear(((ViewHolder) holder).image);
+            DemoGlideHelper.clear(((ViewHolder) holder).image);
         }
     }
 

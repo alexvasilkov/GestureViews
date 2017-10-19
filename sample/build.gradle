@@ -8,12 +8,12 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.alexvasilkov.sign'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion '25.0.3'
+    compileSdkVersion 26
+    buildToolsVersion '26.0.2'
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode 15
         versionName '2.3.2'
     }
@@ -42,12 +42,12 @@ android {
 dependencies {
     compile project(':library')
 
-    compile 'com.android.support:support-v4:25.3.1'
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support:recyclerview-v7:25.3.1'
-    compile 'com.android.support:design:25.3.1'
+    compile 'com.android.support:support-v4:26.1.0'
+    compile 'com.android.support:appcompat-v7:26.1.0'
+    compile 'com.android.support:recyclerview-v7:26.1.0'
+    compile 'com.android.support:design:26.1.0'
 
-    compile 'com.github.bumptech.glide:glide:3.8.0'
+    compile 'com.github.bumptech.glide:glide:4.2.0'
 
     compile 'com.alexvasilkov:android-commons:2.0.2'
     compile 'com.alexvasilkov:events:1.0.0'

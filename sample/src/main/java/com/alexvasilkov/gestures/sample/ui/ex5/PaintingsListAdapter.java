@@ -8,8 +8,8 @@ import android.widget.ImageView;
 
 import com.alexvasilkov.android.commons.ui.Views;
 import com.alexvasilkov.gestures.sample.R;
-import com.alexvasilkov.gestures.sample.logic.Painting;
-import com.alexvasilkov.gestures.sample.utils.glide.GlideHelper;
+import com.alexvasilkov.gestures.sample.ui.ex.GlideHelper;
+import com.alexvasilkov.gestures.sample.ui.ex.Painting;
 
 class PaintingsListAdapter extends BaseAdapter implements View.OnClickListener {
 

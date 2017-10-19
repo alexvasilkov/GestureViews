@@ -12,9 +12,8 @@ import com.alexvasilkov.gestures.animation.ViewPositionAnimator.PositionUpdateLi
 import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.ui.base.settings.SettingsSetupListener;
-import com.alexvasilkov.gestures.sample.utils.glide.GlideHelper;
+import com.alexvasilkov.gestures.sample.ui.demo.utils.DemoGlideHelper;
 import com.alexvasilkov.gestures.views.GestureImageView;
-import com.bumptech.glide.Glide;
 import com.googlecode.flickrjandroid.photos.Photo;
 
 import java.util.List;
@@ -120,24 +119,23 @@ public class PhotoPagerAdapter extends RecyclePagerAdapter<PhotoPagerAdapter.Vie
         Photo photo = photos.get(position);
 
         // Loading image
-        GlideHelper.loadFlickrFull(photo, holder.image,
-                new GlideHelper.ImageLoadingListener() {
-                    @Override
-                    public void onLoaded() {
-                        holder.progress.animate().cancel();
-                        holder.progress.animate().alpha(0f);
-                        // Re-enabling touch controls
-                        if (holder.gesturesDisabled) {
-                            holder.image.getController().getSettings().enableGestures();
-                            holder.gesturesDisabled = false;
-                        }
-                    }
+        DemoGlideHelper.loadFlickrFull(photo, holder.image, new DemoGlideHelper.LoadingListener() {
+            @Override
+            public void onSuccess() {
+                holder.progress.animate().cancel();
+                holder.progress.animate().alpha(0f);
+                // Re-enabling touch controls
+                if (holder.gesturesDisabled) {
+                    holder.image.getController().getSettings().enableGestures();
+                    holder.gesturesDisabled = false;
+                }
+            }
 
-                    @Override
-                    public void onFailed() {
-                        holder.progress.animate().alpha(0f);
-                    }
-                });
+            @Override
+            public void onError() {
+                holder.progress.animate().alpha(0f);
+            }
+        });
     }
 
     @Override
@@ -149,7 +147,7 @@ public class PhotoPagerAdapter extends RecyclePagerAdapter<PhotoPagerAdapter.Vie
             holder.gesturesDisabled = false;
         }
 
-        Glide.clear(holder.image);
+        DemoGlideHelper.clear(holder.image);
 
         holder.progress.animate().cancel();
         holder.progress.setAlpha(0f);

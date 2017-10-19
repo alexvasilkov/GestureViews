@@ -17,7 +17,9 @@
             android:layout_width="match_parent"
             android:layout_height="172dp"
             android:background="@drawable/demo_top_background"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+            android:stateListAnimator="@null"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            tools:ignore="UnusedAttribute">
 
             <android.support.design.widget.CollapsingToolbarLayout
                 android:layout_width="match_parent"

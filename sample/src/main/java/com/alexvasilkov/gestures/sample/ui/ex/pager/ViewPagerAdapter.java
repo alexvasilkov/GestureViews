@@ -5,12 +5,10 @@ import android.support.v4.view.ViewPager;
 import android.view.ViewGroup;
 
 import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
-import com.alexvasilkov.gestures.sample.logic.Painting;
-import com.alexvasilkov.gestures.sample.logic.Paintings;
 import com.alexvasilkov.gestures.sample.ui.base.settings.SettingsSetupListener;
-import com.alexvasilkov.gestures.sample.utils.glide.GlideHelper;
+import com.alexvasilkov.gestures.sample.ui.ex.GlideHelper;
+import com.alexvasilkov.gestures.sample.ui.ex.Painting;
 import com.alexvasilkov.gestures.views.GestureImageView;
-import com.bumptech.glide.Glide;
 
 class ViewPagerAdapter extends RecyclePagerAdapter<ViewPagerAdapter.ViewHolder> {
 
@@ -20,7 +18,7 @@ class ViewPagerAdapter extends RecyclePagerAdapter<ViewPagerAdapter.ViewHolder> 
 
     ViewPagerAdapter(ViewPager pager, SettingsSetupListener listener) {
         this.viewPager = pager;
-        this.paintings = Paintings.list(pager.getResources());
+        this.paintings = Painting.list(pager.getResources());
         this.setupListener = listener;
     }
 
@@ -55,7 +53,7 @@ class ViewPagerAdapter extends RecyclePagerAdapter<ViewPagerAdapter.ViewHolder> 
 
     @Override
     public void onRecycleViewHolder(@NonNull ViewHolder holder) {
-        Glide.clear(holder.image);
+        GlideHelper.clear(holder.image);
     }
 
     static class ViewHolder extends RecyclePagerAdapter.ViewHolder {

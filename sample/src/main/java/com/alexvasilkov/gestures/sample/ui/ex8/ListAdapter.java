@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.alexvasilkov.android.commons.ui.Views;
 import com.alexvasilkov.gestures.sample.R;
-import com.alexvasilkov.gestures.sample.utils.glide.GlideHelper;
+import com.alexvasilkov.gestures.sample.ui.ex.GlideHelper;
 
 import java.util.List;
 
@@ -33,7 +33,7 @@ class ListAdapter extends RecyclerView.Adapter<ViewHolder> implements View.OnCli
 
     @Override
     public int getItemViewType(int position) {
-        return items.get(position).images == null ? TYPE_TEXT : TYPE_IMAGES;
+        return items.get(position).paintings == null ? TYPE_TEXT : TYPE_IMAGES;
     }
 
     @Override
@@ -62,15 +62,15 @@ class ListAdapter extends RecyclerView.Adapter<ViewHolder> implements View.OnCli
     }
 
     private void onBindImages(ImagesViewHolder holder, Item item, int pos) {
-        if (item.images != null && item.images.length > 0) {
-            GlideHelper.loadResource(item.images[0], holder.image1);
-            if (item.images.length > 1) {
+        if (item.paintings != null && item.paintings.length > 0) {
+            GlideHelper.loadResource(item.paintings[0].imageId, holder.image1);
+            if (item.paintings.length > 1) {
                 holder.imagesRow.setVisibility(View.VISIBLE);
-                GlideHelper.loadResource(item.images[1], holder.image2);
+                GlideHelper.loadResource(item.paintings[1].imageId, holder.image2);
 
-                if (item.images.length > 2) {
+                if (item.paintings.length > 2) {
                     holder.image3.setVisibility(View.VISIBLE);
-                    GlideHelper.loadResource(item.images[2], holder.image3);
+                    GlideHelper.loadResource(item.paintings[2].imageId, holder.image3);
                 } else {
                     holder.image3.setVisibility(View.INVISIBLE);
                 }

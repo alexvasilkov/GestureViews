@@ -13,11 +13,10 @@ import com.alexvasilkov.android.commons.texts.SpannableBuilder;
 import com.alexvasilkov.android.commons.ui.Views;
 import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
 import com.alexvasilkov.gestures.sample.R;
-import com.alexvasilkov.gestures.sample.logic.Painting;
 import com.alexvasilkov.gestures.sample.ui.base.settings.SettingsSetupListener;
-import com.alexvasilkov.gestures.sample.utils.glide.GlideHelper;
+import com.alexvasilkov.gestures.sample.ui.ex.GlideHelper;
+import com.alexvasilkov.gestures.sample.ui.ex.Painting;
 import com.alexvasilkov.gestures.views.GestureFrameLayout;
-import com.bumptech.glide.Glide;
 
 class LayoutsPagerAdapter extends RecyclePagerAdapter<LayoutsPagerAdapter.ViewHolder>
         implements View.OnClickListener {
@@ -68,7 +67,7 @@ class LayoutsPagerAdapter extends RecyclePagerAdapter<LayoutsPagerAdapter.ViewHo
     @Override
     public void onRecycleViewHolder(@NonNull ViewHolder holder) {
         holder.layout.getController().resetState();
-        Glide.clear(holder.image);
+        GlideHelper.clear(holder.image);
     }
 
     @Override

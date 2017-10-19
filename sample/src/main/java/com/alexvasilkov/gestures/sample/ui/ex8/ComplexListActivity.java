@@ -72,7 +72,7 @@ public class ComplexListActivity extends BaseExampleActivity
         // Setting up images grid
         views.list.setLayoutManager(new LinearLayoutManager(this));
 
-        final ListAdapter listAdapter = new ListAdapter(Item.createItemsList(), this);
+        final ListAdapter listAdapter = new ListAdapter(Item.createItemsList(this), this);
         views.list.setAdapter(listAdapter);
     }
 
@@ -154,7 +154,7 @@ public class ComplexListActivity extends BaseExampleActivity
     public void onImageClick(Item item, int itemPos, int imagePos) {
         selectedPosition = itemPos;
 
-        pagerAdapter.setImages(item.images);
+        pagerAdapter.setPaintings(item.paintings);
         pagerAdapter.setActivated(true);
 
         animator.enter(imagePos, true);

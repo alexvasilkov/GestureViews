@@ -6,7 +6,8 @@ import android.view.ViewGroup;
 
 import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
 import com.alexvasilkov.gestures.sample.ui.base.settings.SettingsSetupListener;
-import com.alexvasilkov.gestures.sample.utils.glide.GlideHelper;
+import com.alexvasilkov.gestures.sample.ui.ex.GlideHelper;
+import com.alexvasilkov.gestures.sample.ui.ex.Painting;
 import com.alexvasilkov.gestures.views.GestureImageView;
 
 class PagerAdapter extends RecyclePagerAdapter<PagerAdapter.ViewHolder> {
@@ -14,7 +15,7 @@ class PagerAdapter extends RecyclePagerAdapter<PagerAdapter.ViewHolder> {
     private final ViewPager viewPager;
     private final SettingsSetupListener setupListener;
 
-    private int[] images;
+    private Painting[] paintings;
     private boolean activated;
 
     PagerAdapter(ViewPager pager, SettingsSetupListener listener) {
@@ -22,8 +23,8 @@ class PagerAdapter extends RecyclePagerAdapter<PagerAdapter.ViewHolder> {
         this.setupListener = listener;
     }
 
-    void setImages(int[] images) {
-        this.images = images;
+    void setPaintings(Painting[] paintings) {
+        this.paintings = paintings;
         notifyDataSetChanged();
     }
 
@@ -42,7 +43,7 @@ class PagerAdapter extends RecyclePagerAdapter<PagerAdapter.ViewHolder> {
 
     @Override
     public int getCount() {
-        return !activated || images == null ? 0 : images.length;
+        return !activated || paintings == null ? 0 : paintings.length;
     }
 
     @Override
@@ -57,7 +58,7 @@ class PagerAdapter extends RecyclePagerAdapter<PagerAdapter.ViewHolder> {
         if (setupListener != null) {
             setupListener.onSetupGestureView(holder.image);
         }
-        GlideHelper.loadResource(images[position], holder.image);
+        GlideHelper.loadResource(paintings[position].imageId, holder.image);
     }
 
     static GestureImageView getImage(RecyclePagerAdapter.ViewHolder holder) {

@@ -9,10 +9,9 @@ import com.alexvasilkov.android.commons.ui.Views;
 import com.alexvasilkov.gestures.animation.ViewPositionAnimator;
 import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
 import com.alexvasilkov.gestures.sample.R;
-import com.alexvasilkov.gestures.sample.logic.Painting;
-import com.alexvasilkov.gestures.sample.logic.Paintings;
 import com.alexvasilkov.gestures.sample.ui.base.BaseExampleActivity;
 import com.alexvasilkov.gestures.sample.ui.demo.DemoActivity;
+import com.alexvasilkov.gestures.sample.ui.ex.Painting;
 import com.alexvasilkov.gestures.transition.GestureTransitions;
 import com.alexvasilkov.gestures.transition.ViewsTransitionAnimator;
 import com.alexvasilkov.gestures.transition.tracker.SimpleTracker;
@@ -39,7 +38,7 @@ public class ListViewToPagerActivity extends BaseExampleActivity
         setContentView(R.layout.ex5_screen);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        final Painting[] paintings = Paintings.list(getResources());
+        final Painting[] paintings = Painting.list(getResources());
 
         // Initializing ListView
         list = Views.find(this, R.id.transition_list);

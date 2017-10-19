@@ -1,13 +1,24 @@
-package com.alexvasilkov.gestures.sample.logic;
+package com.alexvasilkov.gestures.sample.ui.ex;
 
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 
 import com.alexvasilkov.gestures.sample.R;
 
-public class Paintings {
+public class Painting {
 
-    private Paintings() {}
+    public final int imageId;
+    public final String author;
+    public final String title;
+    public final String link;
+
+    private Painting(int imageId, String author, String title, String link) {
+        this.imageId = imageId;
+        this.author = author;
+        this.title = title;
+        this.link = link;
+    }
+
 
     public static Painting[] list(Resources res) {
         final String[] authors = res.getStringArray(R.array.paintings_authors);

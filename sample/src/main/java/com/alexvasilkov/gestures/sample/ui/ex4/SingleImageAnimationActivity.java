@@ -13,7 +13,7 @@ import com.alexvasilkov.gestures.commons.circle.CircleGestureImageView;
 import com.alexvasilkov.gestures.commons.circle.CircleImageView;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.ui.base.BaseExampleActivity;
-import com.alexvasilkov.gestures.sample.utils.glide.GlideHelper;
+import com.alexvasilkov.gestures.sample.ui.ex.GlideHelper;
 import com.alexvasilkov.gestures.transition.GestureTransitions;
 import com.alexvasilkov.gestures.transition.ViewsTransitionAnimator;
 

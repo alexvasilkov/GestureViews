@@ -17,7 +17,7 @@ import com.alexvasilkov.gestures.State;
 import com.alexvasilkov.gestures.commons.FinderView;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.ui.base.BaseActivity;
-import com.alexvasilkov.gestures.sample.utils.glide.GlideHelper;
+import com.alexvasilkov.gestures.sample.ui.demo.utils.DemoGlideHelper;
 import com.alexvasilkov.gestures.views.GestureImageView;
 import com.googlecode.flickrjandroid.photos.Photo;
 
@@ -57,7 +57,7 @@ public class PhotoCropActivity extends BaseActivity {
         finderView.setSettings(imageView.getController().getSettings());
 
         Photo photo = (Photo) getIntent().getSerializableExtra(EXTRA_PHOTO);
-        GlideHelper.loadFlickrFull(photo, imageView, null);
+        DemoGlideHelper.loadFlickrFull(photo, imageView, null);
 
         applyFinderShape(false);
     }
