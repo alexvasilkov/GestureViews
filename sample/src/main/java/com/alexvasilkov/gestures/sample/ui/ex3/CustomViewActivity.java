@@ -19,7 +19,7 @@ public class CustomViewActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.ex3_screen);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBarNotNull().setDisplayHomeAsUpEnabled(true);
 
         final GestureTextView textView = Views.find(this, R.id.text_view);
         textView.getController().getSettings().setMaxZoom(MAX_ZOOM);

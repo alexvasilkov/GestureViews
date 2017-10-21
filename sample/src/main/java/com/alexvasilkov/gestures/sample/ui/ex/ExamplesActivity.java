@@ -26,7 +26,7 @@ public class ExamplesActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.examples_screen);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBarNotNull().setDisplayHomeAsUpEnabled(true);
 
         RecyclerView recyclerView = Views.find(this, R.id.main_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

@@ -31,7 +31,7 @@ public class CrossActivitiesDemoActivity extends BaseActivity {
 
         // Initializing views
         setContentView(R.layout.ex7_screen);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBarNotNull().setDisplayHomeAsUpEnabled(true);
         image = Views.find(this, R.id.cross_from);
 
         image.setOnClickListener(new View.OnClickListener() {

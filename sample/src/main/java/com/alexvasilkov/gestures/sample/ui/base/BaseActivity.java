@@ -47,10 +47,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     @NonNull
-    @Override
-    public ActionBar getSupportActionBar() {
-        // Making getSupportActionBar() method to be @NonNull
-        ActionBar actionBar = super.getSupportActionBar();
+    public ActionBar getSupportActionBarNotNull() {
+        final ActionBar actionBar = getSupportActionBar();
         if (actionBar == null) {
             throw new NullPointerException("Action bar was not initialized");
         }

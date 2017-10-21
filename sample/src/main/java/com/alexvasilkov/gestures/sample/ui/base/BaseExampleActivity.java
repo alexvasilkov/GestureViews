@@ -5,7 +5,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.alexvasilkov.android.commons.ui.Views;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.ui.base.settings.SettingsMenu;
 import com.alexvasilkov.gestures.sample.ui.base.settings.SettingsSetupListener;
@@ -25,11 +24,11 @@ public abstract class BaseExampleActivity extends BaseActivity {
         super.onPostCreate(savedInstanceState);
 
         // Initializing toolbar
-        final Toolbar toolbar = Views.find(this, R.id.toolbar);
-        if (toolbar != null) {
+        if (getSupportActionBar() == null) {
+            final Toolbar toolbar = findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
         }
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBarNotNull().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override

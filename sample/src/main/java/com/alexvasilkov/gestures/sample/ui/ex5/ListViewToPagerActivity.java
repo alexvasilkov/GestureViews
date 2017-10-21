@@ -36,7 +36,7 @@ public class ListViewToPagerActivity extends BaseExampleActivity
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.ex5_screen);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBarNotNull().setDisplayHomeAsUpEnabled(true);
 
         final Painting[] paintings = Painting.list(getResources());
 

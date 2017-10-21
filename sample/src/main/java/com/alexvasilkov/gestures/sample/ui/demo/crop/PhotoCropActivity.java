@@ -45,7 +45,7 @@ public class PhotoCropActivity extends BaseActivity {
 
         Toolbar toolbar = Views.find(this, R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBarNotNull().setDisplayHomeAsUpEnabled(true);
 
         imageView = Views.find(this, R.id.cropping_image);
         imageView.getController().getSettings()

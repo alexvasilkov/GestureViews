@@ -40,7 +40,7 @@ public class FullImageActivity extends BaseExampleActivity {
         super.onCreate(savedInstanceState);
 
         // Initializing views
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBarNotNull().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.ex7_image_screen);
         image = Views.find(this, R.id.cross_to);
         getSettingsListener().onSetupGestureView(image);

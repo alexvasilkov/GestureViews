@@ -29,7 +29,7 @@ public class LayoutsInPagerActivity extends BaseExampleActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.ex2_screen);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBarNotNull().setDisplayHomeAsUpEnabled(true);
 
         final Painting[] paintings = Painting.list(getResources());
 

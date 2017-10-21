@@ -33,7 +33,7 @@ public class PhotoCropResultActivity extends BaseActivity {
 
         Toolbar toolbar = Views.find(this, R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBarNotNull().setDisplayHomeAsUpEnabled(true);
 
         GestureImageView imageView = Views.find(this, R.id.cropped_image);
         imageView.setImageBitmap(bitmapToShow);

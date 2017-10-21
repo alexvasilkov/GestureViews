@@ -43,7 +43,7 @@ public class ComplexListActivity extends BaseExampleActivity
         views = new ViewHolder(this);
 
         setSupportActionBar(views.toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBarNotNull().setDisplayHomeAsUpEnabled(true);
 
         initDecorMargins();
         initList();
