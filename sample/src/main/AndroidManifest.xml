@@ -42,7 +42,7 @@
 
         <activity
             android:name=".ui.ex.image.ImageViewerActivity"
-            android:label="GestureImageView"
+            android:label="Image viewer"
             android:theme="@style/AppTheme.Full.NoTitle.Dark">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -61,8 +61,8 @@
         </activity>
 
         <activity
-            android:name=".ui.ex.single.SingleImageAnimationActivity"
-            android:label="Single image animation">
+            android:name=".ui.ex.single.ImageAnimationActivity"
+            android:label="Image animation">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -70,7 +70,21 @@
         </activity>
 
         <activity
-            android:name=".ui.ex.single.round.RoundImageAnimationActivity"
+            android:name=".ui.ex.single.cross.ImageCrossAnimationActivity"
+            android:label="Image animation (cross-activity)">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ui.ex.single.cross.FullImageActivity"
+            android:label="New activity"
+            android:theme="@style/AppTheme.Transparent" />
+
+        <activity
+            android:name=".ui.ex.single.RoundImageAnimationActivity"
             android:label="Round image animation">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -115,20 +129,6 @@
             android:name=".ui.demo.crop.PhotoCropResultActivity"
             android:label="Cropped"
             android:theme="@style/AppTheme.Full.NoTitle.Dark" />
-
-        <activity
-            android:name=".ui.ex7.CrossActivitiesDemoActivity"
-            android:label="Cross activities animation">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".ui.ex7.FullImageActivity"
-            android:label="New activity"
-            android:theme="@style/AppTheme.Transparent" />
 
         <activity
             android:name=".ui.ex8.ComplexListActivity"

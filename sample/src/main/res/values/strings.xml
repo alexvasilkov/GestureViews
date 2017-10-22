@@ -11,7 +11,7 @@
 
     <string name="examples_title">Examples</string>
 
-    <string name="single_image_title">Click image to expand</string>
+    <string name="single_image_title">Tap image to expand:</string>
 
     <string name="button_crop">Crop</string>
     <string name="button_wiki_art">WikiArt</string>

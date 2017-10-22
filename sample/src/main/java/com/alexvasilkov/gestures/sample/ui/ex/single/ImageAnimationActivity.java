@@ -16,7 +16,7 @@ import com.alexvasilkov.gestures.views.GestureImageView;
 /**
  * This example demonstrates small image animation into a full mode.
  */
-public class SingleImageAnimationActivity extends BaseExampleActivity {
+public class ImageAnimationActivity extends BaseExampleActivity {
 
     private ImageView image;
     private GestureImageView fullImage;
