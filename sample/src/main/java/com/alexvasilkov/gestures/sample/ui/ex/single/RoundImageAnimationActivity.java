@@ -12,7 +12,7 @@ public class RoundImageAnimationActivity extends ImageAnimationActivity {
 
     @Override
     protected void initContentView() {
-        setContentView(R.layout.single_image_round_screen);
+        setContentView(R.layout.image_animation_round_screen);
     }
 
 }

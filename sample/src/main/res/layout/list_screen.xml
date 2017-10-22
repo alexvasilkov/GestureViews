@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <ListView
-        android:id="@+id/transition_list"
+        android:id="@+id/list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:cacheColorHint="@color/window_background"
@@ -16,17 +14,17 @@
         android:padding="16dp"
         android:scrollbarStyle="outsideOverlay"
         android:scrollbars="vertical"
-        tools:listitem="@layout/ex5_item_painting" />
+        tools:listitem="@layout/list_image_item" />
 
     <View
-        android:id="@+id/transition_full_background"
+        android:id="@+id/list_full_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/window_background_2"
         android:visibility="invisible" />
 
     <android.support.v4.view.ViewPager
-        android:id="@+id/transition_pager"
+        android:id="@+id/list_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

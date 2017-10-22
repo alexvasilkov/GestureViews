@@ -40,6 +40,14 @@
         <item name="colorButtonNormal">?colorAccent</item>
     </style>
 
+    <style name="App.ImageText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">?android:textColorSecondary</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">italic</item>
+    </style>
+
 
     <style name="App.Demo" />
 

@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.ui.ex5;
+package com.alexvasilkov.gestures.sample.ui.ex.list;
 
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
@@ -10,13 +10,13 @@ import com.alexvasilkov.gestures.sample.ui.ex.GlideHelper;
 import com.alexvasilkov.gestures.sample.ui.ex.Painting;
 import com.alexvasilkov.gestures.views.GestureImageView;
 
-class PaintingsPagerAdapter extends RecyclePagerAdapter<PaintingsPagerAdapter.ViewHolder> {
+class PagerAdapter extends RecyclePagerAdapter<PagerAdapter.ViewHolder> {
 
     private final ViewPager viewPager;
     private final Painting[] paintings;
     private final SettingsSetupListener setupListener;
 
-    PaintingsPagerAdapter(ViewPager pager, Painting[] paintings, SettingsSetupListener listener) {
+    PagerAdapter(ViewPager pager, Painting[] paintings, SettingsSetupListener listener) {
         this.viewPager = pager;
         this.paintings = paintings;
         this.setupListener = listener;

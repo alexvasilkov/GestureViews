@@ -30,7 +30,7 @@ public class ImageCrossAnimationActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.single_image_cross_from_screen);
+        setContentView(R.layout.image_cross_animation_from_screen);
         getSupportActionBarNotNull().setDisplayHomeAsUpEnabled(true);
 
         image = findViewById(R.id.single_image_from);

@@ -4,16 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/App.ImageText"
         android:layout_marginTop="24dp"
         android:gravity="center_horizontal"
-        android:text="@string/single_image_title"
-        android:textColor="?android:textColorSecondary"
-        android:textSize="16sp"
-        android:textStyle="italic" />
+        android:text="@string/expand_image" />
 
-    <com.alexvasilkov.gestures.commons.circle.CircleImageView
+    <ImageView
         android:id="@+id/single_image"
         android:layout_width="144dp"
         android:layout_height="144dp"
@@ -29,7 +25,7 @@
         android:background="@color/primary_light"
         android:visibility="invisible" />
 
-    <com.alexvasilkov.gestures.commons.circle.CircleGestureImageView
+    <com.alexvasilkov.gestures.views.GestureImageView
         android:id="@+id/single_image_full"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -40,7 +40,7 @@ public class FullImageActivity extends BaseExampleActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.single_image_cross_to_screen);
+        setContentView(R.layout.image_cross_animation_to_screen);
         getSupportActionBarNotNull().setDisplayHomeAsUpEnabled(true);
 
         image = findViewById(R.id.single_image_to);
@@ -79,6 +79,8 @@ public class FullImageActivity extends BaseExampleActivity {
 
     @Override
     public void onBackPressed() {
+        // We should leave full image mode instead of finishing this activity,
+        // activity itself should only be finished in the end of the "exit" animation.
         if (!image.getPositionAnimator().isLeaving()) {
             image.getPositionAnimator().exit(true);
         }
@@ -86,10 +88,16 @@ public class FullImageActivity extends BaseExampleActivity {
 
     @Override
     protected void onSettingsChanged() {
+        // Applying settings from toolbar menu, see BaseExampleActivity
         getSettingsListener().onSetupGestureView(image);
+        // Resetting to initial image state
+        image.getController().resetState();
     }
 
     private void enterFullImage(boolean animate) {
+        // Updating gesture image settings
+        getSettingsListener().onSetupGestureView(image);
+
         // Playing enter animation from provided position
         ViewPosition position = ViewPosition.unpack(getIntent().getStringExtra(EXTRA_POSITION));
         image.getPositionAnimator().enter(position, animate);

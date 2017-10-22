@@ -47,7 +47,7 @@ public class ImageViewerActivity extends BaseExampleActivity {
         // Applying settings from toolbar menu, see BaseExampleActivity
         getSettingsListener().onSetupGestureView(imageViewer);
 
-        // Resetting initial image state
+        // Resetting to initial image state
         imageViewer.getController().resetState();
     }
 

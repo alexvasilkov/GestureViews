@@ -66,6 +66,7 @@ class LayoutsPagerAdapter extends RecyclePagerAdapter<LayoutsPagerAdapter.ViewHo
 
     @Override
     public void onRecycleViewHolder(@NonNull ViewHolder holder) {
+        // Resetting to initial image state
         holder.layout.getController().resetState();
         GlideHelper.clear(holder.image);
     }

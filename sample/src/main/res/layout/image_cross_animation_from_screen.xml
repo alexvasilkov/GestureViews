@@ -4,14 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/App.ImageText"
         android:layout_marginTop="24dp"
         android:gravity="center_horizontal"
-        android:text="@string/single_image_title"
-        android:textColor="?android:textColorSecondary"
-        android:textSize="16sp"
-        android:textStyle="italic" />
+        android:text="@string/expand_image" />
 
     <ImageView
         android:id="@+id/single_image_from"

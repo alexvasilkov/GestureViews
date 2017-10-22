@@ -93,6 +93,25 @@
         </activity>
 
         <activity
+            android:name=".ui.ex.list.RecyclerToPagerActivity"
+            android:label="RecyclerView transitions">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ui.ex.list.ListViewToPagerActivity"
+            android:label="ListView transitions">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+
+        <activity
             android:name=".ui.ex2.LayoutsInPagerActivity"
             android:label="Layouts in ViewPager"
             android:theme="@style/AppTheme.FrameLayout">
@@ -105,15 +124,6 @@
         <activity
             android:name=".ui.ex3.CustomViewActivity"
             android:label="Custom view">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".ui.ex5.ListViewToPagerActivity"
-            android:label="ListView transitions">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

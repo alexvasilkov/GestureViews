@@ -1,22 +1,25 @@
-package com.alexvasilkov.gestures.sample.ui.ex5;
+package com.alexvasilkov.gestures.sample.ui.ex.list;
 
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.alexvasilkov.android.commons.texts.SpannableBuilder;
 import com.alexvasilkov.android.commons.ui.Views;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.ui.ex.GlideHelper;
 import com.alexvasilkov.gestures.sample.ui.ex.Painting;
 
-class PaintingsListAdapter extends BaseAdapter implements View.OnClickListener {
+class ListAdapter extends BaseAdapter implements View.OnClickListener {
 
     private final Painting[] paintings;
-    private final OnPaintingListener listener;
+    private final OnPaintingClickListener listener;
 
-    PaintingsListAdapter(Painting[] paintings, OnPaintingListener listener) {
+    ListAdapter(Painting[] paintings, OnPaintingClickListener listener) {
         this.paintings = paintings;
         this.listener = listener;
     }
@@ -51,13 +54,25 @@ class PaintingsListAdapter extends BaseAdapter implements View.OnClickListener {
 
     private ViewHolder onCreateHolder(ViewGroup parent) {
         ViewHolder holder = new ViewHolder(parent);
-        holder.image.setOnClickListener(this);
+        holder.itemView.setOnClickListener(this);
         return holder;
     }
 
     private void onBindHolder(ViewHolder holder, int position) {
-        holder.image.setTag(R.id.tag_item, position);
-        GlideHelper.loadResource(paintings[position].imageId, holder.image);
+        final Painting painting = paintings[position];
+
+        // Storing item position for click handler
+        holder.itemView.setTag(R.id.tag_item, position);
+
+        GlideHelper.loadResource(painting.imageId, holder.image);
+
+        CharSequence text = new SpannableBuilder(holder.title.getContext())
+                .createStyle().setFont(Typeface.DEFAULT_BOLD).apply()
+                .append(painting.author).append("\n")
+                .clearStyle()
+                .append(painting.title)
+                .build();
+        holder.title.setText(text);
     }
 
     @Override
@@ -75,14 +90,16 @@ class PaintingsListAdapter extends BaseAdapter implements View.OnClickListener {
     static class ViewHolder {
         final View itemView;
         final ImageView image;
+        final TextView title;
 
         ViewHolder(ViewGroup parent) {
-            itemView = Views.inflate(parent, R.layout.ex5_item_painting);
-            image = (ImageView) itemView;
+            itemView = Views.inflate(parent, R.layout.list_image_item);
+            image = itemView.findViewById(R.id.list_image);
+            title = itemView.findViewById(R.id.list_image_title);
         }
     }
 
-    interface OnPaintingListener {
+    interface OnPaintingClickListener {
         void onPaintingClick(int position);
     }
 

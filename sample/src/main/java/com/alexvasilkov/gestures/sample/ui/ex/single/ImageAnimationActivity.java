@@ -59,7 +59,7 @@ public class ImageAnimationActivity extends BaseExampleActivity {
      * Override this method if you want to provide slightly different layout,
      */
     protected void initContentView() {
-        setContentView(R.layout.single_image_screen);
+        setContentView(R.layout.image_animation_screen);
     }
 
     @Override
@@ -76,6 +76,8 @@ public class ImageAnimationActivity extends BaseExampleActivity {
     protected void onSettingsChanged() {
         // Applying settings from toolbar menu, see BaseExampleActivity
         getSettingsListener().onSetupGestureView(fullImage);
+        // Resetting to initial image state
+        fullImage.getController().resetState();
     }
 
     private void openFullImage() {
@@ -86,6 +88,7 @@ public class ImageAnimationActivity extends BaseExampleActivity {
 
         // Updating gesture image settings
         getSettingsListener().onSetupGestureView(fullImage);
+        // Resetting to initial image state
         fullImage.getController().resetState();
 
         animator.enterSingle(true);
