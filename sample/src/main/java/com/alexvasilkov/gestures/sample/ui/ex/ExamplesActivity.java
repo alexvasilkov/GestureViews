@@ -15,11 +15,14 @@ import android.widget.TextView;
 import com.alexvasilkov.android.commons.ui.Views;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.ui.base.BaseActivity;
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ExamplesActivity extends BaseActivity {
+
+    private Painting[] paintings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +34,18 @@ public class ExamplesActivity extends BaseActivity {
         RecyclerView recyclerView = Views.find(this, R.id.main_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new SampleAdapter(getActivitiesList()));
+
+        paintings = Painting.list(getResources());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Warming up thumbnails cache for smoother experience
+        for (Painting painting : paintings) {
+            Glide.with(this).load(painting.thumbId).preload();
+        }
     }
 
     private void onItemClicked(ActivityInfo info) {

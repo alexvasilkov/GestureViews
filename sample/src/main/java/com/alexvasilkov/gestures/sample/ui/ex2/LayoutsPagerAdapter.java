@@ -50,7 +50,8 @@ class LayoutsPagerAdapter extends RecyclePagerAdapter<LayoutsPagerAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         setupListener.onSetupGestureView(holder.layout);
 
-        GlideHelper.loadResource(paintings[position].imageId, holder.image);
+        Painting painting = paintings[position];
+        GlideHelper.loadFull(holder.image, painting.imageId, painting.thumbId);
 
         final CharSequence titleText = new SpannableBuilder(holder.itemView.getContext())
                 .createStyle().setFont(Typeface.DEFAULT_BOLD).apply()

@@ -63,14 +63,14 @@ class ListAdapter extends RecyclerView.Adapter<ViewHolder> implements View.OnCli
 
     private void onBindImages(ImagesViewHolder holder, Item item, int pos) {
         if (item.paintings != null && item.paintings.length > 0) {
-            GlideHelper.loadResource(item.paintings[0].imageId, holder.image1);
+            GlideHelper.loadThumb(holder.image1, item.paintings[0].thumbId);
             if (item.paintings.length > 1) {
                 holder.imagesRow.setVisibility(View.VISIBLE);
-                GlideHelper.loadResource(item.paintings[1].imageId, holder.image2);
+                GlideHelper.loadThumb(holder.image2, item.paintings[1].thumbId);
 
                 if (item.paintings.length > 2) {
                     holder.image3.setVisibility(View.VISIBLE);
-                    GlideHelper.loadResource(item.paintings[2].imageId, holder.image3);
+                    GlideHelper.loadThumb(holder.image3, item.paintings[2].thumbId);
                 } else {
                     holder.image3.setVisibility(View.INVISIBLE);
                 }

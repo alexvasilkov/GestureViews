@@ -58,7 +58,8 @@ class PagerAdapter extends RecyclePagerAdapter<PagerAdapter.ViewHolder> {
         if (setupListener != null) {
             setupListener.onSetupGestureView(holder.image);
         }
-        GlideHelper.loadResource(paintings[position].imageId, holder.image);
+        Painting painting = paintings[position];
+        GlideHelper.loadFull(holder.image, painting.imageId, painting.thumbId);
     }
 
     static GestureImageView getImage(RecyclePagerAdapter.ViewHolder holder) {

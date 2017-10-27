@@ -12,6 +12,7 @@ import com.alexvasilkov.gestures.animation.ViewPosition;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.ui.base.BaseActivity;
 import com.alexvasilkov.gestures.sample.ui.ex.GlideHelper;
+import com.alexvasilkov.gestures.sample.ui.ex.Painting;
 
 /**
  * This example demonstrates image animation that crosses activities bounds.<br/>
@@ -22,7 +23,7 @@ import com.alexvasilkov.gestures.sample.ui.ex.GlideHelper;
  */
 public class ImageCrossAnimationActivity extends BaseActivity {
 
-    private static final int IMAGE_ID = R.drawable.painting_03;
+    private static final int PAINTING_ID = 2;
 
     private ImageView image;
 
@@ -36,7 +37,8 @@ public class ImageCrossAnimationActivity extends BaseActivity {
         image = findViewById(R.id.single_image_from);
 
         // Loading image
-        GlideHelper.loadResource(IMAGE_ID, image);
+        Painting painting = Painting.list(getResources())[PAINTING_ID];
+        GlideHelper.loadThumb(image, painting.thumbId);
 
         // Setting image click listener
         image.setOnClickListener(new View.OnClickListener() {
@@ -62,7 +64,7 @@ public class ImageCrossAnimationActivity extends BaseActivity {
         ViewPosition position = ViewPosition.from(image);
         // Now pass this position to a new activity. New activity should start without any
         // animations and should have transparent window (set through activity theme).
-        FullImageActivity.open(this, position, IMAGE_ID);
+        FullImageActivity.open(this, position, PAINTING_ID);
     }
 
     private void onLayoutChanges() {

@@ -3,7 +3,6 @@ package com.alexvasilkov.gestures.sample.ui.ex.single.cross;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.DrawableRes;
 import android.view.View;
 import android.view.ViewTreeObserver.OnPreDrawListener;
 
@@ -13,6 +12,7 @@ import com.alexvasilkov.gestures.animation.ViewPositionAnimator.PositionUpdateLi
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.ui.base.BaseExampleActivity;
 import com.alexvasilkov.gestures.sample.ui.ex.GlideHelper;
+import com.alexvasilkov.gestures.sample.ui.ex.Painting;
 import com.alexvasilkov.gestures.views.GestureImageView;
 
 /**
@@ -22,15 +22,15 @@ import com.alexvasilkov.gestures.views.GestureImageView;
 public class FullImageActivity extends BaseExampleActivity {
 
     private static final String EXTRA_POSITION = "position";
-    private static final String EXTRA_IMAGE_ID = "image_id";
+    private static final String EXTRA_PAINTING_ID = "painting_id";
 
     private GestureImageView image;
     private View background;
 
-    static void open(Activity from, ViewPosition position, @DrawableRes int imageId) {
+    static void open(Activity from, ViewPosition position, int paintingId) {
         Intent intent = new Intent(from, FullImageActivity.class);
         intent.putExtra(EXTRA_POSITION, position.pack());
-        intent.putExtra(EXTRA_IMAGE_ID, imageId);
+        intent.putExtra(EXTRA_PAINTING_ID, paintingId);
         from.startActivity(intent);
         from.overridePendingTransition(0, 0); // No activity animation
     }
@@ -52,8 +52,9 @@ public class FullImageActivity extends BaseExampleActivity {
 
         // Loading image. Note, that this image should already be cached in the memory to ensure
         // very fast loading. Consider using same image or its thumbnail as on prev screen.
-        final int imageId = getIntent().getIntExtra(EXTRA_IMAGE_ID, 0);
-        GlideHelper.loadResource(imageId, image);
+        final int paintingId = getIntent().getIntExtra(EXTRA_PAINTING_ID, 0);
+        Painting painting = Painting.list(getResources())[paintingId];
+        GlideHelper.loadFull(image, painting.imageId, painting.thumbId);
 
         // Listening for animation state and updating our view accordingly
         image.getPositionAnimator().addPositionUpdateListener(new PositionUpdateListener() {
@@ -120,8 +121,13 @@ public class FullImageActivity extends BaseExampleActivity {
             image.getController().getSettings().disableBounds();
             image.getPositionAnimator().setState(0f, false, false);
 
-            finish();
-            overridePendingTransition(0, 0);
+            runOnNextFrame(new Runnable() {
+                @Override
+                public void run() {
+                    finish();
+                    overridePendingTransition(0, 0);
+                }
+            });
         }
     }
 
@@ -138,24 +144,20 @@ public class FullImageActivity extends BaseExampleActivity {
      * Runs provided action after image is drawn for the first time.
      */
     private void runAfterImageDraw(final Runnable action) {
-        // Using array as final but modifiable boolean
-        final boolean[] isFirstDrawPassed = new boolean[] { false };
-
         image.getViewTreeObserver().addOnPreDrawListener(new OnPreDrawListener() {
             @Override
             public boolean onPreDraw() {
-                if (isFirstDrawPassed[0]) {
-                    image.getViewTreeObserver().removeOnPreDrawListener(this);
-                    action.run();
-                    return true;
-                } else {
-                    isFirstDrawPassed[0] = true;
-                    image.invalidate(); // Ensure next drawing pass
-                    return false;
-                }
+                image.getViewTreeObserver().removeOnPreDrawListener(this);
+                runOnNextFrame(action);
+                return true;
             }
         });
         image.invalidate();
+    }
+
+    private void runOnNextFrame(Runnable action) {
+        final long frameLength = 17L; // 1 frame at 60 fps
+        image.postDelayed(action, frameLength);
     }
 
 }

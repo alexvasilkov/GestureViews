@@ -44,7 +44,7 @@ class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder>
         // Storing item position for click handler
         holder.itemView.setTag(R.id.tag_item, position);
 
-        GlideHelper.loadResource(painting.imageId, holder.image);
+        GlideHelper.loadThumb(holder.image, painting.thumbId);
 
         CharSequence text = new SpannableBuilder(holder.title.getContext())
                 .createStyle().setFont(Typeface.DEFAULT_BOLD).apply()

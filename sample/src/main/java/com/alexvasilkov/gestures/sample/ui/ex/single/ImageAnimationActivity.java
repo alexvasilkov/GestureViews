@@ -9,6 +9,7 @@ import com.alexvasilkov.gestures.animation.ViewPositionAnimator.PositionUpdateLi
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.ui.base.BaseExampleActivity;
 import com.alexvasilkov.gestures.sample.ui.ex.GlideHelper;
+import com.alexvasilkov.gestures.sample.ui.ex.Painting;
 import com.alexvasilkov.gestures.transition.GestureTransitions;
 import com.alexvasilkov.gestures.transition.ViewsTransitionAnimator;
 import com.alexvasilkov.gestures.views.GestureImageView;
@@ -18,10 +19,14 @@ import com.alexvasilkov.gestures.views.GestureImageView;
  */
 public class ImageAnimationActivity extends BaseExampleActivity {
 
+    private static final int PAINTING_ID = 2;
+
     private ImageView image;
     private GestureImageView fullImage;
     private View fullBackground;
     private ViewsTransitionAnimator animator;
+
+    private Painting painting;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +39,8 @@ public class ImageAnimationActivity extends BaseExampleActivity {
         fullBackground = findViewById(R.id.single_image_back);
 
         // Loading image
-        GlideHelper.loadResource(R.drawable.painting_03, image);
+        painting = Painting.list(getResources())[PAINTING_ID];
+        GlideHelper.loadThumb(image, painting.thumbId);
 
         // We will expand image on click
         image.setOnClickListener(new View.OnClickListener() {
@@ -92,6 +98,7 @@ public class ImageAnimationActivity extends BaseExampleActivity {
         fullImage.getController().resetState();
 
         animator.enterSingle(true);
+        GlideHelper.loadFull(fullImage, painting.imageId, painting.thumbId);
     }
 
     private void applyImageAnimationState(float position, boolean isLeaving) {
