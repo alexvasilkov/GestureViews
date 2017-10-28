@@ -16,12 +16,17 @@ abstract class FromBaseListener<P extends View, ID> extends RequestListener<ID> 
 
     private final P parentView;
     private final FromTracker<ID> tracker;
-    private boolean scrollHalfVisibleItems;
 
-    FromBaseListener(P parentView, FromTracker<ID> tracker) {
+    private boolean autoScroll;
+    private boolean isFullyOpened;
+
+    FromBaseListener(P parentView, FromTracker<ID> tracker, boolean autoScroll) {
         this.parentView = parentView;
         this.tracker = tracker;
+        this.autoScroll = autoScroll;
     }
+
+    abstract boolean isShownInList(P parentView, int pos);
 
     abstract void scrollToPosition(P parentView, int pos);
 
@@ -34,7 +39,7 @@ abstract class FromBaseListener<P extends View, ID> extends RequestListener<ID> 
             @Override
             public void onPositionUpdate(float pos, boolean isLeaving) {
                 parentView.setVisibility(pos == 1f && !isLeaving ? View.INVISIBLE : View.VISIBLE);
-                scrollHalfVisibleItems = pos == 1f; // Only scroll if we in full mode
+                isFullyOpened = pos == 1f;
             }
         });
     }
@@ -50,13 +55,27 @@ abstract class FromBaseListener<P extends View, ID> extends RequestListener<ID> 
             return;
         }
 
-        View view = tracker.getViewById(id);
-        if (view == null) {
-            scrollToPosition(parentView, position);
-        } else {
-            getAnimator().setFromView(id, view);
+        if (isShownInList(parentView, position)) {
+            final View view = tracker.getViewById(id);
 
-            if (scrollHalfVisibleItems && !isFullyVisible(parentView, view)) {
+            if (view == null) {
+                // There is no view for visible item, we have to set 'from' to no specific position
+                getAnimator().setFromNone(id);
+            } else {
+                // View is found, we can set up 'from' view position now
+                getAnimator().setFromView(id, view);
+
+                // Scrolling list to reveal half-visible view
+                if (autoScroll && isFullyOpened && !isFullyVisible(parentView, view)) {
+                    scrollToPosition(parentView, position);
+                }
+            }
+        } else {
+            // There is no view, so we'll set 'from' to no specific position by default
+            getAnimator().setFromNone(id);
+
+            // Item isn't shown so let's scroll to it and see if we'll be able to find the view
+            if (autoScroll) {
                 scrollToPosition(parentView, position);
             }
         }

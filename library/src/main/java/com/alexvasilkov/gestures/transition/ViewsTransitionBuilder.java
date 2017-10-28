@@ -24,13 +24,14 @@ public class ViewsTransitionBuilder<ID> {
     public ViewsTransitionBuilder<ID> fromRecyclerView(@NonNull RecyclerView recyclerView,
             @NonNull ViewsTracker<ID> tracker) {
         animator.setFromListener(
-                new FromRecyclerViewListener<>(recyclerView, toFromTracker(tracker)));
+                new FromRecyclerViewListener<>(recyclerView, toFromTracker(tracker), true));
         return this;
     }
 
     public ViewsTransitionBuilder<ID> fromListView(@NonNull ListView listView,
             @NonNull ViewsTracker<ID> tracker) {
-        animator.setFromListener(new FromListViewListener<>(listView, toFromTracker(tracker)));
+        animator.setFromListener(
+                new FromListViewListener<>(listView, toFromTracker(tracker), true));
         return this;
     }
 

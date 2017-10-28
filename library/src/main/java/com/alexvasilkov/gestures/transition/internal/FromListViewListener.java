@@ -8,19 +8,27 @@ import com.alexvasilkov.gestures.transition.tracker.FromTracker;
 
 public class FromListViewListener<ID> extends FromBaseListener<ListView, ID> {
 
-    public FromListViewListener(ListView listView, final FromTracker<ID> tracker) {
-        super(listView, tracker);
+    public FromListViewListener(ListView list, final FromTracker<ID> tracker, boolean autoScroll) {
+        super(list, tracker, autoScroll);
 
-        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+        if (!autoScroll) {
+            // No need to track list view scrolling if auto scroll is disabled
+            return;
+        }
+
+        // Tracking list view scrolling to pick up newly visible views
+        list.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScroll(AbsListView view, int firstVisible, int visibleCount, int total) {
                 final ID id = getAnimator() == null ? null : getAnimator().getRequestedId();
 
+                // If view was requested and list is scrolled we should try to find the view again
                 if (id != null) {
                     int position = tracker.getPositionById(id);
                     if (position >= firstVisible && position < firstVisible + visibleCount) {
                         View from = tracker.getViewById(id);
                         if (from != null) {
+                            // View is found, we can set up 'from' view position now
                             getAnimator().setFromView(id, from);
                         }
                     }
@@ -35,8 +43,13 @@ public class FromListViewListener<ID> extends FromBaseListener<ListView, ID> {
     }
 
     @Override
-    void scrollToPosition(ListView parentView, int pos) {
-        parentView.setSelection(pos);
+    boolean isShownInList(ListView list, int pos) {
+        return pos >= list.getFirstVisiblePosition() && pos <= list.getLastVisiblePosition();
+    }
+
+    @Override
+    void scrollToPosition(ListView list, int pos) {
+        list.setSelection(pos);
     }
 
 }
