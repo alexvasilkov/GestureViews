@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.utils;
+package com.alexvasilkov.gestures.sample.ui.demo.utils;
 
 import android.content.Context;
 import android.content.res.Configuration;

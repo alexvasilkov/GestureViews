@@ -1,11 +1,15 @@
 package com.alexvasilkov.gestures.sample.ui.ex;
 
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ResolveInfo;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -92,7 +96,15 @@ public class ExamplesActivity extends BaseActivity {
         @Override
         public void onBindViewHolder(ViewHolder viewHolder, int position) {
             viewHolder.info = list.get(position);
+
             viewHolder.text.setText(viewHolder.info.loadLabel(getPackageManager()));
+
+            Context context = ExamplesActivity.this;
+            Drawable icon = DrawableCompat.wrap(viewHolder.info.loadIcon(getPackageManager()));
+            DrawableCompat.setTint(icon, ContextCompat.getColor(context, R.color.primary));
+            int padding = getResources().getDimensionPixelSize(R.dimen.example_icon_padding);
+            viewHolder.text.setCompoundDrawablePadding(padding);
+            viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null);
         }
 
         @Override

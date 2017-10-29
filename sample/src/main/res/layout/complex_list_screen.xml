@@ -1,38 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
+<merge
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    tools:context=".ui.ex.list.complex.BaseComplexListActivity">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/complex_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?actionBarSize"
         android:clipToPadding="false"
-        android:paddingBottom="8dp"
+        android:paddingBottom="16dp"
         android:paddingTop="8dp"
         android:scrollbarStyle="outsideOverlay"
         android:scrollbars="vertical"
-        tools:listitem="@layout/ex8_item_images" />
-
-    <android.support.v7.widget.Toolbar style="@style/App.Toolbar" />
+        tools:listitem="@layout/complex_list_item_images" />
 
     <View
-        android:id="@+id/complex_full_background"
+        android:id="@+id/complex_pager_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/window_background_dark_2"
+        android:background="@color/primary_light"
         android:visibility="invisible" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/complex_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/complex_full_toolbar"
-        style="@style/App.Toolbar.Transparent"
-        android:visibility="invisible" />
 
 </merge>

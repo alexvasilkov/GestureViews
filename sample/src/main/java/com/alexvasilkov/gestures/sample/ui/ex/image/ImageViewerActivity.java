@@ -22,7 +22,6 @@ public class ImageViewerActivity extends BaseExampleActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.image_screen);
-        setTitle(null);
 
         // Initializing image viewer
         imageViewer = findViewById(R.id.image_viewer);

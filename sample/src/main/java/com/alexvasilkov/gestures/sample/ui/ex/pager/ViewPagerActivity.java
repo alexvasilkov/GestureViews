@@ -27,7 +27,6 @@ public class ViewPagerActivity extends BaseExampleActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.pager_screen);
-        setTitle(null);
 
         // Initializing ViewPager
         viewPager = findViewById(R.id.pager);

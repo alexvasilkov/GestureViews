@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.ui.ex.list;
+package com.alexvasilkov.gestures.sample.ui.ex.list.recycler;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -56,16 +56,18 @@ public class RecyclerToPagerActivity extends BaseExampleActivity
             @Override
             public View getViewAt(int position) {
                 RecyclerView.ViewHolder holder = list.findViewHolderForLayoutPosition(position);
-                return holder == null ? null : RecyclerAdapter.getImage(holder);
+                return holder == null ? null : RecyclerAdapter.getImageView(holder);
             }
         };
+
         final SimpleTracker pagerTracker = new SimpleTracker() {
             @Override
             public View getViewAt(int position) {
                 RecyclePagerAdapter.ViewHolder holder = pagerAdapter.getViewHolder(position);
-                return holder == null ? null : PagerAdapter.getImage(holder);
+                return holder == null ? null : PagerAdapter.getImageView(holder);
             }
         };
+
         animator = GestureTransitions.from(list, listTracker).into(pager, pagerTracker);
 
         // Setting up background animation during image transition

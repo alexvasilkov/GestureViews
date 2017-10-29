@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.ui.ex.list;
+package com.alexvasilkov.gestures.sample.ui.ex.list.listview;
 
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
@@ -44,7 +44,7 @@ class PagerAdapter extends RecyclePagerAdapter<PagerAdapter.ViewHolder> {
         GlideHelper.loadFull(holder.image, painting.imageId, painting.thumbId);
     }
 
-    static GestureImageView getImage(RecyclePagerAdapter.ViewHolder holder) {
+    static GestureImageView getImageView(RecyclePagerAdapter.ViewHolder holder) {
         return ((ViewHolder) holder).image;
     }
 

@@ -1,12 +1,10 @@
 package com.alexvasilkov.gestures.sample.ui.base;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import com.alexvasilkov.android.commons.ui.Views;
 import com.alexvasilkov.gestures.sample.BuildConfig;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.ui.demo.DemoActivity;
@@ -14,16 +12,17 @@ import com.alexvasilkov.gestures.sample.ui.ex.ExamplesActivity;
 
 public class StartActivity extends BaseActivity implements View.OnClickListener {
 
-    @SuppressLint("SetTextI18n") // It's ok for version name
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.start_screen);
 
-        Views.find(this, R.id.start_demo).setOnClickListener(this);
-        Views.find(this, R.id.start_examples).setOnClickListener(this);
+        findViewById(R.id.start_demo).setOnClickListener(this);
+        findViewById(R.id.start_examples).setOnClickListener(this);
 
-        Views.<TextView>find(this, R.id.start_version).setText("v" + BuildConfig.VERSION_NAME);
+        final String version = "v" + BuildConfig.VERSION_NAME;
+        final TextView versionView = findViewById(R.id.start_version);
+        versionView.setText(version);
     }
 
     @Override

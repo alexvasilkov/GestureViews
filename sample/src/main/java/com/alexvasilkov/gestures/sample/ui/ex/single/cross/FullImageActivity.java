@@ -41,7 +41,6 @@ public class FullImageActivity extends BaseExampleActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.image_cross_animation_to_screen);
-        getSupportActionBarNotNull().setDisplayHomeAsUpEnabled(true);
 
         image = findViewById(R.id.single_image_to);
         background = findViewById(R.id.single_image_to_back);

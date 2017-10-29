@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.ui.ex.list;
+package com.alexvasilkov.gestures.sample.ui.ex.list.listview;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -52,27 +52,23 @@ public class ListViewToPagerActivity extends BaseExampleActivity
         // that are used to find images views for particular item IDs in the list and in the pager
         // to keep them in sync.
         // In this example we will use SimpleTracker which will track images by their positions,
-        // if you have a more complicated case see further examples.
+        // if you have a more complicated case see "complex" package for advanced examples.
         final SimpleTracker listTracker = new SimpleTracker() {
             @Override
             public View getViewAt(int position) {
-                int first = list.getFirstVisiblePosition();
-                int last = list.getLastVisiblePosition();
-                if (position < first || position > last) {
-                    return null;
-                } else {
-                    View itemView = list.getChildAt(position - first);
-                    return ListAdapter.getImage(itemView);
-                }
+                View itemView = list.getChildAt(position - list.getFirstVisiblePosition());
+                return itemView == null ? null : ListAdapter.getImageView(itemView);
             }
         };
+
         final SimpleTracker pagerTracker = new SimpleTracker() {
             @Override
             public View getViewAt(int position) {
                 RecyclePagerAdapter.ViewHolder holder = pagerAdapter.getViewHolder(position);
-                return holder == null ? null : PagerAdapter.getImage(holder);
+                return holder == null ? null : PagerAdapter.getImageView(holder);
             }
         };
+
         animator = GestureTransitions.from(list, listTracker).into(pager, pagerTracker);
 
         // Setting up background animation during image transition

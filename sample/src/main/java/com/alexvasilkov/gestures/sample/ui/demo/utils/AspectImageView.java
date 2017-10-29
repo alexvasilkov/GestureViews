@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.views;
+package com.alexvasilkov.gestures.sample.ui.demo.utils;
 
 import android.content.Context;
 import android.content.res.TypedArray;

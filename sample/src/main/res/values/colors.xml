@@ -1,21 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Next colors are slightly different to prevent backgrounds animation bugs on some Android versions -->
-
     <color name="window_background">#FFFFFF</color>
-    <color name="window_background_2">#FFFFFE</color>
     <color name="window_background_dark">#000000</color>
-    <color name="window_background_dark_2">#000001</color>
 
     <color name="primary">#2E7D32</color>
     <color name="primary_dark">#1B5E20</color>
     <color name="primary_light">#e6f2e7</color>
     <color name="accent">#F57F17</color>
+    <color name="accent_light">#f2ece6</color>
 
-    <color name="shadow">#44000000</color>
-
-    <color name="text_primary_light">#FFFFFF</color>
     <color name="text_secondary_light">#AAAAAA</color>
 
     <color name="error_color">#CC3322</color>

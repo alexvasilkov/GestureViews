@@ -100,8 +100,10 @@
             app:layout_anchorGravity="bottom">
 
             <View
-                style="@style/App.ToolbarShadow"
-                android:layout_marginTop="@dimen/shadow" />
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/shadow_top" />
 
         </FrameLayout>
 
@@ -111,7 +113,7 @@
         android:id="@+id/demo_full_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/window_background_dark_2"
+        android:background="@color/window_background_dark"
         android:visibility="invisible" />
 
     <android.support.v4.view.ViewPager
@@ -132,7 +134,7 @@
         android:layout_margin="16dp"
         android:shadowColor="#000000"
         android:shadowRadius="4"
-        android:textColor="@color/text_primary_light"
+        android:textColor="?android:textColorPrimaryInverse"
         android:textSize="16sp"
         android:visibility="invisible" />
 

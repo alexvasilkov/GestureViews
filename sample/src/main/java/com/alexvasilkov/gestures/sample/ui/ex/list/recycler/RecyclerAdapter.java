@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.ui.ex.list;
+package com.alexvasilkov.gestures.sample.ui.ex.list.recycler;
 
 import android.graphics.Typeface;
 import android.support.annotation.NonNull;
@@ -61,7 +61,7 @@ class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder>
         listener.onPaintingClick(pos);
     }
 
-    static ImageView getImage(RecyclerView.ViewHolder holder) {
+    static ImageView getImageView(RecyclerView.ViewHolder holder) {
         return ((ViewHolder) holder).image;
     }
 

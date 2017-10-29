@@ -26,8 +26,9 @@
             android:layout_margin="16dp"
             android:shadowColor="#000000"
             android:shadowRadius="4"
-            android:textColor="@color/text_primary_light"
-            android:textSize="16sp" />
+            android:textColor="?android:textColorPrimaryInverse"
+            android:textSize="16sp"
+            tools:text="Painting name" />
 
         <Button
             android:id="@+id/painting_button"

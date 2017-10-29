@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.ui.ex8;
+package com.alexvasilkov.gestures.sample.ui.ex.list.complex;
 
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
@@ -10,40 +10,28 @@ import com.alexvasilkov.gestures.sample.ui.ex.GlideHelper;
 import com.alexvasilkov.gestures.sample.ui.ex.Painting;
 import com.alexvasilkov.gestures.views.GestureImageView;
 
+import java.util.List;
+
 class PagerAdapter extends RecyclePagerAdapter<PagerAdapter.ViewHolder> {
 
     private final ViewPager viewPager;
     private final SettingsSetupListener setupListener;
 
-    private Painting[] paintings;
-    private boolean activated;
+    private List<Painting> paintings;
 
     PagerAdapter(ViewPager pager, SettingsSetupListener listener) {
         this.viewPager = pager;
         this.setupListener = listener;
     }
 
-    void setPaintings(Painting[] paintings) {
+    void setPaintings(List<Painting> paintings) {
         this.paintings = paintings;
         notifyDataSetChanged();
     }
 
-    /**
-     * To prevent ViewPager from holding heavy views (with bitmaps)  while it is not showing
-     * we may just pretend there are no items in this adapter ("activate" = false).
-     * But once we need to run opening animation we should "activate" this adapter again.<br/>
-     * Adapter is not activated by default.
-     */
-    void setActivated(boolean activated) {
-        if (this.activated != activated) {
-            this.activated = activated;
-            notifyDataSetChanged();
-        }
-    }
-
     @Override
     public int getCount() {
-        return !activated || paintings == null ? 0 : paintings.length;
+        return paintings == null ? 0 : paintings.size();
     }
 
     @Override
@@ -55,14 +43,12 @@ class PagerAdapter extends RecyclePagerAdapter<PagerAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        if (setupListener != null) {
-            setupListener.onSetupGestureView(holder.image);
-        }
-        Painting painting = paintings[position];
+        setupListener.onSetupGestureView(holder.image);
+        Painting painting = paintings.get(position);
         GlideHelper.loadFull(holder.image, painting.imageId, painting.thumbId);
     }
 
-    static GestureImageView getImage(RecyclePagerAdapter.ViewHolder holder) {
+    static GestureImageView getImageView(RecyclePagerAdapter.ViewHolder holder) {
         return ((ViewHolder) holder).image;
     }
 

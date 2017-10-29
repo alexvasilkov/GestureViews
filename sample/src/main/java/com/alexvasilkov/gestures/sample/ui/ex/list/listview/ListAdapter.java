@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.ui.ex.list;
+package com.alexvasilkov.gestures.sample.ui.ex.list.listview;
 
 import android.graphics.Typeface;
 import android.support.annotation.NonNull;
@@ -81,7 +81,7 @@ class ListAdapter extends BaseAdapter implements View.OnClickListener {
         listener.onPaintingClick(pos);
     }
 
-    static ImageView getImage(View itemView) {
+    static ImageView getImageView(View itemView) {
         ViewHolder holder = (ViewHolder) itemView.getTag(R.id.tag_holder);
         return holder == null ? null : holder.image;
     }

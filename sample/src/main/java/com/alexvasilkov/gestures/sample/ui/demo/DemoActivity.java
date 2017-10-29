@@ -31,7 +31,7 @@ import com.alexvasilkov.gestures.sample.ui.demo.adapter.PhotoListAdapter;
 import com.alexvasilkov.gestures.sample.ui.demo.adapter.PhotoPagerAdapter;
 import com.alexvasilkov.gestures.sample.ui.demo.crop.PhotoCropActivity;
 import com.alexvasilkov.gestures.sample.ui.demo.logic.FlickrApi;
-import com.alexvasilkov.gestures.sample.utils.DecorUtils;
+import com.alexvasilkov.gestures.sample.ui.demo.utils.DecorUtils;
 import com.alexvasilkov.gestures.transition.GestureTransitions;
 import com.alexvasilkov.gestures.transition.ViewsTransitionAnimator;
 import com.alexvasilkov.gestures.transition.tracker.SimpleTracker;
@@ -168,7 +168,7 @@ public class DemoActivity extends BaseExampleActivity implements PhotoListAdapte
      */
     private void applyFullImageState(float position, boolean isLeaving) {
         views.fullBackground.setVisibility(position == 0f ? View.INVISIBLE : View.VISIBLE);
-        views.fullBackground.getBackground().setAlpha((int) (255 * position));
+        views.fullBackground.setAlpha(position);
 
         views.fullImageToolbar.setVisibility(position == 0f ? View.INVISIBLE : View.VISIBLE);
         views.fullImageToolbar.setAlpha(position);
@@ -270,6 +270,7 @@ public class DemoActivity extends BaseExampleActivity implements PhotoListAdapte
             views.pagerTitle.setText(null);
         } else {
             SpannableBuilder title = new SpannableBuilder(DemoActivity.this);
+
             title.append(photo.getTitle()).append("\n")
                     .createStyle().setColorResId(R.color.text_secondary_light).apply()
                     .append(R.string.photo_by).append(" ")
@@ -341,7 +342,7 @@ public class DemoActivity extends BaseExampleActivity implements PhotoListAdapte
      */
     private void applyFullPagerState(float position, boolean isLeaving) {
         views.fullBackground.setVisibility(position == 0f ? View.INVISIBLE : View.VISIBLE);
-        views.fullBackground.getBackground().setAlpha((int) (255 * position));
+        views.fullBackground.setAlpha(position);
 
         views.pagerToolbar.setVisibility(position == 0f ? View.INVISIBLE : View.VISIBLE);
         views.pagerToolbar.setAlpha(isSystemUiShown() ? position : 0f);
