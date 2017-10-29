@@ -273,7 +273,7 @@ public class DemoActivity extends BaseExampleActivity implements PhotoListAdapte
 
             title.append(photo.getTitle()).append("\n")
                     .createStyle().setColorResId(R.color.text_secondary_light).apply()
-                    .append(R.string.photo_by).append(" ")
+                    .append(R.string.demo_photo_by).append(" ")
                     .append(photo.getOwner().getUsername());
             views.pagerTitle.setText(title.build());
         }
@@ -283,7 +283,7 @@ public class DemoActivity extends BaseExampleActivity implements PhotoListAdapte
      * Setting up pager toolbar actions.
      */
     private void onCreateOptionsMenuFullMode(Menu menu) {
-        MenuItem crop = menu.add(Menu.NONE, R.id.menu_crop, 0, R.string.button_crop);
+        MenuItem crop = menu.add(Menu.NONE, R.id.menu_crop, 0, R.string.menu_crop);
         crop.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         crop.setIcon(R.drawable.ic_crop_white_24dp);
     }

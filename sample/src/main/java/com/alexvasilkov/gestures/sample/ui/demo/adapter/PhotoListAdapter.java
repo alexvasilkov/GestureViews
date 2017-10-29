@@ -61,12 +61,12 @@ public class PhotoListAdapter extends DefaultEndlessRecyclerAdapter<PhotoListAda
 
     @Override
     protected void onBindLoadingView(TextView loadingText) {
-        loadingText.setText(R.string.loading_images);
+        loadingText.setText(R.string.demo_loading_photos);
     }
 
     @Override
     protected void onBindErrorView(TextView errorText) {
-        errorText.setText(R.string.reload_images);
+        errorText.setText(R.string.demo_reload_photos);
     }
 
     @Override

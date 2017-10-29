@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.ui.ex3;
+package com.alexvasilkov.gestures.sample.ui.ex.custom;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -6,7 +6,6 @@ import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.MotionEvent;
-import android.view.ViewParent;
 
 import com.alexvasilkov.gestures.GestureController;
 import com.alexvasilkov.gestures.State;
@@ -60,13 +59,6 @@ public class GestureTextView extends AppCompatTextView implements GestureView {
 
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
-        if (event.getActionMasked() == MotionEvent.ACTION_POINTER_DOWN) {
-            ViewParent parent = getParent();
-            if (parent != null) {
-                parent.requestDisallowInterceptTouchEvent(true);
-            }
-        }
-
         return controller.onTouch(this, event);
     }
 
@@ -93,8 +85,11 @@ public class GestureTextView extends AppCompatTextView implements GestureView {
 
     protected void applyState(State state) {
         float size = origSize * state.getZoom();
-        float maxZoom = controller.getSettings().getMaxZoom();
-        size = Math.max(origSize, Math.min(size, origSize * maxZoom));
+        float maxSize = origSize * controller.getSettings().getMaxZoom();
+        size = Math.max(origSize, Math.min(size, maxSize));
+
+        // Bigger text size steps for smoother scaling
+        size = Math.round(size);
 
         if (!State.equals(this.size, size)) {
             this.size = size;

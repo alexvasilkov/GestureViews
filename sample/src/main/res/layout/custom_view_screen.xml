@@ -3,14 +3,15 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fadeScrollbars="false"
     android:fillViewport="true">
 
-    <com.alexvasilkov.gestures.sample.ui.ex3.GestureTextView
+    <com.alexvasilkov.gestures.sample.ui.ex.custom.GestureTextView
         android:id="@+id/text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp"
-        android:text="@string/text_example"
+        android:text="@string/custom_view_text"
         android:textSize="12sp" />
 
 </ScrollView>

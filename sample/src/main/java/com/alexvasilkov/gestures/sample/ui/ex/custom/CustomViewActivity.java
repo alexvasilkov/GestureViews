@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.ui.ex3;
+package com.alexvasilkov.gestures.sample.ui.ex.custom;
 
 import android.os.Bundle;
 
@@ -12,17 +12,15 @@ import com.alexvasilkov.gestures.sample.ui.base.BaseActivity;
  */
 public class CustomViewActivity extends BaseActivity {
 
-    private static final float MAX_ZOOM = 1.5f;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.ex3_screen);
+        setContentView(R.layout.custom_view_screen);
         getSupportActionBarNotNull().setDisplayHomeAsUpEnabled(true);
 
         final GestureTextView textView = Views.find(this, R.id.text_view);
-        textView.getController().getSettings().setMaxZoom(MAX_ZOOM);
+        textView.getController().getSettings().setMaxZoom(1.5f);
     }
 
 }

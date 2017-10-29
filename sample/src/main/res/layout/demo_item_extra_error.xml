@@ -12,4 +12,4 @@
     android:textColor="?android:textColorPrimaryInverse"
     android:textSize="16sp"
     android:theme="@style/App.Button.Error"
-    tools:text="@string/reload_images" />
+    tools:text="@string/demo_reload_photos" />

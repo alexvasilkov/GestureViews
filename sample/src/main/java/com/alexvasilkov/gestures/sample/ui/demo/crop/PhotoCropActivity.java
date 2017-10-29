@@ -114,7 +114,7 @@ public class PhotoCropActivity extends BaseActivity {
             shape.setIcon(R.drawable.ic_crop_16_9_white_24dp);
         }
 
-        MenuItem crop = menu.add(Menu.NONE, R.id.menu_crop, 0, R.string.button_crop);
+        MenuItem crop = menu.add(Menu.NONE, R.id.menu_crop, 0, R.string.menu_crop);
         crop.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         crop.setIcon(R.drawable.ic_done_white_24dp);
 

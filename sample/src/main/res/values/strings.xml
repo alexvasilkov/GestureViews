@@ -8,21 +8,34 @@
 
     <string name="demo_headline">Landscapes</string>
     <string name="demo_subhead">Powered by Flickr</string>
+    <string name="demo_reload_photos">Load photos</string>
+    <string name="demo_loading_photos">Loading photos…</string>
+    <string name="demo_photo_by">by</string>
 
     <string name="examples_title">Examples</string>
 
     <string name="expand_image">Tap image to expand:</string>
 
-    <string name="button_crop">Crop</string>
     <string name="button_wiki_art">WikiArt</string>
 
-    <string name="image_content_description">Image</string>
-
-    <string name="text_example">Lorem ipsum dolor sit amet, graeco tritani te mei, facilisis prodesset id est. Magna labore quo ne. Ne noster mentitum delicatissimi his. Id nam summo munere luptatum, an dicunt cotidieque per. Aeque conceptam ea eos, an wisi ancillae deserunt vim, reque virtute fastidii cu sed. Sumo deleniti iracundia cum eu, vel iudico sententiae suscipiantur ad. Id iudico albucius voluptatibus duo.\n\nIn per sale delenit torquatos, id has mundi iudicabit intellegam, vim quis eros brute eu. In modo tempor duo, an ius electram honestatis, est case nominati accommodare ea. Ad sint atqui definitiones has, cum insolens oportere id, has no inani veniam. Scripta verterem no nec, ex qui putant facilisis.</string>
-
-    <string name="reload_images">Load images</string>
-    <string name="loading_images">Loading images…</string>
-    <string name="photo_by">by</string>
+    <string name="custom_view_text">
+        You can use pinch-to-zoom and double tap gestures to control font size of this text.
+        \n\nLorem ipsum dolor sit amet, graeco tritani te mei, facilisis prodesset id est. Magna
+        labore quo ne. Ne noster mentitum delicatissimi his. Id nam summo munere luptatum, an dicunt
+        cotidieque per. Aeque conceptam ea eos, an wisi ancillae deserunt vim, reque virtute
+        fastidii cu sed. Sumo deleniti iracundia cum eu, vel iudico sententiae suscipiantur ad. Id
+        iudico albucius voluptatibus duo.
+        \n\nIn per sale delenit torquatos, id has mundi iudicabit intellegam, vim quis eros brute
+        eu. In modo tempor duo, an ius electram honestatis, est case nominati accommodare ea. Ad
+        sint atqui definitiones has, cum insolens oportere id, has no inani veniam. Scripta verterem
+        no nec, ex qui putant facilisis.
+        \n\nSuspendisse et dolor in quam ultrices ornare. Aliquam enim orci, tincidunt eu nulla
+        eget, tempus auctor neque. Cras ut sodales tellus. In gravida nibh justo, ac consequat
+        ligula fermentum sit amet. Sed vitae fringilla nulla, posuere viverra orci. Fusce quis
+        placerat ex, efficitur tincidunt neque. Donec eros ante, porttitor at iaculis eu, posuere
+        nec augue. Suspendisse viverra pretium ante, sed sagittis erat luctus ut. In imperdiet
+        turpis viverra porta euismod.
+    </string>
 
     <string name="menu_enable_pan">Pan</string>
     <string name="menu_enable_zoom">Zoom</string>
@@ -38,6 +51,7 @@
     <string name="menu_enable_slow">Slow animations</string>
     <string name="menu_enable_overlay">Debug overlay</string>
 
+    <string name="menu_crop">Crop</string>
     <string name="menu_crop_rect">Rectangle</string>
     <string name="menu_crop_square">Square</string>
     <string name="menu_crop_circle">Circle</string>

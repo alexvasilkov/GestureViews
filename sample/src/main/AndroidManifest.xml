@@ -35,6 +35,16 @@
             android:name=".ui.demo.DemoActivity"
             android:theme="@style/AppTheme.Full.NoTitle" />
 
+        <activity
+            android:name=".ui.demo.crop.PhotoCropActivity"
+            android:label="Rotate &amp; crop"
+            android:theme="@style/AppTheme.Full.NoTitle.Dark" />
+
+        <activity
+            android:name=".ui.demo.crop.PhotoCropResultActivity"
+            android:label="Cropped"
+            android:theme="@style/AppTheme.Full.NoTitle.Dark" />
+
 
         <activity
             android:name=".ui.ex.ExamplesActivity"
@@ -135,6 +145,15 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".ui.ex9.ImageMarkerActivity"
+            android:icon="@drawable/ic_place_black_24dp"
+            android:label="Image marker">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
 
         <activity
             android:name=".ui.ex2.LayoutsInPagerActivity"
@@ -148,29 +167,9 @@
         </activity>
 
         <activity
-            android:name=".ui.ex3.CustomViewActivity"
+            android:name=".ui.ex.custom.CustomViewActivity"
             android:icon="@drawable/ic_format_size_black_24dp"
-            android:label="Custom view">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".ui.demo.crop.PhotoCropActivity"
-            android:label="Rotate &amp; crop"
-            android:theme="@style/AppTheme.Full.NoTitle.Dark" />
-
-        <activity
-            android:name=".ui.demo.crop.PhotoCropResultActivity"
-            android:label="Cropped"
-            android:theme="@style/AppTheme.Full.NoTitle.Dark" />
-
-        <activity
-            android:name=".ui.ex9.ImageMarkerActivity"
-            android:icon="@drawable/ic_place_black_24dp"
-            android:label="Image marker">
+            android:label="Custom gesture view">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
