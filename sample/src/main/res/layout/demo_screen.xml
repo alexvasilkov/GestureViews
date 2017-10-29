@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.demo.DemoActivity">
+    tools:context=".demo.DemoActivity">
 
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/demo_coordinator"

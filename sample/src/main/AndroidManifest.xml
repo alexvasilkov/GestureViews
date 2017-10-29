@@ -18,12 +18,12 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".ui.base.StartActivity"
+            android:name=".base.StartActivity"
             android:theme="@style/AppTheme.Start" />
 
         <activity-alias
             android:name=".ui.base.MainActivity"
-            android:targetActivity=".ui.base.StartActivity">
+            android:targetActivity=".base.StartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,26 +32,26 @@
         </activity-alias>
 
         <activity
-            android:name=".ui.demo.DemoActivity"
+            android:name=".demo.DemoActivity"
             android:theme="@style/AppTheme.Full.NoTitle" />
 
         <activity
-            android:name=".ui.demo.crop.PhotoCropActivity"
+            android:name=".demo.crop.PhotoCropActivity"
             android:label="Rotate &amp; crop"
             android:theme="@style/AppTheme.Full.NoTitle.Dark" />
 
         <activity
-            android:name=".ui.demo.crop.PhotoCropResultActivity"
+            android:name=".demo.crop.PhotoCropResultActivity"
             android:label="Cropped"
             android:theme="@style/AppTheme.Full.NoTitle.Dark" />
 
 
         <activity
-            android:name=".ui.ex.ExamplesActivity"
+            android:name=".ex.ExamplesActivity"
             android:label="@string/examples_title" />
 
         <activity
-            android:name=".ui.ex.image.ImageViewerActivity"
+            android:name=".ex.image.ImageViewerActivity"
             android:icon="@drawable/ic_image_black_24dp"
             android:label="Image viewer">
             <intent-filter>
@@ -61,7 +61,7 @@
         </activity>
 
         <activity
-            android:name=".ui.ex.pager.ViewPagerActivity"
+            android:name=".ex.pager.ViewPagerActivity"
             android:icon="@drawable/ic_view_carousel_black_24dp"
             android:label="ViewPager integration">
             <intent-filter>
@@ -71,7 +71,7 @@
         </activity>
 
         <activity
-            android:name=".ui.ex.single.ImageAnimationActivity"
+            android:name=".ex.single.ImageAnimationActivity"
             android:icon="@drawable/ic_collections_black_24dp"
             android:label="Image animation">
             <intent-filter>
@@ -81,7 +81,7 @@
         </activity>
 
         <activity
-            android:name=".ui.ex.single.cross.ImageCrossAnimationActivity"
+            android:name=".ex.single.cross.ImageCrossAnimationActivity"
             android:icon="@drawable/ic_collections_black_24dp"
             android:label="Image animation (cross-activity)">
             <intent-filter>
@@ -91,12 +91,12 @@
         </activity>
 
         <activity
-            android:name=".ui.ex.single.cross.FullImageActivity"
+            android:name=".ex.single.cross.FullImageActivity"
             android:label="New activity"
             android:theme="@style/AppTheme.Transparent" />
 
         <activity
-            android:name=".ui.ex.single.RoundImageAnimationActivity"
+            android:name=".ex.single.RoundImageAnimationActivity"
             android:icon="@drawable/ic_collections_black_24dp"
             android:label="Round image animation">
             <intent-filter>
@@ -106,7 +106,7 @@
         </activity>
 
         <activity
-            android:name=".ui.ex.list.recycler.RecyclerToPagerActivity"
+            android:name=".ex.list.recycler.RecyclerToPagerActivity"
             android:icon="@drawable/ic_view_list_black_24dp"
             android:label="RecyclerView transitions">
             <intent-filter>
@@ -116,7 +116,7 @@
         </activity>
 
         <activity
-            android:name=".ui.ex.list.listview.ListViewToPagerActivity"
+            android:name=".ex.list.listview.ListViewToPagerActivity"
             android:icon="@drawable/ic_view_list_black_24dp"
             android:label="ListView transitions">
             <intent-filter>
@@ -126,7 +126,7 @@
         </activity>
 
         <activity
-            android:name=".ui.ex.list.complex.ComplexListV1Activity"
+            android:name=".ex.list.complex.ComplexListV1Activity"
             android:icon="@drawable/ic_view_quilt_black_24dp"
             android:label="Complex list transition v1">
             <intent-filter>
@@ -136,7 +136,7 @@
         </activity>
 
         <activity
-            android:name=".ui.ex.list.complex.ComplexListV2Activity"
+            android:name=".ex.list.complex.ComplexListV2Activity"
             android:icon="@drawable/ic_view_quilt_black_24dp"
             android:label="Complex list transition v2">
             <intent-filter>
@@ -146,7 +146,7 @@
         </activity>
 
         <activity
-            android:name=".ui.ex9.ImageMarkerActivity"
+            android:name=".ex9.ImageMarkerActivity"
             android:icon="@drawable/ic_place_black_24dp"
             android:label="Image marker">
             <intent-filter>
@@ -156,7 +156,7 @@
         </activity>
 
         <activity
-            android:name=".ui.ex2.LayoutsInPagerActivity"
+            android:name=".ex2.LayoutsInPagerActivity"
             android:icon="@drawable/ic_view_carousel_black_24dp"
             android:label="Layouts in ViewPager"
             android:theme="@style/AppTheme.FrameLayout">
@@ -167,7 +167,7 @@
         </activity>
 
         <activity
-            android:name=".ui.ex.custom.CustomViewActivity"
+            android:name=".ex.custom.CustomViewActivity"
             android:icon="@drawable/ic_format_size_black_24dp"
             android:label="Custom gesture view">
             <intent-filter>

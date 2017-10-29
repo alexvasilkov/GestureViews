@@ -7,7 +7,7 @@
     android:fitsSystemWindows="true"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".ui.base.StartActivity">
+    tools:context=".base.StartActivity">
 
     <View
         android:layout_width="0dp"
