@@ -2,7 +2,7 @@ package com.alexvasilkov.gestures.sample.ex.list.complex;
 
 import android.content.Context;
 
-import com.alexvasilkov.gestures.sample.ex.Painting;
+import com.alexvasilkov.gestures.sample.ex.utils.Painting;
 
 import java.util.ArrayList;
 import java.util.Arrays;

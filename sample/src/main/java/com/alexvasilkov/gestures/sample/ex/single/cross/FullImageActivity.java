@@ -11,8 +11,8 @@ import com.alexvasilkov.gestures.animation.ViewPosition;
 import com.alexvasilkov.gestures.animation.ViewPositionAnimator.PositionUpdateListener;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.base.BaseExampleActivity;
-import com.alexvasilkov.gestures.sample.ex.GlideHelper;
-import com.alexvasilkov.gestures.sample.ex.Painting;
+import com.alexvasilkov.gestures.sample.ex.utils.GlideHelper;
+import com.alexvasilkov.gestures.sample.ex.utils.Painting;
 import com.alexvasilkov.gestures.views.GestureImageView;
 
 /**

@@ -11,8 +11,8 @@ import android.widget.TextView;
 import com.alexvasilkov.android.commons.texts.SpannableBuilder;
 import com.alexvasilkov.android.commons.ui.Views;
 import com.alexvasilkov.gestures.sample.R;
-import com.alexvasilkov.gestures.sample.ex.GlideHelper;
-import com.alexvasilkov.gestures.sample.ex.Painting;
+import com.alexvasilkov.gestures.sample.ex.utils.GlideHelper;
+import com.alexvasilkov.gestures.sample.ex.utils.Painting;
 
 class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder>
         implements View.OnClickListener {

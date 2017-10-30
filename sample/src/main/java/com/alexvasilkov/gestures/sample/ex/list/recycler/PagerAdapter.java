@@ -6,8 +6,8 @@ import android.view.ViewGroup;
 
 import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
 import com.alexvasilkov.gestures.sample.base.settings.SettingsSetupListener;
-import com.alexvasilkov.gestures.sample.ex.GlideHelper;
-import com.alexvasilkov.gestures.sample.ex.Painting;
+import com.alexvasilkov.gestures.sample.ex.utils.GlideHelper;
+import com.alexvasilkov.gestures.sample.ex.utils.Painting;
 import com.alexvasilkov.gestures.views.GestureImageView;
 
 class PagerAdapter extends RecyclePagerAdapter<PagerAdapter.ViewHolder> {

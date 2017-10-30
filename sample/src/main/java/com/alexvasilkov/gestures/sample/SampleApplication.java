@@ -4,7 +4,7 @@ import android.app.Application;
 
 import com.alexvasilkov.events.Events;
 import com.alexvasilkov.gestures.internal.GestureDebug;
-import com.alexvasilkov.gestures.sample.demo.logic.FlickrApi;
+import com.alexvasilkov.gestures.sample.demo.utils.FlickrApi;
 
 public class SampleApplication extends Application {
 

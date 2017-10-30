@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.alexvasilkov.android.commons.ui.Views;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.base.BaseActivity;
+import com.alexvasilkov.gestures.sample.ex.utils.Painting;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
@@ -99,6 +100,7 @@ public class ExamplesActivity extends BaseActivity {
 
             viewHolder.text.setText(viewHolder.info.loadLabel(getPackageManager()));
 
+            // Setting tinted example icon
             Context context = ExamplesActivity.this;
             Drawable icon = DrawableCompat.wrap(viewHolder.info.loadIcon(getPackageManager()));
             DrawableCompat.setTint(icon, ContextCompat.getColor(context, R.color.primary));

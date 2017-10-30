@@ -11,8 +11,8 @@ import com.alexvasilkov.events.Events;
 import com.alexvasilkov.gestures.animation.ViewPosition;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.base.BaseActivity;
-import com.alexvasilkov.gestures.sample.ex.GlideHelper;
-import com.alexvasilkov.gestures.sample.ex.Painting;
+import com.alexvasilkov.gestures.sample.ex.utils.GlideHelper;
+import com.alexvasilkov.gestures.sample.ex.utils.Painting;
 
 /**
  * This example demonstrates image animation that crosses activities bounds.<br/>
