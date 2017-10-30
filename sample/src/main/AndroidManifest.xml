@@ -146,9 +146,9 @@
         </activity>
 
         <activity
-            android:name=".ex9.ImageMarkerActivity"
+            android:name=".ex.markers.ImageMarkersActivity"
             android:icon="@drawable/ic_place_black_24dp"
-            android:label="Image marker">
+            android:label="Image markers overlay">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

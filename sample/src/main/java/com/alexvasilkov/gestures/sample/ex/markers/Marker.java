@@ -1,9 +1,9 @@
-package com.alexvasilkov.gestures.sample.ex9;
+package com.alexvasilkov.gestures.sample.ex.markers;
 
 import android.graphics.drawable.Drawable;
 import android.view.Gravity;
 
-@SuppressWarnings({ "WeakerAccess", "unused" }) // Public API
+@SuppressWarnings("WeakerAccess") // Public API
 public class Marker {
 
     private Drawable icon;
@@ -12,7 +12,7 @@ public class Marker {
     private int locationY = 0;
     private int offsetX = 0;
     private int offsetY = 0;
-    private float zoom = 1f;
+    private float scale = 1f;
     private float rotation = 0f;
     private Mode mode = Mode.PIN;
 
@@ -79,15 +79,15 @@ public class Marker {
     }
 
     /**
-     * Sets default zoom for marker's icon.
+     * Sets default scale for marker's icon.
      */
-    public Marker setZoom(float zoom) {
-        this.zoom = zoom;
+    public Marker setScale(float scale) {
+        this.scale = scale;
         return this;
     }
 
-    public float getZoom() {
-        return zoom;
+    public float getScale() {
+        return scale;
     }
 
     /**
