@@ -541,7 +541,7 @@ public class GestureController implements View.OnTouchListener {
             return false;
         }
 
-        boolean scrollConsumed = exitController.onScroll(-dy);
+        boolean scrollConsumed = exitController.onScroll(-dx, -dy);
         if (scrollConsumed) {
             return true;
         }

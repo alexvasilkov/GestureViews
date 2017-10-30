@@ -38,12 +38,14 @@ public class ExitController {
     private boolean isZoomInAction;
     private boolean isRotationInAction;
 
+    private boolean skipScrollDetection;
     private boolean skipZoomDetection;
 
     private boolean isScrollDetected;
     private boolean isZoomDetected;
 
-    private float scrollAccumulator;
+    private float totalScrollX;
+    private float totalScrollY;
     private float zoomAccumulator = 1f;
 
     private float scrollDirection;
@@ -69,19 +71,23 @@ public class ExitController {
     /**
      * @return true if scroll was consumed, false otherwise.
      */
-    public boolean onScroll(float dy) {
+    public boolean onScroll(float dx, float dy) {
         // Exit by scroll should not be detected if zoom or rotation is currently in place.
         // Also, we can detect scroll only if image is zoomed out and it reached movement bounds.
 
-        if (!isExitDetected() && canDetectExit() && !isZoomInAction && !isRotationInAction
-                && isZoomedOut() && !canScroll(dy)) {
+        if (!skipScrollDetection && !isExitDetected() && canDetectExit()
+                && !isZoomInAction && !isRotationInAction && isZoomedOut() && !canScroll(dy)) {
 
-            // Waiting until we scrolled enough to trigger exit detection
-            scrollAccumulator += dy;
-            if (Math.abs(scrollAccumulator) > scrollThresholdScaled) {
+            totalScrollX += dx;
+            totalScrollY += dy;
+
+            // Waiting until we scrolled enough to trigger exit detection or to skip it
+            if (Math.abs(totalScrollY) > scrollThresholdScaled) {
                 isScrollDetected = true;
                 initialY = controller.getState().getY();
                 startDetection();
+            } else if (Math.abs(totalScrollX) > scrollThresholdScaled) {
+                skipScrollDetection = true;
             }
         }
 
@@ -278,9 +284,11 @@ public class ExitController {
 
         isScrollDetected = false;
         isZoomDetected = false;
+        skipScrollDetection = false;
         exitState = 1f;
         scrollDirection = 0f;
-        scrollAccumulator = 0f;
+        totalScrollX = 0f;
+        totalScrollY = 0f;
         zoomAccumulator = 1f;
     }
 
