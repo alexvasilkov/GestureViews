@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.ex2;
+package com.alexvasilkov.gestures.sample.ex.frame.pager;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -27,17 +27,18 @@ public class LayoutsInPagerActivity extends BaseExampleActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.ex2_screen);
+        setContentView(R.layout.frame_pager_screen);
 
         final Painting[] paintings = Painting.list(getResources());
 
-        viewPager = findViewById(R.id.paintings_view_pager);
+        viewPager = findViewById(R.id.frame_pager);
         viewPager.setAdapter(new LayoutsPagerAdapter(viewPager, paintings, getSettingsListener()));
         viewPager.setPageMargin(getResources().getDimensionPixelSize(R.dimen.view_pager_margin));
     }
 
     @Override
     protected void onSettingsChanged() {
+        // Applying settings from toolbar menu, see BaseExampleActivity
         viewPager.getAdapter().notifyDataSetChanged();
     }
 

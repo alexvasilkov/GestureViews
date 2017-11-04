@@ -2,7 +2,7 @@
 <com.alexvasilkov.gestures.views.GestureFrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/painting_g_layout"
+    android:id="@+id/frame_item_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -11,14 +11,14 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/painting_image"
+            android:id="@+id/frame_item_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
             tools:src="@drawable/painting_02" />
 
         <TextView
-            android:id="@+id/painting_title"
+            android:id="@+id/frame_item_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
@@ -30,7 +30,7 @@
             tools:text="Painting name" />
 
         <Button
-            android:id="@+id/painting_button"
+            android:id="@+id/frame_item_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"

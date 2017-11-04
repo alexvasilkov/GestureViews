@@ -156,7 +156,7 @@
         </activity>
 
         <activity
-            android:name=".ex2.LayoutsInPagerActivity"
+            android:name=".ex.frame.pager.LayoutsInPagerActivity"
             android:icon="@drawable/ic_view_carousel_black_24dp"
             android:label="Layouts in ViewPager"
             android:theme="@style/AppTheme.FrameLayout">
