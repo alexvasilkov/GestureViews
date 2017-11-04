@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ex.image.crop.ImageCropActivity">
+
+    <com.alexvasilkov.gestures.views.GestureImageView
+        android:id="@+id/image_crop_viewer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:src="@drawable/painting_02" />
+
+    <com.alexvasilkov.gestures.commons.FinderView
+        android:id="@+id/image_crop_finder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</merge>

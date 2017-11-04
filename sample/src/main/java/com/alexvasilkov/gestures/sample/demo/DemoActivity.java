@@ -7,8 +7,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,14 +18,12 @@ import com.alexvasilkov.events.Events;
 import com.alexvasilkov.events.Events.Failure;
 import com.alexvasilkov.events.Events.Result;
 import com.alexvasilkov.gestures.commons.DepthPageTransformer;
-import com.alexvasilkov.gestures.commons.FinderView;
 import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.base.BaseExampleActivity;
 import com.alexvasilkov.gestures.sample.demo.adapter.EndlessRecyclerAdapter;
 import com.alexvasilkov.gestures.sample.demo.adapter.PhotoListAdapter;
 import com.alexvasilkov.gestures.sample.demo.adapter.PhotoPagerAdapter;
-import com.alexvasilkov.gestures.sample.demo.crop.PhotoCropActivity;
 import com.alexvasilkov.gestures.sample.demo.utils.DecorUtils;
 import com.alexvasilkov.gestures.sample.demo.utils.FlickrApi;
 import com.alexvasilkov.gestures.transition.GestureTransitions;
@@ -39,9 +35,7 @@ import com.googlecode.flickrjandroid.photos.Photo;
 import java.util.List;
 
 /**
- * Advanced usage example that demonstrates images animation from RecyclerView (grid)
- * into ViewPager. It also shows how to implement image cropping ({@link PhotoCropActivity}) using
- * {@link FinderView} widget, and demonstrates rounded image animation feature.
+ * Advanced usage example that demonstrates images animation from RecyclerView into ViewPager.
  * <p>
  * For particular use cases see standalone examples.
  */
@@ -214,10 +208,6 @@ public class DemoActivity extends BaseExampleActivity implements PhotoListAdapte
         views.pagerToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         views.pagerToolbar.setNavigationOnClickListener(view -> onBackPressed());
 
-        onCreateOptionsMenuFullMode(views.pagerToolbar.getMenu());
-
-        views.pagerToolbar.setOnMenuItemClickListener(this::onOptionsItemSelectedFullMode);
-
         // Enabling immersive mode by clicking on full screen image
         pagerAdapter.setImageClickListener(() -> {
             if (!listAnimator.isLeaving()) {
@@ -244,32 +234,6 @@ public class DemoActivity extends BaseExampleActivity implements PhotoListAdapte
                     .append(R.string.demo_photo_by).append(" ")
                     .append(photo.getOwner().getUsername());
             views.pagerTitle.setText(title.build());
-        }
-    }
-
-    /**
-     * Setting up pager toolbar actions.
-     */
-    private void onCreateOptionsMenuFullMode(Menu menu) {
-        MenuItem crop = menu.add(Menu.NONE, R.id.menu_crop, 0, R.string.menu_crop);
-        crop.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-        crop.setIcon(R.drawable.ic_crop_white_24dp);
-    }
-
-    /**
-     * Listener for pager toolbar actions clicks.
-     */
-    private boolean onOptionsItemSelectedFullMode(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_crop:
-                Photo photo = pagerAdapter.getPhoto(views.pager.getCurrentItem());
-                if (photo == null) {
-                    return false;
-                }
-                PhotoCropActivity.show(DemoActivity.this, photo);
-                return true;
-            default:
-                return false;
         }
     }
 

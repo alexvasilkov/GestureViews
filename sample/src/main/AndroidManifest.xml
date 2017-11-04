@@ -36,17 +36,6 @@
             android:theme="@style/AppTheme.Full.NoTitle" />
 
         <activity
-            android:name=".demo.crop.PhotoCropActivity"
-            android:label="Rotate &amp; crop"
-            android:theme="@style/AppTheme.Full.NoTitle.Dark" />
-
-        <activity
-            android:name=".demo.crop.PhotoCropResultActivity"
-            android:label="Cropped"
-            android:theme="@style/AppTheme.Full.NoTitle.Dark" />
-
-
-        <activity
             android:name=".ex.ExamplesActivity"
             android:label="@string/examples_title" />
 
@@ -61,9 +50,9 @@
         </activity>
 
         <activity
-            android:name=".ex.image.markers.ImageMarkersActivity"
-            android:icon="@drawable/ic_place_black_24dp"
-            android:label="Image markers overlay">
+            android:name=".ex.image.crop.ImageCropActivity"
+            android:icon="@drawable/ic_crop_black_24dp"
+            android:label="Image cropping">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -73,7 +62,17 @@
         <activity
             android:name=".ex.image.pager.ViewPagerActivity"
             android:icon="@drawable/ic_view_carousel_black_24dp"
-            android:label="ViewPager integration">
+            android:label="Images in ViewPager">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ex.image.markers.ImageMarkersActivity"
+            android:icon="@drawable/ic_place_black_24dp"
+            android:label="Image markers overlay">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

@@ -52,8 +52,5 @@
     <string name="menu_enable_overlay">Debug overlay</string>
 
     <string name="menu_crop">Crop</string>
-    <string name="menu_crop_rect">Rectangle</string>
-    <string name="menu_crop_square">Square</string>
-    <string name="menu_crop_circle">Circle</string>
 
 </resources>

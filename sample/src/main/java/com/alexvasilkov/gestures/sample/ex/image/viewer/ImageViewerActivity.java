@@ -5,12 +5,16 @@ import android.widget.Toast;
 
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.base.BaseExampleActivity;
+import com.alexvasilkov.gestures.sample.ex.utils.GlideHelper;
+import com.alexvasilkov.gestures.sample.ex.utils.Painting;
 import com.alexvasilkov.gestures.views.GestureImageView;
 
 /**
  * Simple example demonstrates general usage of {@link GestureImageView}.
  */
 public class ImageViewerActivity extends BaseExampleActivity {
+
+    private static final int PAINTING_ID = 1;
 
     private GestureImageView imageViewer;
 
@@ -34,6 +38,9 @@ public class ImageViewerActivity extends BaseExampleActivity {
             showToast("Long click");
             return true;
         });
+
+        final Painting painting = Painting.list(getResources())[PAINTING_ID];
+        GlideHelper.loadFull(imageViewer, painting.imageId, painting.thumbId);
     }
 
     private void showToast(String text) {
