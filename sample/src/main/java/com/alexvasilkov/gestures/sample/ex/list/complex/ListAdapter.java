@@ -14,7 +14,7 @@ import com.alexvasilkov.gestures.sample.ex.utils.Painting;
 
 import java.util.List;
 
-class ListAdapter extends RecyclerView.Adapter<ViewHolder> implements View.OnClickListener {
+class ListAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     private static final int TYPE_IMAGES = 0;
     private static final int TYPE_TEXT = 1;
@@ -45,7 +45,7 @@ class ListAdapter extends RecyclerView.Adapter<ViewHolder> implements View.OnCli
                 // Setting up click listeners and saving images positions into tags
                 for (int i = 0, size = holder.images.length; i < size; i++) {
                     holder.images[i].setTag(R.id.tag_item, i);
-                    holder.images[i].setOnClickListener(this);
+                    holder.images[i].setOnClickListener(this::onImageClick);
                 }
                 return holder;
             case TYPE_TEXT:
@@ -97,11 +97,10 @@ class ListAdapter extends RecyclerView.Adapter<ViewHolder> implements View.OnCli
         holder.text.setText(item.text);
     }
 
-    @Override
-    public void onClick(View view) {
-        final ViewGroup parent = (ViewGroup) view.getParent();
+    private void onImageClick(View image) {
+        final ViewGroup parent = (ViewGroup) image.getParent();
         final int itemPos = (int) parent.getTag(R.id.tag_item);
-        final int imagePos = (int) view.getTag(R.id.tag_item);
+        final int imagePos = (int) image.getTag(R.id.tag_item);
 
         listener.onImageClick(itemPos, imagePos);
     }

@@ -8,7 +8,6 @@ import android.view.ViewTreeObserver.OnPreDrawListener;
 
 import com.alexvasilkov.events.Events;
 import com.alexvasilkov.gestures.animation.ViewPosition;
-import com.alexvasilkov.gestures.animation.ViewPositionAnimator.PositionUpdateListener;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.base.BaseExampleActivity;
 import com.alexvasilkov.gestures.sample.ex.utils.GlideHelper;
@@ -56,24 +55,16 @@ public class FullImageActivity extends BaseExampleActivity {
         GlideHelper.loadFull(image, painting.imageId, painting.thumbId);
 
         // Listening for animation state and updating our view accordingly
-        image.getPositionAnimator().addPositionUpdateListener(new PositionUpdateListener() {
-            @Override
-            public void onPositionUpdate(float position, boolean isLeaving) {
-                applyImageAnimationState(position, isLeaving);
-            }
-        });
+        image.getPositionAnimator().addPositionUpdateListener(this::applyImageAnimationState);
 
         // Starting enter image animation only once image is drawn for the first time to prevent
         // image blinking on activity start
-        runAfterImageDraw(new Runnable() {
-            @Override
-            public void run() {
-                // Enter animation should only be played if activity is not created from saved state
-                enterFullImage(savedInstanceState == null);
+        runAfterImageDraw(() -> {
+            // Enter animation should only be played if activity is not created from saved state
+            enterFullImage(savedInstanceState == null);
 
-                // Hiding original image
-                Events.create(CrossEvents.SHOW_IMAGE).param(false).post();
-            }
+            // Hiding original image
+            Events.create(CrossEvents.SHOW_IMAGE).param(false).post();
         });
     }
 
@@ -120,12 +111,9 @@ public class FullImageActivity extends BaseExampleActivity {
             image.getController().getSettings().disableBounds();
             image.getPositionAnimator().setState(0f, false, false);
 
-            runOnNextFrame(new Runnable() {
-                @Override
-                public void run() {
-                    finish();
-                    overridePendingTransition(0, 0);
-                }
+            runOnNextFrame(() -> {
+                finish();
+                overridePendingTransition(0, 0);
             });
         }
     }

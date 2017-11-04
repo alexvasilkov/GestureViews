@@ -6,7 +6,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.alexvasilkov.gestures.animation.ViewPositionAnimator;
 import com.alexvasilkov.gestures.commons.DepthPageTransformer;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.base.BaseExampleActivity;
@@ -18,8 +17,7 @@ import java.util.List;
  * Base implementation of complex list examples. Subclasses should provide there own logic for
  * list items creation, animator initialization and pager items setup.
  */
-abstract class BaseComplexListActivity extends BaseExampleActivity
-        implements ViewPositionAnimator.PositionUpdateListener, ListAdapter.OnImageClickListener {
+abstract class BaseComplexListActivity extends BaseExampleActivity {
 
     private ViewPager pager;
     private View pagerBackground;
@@ -41,7 +39,7 @@ abstract class BaseComplexListActivity extends BaseExampleActivity
 
         // Setting up recycler view
         list.setLayoutManager(new LinearLayoutManager(this));
-        list.setAdapter(new ListAdapter(items, this));
+        list.setAdapter(new ListAdapter(items, this::onImageClick));
 
         // Setting up pager view
         pagerAdapter = new PagerAdapter(pager, getSettingsListener());
@@ -50,7 +48,7 @@ abstract class BaseComplexListActivity extends BaseExampleActivity
 
         // Setting up animator
         animator = createAnimator(list, pager);
-        animator.addPositionUpdateListener(this);
+        animator.addPositionUpdateListener(this::applyImageAnimationState);
     }
 
     @Override
@@ -68,8 +66,7 @@ abstract class BaseComplexListActivity extends BaseExampleActivity
         pagerAdapter.notifyDataSetChanged();
     }
 
-    @Override
-    public void onPositionUpdate(float position, boolean isLeaving) {
+    private void applyImageAnimationState(float position, boolean isLeaving) {
         pagerBackground.setVisibility(position == 0f ? View.INVISIBLE : View.VISIBLE);
         pagerBackground.setAlpha(position);
 
@@ -87,8 +84,7 @@ abstract class BaseComplexListActivity extends BaseExampleActivity
         }
     }
 
-    @Override
-    public void onImageClick(int itemPos, int imagePos) {
+    private void onImageClick(int itemPos, int imagePos) {
         openImageInPager(pagerAdapter, itemPos, imagePos);
     }
 

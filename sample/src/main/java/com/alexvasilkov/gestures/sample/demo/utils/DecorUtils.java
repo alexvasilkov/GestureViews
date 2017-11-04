@@ -10,6 +10,7 @@ import android.view.ViewConfiguration;
 
 import com.alexvasilkov.android.commons.ui.Views;
 
+@SuppressWarnings({ "SameParameterValue", "unused" }) // Public API
 public class DecorUtils {
 
     private DecorUtils() {}

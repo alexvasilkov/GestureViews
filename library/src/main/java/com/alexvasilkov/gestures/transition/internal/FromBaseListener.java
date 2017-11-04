@@ -16,8 +16,8 @@ abstract class FromBaseListener<P extends View, ID> extends RequestListener<ID> 
 
     private final P parentView;
     private final FromTracker<ID> tracker;
+    private final boolean autoScroll;
 
-    private boolean autoScroll;
     private boolean isFullyOpened;
 
     FromBaseListener(P parentView, FromTracker<ID> tracker, boolean autoScroll) {

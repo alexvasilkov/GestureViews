@@ -1,11 +1,9 @@
 package com.alexvasilkov.gestures.sample.ex.image.animation;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.alexvasilkov.gestures.animation.ViewPositionAnimator.PositionUpdateListener;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.base.BaseExampleActivity;
 import com.alexvasilkov.gestures.sample.ex.utils.GlideHelper;
@@ -43,22 +41,11 @@ public class ImageAnimationActivity extends BaseExampleActivity {
         GlideHelper.loadThumb(image, painting.thumbId);
 
         // We will expand image on click
-        image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(@NonNull View view) {
-                openFullImage();
-            }
-        });
+        image.setOnClickListener(view -> openFullImage());
 
         // Initializing image animator
         animator = GestureTransitions.from(image).into(fullImage);
-
-        animator.addPositionUpdateListener(new PositionUpdateListener() {
-            @Override
-            public void onPositionUpdate(float position, boolean isLeaving) {
-                applyImageAnimationState(position, isLeaving);
-            }
-        });
+        animator.addPositionUpdateListener(this::applyImageAnimationState);
     }
 
     /**

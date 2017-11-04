@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
-import com.alexvasilkov.android.commons.ui.Views;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.base.BaseActivity;
 import com.alexvasilkov.gestures.views.GestureImageView;
@@ -31,11 +30,11 @@ public class PhotoCropResultActivity extends BaseActivity {
 
         setContentView(R.layout.demo_crop_result_screen);
 
-        Toolbar toolbar = Views.find(this, R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBarNotNull().setDisplayHomeAsUpEnabled(true);
 
-        GestureImageView imageView = Views.find(this, R.id.cropped_image);
+        GestureImageView imageView = findViewById(R.id.cropped_image);
         imageView.setImageBitmap(bitmapToShow);
     }
 

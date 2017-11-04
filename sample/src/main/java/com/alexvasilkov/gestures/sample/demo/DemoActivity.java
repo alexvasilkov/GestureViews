@@ -3,7 +3,6 @@ package com.alexvasilkov.gestures.sample.demo;
 import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,7 +19,6 @@ import com.alexvasilkov.android.commons.ui.Views;
 import com.alexvasilkov.events.Events;
 import com.alexvasilkov.events.Events.Failure;
 import com.alexvasilkov.events.Events.Result;
-import com.alexvasilkov.gestures.animation.ViewPositionAnimator.PositionUpdateListener;
 import com.alexvasilkov.gestures.commons.DepthPageTransformer;
 import com.alexvasilkov.gestures.commons.FinderView;
 import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
@@ -138,29 +136,16 @@ public class DemoActivity extends BaseExampleActivity implements PhotoListAdapte
                 .setDoubleTapZoom(3f);
 
         views.fullImageToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
-        views.fullImageToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(@NonNull View view) {
-                onBackPressed();
-            }
-        });
+        views.fullImageToolbar.setNavigationOnClickListener(view -> onBackPressed());
 
         imageAnimator = GestureTransitions.from(views.appBarImage).into(views.fullImage);
 
         // Setting up and animating image transition
-        imageAnimator.addPositionUpdateListener(new PositionUpdateListener() {
-            @Override
-            public void onPositionUpdate(float position, boolean isLeaving) {
-                applyFullImageState(position, isLeaving);
-            }
-        });
+        imageAnimator.addPositionUpdateListener(this::applyFullImageState);
 
-        views.appBarImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getSettingsListener().onSetupGestureView(views.fullImage);
-                imageAnimator.enterSingle(true);
-            }
+        views.appBarImage.setOnClickListener(view -> {
+            getSettingsListener().onSetupGestureView(views.fullImage);
+            imageAnimator.enterSingle(true);
         });
     }
 
@@ -227,39 +212,21 @@ public class DemoActivity extends BaseExampleActivity implements PhotoListAdapte
 
         // Setting up pager toolbar
         views.pagerToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
-        views.pagerToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(@NonNull View view) {
-                onBackPressed();
-            }
-        });
+        views.pagerToolbar.setNavigationOnClickListener(view -> onBackPressed());
 
         onCreateOptionsMenuFullMode(views.pagerToolbar.getMenu());
 
-        views.pagerToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                return onOptionsItemSelectedFullMode(item);
-            }
-        });
+        views.pagerToolbar.setOnMenuItemClickListener(this::onOptionsItemSelectedFullMode);
 
         // Enabling immersive mode by clicking on full screen image
-        pagerAdapter.setImageClickListener(new PhotoPagerAdapter.ImageClickListener() {
-            @Override
-            public void onFullImageClick() {
-                if (!listAnimator.isLeaving()) {
-                    // Toggle immersive mode
-                    showSystemUi(!isSystemUiShown());
-                }
+        pagerAdapter.setImageClickListener(() -> {
+            if (!listAnimator.isLeaving()) {
+                // Toggle immersive mode
+                showSystemUi(!isSystemUiShown());
             }
         });
         getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(
-                new View.OnSystemUiVisibilityChangeListener() {
-                    @Override
-                    public void onSystemUiVisibilityChange(int visibility) {
-                        views.pagerToolbar.animate().alpha(isSystemUiShown() ? 1f : 0f);
-                    }
-                });
+                visibility -> views.pagerToolbar.animate().alpha(isSystemUiShown() ? 1f : 0f));
     }
 
     /**
@@ -330,12 +297,7 @@ public class DemoActivity extends BaseExampleActivity implements PhotoListAdapte
                 .into(views.pager, pagerTracker);
 
         // Setting up and animating image transition
-        listAnimator.addPositionUpdateListener(new PositionUpdateListener() {
-            @Override
-            public void onPositionUpdate(float position, boolean isLeaving) {
-                applyFullPagerState(position, isLeaving);
-            }
-        });
+        listAnimator.addPositionUpdateListener(this::applyFullPagerState);
     }
 
     /**
@@ -486,17 +448,17 @@ public class DemoActivity extends BaseExampleActivity implements PhotoListAdapte
         final Toolbar fullImageToolbar;
 
         ViewHolder(Activity activity) {
-            toolbar = Views.find(activity, R.id.toolbar);
-            appBar = Views.find(activity, R.id.demo_app_bar);
-            appBarImage = Views.find(activity, R.id.demo_app_bar_image);
-            grid = Views.find(activity, R.id.demo_grid);
+            toolbar = activity.findViewById(R.id.toolbar);
+            appBar = activity.findViewById(R.id.demo_app_bar);
+            appBarImage = activity.findViewById(R.id.demo_app_bar_image);
+            grid = activity.findViewById(R.id.demo_grid);
 
-            fullBackground = Views.find(activity, R.id.demo_full_background);
-            pager = Views.find(activity, R.id.demo_pager);
-            pagerTitle = Views.find(activity, R.id.demo_pager_title);
-            pagerToolbar = Views.find(activity, R.id.demo_pager_toolbar);
-            fullImage = Views.find(activity, R.id.demo_full_image);
-            fullImageToolbar = Views.find(activity, R.id.demo_full_image_toolbar);
+            fullBackground = activity.findViewById(R.id.demo_full_background);
+            pager = activity.findViewById(R.id.demo_pager);
+            pagerTitle = activity.findViewById(R.id.demo_pager_title);
+            pagerToolbar = activity.findViewById(R.id.demo_pager_toolbar);
+            fullImage = activity.findViewById(R.id.demo_full_image);
+            fullImageToolbar = activity.findViewById(R.id.demo_full_image_toolbar);
         }
     }
 

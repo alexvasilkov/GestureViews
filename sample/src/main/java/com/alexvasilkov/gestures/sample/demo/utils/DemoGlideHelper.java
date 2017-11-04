@@ -20,28 +20,21 @@ import com.googlecode.flickrjandroid.photos.Photo;
 
 public class DemoGlideHelper {
 
-    private static final Transition<Drawable> TRANSITION = new Transition<Drawable>() {
-        @Override
-        public boolean transition(Drawable current, ViewAdapter adapter) {
-            if (adapter.getView() instanceof ImageView) {
-                ImageView image = (ImageView) adapter.getView();
-                if (image.getDrawable() == null) {
-                    image.setAlpha(0f);
-                    image.animate().alpha(1f);
-                }
+    private static final Transition<Drawable> TRANSITION = (current, adapter) -> {
+        if (adapter.getView() instanceof ImageView) {
+            ImageView image = (ImageView) adapter.getView();
+            if (image.getDrawable() == null) {
+                image.setAlpha(0f);
+                image.animate().alpha(1f);
             }
-            return false;
         }
+        return false;
     };
 
     private static final TransitionFactory<Drawable> TRANSITION_FACTORY =
-            new TransitionFactory<Drawable>() {
-                @Override
-                public Transition<Drawable> build(DataSource dataSource, boolean isFirstResource) {
-                    // Do not animate if image is loaded from memory
-                    return dataSource == DataSource.REMOTE
-                            ? TRANSITION : NoTransition.<Drawable>get();
-                }
+            (dataSource, isFirstResource) -> {
+                // Do not animate if image is loaded from memory
+                return dataSource == DataSource.REMOTE ? TRANSITION : NoTransition.get();
             };
 
 
@@ -82,7 +75,7 @@ public class DemoGlideHelper {
                 .load(photoUrl)
                 .apply(new RequestOptions().apply(options).placeholder(image.getDrawable()))
                 .thumbnail(thumbRequest)
-                .listener(new RequestListenerWrapper<Drawable>(listener))
+                .listener(new RequestListenerWrapper<>(listener))
                 .into(image);
     }
 

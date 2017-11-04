@@ -10,7 +10,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.alexvasilkov.android.commons.state.InstanceState;
-import com.alexvasilkov.android.commons.ui.Views;
 import com.alexvasilkov.gestures.GestureController;
 import com.alexvasilkov.gestures.Settings;
 import com.alexvasilkov.gestures.State;
@@ -43,17 +42,17 @@ public class PhotoCropActivity extends BaseActivity {
 
         setContentView(R.layout.demo_crop_screen);
 
-        Toolbar toolbar = Views.find(this, R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBarNotNull().setDisplayHomeAsUpEnabled(true);
 
-        imageView = Views.find(this, R.id.cropping_image);
+        imageView = findViewById(R.id.cropping_image);
         imageView.getController().getSettings()
                 .setFitMethod(Settings.Fit.OUTSIDE)
                 .setFillViewport(true)
                 .setRotationEnabled(true);
 
-        finderView = Views.find(this, R.id.cropping_finder);
+        finderView = findViewById(R.id.cropping_finder);
         finderView.setSettings(imageView.getController().getSettings());
 
         Photo photo = (Photo) getIntent().getSerializableExtra(EXTRA_PHOTO);

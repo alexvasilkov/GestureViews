@@ -18,8 +18,7 @@ import com.alexvasilkov.gestures.sample.ex.utils.GlideHelper;
 import com.alexvasilkov.gestures.sample.ex.utils.Painting;
 import com.alexvasilkov.gestures.views.GestureFrameLayout;
 
-class LayoutsPagerAdapter extends RecyclePagerAdapter<LayoutsPagerAdapter.ViewHolder>
-        implements View.OnClickListener {
+class LayoutsPagerAdapter extends RecyclePagerAdapter<LayoutsPagerAdapter.ViewHolder> {
 
     private static final float MAX_ZOOM = 1.5f;
 
@@ -43,6 +42,7 @@ class LayoutsPagerAdapter extends RecyclePagerAdapter<LayoutsPagerAdapter.ViewHo
         final ViewHolder holder = new ViewHolder(container);
         holder.layout.getController().getSettings().setMaxZoom(MAX_ZOOM);
         holder.layout.getController().enableScrollInViewPager(viewPager);
+        holder.button.setOnClickListener(this::onButtonClick);
         return holder;
     }
 
@@ -62,7 +62,6 @@ class LayoutsPagerAdapter extends RecyclePagerAdapter<LayoutsPagerAdapter.ViewHo
         holder.title.setText(titleText);
 
         holder.button.setTag(paintings[position].link);
-        holder.button.setOnClickListener(this);
     }
 
     @Override
@@ -72,10 +71,9 @@ class LayoutsPagerAdapter extends RecyclePagerAdapter<LayoutsPagerAdapter.ViewHo
         GlideHelper.clear(holder.image);
     }
 
-    @Override
-    public void onClick(@NonNull View view) {
-        final String url = (String) view.getTag();
-        Navigate.from(view.getContext()).external().browser().url(url).start();
+    private void onButtonClick(@NonNull View button) {
+        final String url = (String) button.getTag();
+        Navigate.from(button.getContext()).external().browser().url(url).start();
     }
 
 
@@ -87,10 +85,10 @@ class LayoutsPagerAdapter extends RecyclePagerAdapter<LayoutsPagerAdapter.ViewHo
 
         ViewHolder(ViewGroup container) {
             super(Views.inflate(container, R.layout.ex2_item_layout));
-            layout = Views.find(itemView, R.id.painting_g_layout);
-            image = Views.find(layout, R.id.painting_image);
-            title = Views.find(layout, R.id.painting_title);
-            button = Views.find(layout, R.id.painting_button);
+            layout = itemView.findViewById(R.id.painting_g_layout);
+            image = layout.findViewById(R.id.painting_image);
+            title = layout.findViewById(R.id.painting_title);
+            button = layout.findViewById(R.id.painting_button);
         }
     }
 

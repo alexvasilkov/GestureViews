@@ -2,7 +2,6 @@ package com.alexvasilkov.gestures.sample.ex.custom;
 
 import android.os.Bundle;
 
-import com.alexvasilkov.android.commons.ui.Views;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.base.BaseActivity;
 
@@ -19,7 +18,7 @@ public class CustomViewActivity extends BaseActivity {
         setContentView(R.layout.custom_view_screen);
         getSupportActionBarNotNull().setDisplayHomeAsUpEnabled(true);
 
-        final GestureTextView textView = Views.find(this, R.id.text_view);
+        final GestureTextView textView = findViewById(R.id.text_view);
         textView.getController().getSettings().setMaxZoom(1.5f);
     }
 

@@ -5,7 +5,6 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.ListView;
 
-import com.alexvasilkov.gestures.animation.ViewPositionAnimator;
 import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.base.BaseExampleActivity;
@@ -20,8 +19,7 @@ import com.alexvasilkov.gestures.transition.tracker.SimpleTracker;
  * Note, that it is advised to use RecyclerView instead of ListView in most cases.
  * RecyclerView usage is almost the same. See also {@link DemoActivity}.
  */
-public class ListViewToPagerActivity extends BaseExampleActivity
-        implements ListAdapter.OnPaintingClickListener {
+public class ListViewToPagerActivity extends BaseExampleActivity {
 
     private ListView list;
     private ViewPager pager;
@@ -40,7 +38,7 @@ public class ListViewToPagerActivity extends BaseExampleActivity
 
         // Initializing ListView
         list = findViewById(R.id.list_view);
-        list.setAdapter(new ListAdapter(paintings, this));
+        list.setAdapter(new ListAdapter(paintings, this::onPaintingClick));
 
         // Initializing ViewPager
         pager = findViewById(R.id.list_pager);
@@ -73,13 +71,7 @@ public class ListViewToPagerActivity extends BaseExampleActivity
 
         // Setting up background animation during image transition
         background = findViewById(R.id.list_full_background);
-        animator.addPositionUpdateListener(new ViewPositionAnimator.PositionUpdateListener() {
-            @Override
-            public void onPositionUpdate(float position, boolean isLeaving) {
-                background.setVisibility(position == 0f ? View.INVISIBLE : View.VISIBLE);
-                background.setAlpha(position);
-            }
-        });
+        animator.addPositionUpdateListener((pos, isLeaving) -> applyImageAnimationState(pos));
     }
 
     @Override
@@ -98,10 +90,14 @@ public class ListViewToPagerActivity extends BaseExampleActivity
         pager.getAdapter().notifyDataSetChanged();
     }
 
-    @Override
-    public void onPaintingClick(int position) {
+    private void onPaintingClick(int position) {
         // Animating image transition from given list position into pager
         animator.enter(position, true);
+    }
+
+    private void applyImageAnimationState(float position) {
+        background.setVisibility(position == 0f ? View.INVISIBLE : View.VISIBLE);
+        background.setAlpha(position);
     }
 
 }

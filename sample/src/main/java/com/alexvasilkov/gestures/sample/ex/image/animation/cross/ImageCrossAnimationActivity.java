@@ -1,10 +1,8 @@
 package com.alexvasilkov.gestures.sample.ex.image.animation.cross;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
-import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.ImageView;
 
 import com.alexvasilkov.events.Events;
@@ -41,24 +39,14 @@ public class ImageCrossAnimationActivity extends BaseActivity {
         GlideHelper.loadThumb(image, painting.thumbId);
 
         // Setting image click listener
-        image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(@NonNull View view) {
-                showFullImage();
-            }
-        });
+        image.setOnClickListener(this::showFullImage);
 
         // Image position may change (e.g. when screen orientation is changed), so we should update
         // fullscreen image to ensure exit animation will return image into correct position.
-        image.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                onLayoutChanges();
-            }
-        });
+        image.getViewTreeObserver().addOnGlobalLayoutListener(this::onLayoutChanges);
     }
 
-    private void showFullImage() {
+    private void showFullImage(View image) {
         // Requesting opening image in a new activity with animation.
         // First of all we need to get current image position:
         ViewPosition position = ViewPosition.from(image);

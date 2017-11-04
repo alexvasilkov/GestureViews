@@ -3,7 +3,6 @@ package com.alexvasilkov.gestures.sample.ex2;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 
-import com.alexvasilkov.android.commons.ui.Views;
 import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.base.BaseExampleActivity;
@@ -32,7 +31,7 @@ public class LayoutsInPagerActivity extends BaseExampleActivity {
 
         final Painting[] paintings = Painting.list(getResources());
 
-        viewPager = Views.find(this, R.id.paintings_view_pager);
+        viewPager = findViewById(R.id.paintings_view_pager);
         viewPager.setAdapter(new LayoutsPagerAdapter(viewPager, paintings, getSettingsListener()));
         viewPager.setPageMargin(getResources().getDimensionPixelSize(R.dimen.view_pager_margin));
     }

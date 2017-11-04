@@ -14,8 +14,7 @@ import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.ex.utils.GlideHelper;
 import com.alexvasilkov.gestures.sample.ex.utils.Painting;
 
-class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder>
-        implements View.OnClickListener {
+class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
 
     private final Painting[] paintings;
     private final OnPaintingClickListener listener;
@@ -33,7 +32,7 @@ class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder>
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ViewHolder holder = new ViewHolder(parent);
-        holder.itemView.setOnClickListener(this);
+        holder.itemView.setOnClickListener(this::onItemClick);
         return holder;
     }
 
@@ -55,8 +54,7 @@ class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder>
         holder.title.setText(text);
     }
 
-    @Override
-    public void onClick(@NonNull View view) {
+    private void onItemClick(@NonNull View view) {
         int pos = (Integer) view.getTag(R.id.tag_item);
         listener.onPaintingClick(pos);
     }

@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.alexvasilkov.android.commons.ui.Views;
-import com.alexvasilkov.gestures.animation.ViewPositionAnimator.PositionUpdateListener;
 import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.base.settings.SettingsSetupListener;
@@ -26,15 +25,6 @@ public class PhotoPagerAdapter extends RecyclePagerAdapter<PhotoPagerAdapter.Vie
     private ImageClickListener clickListener;
 
     private boolean activated;
-
-    private View.OnClickListener internalClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            if (clickListener != null) {
-                clickListener.onFullImageClick();
-            }
-        }
-    };
 
     public PhotoPagerAdapter(ViewPager viewPager) {
         this.viewPager = viewPager;
@@ -83,19 +73,15 @@ public class PhotoPagerAdapter extends RecyclePagerAdapter<PhotoPagerAdapter.Vie
                 .setMaxZoom(10f)
                 .setDoubleTapZoom(3f);
 
-        holder.image.setOnClickListener(internalClickListener);
+        holder.image.setOnClickListener(view -> onImageClick());
 
         if (setupListener != null) {
             setupListener.onSetupGestureView(holder.image);
         }
 
         holder.image.getController().enableScrollInViewPager(viewPager);
-        holder.image.getPositionAnimator().addPositionUpdateListener(new PositionUpdateListener() {
-            @Override
-            public void onPositionUpdate(float position, boolean isLeaving) {
-                holder.progress.setVisibility(position == 1f ? View.VISIBLE : View.INVISIBLE);
-            }
-        });
+        holder.image.getPositionAnimator().addPositionUpdateListener((position, isLeaving) ->
+                holder.progress.setVisibility(position == 1f ? View.VISIBLE : View.INVISIBLE));
         return holder;
     }
 
@@ -152,6 +138,12 @@ public class PhotoPagerAdapter extends RecyclePagerAdapter<PhotoPagerAdapter.Vie
         holder.image.setImageDrawable(null);
     }
 
+    private void onImageClick() {
+        if (clickListener != null) {
+            clickListener.onFullImageClick();
+        }
+    }
+
     public static GestureImageView getImage(RecyclePagerAdapter.ViewHolder holder) {
         return ((ViewHolder) holder).image;
     }
@@ -164,8 +156,8 @@ public class PhotoPagerAdapter extends RecyclePagerAdapter<PhotoPagerAdapter.Vie
 
         ViewHolder(ViewGroup parent) {
             super(Views.inflate(parent, R.layout.demo_item_photo_full));
-            image = Views.find(itemView, R.id.photo_full_image);
-            progress = Views.find(itemView, R.id.photo_full_progress);
+            image = itemView.findViewById(R.id.photo_full_image);
+            progress = itemView.findViewById(R.id.photo_full_progress);
         }
     }
 

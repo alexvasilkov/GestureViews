@@ -15,8 +15,7 @@ import com.googlecode.flickrjandroid.photos.Photo;
 
 import java.util.List;
 
-public class PhotoListAdapter extends DefaultEndlessRecyclerAdapter<PhotoListAdapter.ViewHolder>
-        implements View.OnClickListener {
+public class PhotoListAdapter extends DefaultEndlessRecyclerAdapter<PhotoListAdapter.ViewHolder> {
 
     private List<Photo> photos;
     private boolean hasMore = true;
@@ -48,7 +47,7 @@ public class PhotoListAdapter extends DefaultEndlessRecyclerAdapter<PhotoListAda
     @Override
     protected ViewHolder onCreateHolder(ViewGroup parent, int viewType) {
         ViewHolder holder = new ViewHolder(parent);
-        holder.image.setOnClickListener(this);
+        holder.image.setOnClickListener(this::onImageClick);
         return holder;
     }
 
@@ -77,9 +76,8 @@ public class PhotoListAdapter extends DefaultEndlessRecyclerAdapter<PhotoListAda
         }
     }
 
-    @Override
-    public void onClick(@NonNull View view) {
-        Photo photo = (Photo) view.getTag(R.id.tag_item);
+    private void onImageClick(@NonNull View image) {
+        Photo photo = (Photo) image.getTag(R.id.tag_item);
         int pos = photos.indexOf(photo);
         listener.onPhotoClick(pos);
     }

@@ -3,7 +3,7 @@ package com.alexvasilkov.gestures.sample.ex.image.markers;
 import android.graphics.drawable.Drawable;
 import android.view.Gravity;
 
-@SuppressWarnings("WeakerAccess") // Public API
+@SuppressWarnings({ "WeakerAccess", "UnusedReturnValue", "SameParameterValue" }) // Public API
 public class Marker {
 
     private Drawable icon;

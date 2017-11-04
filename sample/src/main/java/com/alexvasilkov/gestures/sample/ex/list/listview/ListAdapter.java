@@ -14,7 +14,7 @@ import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.ex.utils.GlideHelper;
 import com.alexvasilkov.gestures.sample.ex.utils.Painting;
 
-class ListAdapter extends BaseAdapter implements View.OnClickListener {
+class ListAdapter extends BaseAdapter {
 
     private final Painting[] paintings;
     private final OnPaintingClickListener listener;
@@ -54,7 +54,7 @@ class ListAdapter extends BaseAdapter implements View.OnClickListener {
 
     private ViewHolder onCreateHolder(ViewGroup parent) {
         ViewHolder holder = new ViewHolder(parent);
-        holder.itemView.setOnClickListener(this);
+        holder.itemView.setOnClickListener(this::onItemClick);
         return holder;
     }
 
@@ -75,8 +75,7 @@ class ListAdapter extends BaseAdapter implements View.OnClickListener {
         holder.title.setText(text);
     }
 
-    @Override
-    public void onClick(@NonNull View view) {
+    private void onItemClick(@NonNull View view) {
         int pos = (Integer) view.getTag(R.id.tag_item);
         listener.onPaintingClick(pos);
     }

@@ -21,23 +21,32 @@ public class ViewsTransitionBuilder<ID> {
 
     private final ViewsTransitionAnimator<ID> animator = new ViewsTransitionAnimator<>();
 
-    public ViewsTransitionBuilder<ID> fromRecyclerView(@NonNull RecyclerView recyclerView,
+    public ViewsTransitionBuilder<ID> fromRecyclerView(
+            @NonNull RecyclerView recyclerView,
             @NonNull ViewsTracker<ID> tracker) {
+
         animator.setFromListener(
                 new FromRecyclerViewListener<>(recyclerView, toFromTracker(tracker), true));
+
         return this;
     }
 
-    public ViewsTransitionBuilder<ID> fromListView(@NonNull ListView listView,
+    public ViewsTransitionBuilder<ID> fromListView(
+            @NonNull ListView listView,
             @NonNull ViewsTracker<ID> tracker) {
+
         animator.setFromListener(
                 new FromListViewListener<>(listView, toFromTracker(tracker), true));
+
         return this;
     }
 
-    public ViewsTransitionBuilder<ID> intoViewPager(@NonNull ViewPager viewPager,
+    public ViewsTransitionBuilder<ID> intoViewPager(
+            @NonNull ViewPager viewPager,
             @NonNull ViewsTracker<ID> tracker) {
+
         animator.setToListener(new IntoViewPagerListener<>(viewPager, toIntoTracker(tracker)));
+
         return this;
     }
 

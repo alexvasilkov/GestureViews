@@ -1,7 +1,6 @@
 package com.alexvasilkov.gestures.sample.ex.image.viewer;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Toast;
 
 import com.alexvasilkov.gestures.sample.R;
@@ -29,20 +28,16 @@ public class ImageViewerActivity extends BaseExampleActivity {
                 .setMaxZoom(6f)
                 .setDoubleTapZoom(3f);
 
-        imageViewer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(ImageViewerActivity.this, "Single click", Toast.LENGTH_SHORT).show();
-            }
-        });
+        imageViewer.setOnClickListener(view -> showToast("Single click"));
 
-        imageViewer.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                Toast.makeText(ImageViewerActivity.this, "Long click", Toast.LENGTH_SHORT).show();
-                return true;
-            }
+        imageViewer.setOnLongClickListener(view -> {
+            showToast("Long click");
+            return true;
         });
+    }
+
+    private void showToast(String text) {
+        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
     }
 
     @Override
