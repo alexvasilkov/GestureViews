@@ -7,7 +7,7 @@ public interface ClipBounds {
 
     /**
      * Clips view so only {@code rect} part will be drawn.
-     * <p/>
+     * <p>
      * Pass {@code null} to turn clipping off.
      */
     void clipBounds(@Nullable RectF rect);

@@ -29,21 +29,21 @@ import java.util.List;
 
 /**
  * Helper class to animate views from one position on screen to another.
- * <p/>
+ * <p>
  * Animation can be performed from any view (e.g. {@link ImageView}) to any gestures controlled
  * view implementing {@link GestureView} (e.g. {@link GestureImageView}).
- * <p/>
+ * <p>
  * Note, that initial and final views should have same aspect ratio for correct animation.
  * In case of {@link ImageView} initial and final images should have same aspect, but actual views
  * can have different aspects (e.g. animating from square thumb view with scale type
  * {@link ScaleType#CENTER_CROP} to rectangular full image view).
- * <p/>
- * To use this class first create an instance and then call {@link #enter(View, boolean)}.<br/>
+ * <p>
+ * To use this class first create an instance and then call {@link #enter(View, boolean)}.<br>
  * Alternatively you can manually pass initial view position using
- * {@link #enter(ViewPosition, boolean)} method. <br/>
- * To exit back to initial view call {@link #exit(boolean)} method.<br/>
+ * {@link #enter(ViewPosition, boolean)} method. <br>
+ * To exit back to initial view call {@link #exit(boolean)} method.<br>
  * You can listen for position changes using
- * {@link #addPositionUpdateListener(PositionUpdateListener)}.<br/>
+ * {@link #addPositionUpdateListener(PositionUpdateListener)}.<br>
  * If initial view was changed you should call {@link #update(View)} method to update to new view.
  * You can also manually update initial view position using {@link #update(ViewPosition)} method.
  */
@@ -169,7 +169,7 @@ public class ViewPositionAnimator {
     /**
      * Starts 'enter' animation from no specific position (position will be calculated based on
      * gravity set in {@link Settings}).
-     * <p/>
+     * <p>
      * <b>Note, that in most cases you should use {@link #enter(View, boolean)} or
      * {@link #enter(ViewPosition, boolean)} methods instead.</b>
      */
@@ -184,7 +184,7 @@ public class ViewPositionAnimator {
 
     /**
      * Starts 'enter' animation from {@code from} view to {@code to}.
-     * <p/>
+     * <p>
      * Note, if {@code from} view was changed (i.e. during list adapter refresh) you should
      * update to new view using {@link #update(View)} method.
      */
@@ -199,7 +199,7 @@ public class ViewPositionAnimator {
 
     /**
      * Starts 'enter' animation from {@code from} position to {@code to} view.
-     * <p/>
+     * <p>
      * Note, if {@code from} view position was changed (i.e. during list adapter refresh) you
      * should update to new view using {@link #update(ViewPosition)} method.
      */
@@ -337,7 +337,7 @@ public class ViewPositionAnimator {
 
     /**
      * Removes listener added by {@link #addPositionUpdateListener(PositionUpdateListener)}.
-     * <p/>
+     * <p>
      * Note, this method may be called inside listener's callback without throwing
      * {@link IndexOutOfBoundsException}.
      */
@@ -376,7 +376,7 @@ public class ViewPositionAnimator {
     /**
      * @return Target (to) position as set by {@link #setToState(State, float)}.
      * Maybe useful to determine real animation position during exit gesture.
-     * <p/>
+     * <p>
      * I.e. {@link #getPosition()} / {@link #getToPosition()} (changes from 0 to ∞)
      * represents interpolated position used to calculate intermediate state and bounds.
      */
@@ -388,7 +388,7 @@ public class ViewPositionAnimator {
     /**
      * @return Current position within range {@code [0, 1]}, where {@code 0} is for
      * initial (from) position and {@code 1} is for final (to) position.
-     * <p/>
+     * <p>
      * Note, that final position can be changed by {@link #setToState(State, float)}, so if you
      * need to have real value of final position (instead of {@code 1}) then you need to use
      * {@link #getToPosition()} method.
@@ -417,10 +417,10 @@ public class ViewPositionAnimator {
 
     /**
      * Specifies target (to) state and it's position which will be used to interpolate
-     * current state for intermediate positions (i.e. during animation or exit gesture).<br/>
+     * current state for intermediate positions (i.e. during animation or exit gesture).<br>
      * This allows you to set up correct state without changing current position
      * ({@link #getPosition()}).
-     * <p/>
+     * <p>
      * Only use this method if you understand what you do.
      *
      * @see #getToPosition()
@@ -445,7 +445,7 @@ public class ViewPositionAnimator {
 
     /**
      * Stops current animation and sets position state to particular values.
-     * <p/>
+     * <p>
      * Note, that once animator reaches {@code state = 0f} and {@code isLeaving = true}
      * it will cleanup all internal stuff. So you will need to call {@link #enter(View, boolean)}
      * or {@link #enter(ViewPosition, boolean)} again in order to continue using animator.

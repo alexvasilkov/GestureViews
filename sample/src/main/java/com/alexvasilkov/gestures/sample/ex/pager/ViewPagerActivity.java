@@ -9,7 +9,7 @@ import com.alexvasilkov.gestures.sample.base.BaseExampleActivity;
 import com.alexvasilkov.gestures.views.GestureImageView;
 
 /**
- * Simple example demonstrates usage of {@link GestureImageView} within ViewPager.<br/>
+ * Simple example demonstrates usage of {@link GestureImageView} within ViewPager.<br>
  * Two things worth noting here:
  * <ul>
  * <li/> For each GestureImageView inside ViewPager we should enable smooth scrolling by calling

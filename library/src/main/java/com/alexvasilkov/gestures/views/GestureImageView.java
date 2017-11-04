@@ -32,7 +32,7 @@ import com.alexvasilkov.gestures.views.interfaces.GestureView;
 /**
  * {@link ImageView} implementation controlled by {@link GestureController}
  * ({@link #getController()}).
- * <p/>
+ * <p>
  * View position can be animated with {@link ViewPositionAnimator}
  * ({@link #getPositionAnimator()}).
  */
@@ -140,7 +140,7 @@ public class GestureImageView extends ImageView
 
     /**
      * Crops bitmap as it is seen inside movement area: {@link Settings#setMovementArea(int, int)}.
-     * <p/>
+     * <p>
      * Note, that size of cropped bitmap may vary from size of movement area,
      * since we will crop part of original image at base zoom level (zoom == 1).
      *

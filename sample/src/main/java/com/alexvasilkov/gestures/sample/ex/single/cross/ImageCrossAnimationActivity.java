@@ -15,9 +15,9 @@ import com.alexvasilkov.gestures.sample.ex.utils.GlideHelper;
 import com.alexvasilkov.gestures.sample.ex.utils.Painting;
 
 /**
- * This example demonstrates image animation that crosses activities bounds.<br/>
+ * This example demonstrates image animation that crosses activities bounds.<br>
  * Cross-activities animation is pretty complicated, since we'll need to have a connection between
- * activities in order to properly coordinate image position changes and animation state.<br/>
+ * activities in order to properly coordinate image position changes and animation state.<br>
  * In this example we will use {@link Events} library to set up such connection, but you can also
  * do it using e.g. {@link LocalBroadcastManager} or manually by setting and removing listeners.
  */

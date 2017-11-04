@@ -5,7 +5,7 @@ import android.view.View;
 
 /**
  * Page transformer which will scroll previous page as usual and will scale next page with alpha.
- * <p/>
+ * <p>
  * Usage: {@link ViewPager#setPageTransformer(boolean, ViewPager.PageTransformer)
  * ViewPager.setPageTransformer(true, new DepthPageTransformer())}
  */

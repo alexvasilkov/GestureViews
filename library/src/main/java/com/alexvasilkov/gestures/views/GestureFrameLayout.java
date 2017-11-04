@@ -26,10 +26,10 @@ import com.alexvasilkov.gestures.views.interfaces.GestureView;
 /**
  * {@link FrameLayout} implementation controlled by {@link GestureController}
  * ({@link #getController()}).
- * <p/>
+ * <p>
  * View position can be animated with {@link ViewPositionAnimator}
  * ({@link #getPositionAnimator()}).
- * <p/>
+ * <p>
  * Note: only one children is eligible in this layout.
  */
 public class GestureFrameLayout extends FrameLayout implements GestureView, AnimatorView {

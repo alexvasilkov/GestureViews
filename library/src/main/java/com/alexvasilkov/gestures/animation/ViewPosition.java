@@ -14,18 +14,18 @@ import java.util.regex.Pattern;
 
 /**
  * Helper class to compute and store view position used for transitions.
- * <p/>
+ * <p>
  * It consists of {@link #view} rectangle, {@link #viewport} rectangle (view rectangle minus
  * padding), {@link #visible} rectangle (part of viewport which is visible on screen)
  * and {@link #image} rectangle (position of the underlying image taking into account
  * {@link ImageView#getScaleType()}, or same as {@link #viewport} if view is not an
  * {@link ImageView} or if {@link ImageView#getDrawable()} is {@code null}).
  * All positions are in screen coordinates.
- * <p/>
+ * <p>
  * To create instance of this class use {@link #from(View)} static method. But note, that view
  * should already be laid out and have correct {@link View#getWidth()} and {@link View#getHeight()}
  * values.
- * <p/>
+ * <p>
  * You can also serialize and deserialize this class to string using {@link #pack()} and
  * {@link #unpack(String)} methods. This can be useful to pass view position between activities.
  */

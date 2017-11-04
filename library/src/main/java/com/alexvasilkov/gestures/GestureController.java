@@ -27,28 +27,28 @@ import java.util.List;
 
 /**
  * Handles touch events to update view's position state ({@link State}) based on current
- * setup ({@link Settings}).<br/>
- * Settings can be obtained and altered through {@link #getSettings()}.<br/>
+ * setup ({@link Settings}).<br>
+ * Settings can be obtained and altered through {@link #getSettings()}.<br>
  * Note, that some settings are required in order to correctly update state, see {@link Settings}.
- * <p/>
+ * <p>
  * This class implements {@link View.OnTouchListener} to delegate touches from view to controller.
- * <p/>
+ * <p>
  * State can also be manipulated directly with {@link #getState()}, {@link #updateState()}
  * and {@link #resetState()}. You can also access {@link #getStateController()} for some additional
  * stuff.
- * <p/>
- * State can be animated with {@link #animateStateTo(State)} method.<br/>
+ * <p>
+ * State can be animated with {@link #animateStateTo(State)} method.<br>
  * See also {@link #stopFlingAnimation()}, {@link #stopStateAnimation()}
  * and {@link #stopAllAnimations()} methods.
- * <p/>
+ * <p>
  * All state changes will be passed to {@link OnStateChangeListener OnStateChangeListener}.
  * See {@link #addOnStateChangeListener(OnStateChangeListener) addOnStateChangeListener} and
  * {@link #removeOnStateChangeListener(OnStateChangeListener) removeOnStateChangeListener} methods.
- * <p/>
+ * <p>
  * Additional touch events can be listened with {@link OnGestureListener OnGestureListener} and
  * {@link SimpleOnGestureListener SimpleOnGestureListener} using
  * {@link #setOnGesturesListener(OnGestureListener) setOnGesturesListener} method.
- * <p/>
+ * <p>
  * State source changes (whether state is being changed by user or by animation) can be
  * listened with {@link OnStateSourceChangeListener} using
  * {@link #setOnStateSourceChangeListener(OnStateSourceChangeListener)} method.
@@ -185,7 +185,7 @@ public class GestureController implements View.OnTouchListener {
 
     /**
      * Returns settings that can be updated.
-     * <p/>
+     * <p>
      * Note: call {@link #updateState()}, {@link #resetState()} or {@link #animateKeepInBounds()}
      * after settings was changed to correctly apply state restrictions.
      */
@@ -196,7 +196,7 @@ public class GestureController implements View.OnTouchListener {
     /**
      * Returns current state. In most cases you should not modify state directly,
      * use one of the methods provided in {@link StateController} instead.
-     * <p/>
+     * <p>
      * If current state was changed outside {@link GestureController}
      * you should call {@link GestureController#updateState()} or {@link #animateKeepInBounds()}
      * to properly apply changes.
@@ -229,9 +229,9 @@ public class GestureController implements View.OnTouchListener {
     /**
      * Resets to initial state (default position, min zoom level) and notifies
      * {@link OnStateChangeListener} listeners.
-     * <p/>
+     * <p>
      * Should be called when image size is changed.
-     * <p/>
+     * <p>
      * See {@link Settings#setImage(int, int)}.
      */
     public void resetState() {
@@ -870,7 +870,7 @@ public class GestureController implements View.OnTouchListener {
 
         /**
          * See {@link GestureDetector.OnGestureListener#onLongPress(MotionEvent)}.
-         * <p/>
+         * <p>
          * Note, that long press is disabled by default, use {@link View#setLongClickable(boolean)}
          * to enable it.
          */

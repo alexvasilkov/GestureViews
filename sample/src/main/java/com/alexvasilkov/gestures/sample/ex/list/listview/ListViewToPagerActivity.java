@@ -16,7 +16,7 @@ import com.alexvasilkov.gestures.transition.ViewsTransitionAnimator;
 import com.alexvasilkov.gestures.transition.tracker.SimpleTracker;
 
 /**
- * This example demonstrates images animation from ListView into ViewPager.<br/>
+ * This example demonstrates images animation from ListView into ViewPager.<br>
  * Note, that it is advised to use RecyclerView instead of ListView in most cases.
  * RecyclerView usage is almost the same. See also {@link DemoActivity}.
  */

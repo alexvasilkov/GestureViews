@@ -7,7 +7,7 @@ public interface ClipView {
 
     /**
      * Clips view so only {@code rect} part (modified by view's state) will be drawn.
-     * <p/>
+     * <p>
      * Pass {@code null} to turn clipping off.
      */
     void clipView(@Nullable RectF rect, float rotation);

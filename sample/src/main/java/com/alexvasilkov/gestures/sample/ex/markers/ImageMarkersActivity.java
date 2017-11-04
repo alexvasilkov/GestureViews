@@ -14,7 +14,7 @@ import com.alexvasilkov.gestures.views.GestureImageView;
 
 /**
  * This example demonstrates how to show markers on top of {@link GestureImageView} pinned to
- * particular image points.<br/>
+ * particular image points.<br>
  * See also {@link MarkersOverlay}.
  */
 public class ImageMarkersActivity extends BaseExampleActivity {

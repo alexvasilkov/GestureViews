@@ -12,7 +12,7 @@ import java.util.Queue;
 
 /**
  * {@link PagerAdapter} implementation where each page is a regular view. Supports views recycling.
- * <p/>
+ * <p>
  * Inspired by {@link RecyclerView.Adapter}.
  */
 public abstract class RecyclePagerAdapter<VH extends RecyclePagerAdapter.ViewHolder>

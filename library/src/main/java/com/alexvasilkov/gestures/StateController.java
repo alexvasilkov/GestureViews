@@ -285,7 +285,7 @@ public class StateController {
     }
 
     /**
-     * Calculates area in which {@link State#getX()} & {@link State#getY()} values can change.
+     * Calculates area in which {@link State#getX()} &amp; {@link State#getY()} values can change.
      * Note, that this is different from {@link Settings#setMovementArea(int, int)} which defines
      * part of the viewport in which image can move.
      */

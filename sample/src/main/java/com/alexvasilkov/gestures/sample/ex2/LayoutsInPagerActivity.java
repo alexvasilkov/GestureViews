@@ -11,7 +11,7 @@ import com.alexvasilkov.gestures.sample.ex.utils.Painting;
 import com.alexvasilkov.gestures.views.GestureFrameLayout;
 
 /**
- * Simple example demonstrates usage of {@link GestureFrameLayout} within ViewPager.<br/>
+ * Simple example demonstrates usage of {@link GestureFrameLayout} within ViewPager.<br>
  * Two things worth noting here:
  * <ol>
  * <li/> For each GestureFrameLayout inside ViewPager we need to enable smooth scrolling by calling

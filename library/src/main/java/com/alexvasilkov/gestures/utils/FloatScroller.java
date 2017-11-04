@@ -45,7 +45,7 @@ public class FloatScroller {
     }
 
     /**
-     * Force the finished field to a particular value.<br/>
+     * Force the finished field to a particular value.<br>
      * Unlike {@link #abortAnimation()} the current value isn't set to the final value.
      *
      * @see android.widget.Scroller#forceFinished(boolean)

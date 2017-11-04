@@ -24,12 +24,12 @@ import com.alexvasilkov.gestures.views.GestureImageView;
 
 /**
  * View to draw movement area above {@link GestureImageView}, useful when implementing cropping.
- * <p/>
+ * <p>
  * To use this view you should set corresponding {@link Settings} with
  * {@link #setSettings(Settings)} method. Then whenever movement area is changed
  * (see {@link Settings#setMovementArea(int, int)}) you will need to call {@link #update(boolean)}
  * method to apply changes.
- * <p/>
+ * <p>
  * You may also use rounded corners with {@link #setRounded(boolean)} method, changes between
  * rounded and non-rounded mode can optionally be animated.
  */

@@ -21,7 +21,7 @@ import java.util.List;
  * Extension of {@link ViewsCoordinator} that allows requesting {@link #enter(Object, boolean)} or
  * {@link #exit(boolean)} animations, keeps track of {@link PositionUpdateListener} listeners
  * and provides correct implementation of {@link #isLeaving()}.
- * <p/>
+ * <p>
  * Usage of this class should be similar to {@link ViewPositionAnimator} class.
  */
 public class ViewsTransitionAnimator<ID> extends ViewsCoordinator<ID> {
@@ -70,10 +70,11 @@ public class ViewsTransitionAnimator<ID> extends ViewsCoordinator<ID> {
 
     /**
      * Similar to {@link #enter(Object, boolean) enter(ID, boolean)} but starts entering from no
-     * specific id.<br/>
+     * specific id.<br>
      * <b>Do not use this method if you are actually going to use items ids in {@link FromTracker}
-     * or {@link IntoTracker}.</b><p/>
-     * Can be used if your have single 'from' item with no specific id, like:<br/>
+     * or {@link IntoTracker}.</b>
+     * <p>
+     * Can be used if your have single 'from' item with no specific id, like:<br>
      * {@code GestureTransitions.from(imageView).into(gestureImageView).enterSingle(true)}
      */
     @SuppressWarnings({ "unchecked", "SameParameterValue" })

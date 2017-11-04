@@ -43,7 +43,8 @@ import java.util.List;
 /**
  * Advanced usage example that demonstrates images animation from RecyclerView (grid)
  * into ViewPager. It also shows how to implement image cropping ({@link PhotoCropActivity}) using
- * {@link FinderView} widget, and demonstrates rounded image animation feature.<p/>
+ * {@link FinderView} widget, and demonstrates rounded image animation feature.
+ * <p>
  * For particular use cases see standalone examples.
  */
 public class DemoActivity extends BaseExampleActivity implements PhotoListAdapter.OnPhotoListener {

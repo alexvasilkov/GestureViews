@@ -131,7 +131,7 @@ public class State {
 
     /**
      * Applying state from current matrix.
-     * <p/>
+     * <p>
      * Having matrix:
      * <pre>
      *     | a  b  tx |

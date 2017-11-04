@@ -9,7 +9,7 @@ import com.alexvasilkov.gestures.views.interfaces.GestureView;
 
 /**
  * Various settings needed for {@link GestureController} and for {@link StateController}.
- * <p/>
+ * <p>
  * Required settings are viewport size ({@link #setViewport(int, int)})
  * and image size {@link #setImage(int, int)}
  */
@@ -128,7 +128,7 @@ public class Settings {
 
     /**
      * Setting viewport size.
-     * <p/>
+     * <p>
      * Should only be used when implementing custom {@link GestureView}.
      */
     public Settings setViewport(int width, int height) {
@@ -150,7 +150,7 @@ public class Settings {
 
     /**
      * Setting full image size.
-     * <p/>
+     * <p>
      * Should only be used when implementing custom {@link GestureView}.
      */
     public Settings setImage(int width, int height) {
@@ -161,7 +161,7 @@ public class Settings {
 
     /**
      * Setting max zoom level.
-     * <p/>
+     * <p>
      * Default value is {@link #MAX_ZOOM}.
      */
     public Settings setMaxZoom(float maxZoom) {
@@ -171,8 +171,8 @@ public class Settings {
 
     /**
      * Setting double tap zoom level, should not be greater than {@link #getMaxZoom()}.
-     * Defaults to {@link #getMaxZoom()} if <= 0.
-     * <p/>
+     * Defaults to {@link #getMaxZoom()} if &lt;= 0.
+     * <p>
      * Default value is -1.
      */
     public Settings setDoubleTapZoom(float doubleTapZoom) {
@@ -181,8 +181,9 @@ public class Settings {
     }
 
     /**
-     * Setting overzoom factor. User will be able to "over zoom" up to this factor. Cannot be < 1.
-     * <p/>
+     * Setting overzoom factor. User will be able to "over zoom" up to this factor.
+     * Cannot be &lt; 1.
+     * <p>
      * Default value is {@link #OVERZOOM_FACTOR}.
      */
     public Settings setOverzoomFactor(float factor) {
@@ -195,8 +196,8 @@ public class Settings {
 
     /**
      * Setting overscroll distance in pixels. User will be able to "over scroll"
-     * up to this distance. Cannot be < 0.
-     * <p/>
+     * up to this distance. Cannot be &lt; 0.
+     * <p>
      * Default value is 0.
      */
     public Settings setOverscrollDistance(float distanceX, float distanceY) {
@@ -220,7 +221,7 @@ public class Settings {
     /**
      * If set to true small image will be scaled to fit entire viewport (or entire movement area
      * if it was set) even if this will require zoom level above max zoom level.
-     * <p/>
+     * <p>
      * Default value is false.
      */
     public Settings setFillViewport(boolean isFitViewport) {
@@ -230,7 +231,7 @@ public class Settings {
 
     /**
      * Setting image gravity inside viewport area.
-     * <p/>
+     * <p>
      * Default value is {@link android.view.Gravity#CENTER}.
      */
     public Settings setGravity(int gravity) {
@@ -240,7 +241,7 @@ public class Settings {
 
     /**
      * Setting image fitting method within viewport area.
-     * <p/>
+     * <p>
      * Default value is {@link Settings.Fit#INSIDE}.
      */
     public Settings setFitMethod(@NonNull Fit fitMethod) {
@@ -250,7 +251,7 @@ public class Settings {
 
     /**
      * Sets whether panning is enabled or not.
-     * <p/>
+     * <p>
      * Default value is true.
      */
     public Settings setPanEnabled(boolean enabled) {
@@ -260,7 +261,7 @@ public class Settings {
 
     /**
      * Sets whether zooming is enabled or not.
-     * <p/>
+     * <p>
      * Default value is true.
      */
     public Settings setZoomEnabled(boolean enabled) {
@@ -270,7 +271,7 @@ public class Settings {
 
     /**
      * Sets whether rotation gesture is enabled or not.
-     * <p/>
+     * <p>
      * Default value is false.
      */
     public Settings setRotationEnabled(boolean enabled) {
@@ -281,7 +282,7 @@ public class Settings {
     /**
      * Sets whether image rotation should stick to 90 degrees intervals or can be free.
      * Only applied when {@link #isRestrictBounds()} is true as well.
-     * <p/>
+     * <p>
      * Default value is false.
      */
     public Settings setRestrictRotation(boolean restrict) {
@@ -291,7 +292,7 @@ public class Settings {
 
     /**
      * Sets whether zooming by double tap is enabled or not.
-     * <p/>
+     * <p>
      * Default value is true.
      */
     public Settings setDoubleTapEnabled(boolean enabled) {
@@ -301,7 +302,7 @@ public class Settings {
 
     /**
      * Sets whether to detect and animate exit from gesture views.
-     * <p/>
+     * <p>
      * Default value is true.
      */
     public Settings setExitEnabled(boolean enabled) {
@@ -310,12 +311,12 @@ public class Settings {
     }
 
     /**
-     * Disable all gestures.<br/>
+     * Disable all gestures.<br>
      * Calls to this method are counted, so if you called it N times
      * you should call {@link #enableGestures()} N times to re-enable all gestures.
-     * <p/>
+     * <p>
      * Useful when you need to temporary disable touch gestures during animation or image loading.
-     * <p/>
+     * <p>
      * See also {@link #enableGestures()}
      */
     public Settings disableGestures() {
@@ -324,10 +325,10 @@ public class Settings {
     }
 
     /**
-     * Re-enable all gestures disabled by {@link #disableGestures()} method.<br/>
+     * Re-enable all gestures disabled by {@link #disableGestures()} method.<br>
      * Calls to this method are counted, so if you called {@link #disableGestures()} N times
      * you should call this method N times to re-enable all gestures.
-     * <p/>
+     * <p>
      * See also {@link #disableGestures()}
      */
     public Settings enableGestures() {
@@ -336,12 +337,12 @@ public class Settings {
     }
 
     /**
-     * Disable bounds restrictions.<br/>
+     * Disable bounds restrictions.<br>
      * Calls to this method are counted, so if you called it N times
      * you should call {@link #enableBounds()} N times to re-enable bounds restrictions.
-     * <p/>
+     * <p>
      * Useful when you need to temporary disable bounds restrictions during animation.
-     * <p/>
+     * <p>
      * See also {@link #enableBounds()}
      */
     public Settings disableBounds() {
@@ -350,10 +351,10 @@ public class Settings {
     }
 
     /**
-     * Re-enable bounds restrictions disabled by {@link #disableBounds()} method.<br/>
+     * Re-enable bounds restrictions disabled by {@link #disableBounds()} method.<br>
      * Calls to this method are counted, so if you called {@link #disableBounds()} N times
      * you should call this method N times to re-enable bounds restrictions.
-     * <p/>
+     * <p>
      * See also {@link #disableBounds()}
      */
     public Settings enableBounds() {

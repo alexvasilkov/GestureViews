@@ -13,7 +13,7 @@ import com.alexvasilkov.gestures.utils.MathUtils;
 /**
  * Encapsulates logic related to movement bounds restriction. It will also apply image gravity
  * provided by {@link Settings#getGravity()} method.
- * <p/>
+ * <p>
  * Movement bounds can be represented using regular rectangle most of the time. But if fit method
  * is set to {@link Settings.Fit#OUTSIDE} and image has rotation != 0 then movement bounds will be
  * a rotated rectangle. That will complicate restrictions logic a bit.
@@ -35,7 +35,7 @@ public class MovementBounds {
 
 
     /**
-     * Calculating bounds for {@link State#x} & {@link State#y} values to keep image within
+     * Calculating bounds for {@link State#x} &amp; {@link State#y} values to keep image within
      * viewport and taking image gravity into account (see {@link Settings#setGravity(int)}).
      */
     public void setup(State state, Settings settings) {
@@ -132,7 +132,7 @@ public class MovementBounds {
     }
 
     /**
-     * Restricts x & y coordinates to current bounds
+     * Restricts x &amp; y coordinates to current bounds
      * (as calculated in {@link #setup(State, Settings)}).
      */
     public void restrict(float x, float y, float extraX, float extraY, PointF out) {
