@@ -150,7 +150,7 @@ public class GestureImageView extends ImageView
      */
     @Nullable
     public Bitmap crop() {
-        return CropUtils.crop(getDrawable(), controller.getState(), controller.getSettings());
+        return CropUtils.crop(getDrawable(), controller);
     }
 
     @SuppressLint("ClickableViewAccessibility") // performClick() will be called by controller
