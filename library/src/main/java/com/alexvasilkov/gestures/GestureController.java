@@ -1,5 +1,6 @@
 package com.alexvasilkov.gestures;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.PointF;
 import android.graphics.RectF;
@@ -101,6 +102,7 @@ public class GestureController implements View.OnTouchListener {
     private final State stateStart = new State();
     private final State stateEnd = new State();
 
+    private final View targetView;
     private final Settings settings;
     private final State state = new State();
     private final State prevState = new State();
@@ -110,13 +112,13 @@ public class GestureController implements View.OnTouchListener {
     public GestureController(@NonNull View view) {
         final Context context = view.getContext();
 
+        targetView = view;
         settings = new Settings();
         stateController = new StateController(settings);
 
         animationEngine = new LocalAnimationEngine(view);
         InternalGesturesListener internalListener = new InternalGesturesListener();
         gestureDetector = new GestureDetector(context, internalListener);
-        gestureDetector.setIsLongpressEnabled(false);
         scaleDetector = new ScaleGestureDetectorFixed(context, internalListener);
         rotateDetector = new RotationGestureDetector(context, internalListener);
 
@@ -171,13 +173,14 @@ public class GestureController implements View.OnTouchListener {
     }
 
     /**
-     * Sets whether long press is enabled or not. Long press is disabled by default.
-     *
-     * @see GestureController.OnGestureListener#onLongPress(android.view.MotionEvent)
+     * @deprecated In order to enable long clicks you should either set
+     * {@link View#setOnLongClickListener(View.OnLongClickListener)} or use
+     * {@link View#setLongClickable(boolean)}.
      */
     @SuppressWarnings({ "unused", "WeakerAccess" }) // Public API
+    @Deprecated
     public void setLongPressEnabled(boolean enabled) {
-        gestureDetector.setIsLongpressEnabled(enabled);
+        targetView.setLongClickable(true);
     }
 
     /**
@@ -405,10 +408,13 @@ public class GestureController implements View.OnTouchListener {
     //  Gestures handling
     // -------------------
 
+    @SuppressLint("ClickableViewAccessibility") // performClick is called in gestures callbacks
     @Override
     public boolean onTouch(@NonNull View view, @NonNull MotionEvent event) {
         MotionEvent viewportEvent = MotionEvent.obtain(event);
         viewportEvent.offsetLocation(-view.getPaddingLeft(), -view.getPaddingTop());
+
+        gestureDetector.setIsLongpressEnabled(view.isLongClickable());
 
         boolean result = gestureDetector.onTouchEvent(viewportEvent);
         result |= scaleDetector.onTouchEvent(viewportEvent);
@@ -524,11 +530,17 @@ public class GestureController implements View.OnTouchListener {
 
     @SuppressWarnings("WeakerAccess") // Public API (can be overridden)
     protected boolean onSingleTapUp(@NonNull MotionEvent event) {
+        // If double tap is not enabled then it should be safe to propagate click event from here
+        if (!settings.isDoubleTapEnabled()) {
+            targetView.performClick();
+        }
         return gestureListener != null && gestureListener.onSingleTapUp(event);
     }
 
     @SuppressWarnings("WeakerAccess") // Public API (can be overridden)
     protected void onLongPress(@NonNull MotionEvent event) {
+        targetView.performLongClick();
+
         if (gestureListener != null) {
             gestureListener.onLongPress(event);
         }
@@ -631,6 +643,10 @@ public class GestureController implements View.OnTouchListener {
 
     @SuppressWarnings("WeakerAccess") // Public API (can be overridden)
     protected boolean onSingleTapConfirmed(MotionEvent event) {
+        // If double tap is enabled we should propagate click only if we aren't in a double tap now
+        if (settings.isDoubleTapEnabled()) {
+            targetView.performClick();
+        }
         return gestureListener != null && gestureListener.onSingleTapConfirmed(event);
     }
 
@@ -855,7 +871,7 @@ public class GestureController implements View.OnTouchListener {
         /**
          * See {@link GestureDetector.OnGestureListener#onLongPress(MotionEvent)}.
          * <p/>
-         * Note, that long press is disabled by default, use {@link #setLongPressEnabled(boolean)}
+         * Note, that long press is disabled by default, use {@link View#setLongClickable(boolean)}
          * to enable it.
          */
         void onLongPress(@NonNull MotionEvent event);

@@ -2,12 +2,10 @@ package com.alexvasilkov.gestures.sample.demo.adapter;
 
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.alexvasilkov.android.commons.ui.Views;
-import com.alexvasilkov.gestures.GestureController.SimpleOnGestureListener;
 import com.alexvasilkov.gestures.animation.ViewPositionAnimator.PositionUpdateListener;
 import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
 import com.alexvasilkov.gestures.sample.R;
@@ -29,13 +27,12 @@ public class PhotoPagerAdapter extends RecyclePagerAdapter<PhotoPagerAdapter.Vie
 
     private boolean activated;
 
-    private SimpleOnGestureListener gesturesListener = new SimpleOnGestureListener() {
+    private View.OnClickListener internalClickListener = new View.OnClickListener() {
         @Override
-        public boolean onSingleTapConfirmed(@NonNull MotionEvent event) {
+        public void onClick(View view) {
             if (clickListener != null) {
                 clickListener.onFullImageClick();
             }
-            return true;
         }
     };
 
@@ -86,7 +83,7 @@ public class PhotoPagerAdapter extends RecyclePagerAdapter<PhotoPagerAdapter.Vie
                 .setMaxZoom(10f)
                 .setDoubleTapZoom(3f);
 
-        holder.image.getController().setOnGesturesListener(gesturesListener);
+        holder.image.setOnClickListener(internalClickListener);
 
         if (setupListener != null) {
             setupListener.onSetupGestureView(holder.image);

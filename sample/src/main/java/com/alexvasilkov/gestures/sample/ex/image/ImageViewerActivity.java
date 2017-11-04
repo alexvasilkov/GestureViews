@@ -1,11 +1,9 @@
 package com.alexvasilkov.gestures.sample.ex.image;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Toast;
 
-import com.alexvasilkov.gestures.GestureController.SimpleOnGestureListener;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.base.BaseExampleActivity;
 import com.alexvasilkov.gestures.views.GestureImageView;
@@ -31,12 +29,18 @@ public class ImageViewerActivity extends BaseExampleActivity {
                 .setMaxZoom(6f)
                 .setDoubleTapZoom(3f);
 
-        // Setting basic gestures listener
-        imageViewer.getController().setOnGesturesListener(new SimpleOnGestureListener() {
+        imageViewer.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onSingleTapConfirmed(@NonNull MotionEvent event) {
-                Toast.makeText(ImageViewerActivity.this, "Single tap", Toast.LENGTH_SHORT).show();
-                return false;
+            public void onClick(View v) {
+                Toast.makeText(ImageViewerActivity.this, "Single click", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        imageViewer.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Toast.makeText(ImageViewerActivity.this, "Long click", Toast.LENGTH_SHORT).show();
+                return true;
             }
         });
     }
