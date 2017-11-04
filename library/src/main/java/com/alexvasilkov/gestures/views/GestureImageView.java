@@ -1,5 +1,6 @@
 package com.alexvasilkov.gestures.views;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -151,6 +152,7 @@ public class GestureImageView extends ImageView
         return CropUtils.crop(getDrawable(), controller.getState(), controller.getSettings());
     }
 
+    @SuppressLint("ClickableViewAccessibility") // performClick() will be called by controller
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
         return controller.onTouch(this, event);

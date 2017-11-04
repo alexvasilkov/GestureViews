@@ -90,6 +90,7 @@ public class CircleGestureImageView extends GestureImageView {
         setup();
     }
 
+    @SuppressWarnings("unused") // Public API
     public void setCircle(boolean isCircle) {
         this.isCircle = isCircle;
         setup();

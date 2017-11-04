@@ -1,5 +1,6 @@
 package com.alexvasilkov.gestures.sample.ex.custom;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.AppCompatTextView;
@@ -57,6 +58,7 @@ public class GestureTextView extends AppCompatTextView implements GestureView {
         return controller;
     }
 
+    @SuppressLint("ClickableViewAccessibility") // performClick will be called by controller
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
         return controller.onTouch(this, event);

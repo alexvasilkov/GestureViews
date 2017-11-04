@@ -1,5 +1,6 @@
 package com.alexvasilkov.gestures.views;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
@@ -93,7 +94,7 @@ public class GestureFrameLayout extends FrameLayout implements GestureView, Anim
     public boolean dispatchTouchEvent(@NonNull MotionEvent event) {
         currentMotionEvent = event;
         // We should remap given event back to original coordinates
-        // so children can correctly respond to it
+        // so that children can correctly respond to it
         MotionEvent invertedEvent = applyMatrix(event, matrixInverse);
         try {
             return super.dispatchTouchEvent(invertedEvent);
@@ -102,6 +103,8 @@ public class GestureFrameLayout extends FrameLayout implements GestureView, Anim
         }
     }
 
+    // It seems to be fine to use this method instead of suggested onDescendantInvalidated(...)
+    @SuppressWarnings("deprecation")
     @Override
     public ViewParent invalidateChildInParent(int[] location, @NonNull Rect dirty) {
         // Invalidating correct rectangle
@@ -109,6 +112,7 @@ public class GestureFrameLayout extends FrameLayout implements GestureView, Anim
         return super.invalidateChildInParent(location, dirty);
     }
 
+    @SuppressLint("ClickableViewAccessibility") // performClick() will be called by controller
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
         // Passing original event to controller

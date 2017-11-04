@@ -41,7 +41,7 @@ public class ViewsTransitionAnimator<ID> extends ViewsCoordinator<ID> {
     /**
      * @deprecated Use {@link GestureTransitions} instead.
      */
-    @SuppressWarnings("WeakerAccess") // Public API
+    @SuppressWarnings({ "WeakerAccess", "DeprecatedIsStillUsed" }) // Public temporary API
     @Deprecated
     public ViewsTransitionAnimator() {
         addPositionUpdateListener(new PositionUpdateListener() {
@@ -76,7 +76,7 @@ public class ViewsTransitionAnimator<ID> extends ViewsCoordinator<ID> {
      * Can be used if your have single 'from' item with no specific id, like:<br/>
      * {@code GestureTransitions.from(imageView).into(gestureImageView).enterSingle(true)}
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "SameParameterValue" })
     public void enterSingle(boolean withAnimation) {
         // Passing 'NONE' Object instead of ID. Will fail if ID will be actually used.
         enter((ID) NONE, withAnimation);

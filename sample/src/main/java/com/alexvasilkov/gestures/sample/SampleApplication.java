@@ -14,8 +14,8 @@ public class SampleApplication extends Application {
 
         Events.register(FlickrApi.class);
 
-        GestureDebug.setDebugFps(true);
-        GestureDebug.setDebugAnimator(true);
+        GestureDebug.setDebugFps(BuildConfig.DEBUG);
+        GestureDebug.setDebugAnimator(BuildConfig.DEBUG);
     }
 
 }

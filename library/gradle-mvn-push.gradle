@@ -18,7 +18,7 @@ apply plugin: 'maven'
 apply plugin: 'signing'
 
 def isReleaseBuild() {
-    return VERSION_NAME.contains("SNAPSHOT") == false
+    return !VERSION_NAME.contains("SNAPSHOT")
 }
 
 def getReleaseRepUrl() {
@@ -81,14 +81,6 @@ afterEvaluate { project ->
                             id POM_DEVELOPER_ID
                             name POM_DEVELOPER_NAME
                         }
-                    }
-                }
-
-                // Excluding dependency on support library
-                pom.whenConfigured { pom ->
-                    pom.dependencies = pom.dependencies.findAll { dep ->
-                        !dep.artifactId.startsWith('support-v4') &&
-                                !dep.artifactId.startsWith('recyclerview-v7')
                     }
                 }
             }

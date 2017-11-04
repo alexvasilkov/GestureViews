@@ -40,18 +40,18 @@ android {
 }
 
 dependencies {
-    compile project(':library')
+    implementation project(':library')
 
-    compile 'com.android.support:support-v4:26.1.0'
-    compile 'com.android.support:appcompat-v7:26.1.0'
-    compile 'com.android.support:recyclerview-v7:26.1.0'
-    compile 'com.android.support:design:26.1.0'
+    implementation 'com.android.support:support-v4:26.1.0'
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support:recyclerview-v7:26.1.0'
+    implementation 'com.android.support:design:26.1.0'
 
-    compile 'com.github.bumptech.glide:glide:4.2.0'
+    implementation 'com.github.bumptech.glide:glide:4.2.0'
 
-    compile 'com.alexvasilkov:android-commons:2.0.2'
-    compile 'com.alexvasilkov:events:1.0.0'
+    implementation 'com.alexvasilkov:android-commons:2.0.2'
+    implementation 'com.alexvasilkov:events:1.0.0'
 
-    compile 'com.googlecode.flickrj-android:flickrj-android:2.1.0'
-    compile 'org.slf4j:slf4j-android:1.7.7' // Required by Flickr library
+    implementation 'com.googlecode.flickrj-android:flickrj-android:2.1.0'
+    implementation 'org.slf4j:slf4j-android:1.7.7' // Required by Flickr library
 }

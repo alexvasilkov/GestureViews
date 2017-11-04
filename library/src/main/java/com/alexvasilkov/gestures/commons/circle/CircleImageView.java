@@ -91,6 +91,7 @@ public class CircleImageView extends ImageView {
         setup();
     }
 
+    @SuppressWarnings("unused") // Public API
     public void setCircle(boolean isCircle) {
         this.isCircle = isCircle;
         setup();

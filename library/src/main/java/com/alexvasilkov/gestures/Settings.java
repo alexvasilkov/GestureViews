@@ -13,7 +13,7 @@ import com.alexvasilkov.gestures.views.interfaces.GestureView;
  * Required settings are viewport size ({@link #setViewport(int, int)})
  * and image size {@link #setImage(int, int)}
  */
-@SuppressWarnings("WeakerAccess") // Public API (fields and methods)
+@SuppressWarnings({ "WeakerAccess", "UnusedReturnValue", "SameParameterValue" }) // Public API
 public class Settings {
 
     public static final float MAX_ZOOM = 2f;

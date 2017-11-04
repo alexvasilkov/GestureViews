@@ -8,6 +8,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -165,13 +166,18 @@ public class FinderView extends View {
         update(false);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     protected void onDraw(Canvas canvas) {
         float rx = rounding * 0.5f * rect.width();
         float ry = rounding * 0.5f * rect.height();
 
         // Punching hole in background color requires offscreen drawing
-        canvas.saveLayer(0, 0, canvas.getWidth(), canvas.getHeight(), null, 0);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            canvas.saveLayer(0, 0, canvas.getWidth(), canvas.getHeight(), null);
+        } else {
+            canvas.saveLayer(0, 0, canvas.getWidth(), canvas.getHeight(), null, 0);
+        }
         canvas.drawColor(backColor);
         canvas.drawRoundRect(rect, rx, ry, paintClear);
         canvas.restore();

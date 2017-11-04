@@ -106,6 +106,7 @@ public class StateController {
      *
      * @return End state to animate changes or null if no changes are required.
      */
+    @SuppressWarnings("SameParameterValue") // Using same method params as in restrictStateBounds
     @Nullable
     State restrictStateBoundsCopy(State state, State prevState, float pivotX, float pivotY,
             boolean allowOverscroll, boolean allowOverzoom, boolean restrictRotation) {

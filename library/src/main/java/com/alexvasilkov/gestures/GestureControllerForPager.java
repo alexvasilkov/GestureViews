@@ -1,5 +1,6 @@
 package com.alexvasilkov.gestures;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.graphics.Matrix;
 import android.graphics.RectF;
@@ -23,7 +24,6 @@ public class GestureControllerForPager extends GestureController {
     private static final float OVERSCROLL_THRESHOLD_FACTOR = 4f;
 
     // Temporary objects
-    private static final int[] tmpLocation = new int[2];
     private static final Matrix tmpMatrix = new Matrix();
     private static final RectF tmpRectF = new RectF();
 
@@ -37,6 +37,7 @@ public class GestureControllerForPager extends GestureController {
     private static final View.OnTouchListener PAGER_TOUCH_LISTENER = new View.OnTouchListener() {
         private boolean isTouchInProgress;
 
+        @SuppressLint("ClickableViewAccessibility") // Not needed for ViewPager
         @Override
         public boolean onTouch(View view, @NonNull MotionEvent event) {
             // ViewPager will steal touch events during settling regardless of
@@ -82,12 +83,11 @@ public class GestureControllerForPager extends GestureController {
      */
     public void enableScrollInViewPager(ViewPager pager) {
         viewPager = pager;
+        //noinspection all - ViewPager is not clickable, it is safe to set touch listener
         pager.setOnTouchListener(PAGER_TOUCH_LISTENER);
 
         // Disabling motion event splitting
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            pager.setMotionEventSplittingEnabled(false);
-        }
+        pager.setMotionEventSplittingEnabled(false);
     }
 
     /**
@@ -97,6 +97,7 @@ public class GestureControllerForPager extends GestureController {
         isViewPagerDisabled = disable;
     }
 
+    @SuppressLint("ClickableViewAccessibility") // performClick() will be called in super class
     @Override
     public boolean onTouch(@NonNull View view, @NonNull MotionEvent event) {
         if (viewPager == null) {
@@ -394,16 +395,9 @@ public class GestureControllerForPager extends GestureController {
     }
 
     private static void transformToPagerEvent(MotionEvent event, View view, ViewPager pager) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            tmpMatrix.reset();
-            transformMatrixToPager(tmpMatrix, view, pager);
-            event.transform(tmpMatrix);
-        } else {
-            view.getLocationOnScreen(tmpLocation);
-            event.offsetLocation(tmpLocation[0], tmpLocation[1]);
-            pager.getLocationOnScreen(tmpLocation);
-            event.offsetLocation(-tmpLocation[0], -tmpLocation[1]);
-        }
+        tmpMatrix.reset();
+        transformMatrixToPager(tmpMatrix, view, pager);
+        event.transform(tmpMatrix);
     }
 
     /**

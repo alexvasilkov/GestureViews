@@ -55,6 +55,7 @@ public class ViewsCoordinator<ID> {
         toListener = listener;
     }
 
+    @SuppressWarnings("unused") // Public API
     public void setReadyListener(@Nullable OnViewsReadyListener<ID> listener) {
         readyListener = listener;
     }
