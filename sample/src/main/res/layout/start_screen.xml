@@ -38,7 +38,7 @@
     <Button
         android:id="@+id/start_demo"
         style="@style/App.Button.Accent"
-        android:layout_width="260dp"
+        android:layout_width="240dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="32dp"
         android:layout_marginRight="32dp"
@@ -47,7 +47,7 @@
 
     <Button
         android:id="@+id/start_examples"
-        android:layout_width="200dp"
+        android:layout_width="240dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="32dp"
         android:layout_marginRight="32dp"
