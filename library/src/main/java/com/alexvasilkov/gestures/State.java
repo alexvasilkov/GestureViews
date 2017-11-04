@@ -31,7 +31,7 @@ public class State {
     }
 
     /**
-     * Rotation in degrees within the range [-180..180].
+     * @return Rotation in degrees within the range [-180..180].
      */
     public float getRotation() {
         return rotation;
@@ -47,6 +47,8 @@ public class State {
 
     /**
      * Applying state to provided matrix. Matrix will contain translation, scale and rotation.
+     *
+     * @param matrix Target matrix
      */
     public void get(Matrix matrix) {
         matrix.set(this.matrix);
@@ -109,6 +111,8 @@ public class State {
 
     /**
      * Applying state from given matrix. Matrix should contain correct translation/scale/rotation.
+     *
+     * @param matrix Source matrix
      */
     public void set(Matrix matrix) {
         this.matrix.set(matrix);
@@ -144,6 +148,9 @@ public class State {
      * rotation = atan(c/d) = atan(-b/a)
      * </pre>
      * See <a href="http://stackoverflow.com/questions/4361242">here</a>.
+     *
+     * @param updateZoom Whether to extract zoom from matrix
+     * @param updateRotation Whether to extract rotation from matrix
      */
     private void updateFromMatrix(boolean updateZoom, boolean updateRotation) {
         matrix.getValues(matrixValues);
@@ -188,6 +195,10 @@ public class State {
 
     /**
      * Compares two float values, allowing small difference (see {@link #EPSILON}).
+     *
+     * @param v1 First value
+     * @param v2 Second value
+     * @return True if both values are close enough to be considered as equal
      */
     @SuppressWarnings("checkstyle:overloadmethodsdeclarationorder")
     public static boolean equals(float v1, float v2) {
@@ -196,6 +207,11 @@ public class State {
 
     /**
      * Compares two float values, allowing small difference (see {@link #EPSILON}).
+     *
+     * @param v1 First value
+     * @param v2 Second value
+     * @return Positive int if first value is greater than second, negative int if second value
+     * is greater than first or 0 if both values are close enough to be considered as equal
      */
     public static int compare(float v1, float v2) {
         return v1 > v2 + EPSILON ? 1 : v1 < v2 - EPSILON ? -1 : 0;

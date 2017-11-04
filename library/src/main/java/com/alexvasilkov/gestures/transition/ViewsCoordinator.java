@@ -123,6 +123,8 @@ public class ViewsCoordinator<ID> {
     /**
      * Notifies that 'from' view is ready even if there is no such view. Can be used in cases when
      * we know that there will be no 'from' view, but animation should be started anyway.
+     *
+     * @param id Item ID for related 'to' view
      */
     public void setFromNone(@NonNull ID id) {
         setFromInternal(id, null, null);
@@ -193,6 +195,7 @@ public class ViewsCoordinator<ID> {
      * <p>
      * Note, that this method will be called each time 'from' or 'to' views are changed.
      *
+     * @param id Item ID used for views lookup
      * @see #getFromView()
      * @see #getFromPos()
      * @see #getToView()
@@ -227,6 +230,8 @@ public class ViewsCoordinator<ID> {
          * Note, that it may not be possible to provide view right now (i.e. because
          * we should scroll source view to reveal correct view), but it should be provided
          * as soon as it's ready.
+         *
+         * @param id Item ID for views lookup
          */
         void onRequestView(@NonNull ID id);
     }
@@ -236,6 +241,8 @@ public class ViewsCoordinator<ID> {
          * Will be called when both 'from' and 'to' views for given item index are ready.
          * <p>
          * Note, that this method will be called each time 'from' or 'to' views are changed.
+         *
+         * @param id Item ID used for views lookup
          */
         void onViewsReady(@NonNull ID id);
     }

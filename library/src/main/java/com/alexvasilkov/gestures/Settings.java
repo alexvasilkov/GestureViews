@@ -130,6 +130,10 @@ public class Settings {
      * Setting viewport size.
      * <p>
      * Should only be used when implementing custom {@link GestureView}.
+     *
+     * @param width Viewport width
+     * @param height Viewport height
+     * @return Current settings object for calls chaining
      */
     public Settings setViewport(int width, int height) {
         viewportW = width;
@@ -140,6 +144,10 @@ public class Settings {
     /**
      * Setting movement area size. Viewport area will be used instead if no movement area is
      * specified.
+     *
+     * @param width Movement area width
+     * @param height Movement area height
+     * @return Current settings object for calls chaining
      */
     public Settings setMovementArea(int width, int height) {
         isMovementAreaSpecified = true;
@@ -152,6 +160,10 @@ public class Settings {
      * Setting full image size.
      * <p>
      * Should only be used when implementing custom {@link GestureView}.
+     *
+     * @param width Image width
+     * @param height Image height
+     * @return Current settings object for calls chaining
      */
     public Settings setImage(int width, int height) {
         imageW = width;
@@ -163,6 +175,9 @@ public class Settings {
      * Setting max zoom level.
      * <p>
      * Default value is {@link #MAX_ZOOM}.
+     *
+     * @param maxZoom Max zoom level
+     * @return Current settings object for calls chaining
      */
     public Settings setMaxZoom(float maxZoom) {
         this.maxZoom = maxZoom;
@@ -174,6 +189,9 @@ public class Settings {
      * Defaults to {@link #getMaxZoom()} if &lt;= 0.
      * <p>
      * Default value is -1.
+     *
+     * @param doubleTapZoom Double tap zoom level
+     * @return Current settings object for calls chaining
      */
     public Settings setDoubleTapZoom(float doubleTapZoom) {
         this.doubleTapZoom = doubleTapZoom;
@@ -185,6 +203,9 @@ public class Settings {
      * Cannot be &lt; 1.
      * <p>
      * Default value is {@link #OVERZOOM_FACTOR}.
+     *
+     * @param factor Overzoom factor
+     * @return Current settings object for calls chaining
      */
     public Settings setOverzoomFactor(float factor) {
         if (factor < 1f) {
@@ -199,6 +220,10 @@ public class Settings {
      * up to this distance. Cannot be &lt; 0.
      * <p>
      * Default value is 0.
+     *
+     * @param distanceX Horizontal overscroll distance in pixels
+     * @param distanceY Vertical overscroll distance in pixels
+     * @return Current settings object for calls chaining
      */
     public Settings setOverscrollDistance(float distanceX, float distanceY) {
         if (distanceX < 0f || distanceY < 0f) {
@@ -211,6 +236,11 @@ public class Settings {
 
     /**
      * Same as {@link #setOverscrollDistance(float, float)} but accepts distance in DP.
+     *
+     * @param context Context
+     * @param distanceXDp Horizontal overscroll distance in dp
+     * @param distanceYDp Vertical overscroll distance in dp
+     * @return Current settings object for calls chaining
      */
     public Settings setOverscrollDistance(Context context, float distanceXDp, float distanceYDp) {
         return setOverscrollDistance(
@@ -223,6 +253,9 @@ public class Settings {
      * if it was set) even if this will require zoom level above max zoom level.
      * <p>
      * Default value is false.
+     *
+     * @param isFitViewport Whether image should fit viewport or not
+     * @return Current settings object for calls chaining
      */
     public Settings setFillViewport(boolean isFitViewport) {
         this.isFillViewport = isFitViewport;
@@ -233,6 +266,9 @@ public class Settings {
      * Setting image gravity inside viewport area.
      * <p>
      * Default value is {@link android.view.Gravity#CENTER}.
+     *
+     * @param gravity Image gravity, one of {@link android.view.Gravity} constants
+     * @return Current settings object for calls chaining
      */
     public Settings setGravity(int gravity) {
         this.gravity = gravity;
@@ -243,6 +279,9 @@ public class Settings {
      * Setting image fitting method within viewport area.
      * <p>
      * Default value is {@link Settings.Fit#INSIDE}.
+     *
+     * @param fitMethod Fit method
+     * @return Current settings object for calls chaining
      */
     public Settings setFitMethod(@NonNull Fit fitMethod) {
         this.fitMethod = fitMethod;
@@ -253,6 +292,9 @@ public class Settings {
      * Sets whether panning is enabled or not.
      * <p>
      * Default value is true.
+     *
+     * @param enabled Whether panning should be enabled or not
+     * @return Current settings object for calls chaining
      */
     public Settings setPanEnabled(boolean enabled) {
         isPanEnabled = enabled;
@@ -263,6 +305,9 @@ public class Settings {
      * Sets whether zooming is enabled or not.
      * <p>
      * Default value is true.
+     *
+     * @param enabled Whether zooming should be enabled or not
+     * @return Current settings object for calls chaining
      */
     public Settings setZoomEnabled(boolean enabled) {
         isZoomEnabled = enabled;
@@ -273,6 +318,9 @@ public class Settings {
      * Sets whether rotation gesture is enabled or not.
      * <p>
      * Default value is false.
+     *
+     * @param enabled Whether rotation should be enabled or not
+     * @return Current settings object for calls chaining
      */
     public Settings setRotationEnabled(boolean enabled) {
         isRotationEnabled = enabled;
@@ -284,6 +332,9 @@ public class Settings {
      * Only applied when {@link #isRestrictBounds()} is true as well.
      * <p>
      * Default value is false.
+     *
+     * @param restrict Whether rotation should be restricted or not
+     * @return Current settings object for calls chaining
      */
     public Settings setRestrictRotation(boolean restrict) {
         isRestrictRotation = restrict;
@@ -294,6 +345,9 @@ public class Settings {
      * Sets whether zooming by double tap is enabled or not.
      * <p>
      * Default value is true.
+     *
+     * @param enabled Whether double tap should be enabled or not
+     * @return Current settings object for calls chaining
      */
     public Settings setDoubleTapEnabled(boolean enabled) {
         isDoubleTapEnabled = enabled;
@@ -304,6 +358,9 @@ public class Settings {
      * Sets whether to detect and animate exit from gesture views.
      * <p>
      * Default value is true.
+     *
+     * @param enabled Whether exit gesture should be enabled or not
+     * @return Current settings object for calls chaining
      */
     public Settings setExitEnabled(boolean enabled) {
         isExitEnabled = enabled;
@@ -318,6 +375,8 @@ public class Settings {
      * Useful when you need to temporary disable touch gestures during animation or image loading.
      * <p>
      * See also {@link #enableGestures()}
+     *
+     * @return Current settings object for calls chaining
      */
     public Settings disableGestures() {
         gesturesDisableCount++;
@@ -330,6 +389,8 @@ public class Settings {
      * you should call this method N times to re-enable all gestures.
      * <p>
      * See also {@link #disableGestures()}
+     *
+     * @return Current settings object for calls chaining
      */
     public Settings enableGestures() {
         gesturesDisableCount--;
@@ -344,6 +405,8 @@ public class Settings {
      * Useful when you need to temporary disable bounds restrictions during animation.
      * <p>
      * See also {@link #enableBounds()}
+     *
+     * @return Current settings object for calls chaining
      */
     public Settings disableBounds() {
         boundsDisableCount++;
@@ -356,6 +419,8 @@ public class Settings {
      * you should call this method N times to re-enable bounds restrictions.
      * <p>
      * See also {@link #disableBounds()}
+     *
+     * @return Current settings object for calls chaining
      */
     public Settings enableBounds() {
         boundsDisableCount--;
@@ -363,6 +428,8 @@ public class Settings {
     }
 
     /**
+     * @param restrict Whether image bounds should be restricted or not
+     * @return Current settings object for calls chaining
      * @deprecated Use {@link #disableBounds()} and {@link #enableBounds()} methods instead.
      */
     @SuppressWarnings("unused") // Public API
@@ -377,6 +444,9 @@ public class Settings {
 
     /**
      * Duration of animations.
+     *
+     * @param duration Animation duration in milliseconds
+     * @return Current settings object for calls chaining
      */
     public Settings setAnimationsDuration(long duration) {
         if (duration < 0L) {
@@ -484,7 +554,7 @@ public class Settings {
 
 
     /**
-     * Whether at least one of pan, zoom, rotation or double tap are enabled or not.
+     * @return Whether at least one of pan, zoom, rotation or double tap are enabled or not
      */
     public boolean isEnabled() {
         return isGesturesEnabled()

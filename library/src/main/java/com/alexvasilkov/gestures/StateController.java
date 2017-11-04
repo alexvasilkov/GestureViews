@@ -46,6 +46,7 @@ public class StateController {
      * when image and viewport sizes are known, otherwise reset will occur sometime in the future
      * when {@link #updateState(State)} method will be called.
      *
+     * @param state State to be reset
      * @return {@code true} if reset was completed or {@code false} if reset is scheduled for future
      */
     boolean resetState(State state) {
@@ -56,6 +57,7 @@ public class StateController {
     /**
      * Updates state (or resets state if reset was scheduled, see {@link #resetState(State)}).
      *
+     * @param state State to be updated
      * @return {@code true} if state was reset to initial state or {@code false} if state was
      * updated.
      */
@@ -85,6 +87,9 @@ public class StateController {
     /**
      * Maximizes zoom if it closer to min zoom or minimizes it if it closer to max zoom.
      *
+     * @param state Current state
+     * @param pivotX Pivot's X coordinate
+     * @param pivotY Pivot's Y coordinate
      * @return End state for toggle animation.
      */
     State toggleMinMaxZoom(State state, float pivotX, float pivotY) {
@@ -104,6 +109,13 @@ public class StateController {
     /**
      * Restricts state's translation and zoom bounds.
      *
+     * @param state State to be restricted
+     * @param prevState Previous state to calculate overscroll and overzoom (optional)
+     * @param pivotX Pivot's X coordinate
+     * @param pivotY Pivot's Y coordinate
+     * @param allowOverscroll Whether overscroll is allowed
+     * @param allowOverzoom Whether overzoom is allowed
+     * @param restrictRotation Whether rotation should be restricted to a nearest N*90 angle
      * @return End state to animate changes or null if no changes are required.
      */
     @SuppressWarnings("SameParameterValue") // Using same method params as in restrictStateBounds
@@ -121,6 +133,13 @@ public class StateController {
      * {@code allowOverscroll (allowOverzoom)} parameter is true then resilience
      * will be applied to translation (zoom) changes if they are out of bounds.
      *
+     * @param state State to be restricted
+     * @param prevState Previous state to calculate overscroll and overzoom (optional)
+     * @param pivotX Pivot's X coordinate
+     * @param pivotY Pivot's Y coordinate
+     * @param allowOverscroll Whether overscroll is allowed
+     * @param allowOverzoom Whether overzoom is allowed
+     * @param restrictRotation Whether rotation should be restricted to a nearest N*90 angle
      * @return true if state was changed, false otherwise.
      */
     boolean restrictStateBounds(State state, State prevState, float pivotX, float pivotY,
@@ -269,6 +288,7 @@ public class StateController {
 
 
     /**
+     * @param state Current state
      * @return Min zoom level as it's used by state controller.
      */
     public float getMinZoom(State state) {
@@ -276,6 +296,7 @@ public class StateController {
     }
 
     /**
+     * @param state Current state
      * @return Max zoom level as it's used by state controller.
      * Note, that it may be different from {@link Settings#getMaxZoom()}.
      */
@@ -288,6 +309,9 @@ public class StateController {
      * Calculates area in which {@link State#getX()} &amp; {@link State#getY()} values can change.
      * Note, that this is different from {@link Settings#setMovementArea(int, int)} which defines
      * part of the viewport in which image can move.
+     *
+     * @param state Current state
+     * @param out Output movement area rectangle
      */
     public void getMovementArea(State state, RectF out) {
         getMovementBounds(state).getExternalBounds(out);
@@ -299,6 +323,7 @@ public class StateController {
      */
 
     /**
+     * @return Min zoom level
      * @deprecated Use {@link #getMinZoom(State)} instead.
      */
     @SuppressWarnings("unused") // Public API
@@ -308,6 +333,7 @@ public class StateController {
     }
 
     /**
+     * @return Max zoom level
      * @deprecated Use {@link #getMaxZoom(State)} instead.
      */
     @SuppressWarnings("unused") // Public API
@@ -317,6 +343,8 @@ public class StateController {
     }
 
     /**
+     * @param out Output movement area rectangle
+     * @param state Current state
      * @deprecated User {@link #getMovementArea(State, RectF)} instead.
      */
     @SuppressWarnings("unused") // Public API
@@ -326,6 +354,10 @@ public class StateController {
     }
 
     /**
+     * @param value Value to be restricted
+     * @param minValue Min value
+     * @param maxValue Max value
+     * @return Restricted value
      * @deprecated Use {@link MathUtils#restrict(float, float, float)}.
      */
     @SuppressWarnings("unused") // Public API
@@ -335,6 +367,10 @@ public class StateController {
     }
 
     /**
+     * @param out Interpolated state (output)
+     * @param start Start state
+     * @param end End state
+     * @param factor Factor
      * @deprecated Use {@link MathUtils#interpolate(State, State, State, float)}.
      */
     @SuppressWarnings("unused") // Public API
@@ -344,6 +380,14 @@ public class StateController {
     }
 
     /**
+     * @param out Interpolated state (output)
+     * @param start Start state
+     * @param startPivotX Pivot point's X coordinate in start state coordinates
+     * @param startPivotY Pivot point's Y coordinate in start state coordinates
+     * @param end End state
+     * @param endPivotX Pivot point's X coordinate in end state coordinates
+     * @param endPivotY Pivot point's Y coordinate in end state coordinates
+     * @param factor Factor
      * @deprecated Use
      * {@link MathUtils#interpolate(State, State, float, float, State, float, float, float)}.
      */
@@ -356,6 +400,10 @@ public class StateController {
     }
 
     /**
+     * @param start Start value
+     * @param end End value
+     * @param factor Factor
+     * @return Interpolated value
      * @deprecated Use {@link MathUtils#interpolate(float, float, float)}.
      */
     @SuppressWarnings("unused") // Public API
@@ -365,6 +413,10 @@ public class StateController {
     }
 
     /**
+     * @param out Interpolated rectangle (output)
+     * @param start Start rectangle
+     * @param end End rectangle
+     * @param factor Factor
      * @deprecated Use {@link MathUtils#interpolate(RectF, RectF, RectF, float)},
      */
     @SuppressWarnings("unused") // Public API

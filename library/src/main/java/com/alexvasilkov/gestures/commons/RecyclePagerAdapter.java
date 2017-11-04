@@ -30,6 +30,9 @@ public abstract class RecyclePagerAdapter<VH extends RecyclePagerAdapter.ViewHol
 
     /**
      * Returns ViewHolder for given position if it exists within ViewPager, or null otherwise.
+     *
+     * @param position Item position
+     * @return View holder for given position
      */
     public VH getViewHolder(int position) {
         return attached.get(position);

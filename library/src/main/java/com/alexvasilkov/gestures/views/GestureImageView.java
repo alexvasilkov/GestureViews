@@ -128,6 +128,7 @@ public class GestureImageView extends ImageView
      * Crops bitmap as it is seen inside movement area: {@link Settings#setMovementArea(int, int)}.
      * Result will be delivered to provided snapshot listener.
      *
+     * @param listener Snapshot listener
      * @deprecated Use {@link #crop()} method instead.
      */
     @SuppressWarnings({ "deprecation", "unused" }) // Public API

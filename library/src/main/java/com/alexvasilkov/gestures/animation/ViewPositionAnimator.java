@@ -172,6 +172,8 @@ public class ViewPositionAnimator {
      * <p>
      * <b>Note, that in most cases you should use {@link #enter(View, boolean)} or
      * {@link #enter(ViewPosition, boolean)} methods instead.</b>
+     *
+     * @param withAnimation Whether to animate entering or immediately jump to entered state
      */
     public void enter(boolean withAnimation) {
         if (GestureDebug.isDebugAnimator()) {
@@ -187,6 +189,9 @@ public class ViewPositionAnimator {
      * <p>
      * Note, if {@code from} view was changed (i.e. during list adapter refresh) you should
      * update to new view using {@link #update(View)} method.
+     *
+     * @param from 'From' view
+     * @param withAnimation Whether to animate entering or immediately jump to entered state
      */
     public void enter(@NonNull View from, boolean withAnimation) {
         if (GestureDebug.isDebugAnimator()) {
@@ -202,6 +207,9 @@ public class ViewPositionAnimator {
      * <p>
      * Note, if {@code from} view position was changed (i.e. during list adapter refresh) you
      * should update to new view using {@link #update(ViewPosition)} method.
+     *
+     * @param fromPos 'From' view position
+     * @param withAnimation Whether to animate entering or immediately jump to entered state
      */
     public void enter(@NonNull ViewPosition fromPos, boolean withAnimation) {
         if (GestureDebug.isDebugAnimator()) {
@@ -215,6 +223,8 @@ public class ViewPositionAnimator {
     /**
      * Updates initial view in case it was changed. You should not call this method if view stays
      * the same since animator should automatically detect view position changes.
+     *
+     * @param from New 'from' view
      */
     public void update(@NonNull View from) {
         if (GestureDebug.isDebugAnimator()) {
@@ -226,6 +236,8 @@ public class ViewPositionAnimator {
 
     /**
      * Updates position of initial view in case it was changed.
+     *
+     * @param from New 'from' view position
      */
     public void update(@NonNull ViewPosition from) {
         if (GestureDebug.isDebugAnimator()) {
@@ -249,6 +261,8 @@ public class ViewPositionAnimator {
 
     /**
      * Starts 'exit' animation from {@code to} view back to {@code from}.
+     *
+     * @param withAnimation Whether to animate exiting or immediately jump to initial state
      */
     public void exit(boolean withAnimation) {
         if (GestureDebug.isDebugAnimator()) {
@@ -327,8 +341,9 @@ public class ViewPositionAnimator {
     }
 
     /**
-     * Adds listener to the set of position updates listeners that will be notified during
-     * any position changes.
+     * Adds position state changes listener that will be notified during animations.
+     *
+     * @param listener Position listener
      */
     public void addPositionUpdateListener(@NonNull PositionUpdateListener listener) {
         listeners.add(listener);
@@ -336,10 +351,13 @@ public class ViewPositionAnimator {
     }
 
     /**
-     * Removes listener added by {@link #addPositionUpdateListener(PositionUpdateListener)}.
+     * Removes position state changes listener as added by
+     * {@link #addPositionUpdateListener(PositionUpdateListener)}.
      * <p>
      * Note, this method may be called inside listener's callback without throwing
      * {@link IndexOutOfBoundsException}.
+     *
+     * @param listener Position listener to be removed
      */
     public void removePositionUpdateListener(@NonNull PositionUpdateListener listener) {
         if (iteratingListeners) {
@@ -355,6 +373,7 @@ public class ViewPositionAnimator {
     }
 
     /**
+     * @return Animation duration
      * @deprecated Use {@link Settings#getAnimationsDuration()} instead.
      */
     @SuppressWarnings("unused") // Public API
@@ -364,6 +383,7 @@ public class ViewPositionAnimator {
     }
 
     /**
+     * @param duration Animation duration
      * @deprecated Use {@link Settings#setAnimationsDuration(long)} instead.
      */
     @SuppressWarnings("unused") // Public API
@@ -398,6 +418,7 @@ public class ViewPositionAnimator {
     }
 
     /**
+     * @return Current position
      * @deprecated Use {@link #getPosition()} method instead.
      */
     @SuppressWarnings("unused") // Public API
@@ -416,13 +437,15 @@ public class ViewPositionAnimator {
 
 
     /**
-     * Specifies target (to) state and it's position which will be used to interpolate
+     * Specifies target ('to') state and it's position which will be used to interpolate
      * current state for intermediate positions (i.e. during animation or exit gesture).<br>
      * This allows you to set up correct state without changing current position
      * ({@link #getPosition()}).
      * <p>
      * Only use this method if you understand what you do.
      *
+     * @param state Target ('to') state
+     * @param position Target ('to') position
      * @see #getToPosition()
      */
     public void setToState(State state, @FloatRange(from = 0f, to = 1f) float position) {
@@ -449,6 +472,11 @@ public class ViewPositionAnimator {
      * Note, that once animator reaches {@code state = 0f} and {@code isLeaving = true}
      * it will cleanup all internal stuff. So you will need to call {@link #enter(View, boolean)}
      * or {@link #enter(ViewPosition, boolean)} again in order to continue using animator.
+     *
+     * @param pos Current position
+     * @param leaving Whether we we are in exiting direction ({@code true}) or in entering
+     * ({@code false})
+     * @param animate Whether we should start animating from given position and in given direction
      */
     public void setState(@FloatRange(from = 0f, to = 1f) float pos,
             boolean leaving, boolean animate) {
@@ -546,7 +574,7 @@ public class ViewPositionAnimator {
 
 
     /**
-     * Whether view position animation is in progress or not.
+     * @return Whether view position animation is in progress or not.
      */
     public boolean isAnimating() {
         return isAnimating;

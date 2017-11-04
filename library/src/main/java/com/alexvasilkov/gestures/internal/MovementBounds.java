@@ -37,6 +37,9 @@ public class MovementBounds {
     /**
      * Calculating bounds for {@link State#x} &amp; {@link State#y} values to keep image within
      * viewport and taking image gravity into account (see {@link Settings#setGravity(int)}).
+     *
+     * @param state Current state
+     * @param settings Current settings
      */
     public void setup(State state, Settings settings) {
         RectF area = tmpRectF;
@@ -134,6 +137,12 @@ public class MovementBounds {
     /**
      * Restricts x &amp; y coordinates to current bounds
      * (as calculated in {@link #setup(State, Settings)}).
+     *
+     * @param x X coordinate
+     * @param y Y coordinate
+     * @param extraX Extra area bounds (horizontal)
+     * @param extraY Extra area bounds (vertical)
+     * @param out Output rectangle
      */
     public void restrict(float x, float y, float extraX, float extraY, PointF out) {
         tmpPointArr[0] = x;

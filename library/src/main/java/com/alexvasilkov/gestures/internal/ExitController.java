@@ -69,6 +69,8 @@ public class ExitController {
     }
 
     /**
+     * @param dx The distance along the X axis that has been scrolled since the last call
+     * @param dy The distance along the Y axis that has been scrolled since the last call
      * @return true if scroll was consumed, false otherwise.
      */
     public boolean onScroll(float dx, float dy) {
@@ -149,6 +151,7 @@ public class ExitController {
     }
 
     /**
+     * @param scaleFactor Current scaling factor
      * @return true if scale was consumed, false otherwise.
      */
     public boolean onScale(float scaleFactor) {

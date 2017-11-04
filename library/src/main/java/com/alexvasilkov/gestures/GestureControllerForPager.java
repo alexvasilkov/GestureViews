@@ -1,10 +1,8 @@
 package com.alexvasilkov.gestures;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.graphics.Matrix;
 import android.graphics.RectF;
-import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.view.MotionEvent;
@@ -80,6 +78,8 @@ public class GestureControllerForPager extends GestureController {
     /**
      * Enables scroll inside {@link ViewPager}
      * (by enabling cross movement between ViewPager and it's child view).
+     *
+     * @param pager Target ViewPager
      */
     public void enableScrollInViewPager(ViewPager pager) {
         viewPager = pager;
@@ -92,6 +92,8 @@ public class GestureControllerForPager extends GestureController {
 
     /**
      * Disables ViewPager scroll. Default is false.
+     *
+     * @param disable Whether to disable ViewPager scroll or not
      */
     public void disableViewPager(boolean disable) {
         isViewPagerDisabled = disable;
@@ -203,7 +205,7 @@ public class GestureControllerForPager extends GestureController {
         return !hasViewPagerX() && super.onDoubleTapEvent(event);
     }
 
-    /**
+    /*
      * Scrolls ViewPager if view reached bounds. Returns distance at which view can be actually
      * scrolled. Here we will split given distance (dX) into movement of ViewPager and movement
      * of view itself.
@@ -232,7 +234,7 @@ public class GestureControllerForPager extends GestureController {
         return viewDx;
     }
 
-    /**
+    /*
      * Splits x scroll between viewpager and view.
      */
     private float splitPagerScroll(float dx, State state, RectF movBounds) {
@@ -268,7 +270,7 @@ public class GestureControllerForPager extends GestureController {
         }
     }
 
-    /**
+    /*
      * Skips part of pager movement to make it harder scrolling pager when image is zoomed
      * or when image is over-scrolled in y direction.
      */
@@ -332,7 +334,7 @@ public class GestureControllerForPager extends GestureController {
         return viewPagerX < -1 || viewPagerX > 1;
     }
 
-    /**
+    /*
      * Manually scrolls ViewPager and returns actual distance at which pager was scrolled.
      */
     private int performViewPagerScroll(@NonNull MotionEvent event, float pagerDx) {
@@ -400,10 +402,9 @@ public class GestureControllerForPager extends GestureController {
         event.transform(tmpMatrix);
     }
 
-    /**
+    /*
      * Inspired by hidden method View#transformMatrixToGlobal().
      */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private static void transformMatrixToPager(Matrix matrix, View view, ViewPager pager) {
         if (view.getParent() instanceof View) {
             View parent = (View) view.getParent();

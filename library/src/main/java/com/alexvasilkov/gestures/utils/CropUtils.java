@@ -15,6 +15,11 @@ public class CropUtils {
 
     /**
      * Crops image drawable into bitmap according to current image position.
+     *
+     * @param drawable Image drawable
+     * @param state Image state
+     * @param settings Image settings
+     * @return Cropped image part
      */
     public static Bitmap crop(Drawable drawable, State state, Settings settings) {
         if (drawable == null) {

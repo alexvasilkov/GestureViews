@@ -133,7 +133,7 @@ public class RotationGestureDetector {
     }
 
     /**
-     * Returns {@code true} if a rotation gesture is in progress.
+     * @return {@code true} if a rotation gesture is in progress
      */
     @SuppressWarnings({ "unused", "WeakerAccess" })
     // To keep similar to standard ScaleGestureDetector

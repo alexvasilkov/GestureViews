@@ -82,6 +82,8 @@ public class FinderView extends View {
 
     /**
      * Sets background color. Default value is {@link #DEFAULT_BACK_COLOR}.
+     *
+     * @param color Background color
      */
     public void setBackColor(@ColorInt int color) {
         backColor = color;
@@ -89,6 +91,8 @@ public class FinderView extends View {
 
     /**
      * Sets borders color. Default value is {@link #DEFAULT_BORDER_COLOR}.
+     *
+     * @param color Finder area borders color
      */
     public void setBorderColor(@ColorInt int color) {
         paintStroke.setColor(color);
@@ -96,14 +100,18 @@ public class FinderView extends View {
 
     /**
      * Sets borders width in pixels. Default value is {@link #DEFAULT_BORDER_WIDTH} dp.
+     *
+     * @param width Finder area borders width in pixels
      */
     public void setBorderWidth(float width) {
         paintStroke.setStrokeWidth(width);
     }
 
     /**
-     * Sets borders width in particular units (see {@link TypedValue}.COMPLEX_UNIT_* constants).
-     * Default value is {@link #DEFAULT_BORDER_WIDTH} dp.
+     * Sets borders width in particular units. Default value is {@link #DEFAULT_BORDER_WIDTH} dp.
+     *
+     * @param unit One of {@link TypedValue}.COMPLEX_UNIT_* constants
+     * @param width Finder area borders width in given unit
      */
     public void setBorderWidth(int unit, float width) {
         setBorderWidth(UnitsUtils.toPixels(getContext(), unit, width));
@@ -111,6 +119,8 @@ public class FinderView extends View {
 
     /**
      * Sets settings to get movement area from.
+     *
+     * @param settings Settings of the corresponding {@link GestureImageView}
      */
     public void setSettings(Settings settings) {
         this.settings = settings;
@@ -120,6 +130,8 @@ public class FinderView extends View {
     /**
      * Whether to round bounds' corners or not. Method {@link #update(boolean)} should be called
      * to apply this setting with optional animation.
+     *
+     * @param rounded Whether finder area should be rounded or not
      */
     public void setRounded(boolean rounded) {
         startRounding = rounding;
@@ -128,6 +140,8 @@ public class FinderView extends View {
 
     /**
      * Applies area size, area position and corners rounding with optional animation.
+     *
+     * @param animate Whether to animate changes when applying new finder area settings
      */
     public void update(boolean animate) {
         if (settings != null && getWidth() > 0 && getHeight() > 0) {
