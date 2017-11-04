@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.ex.single;
+package com.alexvasilkov.gestures.sample.ex.image.animation;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;

@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.ex.pager;
+package com.alexvasilkov.gestures.sample.ex.image.pager;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -26,7 +26,7 @@ public class ViewPagerActivity extends BaseExampleActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.pager_screen);
+        setContentView(R.layout.image_pager_screen);
 
         // Initializing ViewPager
         viewPager = findViewById(R.id.pager);

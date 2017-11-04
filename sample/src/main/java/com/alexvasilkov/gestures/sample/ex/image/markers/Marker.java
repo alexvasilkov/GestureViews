@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.ex.markers;
+package com.alexvasilkov.gestures.sample.ex.image.markers;
 
 import android.graphics.drawable.Drawable;
 import android.view.Gravity;

@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.ex.markers;
+package com.alexvasilkov.gestures.sample.ex.image.markers;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -9,7 +9,7 @@ import android.view.Gravity;
 
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.base.BaseExampleActivity;
-import com.alexvasilkov.gestures.sample.ex.markers.Marker.Mode;
+import com.alexvasilkov.gestures.sample.ex.image.markers.Marker.Mode;
 import com.alexvasilkov.gestures.views.GestureImageView;
 
 /**
@@ -25,7 +25,7 @@ public class ImageMarkersActivity extends BaseExampleActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.markers_screen);
+        setContentView(R.layout.image_markers_screen);
 
         // Setting up world map
         image = findViewById(R.id.markers_image);

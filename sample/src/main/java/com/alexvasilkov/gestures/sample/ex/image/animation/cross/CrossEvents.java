@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.ex.single.cross;
+package com.alexvasilkov.gestures.sample.ex.image.animation.cross;
 
 class CrossEvents {
 

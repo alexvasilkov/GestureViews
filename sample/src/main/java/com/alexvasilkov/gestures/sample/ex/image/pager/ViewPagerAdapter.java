@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.ex.pager;
+package com.alexvasilkov.gestures.sample.ex.image.pager;
 
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;

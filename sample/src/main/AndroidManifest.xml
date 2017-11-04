@@ -51,7 +51,7 @@
             android:label="@string/examples_title" />
 
         <activity
-            android:name=".ex.image.ImageViewerActivity"
+            android:name=".ex.image.viewer.ImageViewerActivity"
             android:icon="@drawable/ic_image_black_24dp"
             android:label="Image viewer">
             <intent-filter>
@@ -61,7 +61,17 @@
         </activity>
 
         <activity
-            android:name=".ex.pager.ViewPagerActivity"
+            android:name=".ex.image.markers.ImageMarkersActivity"
+            android:icon="@drawable/ic_place_black_24dp"
+            android:label="Image markers overlay">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ex.image.pager.ViewPagerActivity"
             android:icon="@drawable/ic_view_carousel_black_24dp"
             android:label="ViewPager integration">
             <intent-filter>
@@ -71,7 +81,7 @@
         </activity>
 
         <activity
-            android:name=".ex.single.ImageAnimationActivity"
+            android:name=".ex.image.animation.ImageAnimationActivity"
             android:icon="@drawable/ic_collections_black_24dp"
             android:label="Image animation">
             <intent-filter>
@@ -81,7 +91,7 @@
         </activity>
 
         <activity
-            android:name=".ex.single.cross.ImageCrossAnimationActivity"
+            android:name=".ex.image.animation.cross.ImageCrossAnimationActivity"
             android:icon="@drawable/ic_collections_black_24dp"
             android:label="Image animation (cross-activity)">
             <intent-filter>
@@ -91,12 +101,12 @@
         </activity>
 
         <activity
-            android:name=".ex.single.cross.FullImageActivity"
+            android:name=".ex.image.animation.cross.FullImageActivity"
             android:label="New activity"
             android:theme="@style/AppTheme.Transparent" />
 
         <activity
-            android:name=".ex.single.RoundImageAnimationActivity"
+            android:name=".ex.image.animation.RoundImageAnimationActivity"
             android:icon="@drawable/ic_collections_black_24dp"
             android:label="Round image animation">
             <intent-filter>
@@ -139,16 +149,6 @@
             android:name=".ex.list.complex.ComplexListV2Activity"
             android:icon="@drawable/ic_view_quilt_black_24dp"
             android:label="Complex list transition v2">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".ex.markers.ImageMarkersActivity"
-            android:icon="@drawable/ic_place_black_24dp"
-            android:label="Image markers overlay">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

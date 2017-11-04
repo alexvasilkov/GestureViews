@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.ex.single;
+package com.alexvasilkov.gestures.sample.ex.image.animation;
 
 import com.alexvasilkov.gestures.commons.circle.CircleGestureImageView;
 import com.alexvasilkov.gestures.commons.circle.CircleImageView;

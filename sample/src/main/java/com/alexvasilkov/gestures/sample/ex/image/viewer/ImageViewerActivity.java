@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.ex.image;
+package com.alexvasilkov.gestures.sample.ex.image.viewer;
 
 import android.os.Bundle;
 import android.view.View;
@@ -19,7 +19,7 @@ public class ImageViewerActivity extends BaseExampleActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.image_screen);
+        setContentView(R.layout.image_viewer_screen);
 
         // Initializing image viewer
         imageViewer = findViewById(R.id.image_viewer);
