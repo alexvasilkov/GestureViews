@@ -15,11 +15,8 @@ import android.util.TypedValue;
 import android.view.View;
 
 import com.alexvasilkov.gestures.Settings;
-import com.alexvasilkov.gestures.internal.AnimationEngine;
 import com.alexvasilkov.gestures.internal.UnitsUtils;
-import com.alexvasilkov.gestures.utils.FloatScroller;
 import com.alexvasilkov.gestures.utils.GravityUtils;
-import com.alexvasilkov.gestures.utils.MathUtils;
 import com.alexvasilkov.gestures.views.GestureImageView;
 
 /**
@@ -27,7 +24,7 @@ import com.alexvasilkov.gestures.views.GestureImageView;
  * <p>
  * To use this view you should set corresponding {@link Settings} with
  * {@link #setSettings(Settings)} method. Then whenever movement area is changed
- * (see {@link Settings#setMovementArea(int, int)}) you will need to call {@link #update(boolean)}
+ * (see {@link Settings#setMovementArea(int, int)}) you will need to call {@link #update()}
  * method to apply changes.
  * <p>
  * You may also use rounded corners with {@link #setRounded(boolean)} method, changes between
@@ -47,16 +44,8 @@ public class FinderView extends View {
 
     private final RectF strokeRect = new RectF();
 
-    private final RectF startRect = new RectF();
-    private final RectF endRect = new RectF();
-    private float startRounding;
-    private float endRounding;
-
     private final Paint paintStroke = new Paint();
     private final Paint paintClear = new Paint();
-
-    private final FloatScroller stateScroller = new FloatScroller();
-    private final AnimationEngine animationEngine = new LocalAnimationEngine();
 
     private int backColor;
     private Settings settings;
@@ -124,60 +113,55 @@ public class FinderView extends View {
      */
     public void setSettings(Settings settings) {
         this.settings = settings;
-        update(false);
+        update();
     }
 
     /**
-     * Whether to round bounds' corners or not. Method {@link #update(boolean)} should be called
-     * to apply this setting with optional animation.
+     * Whether to round bounds' corners.
      *
      * @param rounded Whether finder area should be rounded or not
      */
     public void setRounded(boolean rounded) {
-        startRounding = rounding;
-        endRounding = rounded ? 1f : 0f;
+        rounding = rounded ? 1f : 0f;
+        update();
     }
 
     /**
-     * Applies area size, area position and corners rounding with optional animation.
+     * Applies area size, area position and corners rounding.
      *
-     * @param animate Whether to animate changes when applying new finder area settings
+     * @param animate This paratemter is ignored
+     * @deprecated Animating finder area seems to be useless and is not supported anymore,
+     * use {@link #update()} instead.
      */
+    @SuppressWarnings("unused") // Kept only for backward compatibility
+    @Deprecated
     public void update(boolean animate) {
-        if (settings != null && getWidth() > 0 && getHeight() > 0) {
-            startRect.set(rect);
-
-            GravityUtils.getMovementAreaPosition(settings, tmpRect);
-            endRect.set(tmpRect);
-            endRect.offset(getPaddingLeft(), getPaddingTop());
-
-            stateScroller.forceFinished();
-
-            if (animate) {
-                stateScroller.setDuration(settings.getAnimationsDuration());
-                stateScroller.startScroll(0f, 1f);
-                animationEngine.start();
-            } else {
-                setBounds(endRect, endRounding);
-            }
-        }
+        update();
     }
 
-    private void setBounds(RectF rect, float rounding) {
-        this.rect.set(rect);
-        this.rounding = rounding;
+    /**
+     * Updates finder area size and position. Should be called whenever
+     * corresponding settings are changed, see {@link #setSettings(Settings)}
+     */
+    public void update() {
+        if (settings != null && getWidth() > 0 && getHeight() > 0) {
+            // Updating finder area rectangle
+            GravityUtils.getMovementAreaPosition(settings, tmpRect);
+            rect.set(tmpRect);
+            rect.offset(getPaddingLeft(), getPaddingTop());
 
-        // We want to stroke outside of finder rectangle, while by default stroke is centered
-        strokeRect.set(rect);
-        float halfStroke = 0.5f * paintStroke.getStrokeWidth();
-        strokeRect.inset(-halfStroke, -halfStroke);
+            // We want to stroke outside of finder rectangle, while by default stroke is centered
+            strokeRect.set(rect);
+            float halfStroke = 0.5f * paintStroke.getStrokeWidth();
+            strokeRect.inset(-halfStroke, -halfStroke);
 
-        invalidate();
+            invalidate();
+        }
     }
 
     @Override
     protected void onSizeChanged(int width, int height, int oldWidth, int oldHeight) {
-        update(false);
+        update();
     }
 
     @SuppressWarnings("deprecation")
@@ -197,26 +181,6 @@ public class FinderView extends View {
         canvas.restore();
 
         canvas.drawRoundRect(strokeRect, rx, ry, paintStroke);
-    }
-
-
-    private class LocalAnimationEngine extends AnimationEngine {
-        LocalAnimationEngine() {
-            super(FinderView.this);
-        }
-
-        @Override
-        public boolean onStep() {
-            if (!stateScroller.isFinished()) {
-                stateScroller.computeScroll();
-                float state = stateScroller.getCurr();
-                MathUtils.interpolate(rect, startRect, endRect, state);
-                float rounding = MathUtils.interpolate(startRounding, endRounding, state);
-                setBounds(rect, rounding);
-                return true;
-            }
-            return false;
-        }
     }
 
 }
