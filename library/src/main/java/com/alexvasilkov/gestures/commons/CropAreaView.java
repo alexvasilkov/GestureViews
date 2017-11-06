@@ -174,8 +174,8 @@ public class CropAreaView extends View {
     }
 
     /**
-     * If set to a value > 0f cropping area will be a maximum area fitting this view's paddings and
-     * having specified aspect ratio.
+     * If set to a value &gt; 0 cropping area will be a maximum area fitting this view's paddings
+     * and having specified aspect ratio.
      * <p>
      * Method {@link #update(boolean)} should be called to apply new config with optional animation.
      *

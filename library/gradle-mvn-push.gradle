@@ -92,19 +92,17 @@ afterEvaluate { project ->
         sign configurations.archives
     }
 
-    task jar(type: Jar, dependsOn: compileReleaseJavaWithJavac) {
-        from file(project.compileReleaseJavaWithJavac.destinationDir)
-        exclude '**/R.class', '**/R$*.class', '**/BuildConfig.class'
-    }
-
     task javadocs(type: Javadoc) {
-        source = android.sourceSets.main.java.sourceFiles
-        classpath += files(android.bootClasspath)
+        source = android.sourceSets.main.allJava.sourceFiles
+        classpath = files(android.bootClasspath)
+
         android.libraryVariants.all { variant ->
-            if (variant.name == 'release') {
-                owner.classpath += variant.javaCompiler.classpath
-            }
+            owner.classpath += variant.javaCompiler.classpath
         }
+
+        exclude '**/BuildConfig.java'
+        exclude '**/R.java'
+        exclude '**/internal/**'
 
         title "${POM_NAME} ${VERSION_NAME} API"
         options {
@@ -123,7 +121,6 @@ afterEvaluate { project ->
     }
 
     artifacts {
-        archives jar
         archives sourcesJar
         archives javadocsJar
     }
