@@ -19,3 +19,8 @@ dependencies {
 
 // New version can be uploaded with './gradlew clean :library:uploadArchives'
 apply from: 'gradle-mvn-push.gradle'
+
+// Count methods:
+// dx --dex --output=temp.dex classes.jar
+// hexdump -s 88 -n 4 -e '1/4 "%d\n"' temp.dex
+// Where dx is placed in SDK folder, e.g. ~/Library/Android/sdk/build-tools/26.0.2/
