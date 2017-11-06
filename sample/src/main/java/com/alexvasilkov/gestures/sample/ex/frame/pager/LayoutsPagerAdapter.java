@@ -20,8 +20,6 @@ import com.alexvasilkov.gestures.views.GestureFrameLayout;
 
 class LayoutsPagerAdapter extends RecyclePagerAdapter<LayoutsPagerAdapter.ViewHolder> {
 
-    private static final float MAX_ZOOM = 1.5f;
-
     private final ViewPager viewPager;
     private final Painting[] paintings;
     private final SettingsSetupListener setupListener;
@@ -40,7 +38,7 @@ class LayoutsPagerAdapter extends RecyclePagerAdapter<LayoutsPagerAdapter.ViewHo
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup container) {
         final ViewHolder holder = new ViewHolder(container);
-        holder.layout.getController().getSettings().setMaxZoom(MAX_ZOOM);
+        holder.layout.getController().getSettings().setMaxZoom(1.5f);
         holder.layout.getController().enableScrollInViewPager(viewPager);
         holder.button.setOnClickListener(this::onButtonClick);
         return holder;
