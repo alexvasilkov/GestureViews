@@ -93,7 +93,7 @@ afterEvaluate { project ->
     }
 
     task javadocs(type: Javadoc) {
-        source = android.sourceSets.main.allJava.sourceFiles
+        source = android.sourceSets.main.java.sourceFiles
         classpath = files(android.bootClasspath)
 
         android.libraryVariants.all { variant ->
