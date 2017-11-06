@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="CropAreaView">
+        <attr name="gest_backgroundColor" format="reference|color" />
+        <attr name="gest_borderColor" format="reference|color" />
+        <attr name="gest_borderWidth" format="reference|dimension" />
+        <attr name="gest_rulesHorizontal" format="reference|integer" />
+        <attr name="gest_rulesVertical" format="reference|integer" />
+        <attr name="gest_rulesWidth" format="reference|dimension" />
+        <attr name="gest_rounded" format="reference|boolean" />
+        <attr name="gest_aspect" format="reference|float" />
+    </declare-styleable>
+
+</resources>

@@ -29,7 +29,11 @@ import com.alexvasilkov.gestures.views.GestureImageView;
  * <p>
  * You may also use rounded corners with {@link #setRounded(boolean)} method, changes between
  * rounded and non-rounded mode can optionally be animated.
+ *
+ * @deprecated Use {@link CropAreaView} instead.
  */
+@Deprecated
+@SuppressWarnings("unused") // Kept for backward compatibility
 public class FinderView extends View {
 
     public static final int DEFAULT_BACK_COLOR = Color.argb(128, 0, 0, 0);
@@ -130,11 +134,7 @@ public class FinderView extends View {
      * Applies area size, area position and corners rounding.
      *
      * @param animate This paratemter is ignored
-     * @deprecated Animating finder area seems to be useless and is not supported anymore,
-     * use {@link #update()} instead.
      */
-    @SuppressWarnings("unused") // Kept only for backward compatibility
-    @Deprecated
     public void update(boolean animate) {
         update();
     }
