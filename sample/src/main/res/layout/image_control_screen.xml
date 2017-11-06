@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ex.image.control.ImageControlActivity">
+
+    <com.alexvasilkov.gestures.views.GestureImageView
+        android:id="@+id/image_control_viewer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="48dp"
+        tools:src="@drawable/painting_02" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="48dp"
+        android:background="@drawable/shadow_bottom" />
+
+    <LinearLayout style="@style/App.ControlLayout">
+
+        <CheckBox
+            android:id="@+id/control_animate"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:checked="true"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/animate_changes" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:id="@+id/control_zoom_in"
+            style="@style/App.ControlOption"
+            android:src="@drawable/ic_zoom_in_black_24dp" />
+
+        <ImageView
+            android:id="@+id/control_zoom_out"
+            style="@style/App.ControlOption"
+            android:src="@drawable/ic_zoom_out_black_24dp" />
+
+        <ImageView
+            android:id="@+id/control_rotate"
+            style="@style/App.ControlOption"
+            android:src="@drawable/ic_rotate_90_degrees_ccw_black_24dp" />
+
+        <ImageView
+            android:id="@+id/control_reset"
+            style="@style/App.ControlOption"
+            android:src="@drawable/ic_restore_black_24dp" />
+
+    </LinearLayout>
+
+</merge>

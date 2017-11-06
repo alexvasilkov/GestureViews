@@ -14,8 +14,8 @@
 
     <string name="examples_title">Examples</string>
 
+    <string name="animate_changes">Animate</string>
     <string name="expand_image">Tap image to expand:</string>
-
     <string name="button_wiki_art">WikiArt</string>
 
     <string name="custom_view_text">

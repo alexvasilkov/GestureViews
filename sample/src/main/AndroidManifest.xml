@@ -50,8 +50,18 @@
         </activity>
 
         <activity
+            android:name=".ex.image.control.ImageControlActivity"
+            android:icon="@drawable/ic_image_black_24dp"
+            android:label="Image state control">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
             android:name=".ex.image.crop.ImageCropActivity"
-            android:icon="@drawable/ic_crop_black_24dp"
+            android:icon="@drawable/ic_crop_rotate_black_24dp"
             android:label="Image cropping">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
