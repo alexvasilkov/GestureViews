@@ -38,7 +38,6 @@ class LayoutsPagerAdapter extends RecyclePagerAdapter<LayoutsPagerAdapter.ViewHo
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup container) {
         final ViewHolder holder = new ViewHolder(container);
-        holder.layout.getController().getSettings().setMaxZoom(1.5f);
         holder.layout.getController().enableScrollInViewPager(viewPager);
         holder.button.setOnClickListener(this::onButtonClick);
         return holder;

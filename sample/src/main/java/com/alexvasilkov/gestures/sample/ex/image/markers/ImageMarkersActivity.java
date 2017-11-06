@@ -30,9 +30,6 @@ public class ImageMarkersActivity extends BaseExampleActivity {
         // Setting up world map
         image = findViewById(R.id.markers_image);
         image.setImageResource(R.drawable.world_map);
-        image.getController().getSettings()
-                .setMaxZoom(4f)
-                .setDoubleTapZoom(2f);
 
         final MarkersOverlay overlay = findViewById(R.id.markers_overlay);
         overlay.attachToImage(image);

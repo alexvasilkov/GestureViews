@@ -34,10 +34,6 @@ public class ImageCropActivity extends BaseActivity {
         getSupportActionBarNotNull().setDisplayHomeAsUpEnabled(true);
 
         imageView = findViewById(R.id.image_crop_viewer);
-        imageView.getController().getSettings()
-                .setMaxZoom(6f)
-                .setDoubleTapZoom(3f)
-                .setRotationEnabled(true);
 
         cropView = findViewById(R.id.image_crop_area);
         cropView.setImageView(imageView);

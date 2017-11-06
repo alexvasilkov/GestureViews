@@ -10,6 +10,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="48dp"
+        app:gest_doubleTapZoom="3"
+        app:gest_maxZoom="6"
+        app:gest_rotationEnabled="true"
         tools:src="@drawable/painting_02" />
 
     <com.alexvasilkov.gestures.commons.CropAreaView

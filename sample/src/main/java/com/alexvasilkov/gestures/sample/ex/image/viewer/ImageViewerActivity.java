@@ -27,7 +27,7 @@ public class ImageViewerActivity extends BaseExampleActivity {
         // Initializing image viewer
         imageViewer = findViewById(R.id.image_viewer);
 
-        // Applying custom settings
+        // Applying custom settings (note, that all settings can be also set in XML)
         imageViewer.getController().getSettings()
                 .setMaxZoom(6f)
                 .setDoubleTapZoom(3f);

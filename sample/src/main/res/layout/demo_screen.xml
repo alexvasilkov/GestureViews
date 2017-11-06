@@ -142,7 +142,9 @@
         android:id="@+id/demo_full_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        app:gest_doubleTapZoom="3"
+        app:gest_maxZoom="10" />
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/demo_full_image_toolbar"

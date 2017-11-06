@@ -35,6 +35,7 @@ public class GestureTextView extends AppCompatTextView implements GestureView {
 
         controller = new GestureController(this);
         controller.getSettings().setOverzoomFactor(1f).setPanEnabled(false);
+        controller.getSettings().initFromAttributes(context, attrs);
         controller.addOnStateChangeListener(new GestureController.OnStateChangeListener() {
             @Override
             public void onStateChanged(State state) {

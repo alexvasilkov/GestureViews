@@ -125,10 +125,6 @@ public class DemoActivity extends BaseExampleActivity implements PhotoListAdapte
      * Initializing top image expanding animation.
      */
     private void initTopImage() {
-        views.fullImage.getController().getSettings()
-                .setMaxZoom(10f)
-                .setDoubleTapZoom(3f);
-
         views.fullImageToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         views.fullImageToolbar.setNavigationOnClickListener(view -> onBackPressed());
 
