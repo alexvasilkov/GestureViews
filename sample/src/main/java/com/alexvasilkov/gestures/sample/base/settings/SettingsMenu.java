@@ -54,17 +54,6 @@ public class SettingsMenu implements SettingsSetupListener {
         InstanceStateManager.restoreInstanceState(this, savedInstanceState);
     }
 
-    public void setValuesFrom(Settings settings) {
-        isPanEnabled = settings.isPanEnabled();
-        isZoomEnabled = settings.isZoomEnabled();
-        isRotationEnabled = settings.isRotationEnabled();
-        isRestrictRotation = settings.isRestrictRotation();
-        isExitEnabled = settings.isExitEnabled();
-        isFillViewport = settings.isFillViewport();
-        fitMethod = settings.getFitMethod();
-        gravity = settings.getGravity();
-    }
-
     public boolean onCreateOptionsMenu(Menu menu) {
         addBoolMenu(menu, isPanEnabled, R.string.menu_enable_pan);
         addBoolMenu(menu, isZoomEnabled, R.string.menu_enable_zoom);

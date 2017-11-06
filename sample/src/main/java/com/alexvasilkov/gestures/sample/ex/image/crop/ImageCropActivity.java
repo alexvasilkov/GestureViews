@@ -1,65 +1,80 @@
 package com.alexvasilkov.gestures.sample.ex.image.crop;
 
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.alexvasilkov.gestures.Settings;
-import com.alexvasilkov.gestures.commons.FinderView;
+import com.alexvasilkov.gestures.commons.CropAreaView;
 import com.alexvasilkov.gestures.sample.R;
-import com.alexvasilkov.gestures.sample.base.BaseExampleActivity;
+import com.alexvasilkov.gestures.sample.base.BaseActivity;
 import com.alexvasilkov.gestures.sample.ex.utils.GlideHelper;
 import com.alexvasilkov.gestures.sample.ex.utils.Painting;
 import com.alexvasilkov.gestures.views.GestureImageView;
 
 /**
- * Simple example demonstrates image cropping with optional {@link FinderView} widget overlay.
+ * Simple example demonstrates image cropping using {@link CropAreaView} as overlay.
  */
-public class ImageCropActivity extends BaseExampleActivity {
+public class ImageCropActivity extends BaseActivity {
 
     private static final int PAINTING_ID = 1;
 
     private GestureImageView imageView;
-    private FinderView finderView;
+    private CropAreaView cropView;
+
+    private GestureImageView resultView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.image_crop_screen);
-
-        // Finder area width will be 75% of available screen size and will have 16:9 aspect ratio
-        final DisplayMetrics metrics = getResources().getDisplayMetrics();
-        final int finderWidth = Math.min(metrics.widthPixels, metrics.heightPixels) * 3 / 4;
-        final int finderHeight = finderWidth * 9 / 16;
+        getSupportActionBarNotNull().setDisplayHomeAsUpEnabled(true);
 
         imageView = findViewById(R.id.image_crop_viewer);
         imageView.getController().getSettings()
-                .setFitMethod(Settings.Fit.OUTSIDE)
-                .setFillViewport(true)
-                .setRotationEnabled(true)
-                .setMovementArea(finderWidth, finderHeight);
+                .setMaxZoom(6f)
+                .setDoubleTapZoom(3f)
+                .setRotationEnabled(true);
 
-        setDefaultSettings(imageView.getController().getSettings());
+        cropView = findViewById(R.id.image_crop_area);
+        cropView.setImageView(imageView);
 
-        finderView = findViewById(R.id.image_crop_finder);
-        finderView.setSettings(imageView.getController().getSettings());
+        resultView = findViewById(R.id.image_crop_result);
+        resultView.getController().getSettings()
+                .setMaxZoom(6f)
+                .setDoubleTapZoom(3f);
+
+        initCropOptions();
 
         final Painting painting = Painting.list(getResources())[PAINTING_ID];
         GlideHelper.loadFull(imageView, painting.imageId, painting.thumbId);
     }
 
     @Override
+    public void onBackPressed() {
+        if (resultView.getVisibility() == View.VISIBLE) {
+            // Return back to crop mode
+            imageView.getController().resetState();
+
+            resultView.setImageDrawable(null);
+            resultView.setVisibility(View.GONE);
+            invalidateOptionsMenu();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
 
-        if (finderView.getVisibility() == View.VISIBLE) {
+        if (resultView.getVisibility() != View.VISIBLE) {
             MenuItem crop = menu.add(Menu.NONE, R.id.menu_crop, 0, R.string.menu_crop);
             crop.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-            crop.setIcon(R.drawable.ic_crop_white_24dp);
+            crop.setIcon(R.drawable.ic_check_white_24dp);
         }
 
         return true;
@@ -74,18 +89,10 @@ public class ImageCropActivity extends BaseExampleActivity {
                 // Here you can spin off background thread (e.g. AsyncTask) and save cropped bitmap:
                 // cropped.compress(Bitmap.CompressFormat.JPEG, 80, outputStream);
 
-                // We'll just show cropped bitmap in same image view
-                imageView.setImageBitmap(cropped);
-                finderView.setVisibility(View.GONE);
-
-                // Updating gesture settings to work as a regular image viewer
-                Settings settings = imageView.getController().getSettings();
-                settings.setMovementArea(settings.getViewportW(), settings.getViewportH());
-                settings.setFitMethod(Settings.Fit.INSIDE);
-                settings.setRotationEnabled(false);
-                imageView.getController().resetState();
-
-                setDefaultSettings(settings);
+                // We'll just show cropped bitmap on the same screen
+                resultView.setImageBitmap(cropped);
+                resultView.setVisibility(View.VISIBLE);
+                invalidateOptionsMenu();
             }
             return true;
         } else {
@@ -93,12 +100,32 @@ public class ImageCropActivity extends BaseExampleActivity {
         }
     }
 
-    @Override
-    protected void onSettingsChanged() {
-        // Applying settings from toolbar menu, see BaseExampleActivity
-        getSettingsListener().onSetupGestureView(imageView);
-        // Resetting to initial image state
-        imageView.getController().resetState();
+
+    private void initCropOptions() {
+        findViewById(R.id.crop_16_9).setOnClickListener(v -> {
+            cropView.setAspect(16f / 9f);
+            cropView.setRounded(false);
+            cropView.update(true);
+        });
+        findViewById(R.id.crop_1_1).setOnClickListener(v -> {
+            cropView.setAspect(1f);
+            cropView.setRounded(false);
+            cropView.update(true);
+        });
+        findViewById(R.id.crop_orig).setOnClickListener(v -> {
+            Drawable image = imageView.getDrawable();
+            cropView.setAspect(CropAreaView.ORIGINAL_ASPECT);
+            cropView.setRounded(false);
+            cropView.update(true);
+        });
+        findViewById(R.id.crop_circle).setOnClickListener(v -> {
+            cropView.setAspect(1f);
+            cropView.setRounded(true);
+            cropView.update(true);
+        });
+        findViewById(R.id.crop_reset).setOnClickListener(v -> {
+            imageView.getController().resetState();
+        });
     }
 
 }

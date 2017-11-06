@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ex.image.crop.ImageCropActivity">
 
@@ -8,11 +9,59 @@
         android:id="@+id/image_crop_viewer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="48dp"
         tools:src="@drawable/painting_02" />
 
-    <com.alexvasilkov.gestures.commons.FinderView
-        android:id="@+id/image_crop_finder"
+    <com.alexvasilkov.gestures.commons.CropAreaView
+        android:id="@+id/image_crop_area"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginBottom="48dp"
+        android:padding="32dp"
+        app:gest_aspect="1.3333"
+        app:gest_rulesHorizontal="2"
+        app:gest_rulesVertical="2" />
+
+    <LinearLayout style="@style/App.ControlLayout">
+
+        <ImageView
+            android:id="@+id/crop_16_9"
+            style="@style/App.ControlOption"
+            android:src="@drawable/ic_crop_16_9_black_24dp" />
+
+        <ImageView
+            android:id="@+id/crop_1_1"
+            style="@style/App.ControlOption"
+            android:src="@drawable/ic_crop_square_black_24dp" />
+
+        <ImageView
+            android:id="@+id/crop_orig"
+            style="@style/App.ControlOption"
+            android:src="@drawable/ic_crop_original_black_24dp" />
+
+        <ImageView
+            android:id="@+id/crop_circle"
+            style="@style/App.ControlOption"
+            android:src="@drawable/ic_crop_circle_black_24dp" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:id="@+id/crop_reset"
+            style="@style/App.ControlOption"
+            android:src="@drawable/ic_restore_black_24dp" />
+
+    </LinearLayout>
+
+    <com.alexvasilkov.gestures.views.GestureImageView
+        android:id="@+id/image_crop_result"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/window_background"
+        android:visibility="gone"
+        tools:src="@drawable/painting_02" />
 
 </merge>
