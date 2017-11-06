@@ -66,7 +66,7 @@ public class ImageControlActivity extends BaseExampleActivity {
         final PointF pivot = getPivot();
 
         // Zoom in or out the image
-        state.zoomBy(zoomIn ? 2f : 0.5f, pivot.x, pivot.y);
+        state.zoomBy(zoomIn ? 1.333f : 0.75f, pivot.x, pivot.y);
 
         if (animate) {
             controller.setPivot(pivot.x, pivot.y);
