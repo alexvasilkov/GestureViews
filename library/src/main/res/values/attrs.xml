@@ -1,6 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <declare-styleable name="GestureView">
+        <attr name="gest_movementAreaWidth" format="reference|dimension" />
+        <attr name="gest_movementAreaHeight" format="reference|dimension" />
+        <attr name="gest_maxZoom" format="reference|float" />
+        <attr name="gest_doubleTapZoom" format="reference|float" />
+        <attr name="gest_overzoomFactor" format="reference|float" />
+        <attr name="gest_overscrollX" format="reference|dimension" />
+        <attr name="gest_overscrollY" format="reference|dimension" />
+        <attr name="gest_fillViewport" format="reference|boolean" />
+        <attr name="gest_gravity">
+            <!-- Values are copied from system "gravity" attribute -->
+            <flag name="top" value="0x30" />
+            <flag name="bottom" value="0x50" />
+            <flag name="left" value="0x03" />
+            <flag name="right" value="0x05" />
+            <flag name="center_vertical" value="0x10" />
+            <flag name="center_horizontal" value="0x01" />
+            <flag name="center" value="0x11" />
+            <flag name="start" value="0x00800003" />
+            <flag name="end" value="0x00800005" />
+        </attr>
+        <attr name="gest_fitMethod">
+            <enum name="horizontal" value="0" />
+            <enum name="vertical" value="1" />
+            <enum name="inside" value="2" />
+            <enum name="outside" value="3" />
+        </attr>
+        <attr name="gest_panEnabled" format="reference|boolean" />
+        <attr name="gest_zoomEnabled" format="reference|boolean" />
+        <attr name="gest_rotationEnabled" format="reference|boolean" />
+        <attr name="gest_restrictRotation" format="reference|boolean" />
+        <attr name="gest_doubleTapEnabled" format="reference|boolean" />
+        <attr name="gest_exitEnabled" format="reference|boolean" />
+        <attr name="gest_animationDuration" format="reference|integer" />
+        <attr name="gest_disableGestures" format="reference|boolean" />
+        <attr name="gest_disableBounds" format="reference|boolean" />
+    </declare-styleable>
+
+    <!-- Added copy with GestureImageView name to enable autocomplete in AS -->
+    <declare-styleable name="GestureImageView">
+        <attr name="gest_movementAreaWidth" />
+        <attr name="gest_movementAreaHeight" />
+        <attr name="gest_maxZoom" />
+        <attr name="gest_doubleTapZoom" />
+        <attr name="gest_overzoomFactor" />
+        <attr name="gest_overscrollX" />
+        <attr name="gest_overscrollY" />
+        <attr name="gest_fillViewport" />
+        <attr name="gest_gravity" />
+        <attr name="gest_fitMethod" />
+        <attr name="gest_panEnabled" />
+        <attr name="gest_zoomEnabled" />
+        <attr name="gest_rotationEnabled" />
+        <attr name="gest_restrictRotation" />
+        <attr name="gest_doubleTapEnabled" />
+        <attr name="gest_exitEnabled" />
+        <attr name="gest_animationDuration" />
+        <attr name="gest_disableGestures" />
+        <attr name="gest_disableBounds" />
+    </declare-styleable>
+
+    <!-- Added copy with GestureFrameLayout name to enable autocomplete in AS -->
+    <declare-styleable name="GestureFrameLayout">
+        <attr name="gest_movementAreaWidth" />
+        <attr name="gest_movementAreaHeight" />
+        <attr name="gest_maxZoom" />
+        <attr name="gest_doubleTapZoom" />
+        <attr name="gest_overzoomFactor" />
+        <attr name="gest_overscrollX" />
+        <attr name="gest_overscrollY" />
+        <attr name="gest_fillViewport" />
+        <attr name="gest_gravity" />
+        <attr name="gest_fitMethod" />
+        <attr name="gest_panEnabled" />
+        <attr name="gest_zoomEnabled" />
+        <attr name="gest_rotationEnabled" />
+        <attr name="gest_restrictRotation" />
+        <attr name="gest_doubleTapEnabled" />
+        <attr name="gest_exitEnabled" />
+        <attr name="gest_animationDuration" />
+        <attr name="gest_disableGestures" />
+        <attr name="gest_disableBounds" />
+    </declare-styleable>
+
+
     <declare-styleable name="CropAreaView">
         <attr name="gest_backgroundColor" format="reference|color" />
         <attr name="gest_borderColor" format="reference|color" />

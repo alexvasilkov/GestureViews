@@ -1,7 +1,10 @@
 package com.alexvasilkov.gestures;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.util.AttributeSet;
 import android.view.Gravity;
 
 import com.alexvasilkov.gestures.internal.UnitsUtils;
@@ -124,6 +127,68 @@ public class Settings {
 
     Settings() {
         // Package private constructor
+    }
+
+    public void initFromAttributes(@NonNull Context context, @Nullable AttributeSet attrs) {
+        if (attrs == null) {
+            return;
+        }
+
+        TypedArray arr = context.obtainStyledAttributes(attrs, R.styleable.GestureView);
+
+        movementAreaW = arr.getDimensionPixelSize(
+                R.styleable.GestureView_gest_movementAreaWidth, movementAreaW);
+        movementAreaH = arr.getDimensionPixelSize(
+                R.styleable.GestureView_gest_movementAreaHeight, movementAreaH);
+        isMovementAreaSpecified = movementAreaW > 0 && movementAreaH > 0;
+
+        maxZoom = arr.getFloat(
+                R.styleable.GestureView_gest_maxZoom, maxZoom);
+        doubleTapZoom = arr.getFloat(
+                R.styleable.GestureView_gest_doubleTapZoom, doubleTapZoom);
+        overzoomFactor = arr.getFloat(
+                R.styleable.GestureView_gest_overzoomFactor, overzoomFactor);
+        overscrollDistanceX = arr.getDimension(
+                R.styleable.GestureView_gest_overscrollX, overscrollDistanceX);
+        overscrollDistanceY = arr.getDimension(
+                R.styleable.GestureView_gest_overscrollY, overscrollDistanceY);
+        isFillViewport = arr.getBoolean(
+                R.styleable.GestureView_gest_fillViewport, isFillViewport);
+        gravity = arr.getInt(
+                R.styleable.GestureView_gest_gravity, gravity);
+
+        int fitMethodPos = arr.getInteger(
+                R.styleable.GestureView_gest_fitMethod, fitMethod.ordinal());
+        fitMethod = Fit.values()[fitMethodPos];
+
+        isPanEnabled = arr.getBoolean(
+                R.styleable.GestureView_gest_panEnabled, isPanEnabled);
+        isZoomEnabled = arr.getBoolean(
+                R.styleable.GestureView_gest_zoomEnabled, isZoomEnabled);
+        isRotationEnabled = arr.getBoolean(
+                R.styleable.GestureView_gest_rotationEnabled, isRotationEnabled);
+        isRestrictRotation = arr.getBoolean(
+                R.styleable.GestureView_gest_restrictRotation, isRestrictRotation);
+        isDoubleTapEnabled = arr.getBoolean(
+                R.styleable.GestureView_gest_doubleTapEnabled, isDoubleTapEnabled);
+        isExitEnabled = arr.getBoolean(
+                R.styleable.GestureView_gest_exitEnabled, isExitEnabled);
+        animationsDuration = arr.getInt(
+                R.styleable.GestureView_gest_animationDuration, (int) animationsDuration);
+
+        boolean disableGestures = arr.getBoolean(
+                R.styleable.GestureView_gest_disableGestures, false);
+        if (disableGestures) {
+            disableGestures();
+        }
+
+        boolean disableBounds = arr.getBoolean(
+                R.styleable.GestureView_gest_disableBounds, false);
+        if (disableBounds) {
+            disableBounds();
+        }
+
+        arr.recycle();
     }
 
     /**

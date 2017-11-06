@@ -58,6 +58,7 @@ public class GestureImageView extends ImageView
         super(context, attrs, defStyle);
 
         ensureControllerCreated();
+        controller.getSettings().initFromAttributes(context, attrs);
         controller.addOnStateChangeListener(new GestureController.OnStateChangeListener() {
             @Override
             public void onStateChanged(State state) {

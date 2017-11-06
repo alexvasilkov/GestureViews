@@ -58,6 +58,7 @@ public class GestureFrameLayout extends FrameLayout implements GestureView, Anim
         super(context, attrs, defStyle);
 
         controller = new GestureControllerForPager(this);
+        controller.getSettings().initFromAttributes(context, attrs);
         controller.addOnStateChangeListener(new GestureController.OnStateChangeListener() {
             @Override
             public void onStateChanged(State state) {
