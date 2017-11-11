@@ -9,7 +9,7 @@ import com.alexvasilkov.gestures.sample.base.BaseSettingsActivity;
 import com.alexvasilkov.gestures.views.GestureImageView;
 
 /**
- * Simple example demonstrates usage of {@link GestureImageView} within ViewPager.<br>
+ * This example demonstrates usage of {@link GestureImageView} within ViewPager.<br>
  * Two things worth noting here:
  * <ul>
  * <li/> For each GestureImageView inside ViewPager we should enable smooth scrolling by calling
@@ -27,6 +27,7 @@ public class ViewPagerActivity extends BaseSettingsActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.image_pager_screen);
+        setInfoText(R.string.info_image_pager);
 
         // Initializing ViewPager
         viewPager = findViewById(R.id.pager);

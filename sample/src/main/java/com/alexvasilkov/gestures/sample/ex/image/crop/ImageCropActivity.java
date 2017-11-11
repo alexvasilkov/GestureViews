@@ -14,7 +14,7 @@ import com.alexvasilkov.gestures.sample.ex.utils.Painting;
 import com.alexvasilkov.gestures.views.GestureImageView;
 
 /**
- * Simple example demonstrates image cropping using {@link CropAreaView} as overlay.
+ * This example demonstrates image cropping using {@link CropAreaView} as overlay.
  */
 public class ImageCropActivity extends BaseActivity {
 

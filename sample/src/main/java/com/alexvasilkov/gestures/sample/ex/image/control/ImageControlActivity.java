@@ -14,7 +14,7 @@ import com.alexvasilkov.gestures.views.GestureImageView;
 import com.alexvasilkov.gestures.views.interfaces.GestureView;
 
 /**
- * This example demonstrates image state control with and without animation.
+ * This example demonstrates how to programmatically control image state with and without animation.
  * <p>
  * You can basically get image's {@link State} with
  * {@link GestureView#getController() getController()}

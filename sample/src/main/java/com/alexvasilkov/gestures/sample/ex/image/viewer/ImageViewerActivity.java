@@ -10,7 +10,7 @@ import com.alexvasilkov.gestures.sample.ex.utils.Painting;
 import com.alexvasilkov.gestures.views.GestureImageView;
 
 /**
- * Simple example demonstrates general usage of {@link GestureImageView}.
+ * This example demonstrates basic usage of {@link GestureImageView}.
  */
 public class ImageViewerActivity extends BaseSettingsActivity {
 
@@ -23,6 +23,7 @@ public class ImageViewerActivity extends BaseSettingsActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.image_viewer_screen);
+        setInfoText(R.string.info_image_viewer);
 
         // Initializing image viewer
         imageViewer = findViewById(R.id.image_viewer);
