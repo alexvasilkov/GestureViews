@@ -7,7 +7,7 @@ import android.widget.CheckBox;
 import com.alexvasilkov.gestures.GestureController;
 import com.alexvasilkov.gestures.State;
 import com.alexvasilkov.gestures.sample.R;
-import com.alexvasilkov.gestures.sample.base.BaseExampleActivity;
+import com.alexvasilkov.gestures.sample.base.BaseSettingsActivity;
 import com.alexvasilkov.gestures.sample.ex.utils.GlideHelper;
 import com.alexvasilkov.gestures.sample.ex.utils.Painting;
 import com.alexvasilkov.gestures.views.GestureImageView;
@@ -24,7 +24,7 @@ import com.alexvasilkov.gestures.views.interfaces.GestureView;
  * Note, that in last case you should apply all the state manipulations to a copy of current state
  * (can be made with {@link State#copy()}).
  */
-public class ImageControlActivity extends BaseExampleActivity {
+public class ImageControlActivity extends BaseSettingsActivity {
 
     private static final int PAINTING_ID = 1;
 

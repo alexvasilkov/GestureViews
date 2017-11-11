@@ -5,7 +5,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.alexvasilkov.gestures.sample.R;
-import com.alexvasilkov.gestures.sample.base.BaseExampleActivity;
+import com.alexvasilkov.gestures.sample.base.BaseSettingsActivity;
 import com.alexvasilkov.gestures.sample.ex.utils.GlideHelper;
 import com.alexvasilkov.gestures.sample.ex.utils.Painting;
 import com.alexvasilkov.gestures.transition.GestureTransitions;
@@ -15,7 +15,7 @@ import com.alexvasilkov.gestures.views.GestureImageView;
 /**
  * This example demonstrates image animation from small mode into a full one.
  */
-public class ImageAnimationActivity extends BaseExampleActivity {
+public class ImageAnimationActivity extends BaseSettingsActivity {
 
     private static final int PAINTING_ID = 2;
 

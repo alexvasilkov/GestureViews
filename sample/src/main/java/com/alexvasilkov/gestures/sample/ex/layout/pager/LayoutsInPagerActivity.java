@@ -5,7 +5,7 @@ import android.support.v4.view.ViewPager;
 
 import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
 import com.alexvasilkov.gestures.sample.R;
-import com.alexvasilkov.gestures.sample.base.BaseExampleActivity;
+import com.alexvasilkov.gestures.sample.base.BaseSettingsActivity;
 import com.alexvasilkov.gestures.sample.ex.utils.Painting;
 import com.alexvasilkov.gestures.views.GestureFrameLayout;
 
@@ -19,7 +19,7 @@ import com.alexvasilkov.gestures.views.GestureFrameLayout;
  * performance.
  * </ol>
  */
-public class LayoutsInPagerActivity extends BaseExampleActivity {
+public class LayoutsInPagerActivity extends BaseSettingsActivity {
 
     private ViewPager viewPager;
 

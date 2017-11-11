@@ -5,7 +5,7 @@ import android.support.v4.view.ViewPager;
 
 import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
 import com.alexvasilkov.gestures.sample.R;
-import com.alexvasilkov.gestures.sample.base.BaseExampleActivity;
+import com.alexvasilkov.gestures.sample.base.BaseSettingsActivity;
 import com.alexvasilkov.gestures.views.GestureImageView;
 
 /**
@@ -18,7 +18,7 @@ import com.alexvasilkov.gestures.views.GestureImageView;
  * performance when dealing with heavy data like images.
  * </ul>
  */
-public class ViewPagerActivity extends BaseExampleActivity {
+public class ViewPagerActivity extends BaseSettingsActivity {
 
     private ViewPager viewPager;
 

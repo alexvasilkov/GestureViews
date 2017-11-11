@@ -8,7 +8,7 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.view.Gravity;
 
 import com.alexvasilkov.gestures.sample.R;
-import com.alexvasilkov.gestures.sample.base.BaseExampleActivity;
+import com.alexvasilkov.gestures.sample.base.BaseSettingsActivity;
 import com.alexvasilkov.gestures.sample.ex.image.markers.Marker.Mode;
 import com.alexvasilkov.gestures.views.GestureImageView;
 
@@ -17,7 +17,7 @@ import com.alexvasilkov.gestures.views.GestureImageView;
  * particular image points.<br>
  * See also {@link MarkersOverlay}.
  */
-public class ImageMarkersActivity extends BaseExampleActivity {
+public class ImageMarkersActivity extends BaseSettingsActivity {
 
     private GestureImageView image;
 

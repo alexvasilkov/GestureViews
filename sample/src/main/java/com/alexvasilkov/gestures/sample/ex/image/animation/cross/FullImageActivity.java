@@ -9,7 +9,7 @@ import android.view.ViewTreeObserver.OnPreDrawListener;
 import com.alexvasilkov.events.Events;
 import com.alexvasilkov.gestures.animation.ViewPosition;
 import com.alexvasilkov.gestures.sample.R;
-import com.alexvasilkov.gestures.sample.base.BaseExampleActivity;
+import com.alexvasilkov.gestures.sample.base.BaseSettingsActivity;
 import com.alexvasilkov.gestures.sample.ex.utils.GlideHelper;
 import com.alexvasilkov.gestures.sample.ex.utils.Painting;
 import com.alexvasilkov.gestures.views.GestureImageView;
@@ -18,7 +18,7 @@ import com.alexvasilkov.gestures.views.GestureImageView;
  * Separate activity for fullscreen image. This activity should have translucent background
  * and should skip enter and exit animations.
  */
-public class FullImageActivity extends BaseExampleActivity {
+public class FullImageActivity extends BaseSettingsActivity {
 
     private static final String EXTRA_POSITION = "position";
     private static final String EXTRA_PAINTING_ID = "painting_id";

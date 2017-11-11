@@ -20,7 +20,7 @@ import com.alexvasilkov.events.Events.Result;
 import com.alexvasilkov.gestures.commons.DepthPageTransformer;
 import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
 import com.alexvasilkov.gestures.sample.R;
-import com.alexvasilkov.gestures.sample.base.BaseExampleActivity;
+import com.alexvasilkov.gestures.sample.base.BaseSettingsActivity;
 import com.alexvasilkov.gestures.sample.demo.adapter.EndlessRecyclerAdapter;
 import com.alexvasilkov.gestures.sample.demo.adapter.PhotoListAdapter;
 import com.alexvasilkov.gestures.sample.demo.adapter.PhotoPagerAdapter;
@@ -39,7 +39,7 @@ import java.util.List;
  * <p>
  * For particular use cases see standalone examples.
  */
-public class DemoActivity extends BaseExampleActivity implements PhotoListAdapter.OnPhotoListener {
+public class DemoActivity extends BaseSettingsActivity implements PhotoListAdapter.OnPhotoListener {
 
     private static final int PAGE_SIZE = 30;
     private static final int NO_POSITION = -1;

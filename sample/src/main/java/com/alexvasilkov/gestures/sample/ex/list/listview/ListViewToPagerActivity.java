@@ -7,7 +7,7 @@ import android.widget.ListView;
 
 import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
 import com.alexvasilkov.gestures.sample.R;
-import com.alexvasilkov.gestures.sample.base.BaseExampleActivity;
+import com.alexvasilkov.gestures.sample.base.BaseSettingsActivity;
 import com.alexvasilkov.gestures.sample.demo.DemoActivity;
 import com.alexvasilkov.gestures.sample.ex.utils.Painting;
 import com.alexvasilkov.gestures.transition.GestureTransitions;
@@ -19,7 +19,7 @@ import com.alexvasilkov.gestures.transition.tracker.SimpleTracker;
  * Note, that it is advised to use RecyclerView instead of ListView in most cases.
  * RecyclerView usage is almost the same. See also {@link DemoActivity}.
  */
-public class ListViewToPagerActivity extends BaseExampleActivity {
+public class ListViewToPagerActivity extends BaseSettingsActivity {
 
     private ListView list;
     private ViewPager pager;

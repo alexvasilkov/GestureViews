@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import com.alexvasilkov.gestures.sample.R;
-import com.alexvasilkov.gestures.sample.base.BaseExampleActivity;
+import com.alexvasilkov.gestures.sample.base.BaseSettingsActivity;
 import com.alexvasilkov.gestures.sample.ex.utils.GlideHelper;
 import com.alexvasilkov.gestures.sample.ex.utils.Painting;
 import com.alexvasilkov.gestures.views.GestureImageView;
@@ -12,7 +12,7 @@ import com.alexvasilkov.gestures.views.GestureImageView;
 /**
  * Simple example demonstrates general usage of {@link GestureImageView}.
  */
-public class ImageViewerActivity extends BaseExampleActivity {
+public class ImageViewerActivity extends BaseSettingsActivity {
 
     private static final int PAINTING_ID = 1;
 

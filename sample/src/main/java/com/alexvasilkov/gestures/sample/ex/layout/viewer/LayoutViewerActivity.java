@@ -5,7 +5,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.alexvasilkov.gestures.sample.R;
-import com.alexvasilkov.gestures.sample.base.BaseExampleActivity;
+import com.alexvasilkov.gestures.sample.base.BaseSettingsActivity;
 import com.alexvasilkov.gestures.sample.ex.utils.GlideHelper;
 import com.alexvasilkov.gestures.sample.ex.utils.Painting;
 import com.alexvasilkov.gestures.views.GestureFrameLayout;
@@ -15,7 +15,7 @@ import com.alexvasilkov.gestures.views.GestureFrameLayout;
  * Basically, all you need is to wrap your layout with {@link GestureFrameLayout} and apply
  * necessary settings.
  */
-public class LayoutViewerActivity extends BaseExampleActivity {
+public class LayoutViewerActivity extends BaseSettingsActivity {
 
     private static final int PAINTING_ID = 0;
 

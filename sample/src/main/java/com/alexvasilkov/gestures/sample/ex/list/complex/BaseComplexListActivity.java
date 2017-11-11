@@ -8,7 +8,7 @@ import android.view.View;
 
 import com.alexvasilkov.gestures.commons.DepthPageTransformer;
 import com.alexvasilkov.gestures.sample.R;
-import com.alexvasilkov.gestures.sample.base.BaseExampleActivity;
+import com.alexvasilkov.gestures.sample.base.BaseSettingsActivity;
 import com.alexvasilkov.gestures.transition.ViewsTransitionAnimator;
 
 import java.util.List;
@@ -17,7 +17,7 @@ import java.util.List;
  * Base implementation of complex list examples. Subclasses should provide there own logic for
  * list items creation, animator initialization and pager items setup.
  */
-abstract class BaseComplexListActivity extends BaseExampleActivity {
+abstract class BaseComplexListActivity extends BaseSettingsActivity {
 
     private ViewPager pager;
     private View pagerBackground;
