@@ -77,7 +77,7 @@ public class ImageMarkersActivity extends BaseExampleActivity {
      * Returns tinted icon.
      */
     private Drawable getIcon(@ColorRes int colorId) {
-        Drawable icon = ContextCompat.getDrawable(this, R.drawable.ic_place_white_48dp);
+        Drawable icon = ContextCompat.getDrawable(this, R.drawable.ic_place_black_24dp);
         icon = DrawableCompat.wrap(icon);
         DrawableCompat.setTint(icon, ContextCompat.getColor(this, colorId));
         return icon;
