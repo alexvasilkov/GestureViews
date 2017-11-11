@@ -48,7 +48,7 @@ public class ImageControlActivity extends BaseExampleActivity {
     @Override
     protected void onSettingsChanged() {
         // Applying settings from toolbar menu, see BaseExampleActivity
-        getSettingsListener().onSetupGestureView(imageView);
+        getSettingsController().apply(imageView);
 
         // Resetting to initial image state
         imageView.getController().resetState();

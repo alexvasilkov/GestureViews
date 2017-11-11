@@ -134,7 +134,7 @@ public class DemoActivity extends BaseExampleActivity implements PhotoListAdapte
         imageAnimator.addPositionUpdateListener(this::applyFullImageState);
 
         views.appBarImage.setOnClickListener(view -> {
-            getSettingsListener().onSetupGestureView(views.fullImage);
+            getSettingsController().apply(views.fullImage);
             imageAnimator.enterSingle(true);
         });
     }
@@ -186,8 +186,7 @@ public class DemoActivity extends BaseExampleActivity implements PhotoListAdapte
      */
     private void initPager() {
         // Setting up pager adapter
-        pagerAdapter = new PhotoPagerAdapter(views.pager);
-        pagerAdapter.setSetupListener(getSettingsListener());
+        pagerAdapter = new PhotoPagerAdapter(views.pager, getSettingsController());
 
         pagerListener = new ViewPager.SimpleOnPageChangeListener() {
             @Override

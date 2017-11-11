@@ -5,7 +5,7 @@ import android.support.v4.view.ViewPager;
 import android.view.ViewGroup;
 
 import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
-import com.alexvasilkov.gestures.sample.base.settings.SettingsSetupListener;
+import com.alexvasilkov.gestures.sample.base.settings.SettingsController;
 import com.alexvasilkov.gestures.sample.ex.utils.GlideHelper;
 import com.alexvasilkov.gestures.sample.ex.utils.Painting;
 import com.alexvasilkov.gestures.views.GestureImageView;
@@ -14,12 +14,12 @@ class ViewPagerAdapter extends RecyclePagerAdapter<ViewPagerAdapter.ViewHolder> 
 
     private final ViewPager viewPager;
     private final Painting[] paintings;
-    private final SettingsSetupListener setupListener;
+    private final SettingsController settingsController;
 
-    ViewPagerAdapter(ViewPager pager, SettingsSetupListener listener) {
+    ViewPagerAdapter(ViewPager pager, SettingsController listener) {
         this.viewPager = pager;
         this.paintings = Painting.list(pager.getResources());
-        this.setupListener = listener;
+        this.settingsController = listener;
     }
 
     @Override
@@ -46,7 +46,7 @@ class ViewPagerAdapter extends RecyclePagerAdapter<ViewPagerAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         // Applying settings from toolbar menu, see BaseExampleActivity
-        setupListener.onSetupGestureView(holder.image);
+        settingsController.apply(holder.image);
 
         Painting painting = paintings[position];
         GlideHelper.loadFull(holder.image, painting.imageId, painting.thumbId);

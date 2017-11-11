@@ -46,7 +46,7 @@ public class ImageMarkersActivity extends BaseExampleActivity {
         overlay.addMarker(createMarker(Mode.STICK, 1212, 517, 180f)); // Sydney
 
         // Applying general options
-        getSettingsListener().onSetupGestureView(image);
+        getSettingsController().apply(image);
     }
 
     private Marker createMarker(Mode mode, int px, int py, float rotation) {
@@ -86,7 +86,7 @@ public class ImageMarkersActivity extends BaseExampleActivity {
     @Override
     protected void onSettingsChanged() {
         // Applying settings from toolbar menu, see BaseExampleActivity
-        getSettingsListener().onSetupGestureView(image);
+        getSettingsController().apply(image);
         // Resetting to initial image state
         image.getController().resetState();
     }

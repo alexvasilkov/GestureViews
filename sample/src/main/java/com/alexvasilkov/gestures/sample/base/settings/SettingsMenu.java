@@ -16,7 +16,7 @@ import com.alexvasilkov.gestures.internal.GestureDebug;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.views.interfaces.GestureView;
 
-public class SettingsMenu implements SettingsSetupListener {
+public class SettingsMenu implements SettingsController {
 
     private static final float OVERSCROLL = 32f;
     private static final long SLOW_ANIMATIONS = 1500L;
@@ -148,7 +148,7 @@ public class SettingsMenu implements SettingsSetupListener {
     }
 
     @Override
-    public void onSetupGestureView(GestureView view) {
+    public void apply(GestureView view) {
         Context context = ((View) view).getContext();
         float overscrollX = isOverscrollXEnabled ? OVERSCROLL : 0f;
         float overscrollY = isOverscrollYEnabled ? OVERSCROLL : 0f;

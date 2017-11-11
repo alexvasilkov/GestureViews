@@ -30,7 +30,7 @@ public class ViewPagerActivity extends BaseExampleActivity {
 
         // Initializing ViewPager
         viewPager = findViewById(R.id.pager);
-        viewPager.setAdapter(new ViewPagerAdapter(viewPager, getSettingsListener()));
+        viewPager.setAdapter(new ViewPagerAdapter(viewPager, getSettingsController()));
         viewPager.setPageMargin(getResources().getDimensionPixelSize(R.dimen.view_pager_margin));
     }
 

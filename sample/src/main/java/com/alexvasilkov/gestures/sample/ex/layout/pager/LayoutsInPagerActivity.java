@@ -32,7 +32,8 @@ public class LayoutsInPagerActivity extends BaseExampleActivity {
         final Painting[] paintings = Painting.list(getResources());
 
         viewPager = findViewById(R.id.frame_pager);
-        viewPager.setAdapter(new LayoutsPagerAdapter(viewPager, paintings, getSettingsListener()));
+        viewPager.setAdapter(
+                new LayoutsPagerAdapter(viewPager, paintings, getSettingsController()));
         viewPager.setPageMargin(getResources().getDimensionPixelSize(R.dimen.view_pager_margin));
     }
 

@@ -41,7 +41,7 @@ public class RecyclerToPagerActivity extends BaseExampleActivity {
 
         // Initializing ViewPager
         pager = findViewById(R.id.recycler_pager);
-        pagerAdapter = new PagerAdapter(pager, paintings, getSettingsListener());
+        pagerAdapter = new PagerAdapter(pager, paintings, getSettingsController());
         pager.setAdapter(pagerAdapter);
         pager.setPageMargin(getResources().getDimensionPixelSize(R.dimen.view_pager_margin));
 

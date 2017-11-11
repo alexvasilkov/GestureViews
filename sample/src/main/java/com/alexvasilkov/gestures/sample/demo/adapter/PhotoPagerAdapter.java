@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import com.alexvasilkov.android.commons.ui.Views;
 import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
 import com.alexvasilkov.gestures.sample.R;
-import com.alexvasilkov.gestures.sample.base.settings.SettingsSetupListener;
+import com.alexvasilkov.gestures.sample.base.settings.SettingsController;
 import com.alexvasilkov.gestures.sample.demo.utils.DemoGlideHelper;
 import com.alexvasilkov.gestures.views.GestureImageView;
 import com.googlecode.flickrjandroid.photos.Photo;
@@ -20,14 +20,15 @@ public class PhotoPagerAdapter extends RecyclePagerAdapter<PhotoPagerAdapter.Vie
     private static final long PROGRESS_DELAY = 300L;
 
     private final ViewPager viewPager;
+    private final SettingsController settingsController;
     private List<Photo> photos;
-    private SettingsSetupListener setupListener;
     private ImageClickListener clickListener;
 
     private boolean activated;
 
-    public PhotoPagerAdapter(ViewPager viewPager) {
+    public PhotoPagerAdapter(ViewPager viewPager, SettingsController listener) {
         this.viewPager = viewPager;
+        this.settingsController = listener;
     }
 
     public void setPhotos(List<Photo> photos) {
@@ -37,10 +38,6 @@ public class PhotoPagerAdapter extends RecyclePagerAdapter<PhotoPagerAdapter.Vie
 
     public Photo getPhoto(int pos) {
         return photos == null || pos < 0 || pos >= photos.size() ? null : photos.get(pos);
-    }
-
-    public void setSetupListener(SettingsSetupListener listener) {
-        setupListener = listener;
     }
 
     public void setImageClickListener(ImageClickListener clickListener) {
@@ -71,9 +68,7 @@ public class PhotoPagerAdapter extends RecyclePagerAdapter<PhotoPagerAdapter.Vie
 
         holder.image.setOnClickListener(view -> onImageClick());
 
-        if (setupListener != null) {
-            setupListener.onSetupGestureView(holder.image);
-        }
+        settingsController.apply(holder.image);
 
         holder.image.getController().enableScrollInViewPager(viewPager);
         holder.image.getPositionAnimator().addPositionUpdateListener((position, isLeaving) ->
@@ -83,9 +78,7 @@ public class PhotoPagerAdapter extends RecyclePagerAdapter<PhotoPagerAdapter.Vie
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        if (setupListener != null) {
-            setupListener.onSetupGestureView(holder.image);
-        }
+        settingsController.apply(holder.image);
 
         // Temporary disabling touch controls
         if (!holder.gesturesDisabled) {

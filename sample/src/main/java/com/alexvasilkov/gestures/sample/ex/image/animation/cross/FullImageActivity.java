@@ -80,14 +80,14 @@ public class FullImageActivity extends BaseExampleActivity {
     @Override
     protected void onSettingsChanged() {
         // Applying settings from toolbar menu, see BaseExampleActivity
-        getSettingsListener().onSetupGestureView(image);
+        getSettingsController().apply(image);
         // Resetting to initial image state
         image.getController().resetState();
     }
 
     private void enterFullImage(boolean animate) {
         // Updating gesture image settings
-        getSettingsListener().onSetupGestureView(image);
+        getSettingsController().apply(image);
 
         // Playing enter animation from provided position
         ViewPosition position = ViewPosition.unpack(getIntent().getStringExtra(EXTRA_POSITION));

@@ -68,7 +68,7 @@ public class ImageAnimationActivity extends BaseExampleActivity {
     @Override
     protected void onSettingsChanged() {
         // Applying settings from toolbar menu, see BaseExampleActivity
-        getSettingsListener().onSetupGestureView(fullImage);
+        getSettingsController().apply(fullImage);
         // Resetting to initial image state
         fullImage.getController().resetState();
     }
@@ -80,7 +80,7 @@ public class ImageAnimationActivity extends BaseExampleActivity {
         }
 
         // Updating gesture image settings
-        getSettingsListener().onSetupGestureView(fullImage);
+        getSettingsController().apply(fullImage);
         // Resetting to initial image state
         fullImage.getController().resetState();
 

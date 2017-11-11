@@ -5,7 +5,7 @@ import android.support.v4.view.ViewPager;
 import android.view.ViewGroup;
 
 import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
-import com.alexvasilkov.gestures.sample.base.settings.SettingsSetupListener;
+import com.alexvasilkov.gestures.sample.base.settings.SettingsController;
 import com.alexvasilkov.gestures.sample.ex.utils.GlideHelper;
 import com.alexvasilkov.gestures.sample.ex.utils.Painting;
 import com.alexvasilkov.gestures.views.GestureImageView;
@@ -14,12 +14,12 @@ class PagerAdapter extends RecyclePagerAdapter<PagerAdapter.ViewHolder> {
 
     private final ViewPager viewPager;
     private final Painting[] paintings;
-    private final SettingsSetupListener setupListener;
+    private final SettingsController settingsController;
 
-    PagerAdapter(ViewPager pager, Painting[] paintings, SettingsSetupListener listener) {
+    PagerAdapter(ViewPager pager, Painting[] paintings, SettingsController listener) {
         this.viewPager = pager;
         this.paintings = paintings;
-        this.setupListener = listener;
+        this.settingsController = listener;
     }
 
     @Override
@@ -36,10 +36,7 @@ class PagerAdapter extends RecyclePagerAdapter<PagerAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        if (setupListener != null) {
-            setupListener.onSetupGestureView(holder.image);
-        }
-
+        settingsController.apply(holder.image);
         Painting painting = paintings[position];
         GlideHelper.loadFull(holder.image, painting.imageId, painting.thumbId);
     }

@@ -6,7 +6,7 @@ import android.view.MenuItem;
 
 import com.alexvasilkov.gestures.Settings;
 import com.alexvasilkov.gestures.sample.base.settings.SettingsMenu;
-import com.alexvasilkov.gestures.sample.base.settings.SettingsSetupListener;
+import com.alexvasilkov.gestures.sample.base.settings.SettingsController;
 
 public abstract class BaseExampleActivity extends BaseActivity {
 
@@ -46,7 +46,7 @@ public abstract class BaseExampleActivity extends BaseActivity {
         }
     }
 
-    protected SettingsSetupListener getSettingsListener() {
+    protected SettingsController getSettingsController() {
         return settingsMenu;
     }
 

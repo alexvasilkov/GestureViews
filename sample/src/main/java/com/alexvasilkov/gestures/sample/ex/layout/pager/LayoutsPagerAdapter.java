@@ -13,7 +13,7 @@ import com.alexvasilkov.android.commons.texts.SpannableBuilder;
 import com.alexvasilkov.android.commons.ui.Views;
 import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
 import com.alexvasilkov.gestures.sample.R;
-import com.alexvasilkov.gestures.sample.base.settings.SettingsSetupListener;
+import com.alexvasilkov.gestures.sample.base.settings.SettingsController;
 import com.alexvasilkov.gestures.sample.ex.utils.GlideHelper;
 import com.alexvasilkov.gestures.sample.ex.utils.Painting;
 import com.alexvasilkov.gestures.views.GestureFrameLayout;
@@ -22,12 +22,12 @@ class LayoutsPagerAdapter extends RecyclePagerAdapter<LayoutsPagerAdapter.ViewHo
 
     private final ViewPager viewPager;
     private final Painting[] paintings;
-    private final SettingsSetupListener setupListener;
+    private final SettingsController settingsController;
 
-    LayoutsPagerAdapter(ViewPager pager, Painting[] paintings, SettingsSetupListener listener) {
+    LayoutsPagerAdapter(ViewPager pager, Painting[] paintings, SettingsController listener) {
         this.viewPager = pager;
         this.paintings = paintings;
-        this.setupListener = listener;
+        this.settingsController = listener;
     }
 
     @Override
@@ -45,7 +45,7 @@ class LayoutsPagerAdapter extends RecyclePagerAdapter<LayoutsPagerAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        setupListener.onSetupGestureView(holder.layout);
+        settingsController.apply(holder.layout);
 
         Painting painting = paintings[position];
         GlideHelper.loadFull(holder.image, painting.imageId, painting.thumbId);

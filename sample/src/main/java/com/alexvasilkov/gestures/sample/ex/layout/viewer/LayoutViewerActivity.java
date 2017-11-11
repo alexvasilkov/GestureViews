@@ -45,7 +45,7 @@ public class LayoutViewerActivity extends BaseExampleActivity {
     @Override
     protected void onSettingsChanged() {
         // Applying settings from toolbar menu, see BaseExampleActivity
-        getSettingsListener().onSetupGestureView(layout);
+        getSettingsController().apply(layout);
 
         // Resetting to initial state
         layout.getController().resetState();

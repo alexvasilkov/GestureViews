@@ -42,7 +42,7 @@ abstract class BaseComplexListActivity extends BaseExampleActivity {
         list.setAdapter(new ListAdapter(items, this::onImageClick));
 
         // Setting up pager view
-        pagerAdapter = new PagerAdapter(pager, getSettingsListener());
+        pagerAdapter = new PagerAdapter(pager, getSettingsController());
         pager.setAdapter(pagerAdapter);
         pager.setPageTransformer(true, new DepthPageTransformer());
 
