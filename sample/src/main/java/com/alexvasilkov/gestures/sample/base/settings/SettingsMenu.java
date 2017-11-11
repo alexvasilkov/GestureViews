@@ -46,6 +46,17 @@ public class SettingsMenu implements SettingsSetupListener {
     @InstanceState
     private boolean isSlow = false;
 
+    public void setValuesFrom(Settings settings) {
+        isPanEnabled = settings.isPanEnabled();
+        isZoomEnabled = settings.isZoomEnabled();
+        isRotationEnabled = settings.isRotationEnabled();
+        isRestrictRotation = settings.isRestrictRotation();
+        isExitEnabled = settings.isExitEnabled();
+        isFillViewport = settings.isFillViewport();
+        fitMethod = settings.getFitMethod();
+        gravity = settings.getGravity();
+    }
+
     public void onSaveInstanceState(Bundle outState) {
         InstanceStateManager.saveInstanceState(this, outState);
     }

@@ -9,10 +9,6 @@
         <item name="colorAccent">@color/accent</item>
     </style>
 
-    <style name="AppTheme.FrameLayout">
-        <item name="colorControlHighlight">?colorPrimary</item>
-    </style>
-
     <style name="AppTheme.Transparent">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>

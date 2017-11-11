@@ -165,10 +165,19 @@
         </activity>
 
         <activity
-            android:name=".ex.frame.pager.LayoutsInPagerActivity"
+            android:name=".ex.layout.viewer.LayoutViewerActivity"
+            android:icon="@drawable/ic_ex_layout"
+            android:label="Layout viewer">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ex.layout.pager.LayoutsInPagerActivity"
             android:icon="@drawable/ic_ex_pager"
-            android:label="Layouts in ViewPager"
-            android:theme="@style/AppTheme.FrameLayout">
+            android:label="Layouts in ViewPager">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -178,7 +187,7 @@
         <activity
             android:name=".ex.custom.CustomViewActivity"
             android:icon="@drawable/ic_ex_custom_text"
-            android:label="Custom gesture view">
+            android:label="Custom view">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

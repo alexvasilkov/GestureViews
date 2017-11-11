@@ -1,76 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<com.alexvasilkov.gestures.views.GestureFrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    android:gravity="center"
-    android:orientation="vertical"
+    app:gest_maxZoom="1.5"
+    app:gest_overscrollX="32dp"
+    app:gest_overscrollY="32dp"
+    app:gest_restrictRotation="true"
+    app:gest_rotationEnabled="true"
     tools:context=".base.StartActivity">
 
-    <View
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_weight="1.0" />
+    <!-- Using GestureFrameLayout as parent as an Easter egg -->
 
-    <ImageView
-        android:layout_width="96dp"
-        android:layout_height="96dp"
-        android:src="@drawable/start_icon" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:layout_marginTop="16dp"
-        android:fontFamily="sans-serif-medium"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
         android:gravity="center"
-        android:text="@string/app_name"
-        android:textColor="?android:textColorPrimaryInverse"
-        android:textSize="32sp" />
+        android:orientation="vertical"
+        tools:context=".base.StartActivity">
 
-    <View
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_weight="0.5" />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1.0" />
 
-    <Button
-        android:id="@+id/start_demo"
-        style="@style/App.Button.Accent"
-        android:layout_width="240dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="32dp"
-        android:layout_marginRight="32dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/start_demo" />
+        <ImageView
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:src="@drawable/start_icon" />
 
-    <Button
-        android:id="@+id/start_examples"
-        android:layout_width="240dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="32dp"
-        android:layout_marginRight="32dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/start_examples" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:text="@string/app_name"
+            android:textColor="?android:textColorPrimaryInverse"
+            android:textSize="32sp" />
 
-    <View
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_weight="0.8" />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="0.5" />
 
-    <TextView
-        android:id="@+id/start_version"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:textColor="?android:textColorPrimaryInverse"
-        tools:text="v1.2.3" />
+        <Button
+            android:id="@+id/start_demo"
+            style="@style/App.Button.Accent"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/start_demo" />
 
-    <View
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_weight="0.1"
-        android:minHeight="16dp" />
+        <Button
+            android:id="@+id/start_examples"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/start_examples" />
 
-</LinearLayout>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="0.8" />
+
+        <TextView
+            android:id="@+id/start_version"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:textColor="?android:textColorPrimaryInverse"
+            tools:text="v1.2.3" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="0.1"
+            android:minHeight="16dp" />
+
+    </LinearLayout>
+
+</com.alexvasilkov.gestures.views.GestureFrameLayout>

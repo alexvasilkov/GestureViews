@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.ex.frame.pager;
+package com.alexvasilkov.gestures.sample.ex.layout.pager;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -27,7 +27,7 @@ public class LayoutsInPagerActivity extends BaseExampleActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.frame_pager_screen);
+        setContentView(R.layout.layout_pager_screen);
 
         final Painting[] paintings = Painting.list(getResources());
 

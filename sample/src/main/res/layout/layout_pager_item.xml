@@ -33,6 +33,7 @@
 
         <Button
             android:id="@+id/frame_item_button"
+            style="@style/App.Button.Accent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"

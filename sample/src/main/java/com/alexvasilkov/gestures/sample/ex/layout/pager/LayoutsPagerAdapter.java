@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.ex.frame.pager;
+package com.alexvasilkov.gestures.sample.ex.layout.pager;
 
 import android.graphics.Typeface;
 import android.support.annotation.NonNull;
@@ -81,7 +81,7 @@ class LayoutsPagerAdapter extends RecyclePagerAdapter<LayoutsPagerAdapter.ViewHo
         final View button;
 
         ViewHolder(ViewGroup container) {
-            super(Views.inflate(container, R.layout.frame_pager_item_layout));
+            super(Views.inflate(container, R.layout.layout_pager_item));
             layout = itemView.findViewById(R.id.frame_item_layout);
             image = layout.findViewById(R.id.frame_item_image);
             title = layout.findViewById(R.id.frame_item_title);

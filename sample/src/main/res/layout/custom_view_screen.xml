@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp"
-        android:text="@string/custom_view_text"
+        android:text="@string/random_text"
         android:textSize="12sp" />
 
 </ScrollView>
