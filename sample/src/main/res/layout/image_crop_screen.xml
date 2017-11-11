@@ -22,8 +22,8 @@
         android:layout_marginBottom="48dp"
         android:padding="32dp"
         app:gest_aspect="1.3333"
-        app:gest_rulesHorizontal="2"
-        app:gest_rulesVertical="2" />
+        tools:gest_rulesHorizontal="2"
+        tools:gest_rulesVertical="2" />
 
     <LinearLayout style="@style/App.ControlLayout">
 
@@ -53,6 +53,11 @@
             android:layout_weight="1" />
 
         <ImageView
+            android:id="@+id/crop_add_rules"
+            style="@style/App.ControlOption"
+            android:src="@drawable/ic_grid_on_black_24dp" />
+
+        <ImageView
             android:id="@+id/crop_reset"
             style="@style/App.ControlOption"
             android:src="@drawable/ic_restore_black_24dp" />
@@ -65,6 +70,8 @@
         android:layout_height="match_parent"
         android:background="@color/window_background"
         android:visibility="gone"
+        app:gest_doubleTapZoom="3"
+        app:gest_maxZoom="6"
         tools:src="@drawable/painting_02" />
 
 </merge>

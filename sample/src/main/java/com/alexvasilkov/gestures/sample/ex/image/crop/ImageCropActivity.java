@@ -1,7 +1,6 @@
 package com.alexvasilkov.gestures.sample.ex.image.crop;
 
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,11 +19,13 @@ import com.alexvasilkov.gestures.views.GestureImageView;
 public class ImageCropActivity extends BaseActivity {
 
     private static final int PAINTING_ID = 1;
+    private static final int MAX_GRID_RULES = 5;
 
     private GestureImageView imageView;
     private CropAreaView cropView;
-
     private GestureImageView resultView;
+
+    private int gridRulesCount = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,11 +38,9 @@ public class ImageCropActivity extends BaseActivity {
 
         cropView = findViewById(R.id.image_crop_area);
         cropView.setImageView(imageView);
+        cropView.setRulesCount(gridRulesCount, gridRulesCount);
 
         resultView = findViewById(R.id.image_crop_result);
-        resultView.getController().getSettings()
-                .setMaxZoom(6f)
-                .setDoubleTapZoom(3f);
 
         initCropOptions();
 
@@ -109,7 +108,6 @@ public class ImageCropActivity extends BaseActivity {
             cropView.update(true);
         });
         findViewById(R.id.crop_orig).setOnClickListener(v -> {
-            Drawable image = imageView.getDrawable();
             cropView.setAspect(CropAreaView.ORIGINAL_ASPECT);
             cropView.setRounded(false);
             cropView.update(true);
@@ -119,9 +117,13 @@ public class ImageCropActivity extends BaseActivity {
             cropView.setRounded(true);
             cropView.update(true);
         });
-        findViewById(R.id.crop_reset).setOnClickListener(v -> {
-            imageView.getController().resetState();
+
+        findViewById(R.id.crop_add_rules).setOnClickListener(v -> {
+            gridRulesCount = (gridRulesCount + 1) % (MAX_GRID_RULES + 1);
+            cropView.setRulesCount(gridRulesCount, gridRulesCount);
         });
+        findViewById(R.id.crop_reset).setOnClickListener(v ->
+                imageView.getController().resetState());
     }
 
 }
