@@ -5,8 +5,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.alexvasilkov.gestures.Settings;
-import com.alexvasilkov.gestures.sample.base.settings.SettingsMenu;
 import com.alexvasilkov.gestures.sample.base.settings.SettingsController;
+import com.alexvasilkov.gestures.sample.base.settings.SettingsMenu;
 
 public abstract class BaseSettingsActivity extends BaseActivity {
 
@@ -32,7 +32,9 @@ public abstract class BaseSettingsActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        return settingsMenu.onCreateOptionsMenu(menu);
+        super.onCreateOptionsMenu(menu);
+        settingsMenu.onCreateOptionsMenu(menu);
+        return true;
     }
 
     @Override

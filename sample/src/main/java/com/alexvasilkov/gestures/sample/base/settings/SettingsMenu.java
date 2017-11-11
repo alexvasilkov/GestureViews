@@ -65,7 +65,7 @@ public class SettingsMenu implements SettingsController {
         InstanceStateManager.restoreInstanceState(this, savedInstanceState);
     }
 
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public void onCreateOptionsMenu(Menu menu) {
         addBoolMenu(menu, isPanEnabled, R.string.menu_enable_pan);
         addBoolMenu(menu, isZoomEnabled, R.string.menu_enable_zoom);
         addBoolMenu(menu, isRotationEnabled, R.string.menu_enable_rotation);
@@ -79,7 +79,6 @@ public class SettingsMenu implements SettingsController {
         addSubMenu(menu, GravityType.values(), GravityType.find(gravity), R.string.menu_gravity);
         addBoolMenu(menu, isSlow, R.string.menu_enable_slow);
         addBoolMenu(menu, GestureDebug.isDrawDebugOverlay(), R.string.menu_enable_overlay);
-        return true;
     }
 
     private void addBoolMenu(Menu menu, boolean checked, @StringRes int titleId) {

@@ -36,6 +36,7 @@
     <string name="menu_enable_slow">Slow animations</string>
     <string name="menu_enable_overlay">Debug overlay</string>
 
+    <string name="menu_info">Info</string>
     <string name="menu_crop">Crop</string>
 
     <string name="random_title">Efficitur tincidunt neque</string>

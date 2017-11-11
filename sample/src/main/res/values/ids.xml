@@ -3,6 +3,7 @@
 
     <item name="toolbar" type="id" />
 
+    <item name="menu_info" type="id" />
     <item name="menu_crop" type="id" />
 
     <item name="tag_holder" type="id" />
