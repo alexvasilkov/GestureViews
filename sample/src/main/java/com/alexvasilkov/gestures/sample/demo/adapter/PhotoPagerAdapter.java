@@ -69,10 +69,6 @@ public class PhotoPagerAdapter extends RecyclePagerAdapter<PhotoPagerAdapter.Vie
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup container) {
         final ViewHolder holder = new ViewHolder(container);
 
-        holder.image.getController().getSettings()
-                .setMaxZoom(10f)
-                .setDoubleTapZoom(3f);
-
         holder.image.setOnClickListener(view -> onImageClick());
 
         if (setupListener != null) {

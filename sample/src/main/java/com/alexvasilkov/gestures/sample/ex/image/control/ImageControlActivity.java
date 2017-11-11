@@ -11,7 +11,19 @@ import com.alexvasilkov.gestures.sample.base.BaseExampleActivity;
 import com.alexvasilkov.gestures.sample.ex.utils.GlideHelper;
 import com.alexvasilkov.gestures.sample.ex.utils.Painting;
 import com.alexvasilkov.gestures.views.GestureImageView;
+import com.alexvasilkov.gestures.views.interfaces.GestureView;
 
+/**
+ * This example demonstrates image state control with and without animation.
+ * <p>
+ * You can basically get image's {@link State} with
+ * {@link GestureView#getController() getController()}
+ * .{@link GestureController#getState() getState()}, change it using any of state's methods
+ * and then either immediately apply the changes with {@link GestureController#updateState()} method
+ * or animate them with {@link GestureController#animateStateTo(State)}.<br>
+ * Note, that in last case you should apply all the state manipulations to a copy of current state
+ * (can be made with {@link State#copy()}).
+ */
 public class ImageControlActivity extends BaseExampleActivity {
 
     private static final int PAINTING_ID = 1;
@@ -25,12 +37,10 @@ public class ImageControlActivity extends BaseExampleActivity {
         setContentView(R.layout.image_control_screen);
 
         imageView = findViewById(R.id.image_control_viewer);
-        imageView.getController().getSettings()
-                .setMaxZoom(6f)
-                .setDoubleTapZoom(3f);
 
         initControlOptions();
 
+        // Loading sample image
         final Painting painting = Painting.list(getResources())[PAINTING_ID];
         GlideHelper.loadFull(imageView, painting.imageId, painting.thumbId);
     }
@@ -65,13 +75,15 @@ public class ImageControlActivity extends BaseExampleActivity {
         final State state = controller.getState().copy();
         final PointF pivot = getPivot();
 
-        // Zoom in or out the image
+        // Zooming the image in or out
         state.zoomBy(zoomIn ? 1.333f : 0.75f, pivot.x, pivot.y);
 
         if (animate) {
+            // Animating state changes. Do not forget to make a state's copy prior to any changes.
             controller.setPivot(pivot.x, pivot.y);
             controller.animateStateTo(state);
         } else {
+            // Immediately applying state changes
             controller.getState().set(state);
             controller.updateState();
         }
@@ -93,9 +105,11 @@ public class ImageControlActivity extends BaseExampleActivity {
         state.rotateTo(rotation, pivot.x, pivot.y);
 
         if (animate) {
+            // Animating state changes. Do not forget to make a state's copy prior to any changes.
             controller.setPivot(pivot.x, pivot.y);
             controller.animateStateTo(state);
         } else {
+            // Immediately applying state changes
             controller.getState().set(state);
             controller.updateState();
         }
@@ -117,14 +131,17 @@ public class ImageControlActivity extends BaseExampleActivity {
             state.zoomTo(minZoom, pivot.x, pivot.y);
             state.rotateTo(0f, pivot.x, pivot.y);
 
+            // Animating state changes. Do not forget to make a state's copy prior to any changes.
             controller.setPivot(pivot.x, pivot.y);
             controller.animateStateTo(state);
         } else {
+            // Immediately resetting the state
             controller.resetState();
         }
     }
 
     private PointF getPivot() {
+        // Default pivot point is a view center
         PointF pivot = new PointF();
         pivot.x = 0.5f * imageView.getController().getSettings().getViewportW();
         pivot.y = 0.5f * imageView.getController().getSettings().getViewportH();

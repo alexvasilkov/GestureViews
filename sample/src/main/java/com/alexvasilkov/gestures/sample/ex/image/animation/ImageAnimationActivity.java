@@ -13,7 +13,7 @@ import com.alexvasilkov.gestures.transition.ViewsTransitionAnimator;
 import com.alexvasilkov.gestures.views.GestureImageView;
 
 /**
- * This example demonstrates small image animation into a full mode.
+ * This example demonstrates image animation from small mode into a full one.
  */
 public class ImageAnimationActivity extends BaseExampleActivity {
 

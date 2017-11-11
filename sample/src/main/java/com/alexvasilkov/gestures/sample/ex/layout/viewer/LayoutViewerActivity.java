@@ -10,6 +10,11 @@ import com.alexvasilkov.gestures.sample.ex.utils.GlideHelper;
 import com.alexvasilkov.gestures.sample.ex.utils.Painting;
 import com.alexvasilkov.gestures.views.GestureFrameLayout;
 
+/**
+ * Simple example demonstrates usage of {@link GestureFrameLayout}.
+ * Basically, all you need is to wrap your layout with {@link GestureFrameLayout} and apply
+ * necessary settings.
+ */
 public class LayoutViewerActivity extends BaseExampleActivity {
 
     private static final int PAINTING_ID = 0;
@@ -27,7 +32,7 @@ public class LayoutViewerActivity extends BaseExampleActivity {
         // Initializing custom example settings
         setDefaultSettings(layout.getController().getSettings());
 
-        // Loading image
+        // Loading sample image
         final ImageView imageView = findViewById(R.id.frame_layout_image);
         final Painting painting = Painting.list(getResources())[PAINTING_ID];
         GlideHelper.loadFull(imageView, painting.imageId, painting.thumbId);
