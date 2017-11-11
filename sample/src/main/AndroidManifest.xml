@@ -117,7 +117,7 @@
         <activity
             android:name=".ex.image.animation.RoundImageAnimationActivity"
             android:icon="@drawable/ic_collections_black_24dp"
-            android:label="Round image animation">
+            android:label="Circular image animation">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
