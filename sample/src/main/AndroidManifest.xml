@@ -41,7 +41,7 @@
 
         <activity
             android:name=".ex.image.viewer.ImageViewerActivity"
-            android:icon="@drawable/ic_image_black_24dp"
+            android:icon="@drawable/ic_ex_image"
             android:label="Image viewer">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -51,7 +51,7 @@
 
         <activity
             android:name=".ex.image.control.ImageControlActivity"
-            android:icon="@drawable/ic_image_black_24dp"
+            android:icon="@drawable/ic_ex_state_control"
             android:label="Image state control">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -61,7 +61,7 @@
 
         <activity
             android:name=".ex.image.crop.ImageCropActivity"
-            android:icon="@drawable/ic_crop_rotate_black_24dp"
+            android:icon="@drawable/ic_ex_crop"
             android:label="Image cropping">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -71,7 +71,7 @@
 
         <activity
             android:name=".ex.image.pager.ViewPagerActivity"
-            android:icon="@drawable/ic_view_carousel_black_24dp"
+            android:icon="@drawable/ic_ex_pager"
             android:label="Images in ViewPager">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -81,7 +81,7 @@
 
         <activity
             android:name=".ex.image.markers.ImageMarkersActivity"
-            android:icon="@drawable/ic_place_black_24dp"
+            android:icon="@drawable/ic_ex_markers"
             android:label="Image markers overlay">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -91,7 +91,7 @@
 
         <activity
             android:name=".ex.image.animation.ImageAnimationActivity"
-            android:icon="@drawable/ic_collections_black_24dp"
+            android:icon="@drawable/ic_ex_image_animation"
             android:label="Image animation">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -101,7 +101,7 @@
 
         <activity
             android:name=".ex.image.animation.cross.ImageCrossAnimationActivity"
-            android:icon="@drawable/ic_collections_black_24dp"
+            android:icon="@drawable/ic_ex_image_animation"
             android:label="Image animation (cross-activity)">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -116,7 +116,7 @@
 
         <activity
             android:name=".ex.image.animation.RoundImageAnimationActivity"
-            android:icon="@drawable/ic_collections_black_24dp"
+            android:icon="@drawable/ic_ex_image_animation"
             android:label="Circular image animation">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -126,7 +126,7 @@
 
         <activity
             android:name=".ex.list.recycler.RecyclerToPagerActivity"
-            android:icon="@drawable/ic_view_list_black_24dp"
+            android:icon="@drawable/ic_ex_list"
             android:label="RecyclerView transitions">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -136,7 +136,7 @@
 
         <activity
             android:name=".ex.list.listview.ListViewToPagerActivity"
-            android:icon="@drawable/ic_view_list_black_24dp"
+            android:icon="@drawable/ic_ex_list"
             android:label="ListView transitions">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -146,7 +146,7 @@
 
         <activity
             android:name=".ex.list.complex.ComplexListV1Activity"
-            android:icon="@drawable/ic_view_quilt_black_24dp"
+            android:icon="@drawable/ic_ex_complex_list"
             android:label="Complex list transition v1">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -156,7 +156,7 @@
 
         <activity
             android:name=".ex.list.complex.ComplexListV2Activity"
-            android:icon="@drawable/ic_view_quilt_black_24dp"
+            android:icon="@drawable/ic_ex_complex_list"
             android:label="Complex list transition v2">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -166,7 +166,7 @@
 
         <activity
             android:name=".ex.frame.pager.LayoutsInPagerActivity"
-            android:icon="@drawable/ic_view_carousel_black_24dp"
+            android:icon="@drawable/ic_ex_pager"
             android:label="Layouts in ViewPager"
             android:theme="@style/AppTheme.FrameLayout">
             <intent-filter>
@@ -177,7 +177,7 @@
 
         <activity
             android:name=".ex.custom.CustomViewActivity"
-            android:icon="@drawable/ic_format_size_black_24dp"
+            android:icon="@drawable/ic_ex_custom_text"
             android:label="Custom gesture view">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
