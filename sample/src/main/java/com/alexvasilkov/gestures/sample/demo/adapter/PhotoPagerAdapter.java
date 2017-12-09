@@ -82,7 +82,6 @@ public class PhotoPagerAdapter extends RecyclePagerAdapter<PhotoPagerAdapter.Vie
 
         // Temporary disabling touch controls
         if (!holder.gesturesDisabled) {
-            holder.image.getController().getSettings().disableGestures();
             holder.gesturesDisabled = true;
         }
 
@@ -98,7 +97,6 @@ public class PhotoPagerAdapter extends RecyclePagerAdapter<PhotoPagerAdapter.Vie
                 holder.progress.animate().alpha(0f);
                 // Re-enabling touch controls
                 if (holder.gesturesDisabled) {
-                    holder.image.getController().getSettings().enableGestures();
                     holder.gesturesDisabled = false;
                 }
             }

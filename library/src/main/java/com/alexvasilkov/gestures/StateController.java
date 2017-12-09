@@ -37,6 +37,8 @@ public class StateController {
     private float minZoom;
     private float maxZoom;
 
+    private float zoomPatch;
+
     StateController(Settings settings) {
         this.settings = settings;
     }
@@ -82,6 +84,20 @@ public class StateController {
             restrictStateBounds(state, state, Float.NaN, Float.NaN, false, false, true);
             return false;
         }
+    }
+
+    public void setTempZoomPatch(float factor) {
+        zoomPatch = factor;
+    }
+
+    public void applyZoomPatch(State state) {
+        if (zoomPatch > 0f) {
+            state.set(state.getX(), state.getY(), state.getZoom() * zoomPatch, state.getRotation());
+        }
+    }
+
+    public float applyZoomPatch(float zoom) {
+        return zoomPatch > 0f ? zoomPatch * zoom : zoom;
     }
 
     /**

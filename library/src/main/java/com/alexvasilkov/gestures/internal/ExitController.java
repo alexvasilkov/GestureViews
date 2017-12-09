@@ -201,6 +201,11 @@ public class ExitController {
         return isExitDetected();
     }
 
+    public void applyZoomPatch() {
+        // Applying zoom patch (needed in case if image size is changed)
+        initialZoom = controller.getStateController().applyZoomPatch(initialZoom);
+    }
+
     public void onRotationBegin() {
         isRotationInAction = true;
     }

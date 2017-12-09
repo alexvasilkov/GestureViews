@@ -129,7 +129,9 @@ public class ViewPositionAnimator {
         toController.addOnStateChangeListener(new GestureController.OnStateChangeListener() {
             @Override
             public void onStateChanged(State state) {
-                // No-op
+                // Applying zoom patch (needed in case if image size is changed)
+                toController.getStateController().applyZoomPatch(fromState);
+                toController.getStateController().applyZoomPatch(toState);
             }
 
             @Override

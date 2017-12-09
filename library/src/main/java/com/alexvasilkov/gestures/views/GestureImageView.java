@@ -182,9 +182,12 @@ public class GestureImageView extends ImageView
         ensureControllerCreated();
 
         Settings settings = controller.getSettings();
-        int oldWidth = settings.getImageW();
-        int oldHeight = settings.getImageH();
 
+        // Saving old image size
+        float oldWidth = settings.getImageW();
+        float oldHeight = settings.getImageH();
+
+        // Setting image size
         if (drawable == null) {
             settings.setImage(0, 0);
         } else if (drawable.getIntrinsicWidth() == -1 || drawable.getIntrinsicHeight() == -1) {
@@ -193,7 +196,16 @@ public class GestureImageView extends ImageView
             settings.setImage(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
         }
 
-        if (oldWidth != settings.getImageW() || oldHeight != settings.getImageH()) {
+        // Getting new image size
+        float newWidth = settings.getImageW();
+        float newHeight = settings.getImageH();
+
+        if (newWidth > 0f && newHeight > 0f && oldWidth > 0f && oldHeight > 0f) {
+            float scaleFactor = Math.min(oldWidth / newWidth, oldHeight / newHeight);
+            controller.getStateController().setTempZoomPatch(scaleFactor);
+            controller.updateState();
+            controller.getStateController().setTempZoomPatch(0f);
+        } else {
             controller.resetState();
         }
     }

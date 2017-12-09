@@ -225,6 +225,13 @@ public class GestureController implements View.OnTouchListener {
      * Applies state restrictions and notifies {@link OnStateChangeListener} listeners.
      */
     public void updateState() {
+        // Applying zoom patch (needed in case if image size is changed)
+        stateController.applyZoomPatch(state);
+        stateController.applyZoomPatch(prevState);
+        stateController.applyZoomPatch(stateStart);
+        stateController.applyZoomPatch(stateEnd);
+        exitController.applyZoomPatch();
+
         boolean reset = stateController.updateState(state);
         if (reset) {
             notifyStateReset();
