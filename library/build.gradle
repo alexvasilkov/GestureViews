@@ -1,20 +1,20 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '26.0.2'
+    compileSdkVersion 27
+    buildToolsVersion '26.0.3'
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 26
+        targetSdkVersion 27
         versionCode VERSION_CODE.toInteger()
         versionName VERSION_NAME
     }
 }
 
 dependencies {
-    compileOnly 'com.android.support:support-v4:26.1.0'
-    compileOnly 'com.android.support:recyclerview-v7:26.1.0'
+    compileOnly 'com.android.support:support-v4:27.0.2'
+    compileOnly 'com.android.support:recyclerview-v7:27.0.2'
 }
 
 // New version can be uploaded with './gradlew clean :library:uploadArchives'
@@ -23,4 +23,4 @@ apply from: 'gradle-mvn-push.gradle'
 // Count methods:
 // dx --dex --output=temp.dex classes.jar
 // hexdump -s 88 -n 4 -e '1/4 "%d\n"' temp.dex
-// Where dx is placed in SDK folder, e.g. ~/Library/Android/sdk/build-tools/26.0.2/
+// Where dx is placed in SDK folder, e.g. ~/Library/Android/sdk/build-tools/26.0.3/
