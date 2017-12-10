@@ -14,7 +14,7 @@ import com.alexvasilkov.gestures.views.interfaces.AnimatorView;
 
 /**
  * Helper class to animate transitions into ViewPager with GestureView-driven pages.
- * <p/>
+ * <p>
  * It works best with {@link RecyclePagerAdapter} as ViewPager adapter.
  */
 public class IntoViewPagerListener<ID> extends ViewsTransitionAnimator.RequestListener<ID> {

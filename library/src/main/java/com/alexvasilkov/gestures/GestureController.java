@@ -1,5 +1,6 @@
 package com.alexvasilkov.gestures;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.PointF;
 import android.graphics.RectF;
@@ -26,28 +27,28 @@ import java.util.List;
 
 /**
  * Handles touch events to update view's position state ({@link State}) based on current
- * setup ({@link Settings}).<br/>
- * Settings can be obtained and altered through {@link #getSettings()}.<br/>
+ * setup ({@link Settings}).<br>
+ * Settings can be obtained and altered through {@link #getSettings()}.<br>
  * Note, that some settings are required in order to correctly update state, see {@link Settings}.
- * <p/>
+ * <p>
  * This class implements {@link View.OnTouchListener} to delegate touches from view to controller.
- * <p/>
+ * <p>
  * State can also be manipulated directly with {@link #getState()}, {@link #updateState()}
  * and {@link #resetState()}. You can also access {@link #getStateController()} for some additional
  * stuff.
- * <p/>
- * State can be animated with {@link #animateStateTo(State)} method.<br/>
+ * <p>
+ * State can be animated with {@link #animateStateTo(State)} method.<br>
  * See also {@link #stopFlingAnimation()}, {@link #stopStateAnimation()}
  * and {@link #stopAllAnimations()} methods.
- * <p/>
+ * <p>
  * All state changes will be passed to {@link OnStateChangeListener OnStateChangeListener}.
  * See {@link #addOnStateChangeListener(OnStateChangeListener) addOnStateChangeListener} and
  * {@link #removeOnStateChangeListener(OnStateChangeListener) removeOnStateChangeListener} methods.
- * <p/>
+ * <p>
  * Additional touch events can be listened with {@link OnGestureListener OnGestureListener} and
  * {@link SimpleOnGestureListener SimpleOnGestureListener} using
  * {@link #setOnGesturesListener(OnGestureListener) setOnGesturesListener} method.
- * <p/>
+ * <p>
  * State source changes (whether state is being changed by user or by animation) can be
  * listened with {@link OnStateSourceChangeListener} using
  * {@link #setOnStateSourceChangeListener(OnStateSourceChangeListener)} method.
@@ -101,6 +102,7 @@ public class GestureController implements View.OnTouchListener {
     private final State stateStart = new State();
     private final State stateEnd = new State();
 
+    private final View targetView;
     private final Settings settings;
     private final State state = new State();
     private final State prevState = new State();
@@ -110,13 +112,13 @@ public class GestureController implements View.OnTouchListener {
     public GestureController(@NonNull View view) {
         final Context context = view.getContext();
 
+        targetView = view;
         settings = new Settings();
         stateController = new StateController(settings);
 
         animationEngine = new LocalAnimationEngine(view);
         InternalGesturesListener internalListener = new InternalGesturesListener();
         gestureDetector = new GestureDetector(context, internalListener);
-        gestureDetector.setIsLongpressEnabled(false);
         scaleDetector = new ScaleGestureDetectorFixed(context, internalListener);
         rotateDetector = new RotationGestureDetector(context, internalListener);
 
@@ -134,6 +136,7 @@ public class GestureController implements View.OnTouchListener {
     /**
      * Sets listener for basic touch events.
      *
+     * @param listener Gestures listener
      * @see GestureController.OnGestureListener
      */
     @SuppressWarnings({ "unused", "WeakerAccess" }) // Public API
@@ -144,6 +147,7 @@ public class GestureController implements View.OnTouchListener {
     /**
      * Sets listener for state source changes.
      *
+     * @param listener State's source changes listener
      * @see OnStateSourceChangeListener
      */
     @SuppressWarnings({ "unused", "WeakerAccess" }) // Public API
@@ -154,6 +158,7 @@ public class GestureController implements View.OnTouchListener {
     /**
      * Adds listener for state changes.
      *
+     * @param listener State changes listener
      * @see OnStateChangeListener
      */
     public void addOnStateChangeListener(@NonNull OnStateChangeListener listener) {
@@ -163,6 +168,7 @@ public class GestureController implements View.OnTouchListener {
     /**
      * Removes listener for state changes.
      *
+     * @param listener State changes listener to be removed
      * @see #addOnStateChangeListener(OnStateChangeListener)
      */
     @SuppressWarnings({ "unused", "WeakerAccess" }) // Public API
@@ -171,39 +177,44 @@ public class GestureController implements View.OnTouchListener {
     }
 
     /**
-     * Sets whether long press is enabled or not. Long press is disabled by default.
-     *
-     * @see GestureController.OnGestureListener#onLongPress(android.view.MotionEvent)
+     * @param enabled Whether long press should be enabled or not
+     * @deprecated In order to enable long clicks you should either set
+     * {@link View#setOnLongClickListener(View.OnLongClickListener)} or use
+     * {@link View#setLongClickable(boolean)}.
      */
     @SuppressWarnings({ "unused", "WeakerAccess" }) // Public API
+    @Deprecated
     public void setLongPressEnabled(boolean enabled) {
-        gestureDetector.setIsLongpressEnabled(enabled);
+        targetView.setLongClickable(true);
     }
 
     /**
      * Returns settings that can be updated.
-     * <p/>
+     * <p>
      * Note: call {@link #updateState()}, {@link #resetState()} or {@link #animateKeepInBounds()}
      * after settings was changed to correctly apply state restrictions.
+     *
+     * @return Gesture view's settings
      */
     public Settings getSettings() {
         return settings;
     }
 
     /**
-     * Returns current state. In most cases you should not modify state directly,
-     * use one of the methods provided in {@link StateController} instead.
-     * <p/>
-     * If current state was changed outside {@link GestureController}
-     * you should call {@link GestureController#updateState()} or {@link #animateKeepInBounds()}
+     * Current state.
+     * <p>
+     * If this state is changed from outside you should call
+     * {@link GestureController#updateState()} or {@link #animateKeepInBounds()}
      * to properly apply changes.
+     *
+     * @return Current state
      */
     public State getState() {
         return state;
     }
 
     /**
-     * Returns state controller that can be used externally.
+     * @return State controller to get computed min/max zoom levels or calculate movement area
      */
     @SuppressWarnings("WeakerAccess") // Public API
     public StateController getStateController() {
@@ -211,10 +222,16 @@ public class GestureController implements View.OnTouchListener {
     }
 
     /**
-     * Applies state restrictions and notifies
-     * {@link OnStateChangeListener} listeners.
+     * Applies state restrictions and notifies {@link OnStateChangeListener} listeners.
      */
     public void updateState() {
+        // Applying zoom patch (needed in case if image size is changed)
+        stateController.applyZoomPatch(state);
+        stateController.applyZoomPatch(prevState);
+        stateController.applyZoomPatch(stateStart);
+        stateController.applyZoomPatch(stateEnd);
+        exitController.applyZoomPatch();
+
         boolean reset = stateController.updateState(state);
         if (reset) {
             notifyStateReset();
@@ -226,9 +243,9 @@ public class GestureController implements View.OnTouchListener {
     /**
      * Resets to initial state (default position, min zoom level) and notifies
      * {@link OnStateChangeListener} listeners.
-     * <p/>
+     * <p>
      * Should be called when image size is changed.
-     * <p/>
+     * <p>
      * See {@link Settings#setImage(int, int)}.
      */
     public void resetState() {
@@ -244,6 +261,8 @@ public class GestureController implements View.OnTouchListener {
     /**
      * Sets pivot point for zooming when keeping image in bounds.
      *
+     * @param pivotX Pivot point's X coordinate
+     * @param pivotY Pivot point's Y coordinate
      * @see #animateKeepInBounds()
      * @see #animateStateTo(State)
      */
@@ -253,10 +272,10 @@ public class GestureController implements View.OnTouchListener {
     }
 
     /**
-     * Animates to correct position withing bounds.
+     * Animates to correct position withing the bounds.
      *
      * @return {@code true} if animation started, {@code false} otherwise. Animation may
-     * not be started if image already withing bounds.
+     * not be started if image already withing the bounds.
      */
     @SuppressWarnings("WeakerAccess") // Public API
     public boolean animateKeepInBounds() {
@@ -266,6 +285,7 @@ public class GestureController implements View.OnTouchListener {
     /**
      * Animates current state to provided end state.
      *
+     * @param endState End state
      * @return {@code true} if animation started, {@code false} otherwise. Animation may
      * not be started if end state is {@code null} or equals to current state (after bounds
      * restrictions are applied).
@@ -378,6 +398,7 @@ public class GestureController implements View.OnTouchListener {
 
     @SuppressWarnings("WeakerAccess") // Public API (can be overridden)
     protected void notifyStateReset() {
+        exitController.stopDetection();
         for (OnStateChangeListener listener : stateListeners) {
             listener.onStateReset(prevState, state);
         }
@@ -405,10 +426,13 @@ public class GestureController implements View.OnTouchListener {
     //  Gestures handling
     // -------------------
 
+    @SuppressLint("ClickableViewAccessibility") // performClick is called in gestures callbacks
     @Override
     public boolean onTouch(@NonNull View view, @NonNull MotionEvent event) {
         MotionEvent viewportEvent = MotionEvent.obtain(event);
         viewportEvent.offsetLocation(-view.getPaddingLeft(), -view.getPaddingTop());
+
+        gestureDetector.setIsLongpressEnabled(view.isLongClickable());
 
         boolean result = gestureDetector.onTouchEvent(viewportEvent);
         result |= scaleDetector.onTouchEvent(viewportEvent);
@@ -524,11 +548,17 @@ public class GestureController implements View.OnTouchListener {
 
     @SuppressWarnings("WeakerAccess") // Public API (can be overridden)
     protected boolean onSingleTapUp(@NonNull MotionEvent event) {
+        // If double tap is not enabled then it should be safe to propagate click event from here
+        if (!settings.isDoubleTapEnabled()) {
+            targetView.performClick();
+        }
         return gestureListener != null && gestureListener.onSingleTapUp(event);
     }
 
     @SuppressWarnings("WeakerAccess") // Public API (can be overridden)
     protected void onLongPress(@NonNull MotionEvent event) {
+        targetView.performLongClick();
+
         if (gestureListener != null) {
             gestureListener.onLongPress(event);
         }
@@ -541,7 +571,7 @@ public class GestureController implements View.OnTouchListener {
             return false;
         }
 
-        boolean scrollConsumed = exitController.onScroll(-dy);
+        boolean scrollConsumed = exitController.onScroll(-dx, -dy);
         if (scrollConsumed) {
             return true;
         }
@@ -610,6 +640,8 @@ public class GestureController implements View.OnTouchListener {
     }
 
     /**
+     * @param dx Current X offset in the fling scroll
+     * @param dy Current Y offset in the fling scroll
      * @return true if state was changed, false otherwise.
      */
     @SuppressWarnings("WeakerAccess") // Public API (can be overridden)
@@ -631,6 +663,10 @@ public class GestureController implements View.OnTouchListener {
 
     @SuppressWarnings("WeakerAccess") // Public API (can be overridden)
     protected boolean onSingleTapConfirmed(MotionEvent event) {
+        // If double tap is enabled we should propagate click only if we aren't in a double tap now
+        if (settings.isDoubleTapEnabled()) {
+            targetView.performClick();
+        }
         return gestureListener != null && gestureListener.onSingleTapConfirmed(event);
     }
 
@@ -829,41 +865,44 @@ public class GestureController implements View.OnTouchListener {
     @SuppressWarnings("WeakerAccess") // Public API
     public interface OnGestureListener {
         /**
-         * See {@link GestureDetector.OnGestureListener#onDown(MotionEvent)}.
+         * @param event Motion event
+         * @see GestureDetector.OnGestureListener#onDown(MotionEvent)
          */
         void onDown(@NonNull MotionEvent event);
 
         /**
-         * See {@link GestureDetector.OnGestureListener#onDown(MotionEvent)}.
+         * @param event Motion event
+         * @see GestureDetector.OnGestureListener#onDown(MotionEvent)
          */
         void onUpOrCancel(@NonNull MotionEvent event);
 
         /**
-         * See {@link GestureDetector.OnGestureListener#onSingleTapUp(MotionEvent)}.
-         *
+         * @param event Motion event
          * @return true if event was consumed, false otherwise.
+         * @see GestureDetector.OnGestureListener#onSingleTapUp(MotionEvent)
          */
         boolean onSingleTapUp(@NonNull MotionEvent event);
 
         /**
-         * See {@link GestureDetector.OnDoubleTapListener#onSingleTapConfirmed(MotionEvent)}.
-         *
+         * @param event Motion event
          * @return true if event was consumed, false otherwise.
+         * @see GestureDetector.OnDoubleTapListener#onSingleTapConfirmed(MotionEvent)
          */
         boolean onSingleTapConfirmed(@NonNull MotionEvent event);
 
         /**
-         * See {@link GestureDetector.OnGestureListener#onLongPress(MotionEvent)}.
-         * <p/>
-         * Note, that long press is disabled by default, use {@link #setLongPressEnabled(boolean)}
+         * Note, that long press is disabled by default, use {@link View#setLongClickable(boolean)}
          * to enable it.
+         *
+         * @param event Motion event
+         * @see GestureDetector.OnGestureListener#onLongPress(MotionEvent)
          */
         void onLongPress(@NonNull MotionEvent event);
 
         /**
-         * See {@link GestureDetector.OnDoubleTapListener#onDoubleTap(MotionEvent)}.
-         *
+         * @param event Motion event
          * @return true if event was consumed, false otherwise.
+         * @see GestureDetector.OnDoubleTapListener#onDoubleTap(MotionEvent)
          */
         boolean onDoubleTap(@NonNull MotionEvent event);
     }

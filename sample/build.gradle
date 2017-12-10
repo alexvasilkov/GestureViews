@@ -8,12 +8,12 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.alexvasilkov.sign'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion '25.0.3'
+    compileSdkVersion 27
+    buildToolsVersion '26.0.3'
 
     defaultConfig {
-        minSdkVersion 15
-        targetSdkVersion 25
+        minSdkVersion 16
+        targetSdkVersion 27
         versionCode 15
         versionName '2.3.2'
     }
@@ -30,26 +30,33 @@ android {
 
     buildTypes {
         debug {
+            applicationIdSuffix '.debug'
             signingConfig signingConfigs.debug
         }
         release {
             signingConfig signingConfigs.release
         }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
-    compile project(':library')
+    implementation project(':library')
 
-    compile 'com.android.support:support-v4:25.3.1'
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support:recyclerview-v7:25.3.1'
+    implementation 'com.android.support:support-v4:27.0.2'
+    implementation 'com.android.support:appcompat-v7:27.0.2'
+    implementation 'com.android.support:recyclerview-v7:27.0.2'
+    implementation 'com.android.support:design:27.0.2'
 
-    compile 'com.github.bumptech.glide:glide:3.8.0'
+    implementation 'com.github.bumptech.glide:glide:4.2.0'
 
-    compile 'com.alexvasilkov:android-commons:2.0.2'
-    compile 'com.alexvasilkov:events:1.0.0'
+    implementation 'com.alexvasilkov:android-commons:2.0.2'
+    implementation 'com.alexvasilkov:events:1.0.0'
 
-    compile 'com.googlecode.flickrj-android:flickrj-android:2.1.0'
-    compile 'org.slf4j:slf4j-android:1.7.7' // Required by Flickr library
+    implementation 'com.googlecode.flickrj-android:flickrj-android:2.1.0'
+    implementation 'org.slf4j:slf4j-android:1.7.7' // Required by Flickr library
 }

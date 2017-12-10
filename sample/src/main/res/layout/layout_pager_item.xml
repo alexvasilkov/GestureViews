@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.alexvasilkov.gestures.views.GestureFrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frame_item_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:gest_maxZoom="1.5">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/frame_item_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            tools:src="@drawable/painting_02" />
+
+        <TextView
+            android:id="@+id/frame_item_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_margin="16dp"
+            android:shadowColor="#000000"
+            android:shadowRadius="4"
+            android:textColor="?android:textColorPrimaryInverse"
+            android:textSize="16sp"
+            tools:text="Painting name" />
+
+        <Button
+            android:id="@+id/frame_item_button"
+            style="@style/App.Button.Accent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_margin="16dp"
+            android:text="@string/button_wiki_art" />
+
+    </FrameLayout>
+
+</com.alexvasilkov.gestures.views.GestureFrameLayout>

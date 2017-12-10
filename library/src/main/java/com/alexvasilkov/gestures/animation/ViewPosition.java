@@ -14,18 +14,18 @@ import java.util.regex.Pattern;
 
 /**
  * Helper class to compute and store view position used for transitions.
- * <p/>
+ * <p>
  * It consists of {@link #view} rectangle, {@link #viewport} rectangle (view rectangle minus
  * padding), {@link #visible} rectangle (part of viewport which is visible on screen)
  * and {@link #image} rectangle (position of the underlying image taking into account
  * {@link ImageView#getScaleType()}, or same as {@link #viewport} if view is not an
  * {@link ImageView} or if {@link ImageView#getDrawable()} is {@code null}).
  * All positions are in screen coordinates.
- * <p/>
+ * <p>
  * To create instance of this class use {@link #from(View)} static method. But note, that view
  * should already be laid out and have correct {@link View#getWidth()} and {@link View#getHeight()}
  * values.
- * <p/>
+ * <p>
  * You can also serialize and deserialize this class to string using {@link #pack()} and
  * {@link #unpack(String)} methods. This can be useful to pass view position between activities.
  */
@@ -70,6 +70,7 @@ public class ViewPosition {
     }
 
     /**
+     * @param targetView View for which we want to get on-screen location
      * @return true if view position is changed, false otherwise
      */
     private boolean init(@NonNull View targetView) {
@@ -135,6 +136,9 @@ public class ViewPosition {
     /**
      * Computes and returns view position. Note, that view should be already attached and laid out
      * before calling this method.
+     *
+     * @param view View for which we want to get on-screen location
+     * @return View position
      */
     public static ViewPosition from(@NonNull View view) {
         ViewPosition pos = new ViewPosition();
@@ -146,6 +150,8 @@ public class ViewPosition {
      * Computes view position and stores it in given {@code pos}. Note, that view should be already
      * attached and laid out before calling this method.
      *
+     * @param pos Output position
+     * @param view View for which we want to get on-screen location
      * @return true if view position is changed, false otherwise
      */
     public static boolean apply(@NonNull ViewPosition pos, @NonNull View view) {
@@ -154,6 +160,9 @@ public class ViewPosition {
 
     /**
      * Computes minimal view position for given point.
+     *
+     * @param pos Output view position
+     * @param point Target point
      */
     public static void apply(@NonNull ViewPosition pos, @NonNull Point point) {
         pos.view.set(point.x, point.y, point.x + 1, point.y + 1);
@@ -165,6 +174,7 @@ public class ViewPosition {
     /**
      * Packs this ViewPosition into string, which can be passed i.e. between activities.
      *
+     * @return Serialized position
      * @see #unpack(String)
      */
     public String pack() {
@@ -179,6 +189,9 @@ public class ViewPosition {
 
     /**
      * Restores ViewPosition from the string created by {@link #pack()} method.
+     *
+     * @param str Serialized position string
+     * @return De-serialized position
      */
     @SuppressWarnings("unused") // Public API
     public static ViewPosition unpack(String str) {

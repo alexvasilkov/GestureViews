@@ -43,13 +43,27 @@ public class GestureTransitions<ID> {
     public static <ID> GestureTransitions<ID> from(
             @NonNull RecyclerView recyclerView,
             @NonNull FromTracker<ID> tracker) {
-        return from(new FromRecyclerViewListener<>(recyclerView, tracker));
+        return from(recyclerView, tracker, true);
+    }
+
+    public static <ID> GestureTransitions<ID> from(
+            @NonNull RecyclerView recyclerView,
+            @NonNull FromTracker<ID> tracker,
+            boolean autoScroll) {
+        return from(new FromRecyclerViewListener<>(recyclerView, tracker, autoScroll));
     }
 
     public static <ID> GestureTransitions<ID> from(
             @NonNull ListView listView,
             @NonNull FromTracker<ID> tracker) {
-        return from(new FromListViewListener<>(listView, tracker));
+        return from(listView, tracker, true);
+    }
+
+    public static <ID> GestureTransitions<ID> from(
+            @NonNull ListView listView,
+            @NonNull FromTracker<ID> tracker,
+            boolean autoScroll) {
+        return from(new FromListViewListener<>(listView, tracker, autoScroll));
     }
 
     @SuppressWarnings("unused") // Public API

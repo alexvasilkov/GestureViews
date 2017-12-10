@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="info_image_viewer">
+        <b>Gestures</b>
+        \nAll basic gestures are supported:
+        \n<li> Pan</li>
+        \n<li> Zoom</li>
+        \n<li> Fling</li>
+        \n<li> Double tap (with smooth animation)</li>
+        \n<li> Quick scale (double tap &amp; swipe)</li>
+        \n<li> Rotation</li>
+        \n\n<b>Additional features</b>
+        \n<li> Elastic overzoom above min or max levels</li>
+        \n<li> Elastic overscroll</li>
+        \n<li> Restricting rotation by 90°</li>
+        \n<li> … and much more, see next examples</li>
+        \n\n<b>Settings</b>
+        \nAll features above are configurable, plus:
+        \n<li> Max zoom level</li>
+        \n<li> Double tap zoom level</li>
+        \n<li> Image gravity (<tt>CENTER</tt> by default)</li>
+        \n<li> Fit method (<tt>INSIDE</tt> by default)</li>
+        \n<li> Animations duration</li>
+        \n<li> Disable all gestures</li>
+        \n<li> Disable bounds restrictions</li>
+        \n<li> … and more</li>
+        \n\nHint: you can use toolbar menu to change some of the setting on the fly in this and
+        other examples in the app.
+        \n\n<b>Listeners</b>
+        \nBoth <tt>OnClickListener</tt> and <tt>OnLongClickListener</tt> are supported,
+        you can also set <tt>OnGestureListener</tt> to listen for additional
+        events and their locations.
+    </string>
+
+    <string name="info_image_pager">
+        By default GestureImageView will only allow ViewPager scrolling if it is zoomed out to a
+        min zoom.
+        \n\nBut it is also possible to enable seamless ViewPager integration with next features:
+        \n\n<li>Image panning smoothly turns into ViewPager flipping and vise versa</li>
+        \n\n<li>ViewPager flipping is made harder when image is zoomed in, to prevent accidental
+        page flips when panning zoomed image</li>
+    </string>
+
+</resources>

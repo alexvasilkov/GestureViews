@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <ListView
+        android:id="@+id/list_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:cacheColorHint="@color/window_background"
+        android:clipToPadding="false"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="16dp"
+        android:padding="16dp"
+        android:scrollbarStyle="outsideOverlay"
+        android:scrollbars="vertical"
+        tools:listitem="@layout/list_image_item" />
+
+    <View
+        android:id="@+id/list_full_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/primary_light"
+        android:visibility="invisible" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/list_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</merge>

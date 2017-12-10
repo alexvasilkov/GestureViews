@@ -29,21 +29,21 @@ import java.util.List;
 
 /**
  * Helper class to animate views from one position on screen to another.
- * <p/>
+ * <p>
  * Animation can be performed from any view (e.g. {@link ImageView}) to any gestures controlled
  * view implementing {@link GestureView} (e.g. {@link GestureImageView}).
- * <p/>
+ * <p>
  * Note, that initial and final views should have same aspect ratio for correct animation.
  * In case of {@link ImageView} initial and final images should have same aspect, but actual views
  * can have different aspects (e.g. animating from square thumb view with scale type
  * {@link ScaleType#CENTER_CROP} to rectangular full image view).
- * <p/>
- * To use this class first create an instance and then call {@link #enter(View, boolean)}.<br/>
+ * <p>
+ * To use this class first create an instance and then call {@link #enter(View, boolean)}.<br>
  * Alternatively you can manually pass initial view position using
- * {@link #enter(ViewPosition, boolean)} method. <br/>
- * To exit back to initial view call {@link #exit(boolean)} method.<br/>
+ * {@link #enter(ViewPosition, boolean)} method. <br>
+ * To exit back to initial view call {@link #exit(boolean)} method.<br>
  * You can listen for position changes using
- * {@link #addPositionUpdateListener(PositionUpdateListener)}.<br/>
+ * {@link #addPositionUpdateListener(PositionUpdateListener)}.<br>
  * If initial view was changed you should call {@link #update(View)} method to update to new view.
  * You can also manually update initial view position using {@link #update(ViewPosition)} method.
  */
@@ -129,7 +129,9 @@ public class ViewPositionAnimator {
         toController.addOnStateChangeListener(new GestureController.OnStateChangeListener() {
             @Override
             public void onStateChanged(State state) {
-                // No-op
+                // Applying zoom patch (needed in case if image size is changed)
+                toController.getStateController().applyZoomPatch(fromState);
+                toController.getStateController().applyZoomPatch(toState);
             }
 
             @Override
@@ -169,9 +171,11 @@ public class ViewPositionAnimator {
     /**
      * Starts 'enter' animation from no specific position (position will be calculated based on
      * gravity set in {@link Settings}).
-     * <p/>
+     * <p>
      * <b>Note, that in most cases you should use {@link #enter(View, boolean)} or
      * {@link #enter(ViewPosition, boolean)} methods instead.</b>
+     *
+     * @param withAnimation Whether to animate entering or immediately jump to entered state
      */
     public void enter(boolean withAnimation) {
         if (GestureDebug.isDebugAnimator()) {
@@ -184,9 +188,12 @@ public class ViewPositionAnimator {
 
     /**
      * Starts 'enter' animation from {@code from} view to {@code to}.
-     * <p/>
+     * <p>
      * Note, if {@code from} view was changed (i.e. during list adapter refresh) you should
      * update to new view using {@link #update(View)} method.
+     *
+     * @param from 'From' view
+     * @param withAnimation Whether to animate entering or immediately jump to entered state
      */
     public void enter(@NonNull View from, boolean withAnimation) {
         if (GestureDebug.isDebugAnimator()) {
@@ -199,9 +206,12 @@ public class ViewPositionAnimator {
 
     /**
      * Starts 'enter' animation from {@code from} position to {@code to} view.
-     * <p/>
+     * <p>
      * Note, if {@code from} view position was changed (i.e. during list adapter refresh) you
      * should update to new view using {@link #update(ViewPosition)} method.
+     *
+     * @param fromPos 'From' view position
+     * @param withAnimation Whether to animate entering or immediately jump to entered state
      */
     public void enter(@NonNull ViewPosition fromPos, boolean withAnimation) {
         if (GestureDebug.isDebugAnimator()) {
@@ -215,6 +225,8 @@ public class ViewPositionAnimator {
     /**
      * Updates initial view in case it was changed. You should not call this method if view stays
      * the same since animator should automatically detect view position changes.
+     *
+     * @param from New 'from' view
      */
     public void update(@NonNull View from) {
         if (GestureDebug.isDebugAnimator()) {
@@ -226,6 +238,8 @@ public class ViewPositionAnimator {
 
     /**
      * Updates position of initial view in case it was changed.
+     *
+     * @param from New 'from' view position
      */
     public void update(@NonNull ViewPosition from) {
         if (GestureDebug.isDebugAnimator()) {
@@ -249,6 +263,8 @@ public class ViewPositionAnimator {
 
     /**
      * Starts 'exit' animation from {@code to} view back to {@code from}.
+     *
+     * @param withAnimation Whether to animate exiting or immediately jump to initial state
      */
     public void exit(boolean withAnimation) {
         if (GestureDebug.isDebugAnimator()) {
@@ -327,8 +343,9 @@ public class ViewPositionAnimator {
     }
 
     /**
-     * Adds listener to the set of position updates listeners that will be notified during
-     * any position changes.
+     * Adds position state changes listener that will be notified during animations.
+     *
+     * @param listener Position listener
      */
     public void addPositionUpdateListener(@NonNull PositionUpdateListener listener) {
         listeners.add(listener);
@@ -336,10 +353,13 @@ public class ViewPositionAnimator {
     }
 
     /**
-     * Removes listener added by {@link #addPositionUpdateListener(PositionUpdateListener)}.
-     * <p/>
+     * Removes position state changes listener as added by
+     * {@link #addPositionUpdateListener(PositionUpdateListener)}.
+     * <p>
      * Note, this method may be called inside listener's callback without throwing
      * {@link IndexOutOfBoundsException}.
+     *
+     * @param listener Position listener to be removed
      */
     public void removePositionUpdateListener(@NonNull PositionUpdateListener listener) {
         if (iteratingListeners) {
@@ -355,6 +375,7 @@ public class ViewPositionAnimator {
     }
 
     /**
+     * @return Animation duration
      * @deprecated Use {@link Settings#getAnimationsDuration()} instead.
      */
     @SuppressWarnings("unused") // Public API
@@ -364,6 +385,7 @@ public class ViewPositionAnimator {
     }
 
     /**
+     * @param duration Animation duration
      * @deprecated Use {@link Settings#setAnimationsDuration(long)} instead.
      */
     @SuppressWarnings("unused") // Public API
@@ -376,7 +398,7 @@ public class ViewPositionAnimator {
     /**
      * @return Target (to) position as set by {@link #setToState(State, float)}.
      * Maybe useful to determine real animation position during exit gesture.
-     * <p/>
+     * <p>
      * I.e. {@link #getPosition()} / {@link #getToPosition()} (changes from 0 to ∞)
      * represents interpolated position used to calculate intermediate state and bounds.
      */
@@ -388,7 +410,7 @@ public class ViewPositionAnimator {
     /**
      * @return Current position within range {@code [0, 1]}, where {@code 0} is for
      * initial (from) position and {@code 1} is for final (to) position.
-     * <p/>
+     * <p>
      * Note, that final position can be changed by {@link #setToState(State, float)}, so if you
      * need to have real value of final position (instead of {@code 1}) then you need to use
      * {@link #getToPosition()} method.
@@ -398,6 +420,7 @@ public class ViewPositionAnimator {
     }
 
     /**
+     * @return Current position
      * @deprecated Use {@link #getPosition()} method instead.
      */
     @SuppressWarnings("unused") // Public API
@@ -416,13 +439,15 @@ public class ViewPositionAnimator {
 
 
     /**
-     * Specifies target (to) state and it's position which will be used to interpolate
-     * current state for intermediate positions (i.e. during animation or exit gesture).<br/>
+     * Specifies target ('to') state and it's position which will be used to interpolate
+     * current state for intermediate positions (i.e. during animation or exit gesture).<br>
      * This allows you to set up correct state without changing current position
      * ({@link #getPosition()}).
-     * <p/>
+     * <p>
      * Only use this method if you understand what you do.
      *
+     * @param state Target ('to') state
+     * @param position Target ('to') position
      * @see #getToPosition()
      */
     public void setToState(State state, @FloatRange(from = 0f, to = 1f) float position) {
@@ -445,10 +470,15 @@ public class ViewPositionAnimator {
 
     /**
      * Stops current animation and sets position state to particular values.
-     * <p/>
+     * <p>
      * Note, that once animator reaches {@code state = 0f} and {@code isLeaving = true}
      * it will cleanup all internal stuff. So you will need to call {@link #enter(View, boolean)}
      * or {@link #enter(ViewPosition, boolean)} again in order to continue using animator.
+     *
+     * @param pos Current position
+     * @param leaving Whether we we are in exiting direction ({@code true}) or in entering
+     * ({@code false})
+     * @param animate Whether we should start animating from given position and in given direction
      */
     public void setState(@FloatRange(from = 0f, to = 1f) float pos,
             boolean leaving, boolean animate) {
@@ -546,7 +576,7 @@ public class ViewPositionAnimator {
 
 
     /**
-     * Whether view position animation is in progress or not.
+     * @return Whether view position animation is in progress or not.
      */
     public boolean isAnimating() {
         return isAnimating;

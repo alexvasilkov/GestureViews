@@ -5,11 +5,13 @@ import android.view.View;
 
 /**
  * Class implementing both {@link FromTracker} and {@link IntoTracker} assuming that positions will
- * be used as items ids.<p/>
+ * be used as items ids.
+ * <p>
  * Note, that it will only work correctly if both "from" and "to" lists are the same and there will
  * be no changes to them which will change existing items' positions. So you can't remove items, or
  * add items into the middle, but you can add new items to the end of the list, as long as both
- * lists are updated simultaneously.<p/>
+ * lists are updated simultaneously.
+ * <p>
  * If you need to handle more advanced cases you should manually implement {@link FromTracker} and
  * {@link IntoTracker}, and use items ids instead of their positions.
  */

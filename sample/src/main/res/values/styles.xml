@@ -17,10 +17,54 @@
         <item name="android:background">@android:color/transparent</item>
     </style>
 
-    <style name="App.Button" />
+    <style name="App.Button" parent="Widget.AppCompat.Button" />
 
-    <style name="App.Button.Error" parent="Widget.AppCompat.Button">
+    <style name="App.Button.Error">
         <item name="colorButtonNormal">@color/error_color</item>
+    </style>
+
+    <style name="App.Button.Accent">
+        <item name="android:theme">@style/App.AccentButtonTheme</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Widget.Button.Inverse
+        </item>
+    </style>
+
+    <style name="App.AccentButtonTheme">
+        <item name="colorButtonNormal">?colorAccent</item>
+    </style>
+
+    <style name="App.ImageText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">?android:textColorSecondary</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">italic</item>
+    </style>
+
+
+    <style name="App.Demo" />
+
+    <style name="App.Demo.ExpandedTitle" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">#002E7D32</item>
+    </style>
+
+    <style name="App.ControlLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:layout_gravity">bottom</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:background">@color/window_background</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:paddingLeft">8dp</item>
+        <item name="android:paddingRight">8dp</item>
+    </style>
+
+    <style name="App.ControlOption">
+        <item name="android:layout_width">48dp</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:paddingRight">12dp</item>
+        <item name="android:background">?selectableItemBackgroundBorderless</item>
     </style>
 
 </resources>

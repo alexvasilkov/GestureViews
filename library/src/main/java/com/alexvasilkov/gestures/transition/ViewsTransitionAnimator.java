@@ -21,7 +21,7 @@ import java.util.List;
  * Extension of {@link ViewsCoordinator} that allows requesting {@link #enter(Object, boolean)} or
  * {@link #exit(boolean)} animations, keeps track of {@link PositionUpdateListener} listeners
  * and provides correct implementation of {@link #isLeaving()}.
- * <p/>
+ * <p>
  * Usage of this class should be similar to {@link ViewPositionAnimator} class.
  */
 public class ViewsTransitionAnimator<ID> extends ViewsCoordinator<ID> {
@@ -41,7 +41,7 @@ public class ViewsTransitionAnimator<ID> extends ViewsCoordinator<ID> {
     /**
      * @deprecated Use {@link GestureTransitions} instead.
      */
-    @SuppressWarnings("WeakerAccess") // Public API
+    @SuppressWarnings({ "WeakerAccess", "DeprecatedIsStillUsed" }) // Public temporary API
     @Deprecated
     public ViewsTransitionAnimator() {
         addPositionUpdateListener(new PositionUpdateListener() {
@@ -57,6 +57,8 @@ public class ViewsTransitionAnimator<ID> extends ViewsCoordinator<ID> {
     /**
      * Requests 'from' and 'to' views for given ID and starts enter animation when views are ready.
      *
+     * @param id Item ID for views lookup
+     * @param withAnimation Whether to animate entering or immediately jump to entered state
      * @see ViewsCoordinator
      */
     public void enter(@NonNull ID id, boolean withAnimation) {
@@ -70,13 +72,16 @@ public class ViewsTransitionAnimator<ID> extends ViewsCoordinator<ID> {
 
     /**
      * Similar to {@link #enter(Object, boolean) enter(ID, boolean)} but starts entering from no
-     * specific id.<br/>
+     * specific id.<br>
      * <b>Do not use this method if you are actually going to use items ids in {@link FromTracker}
-     * or {@link IntoTracker}.</b><p/>
-     * Can be used if your have single 'from' item with no specific id, like:<br/>
+     * or {@link IntoTracker}.</b>
+     * <p>
+     * Can be used if your have single 'from' item with no specific id, like:<br>
      * {@code GestureTransitions.from(imageView).into(gestureImageView).enterSingle(true)}
+     *
+     * @param withAnimation Whether to animate entering or immediately jump to entered state
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "SameParameterValue" })
     public void enterSingle(boolean withAnimation) {
         // Passing 'NONE' Object instead of ID. Will fail if ID will be actually used.
         enter((ID) NONE, withAnimation);
@@ -86,6 +91,7 @@ public class ViewsTransitionAnimator<ID> extends ViewsCoordinator<ID> {
      * Plays exit animation, should only be called after corresponding call to
      * {@link #enter(Object, boolean)}.
      *
+     * @param withAnimation Whether to animate exiting or immediately jump to initial state
      * @see #isLeaving()
      */
     public void exit(boolean withAnimation) {
@@ -126,9 +132,9 @@ public class ViewsTransitionAnimator<ID> extends ViewsCoordinator<ID> {
 
 
     /**
-     * Adds listener to the set of position updates listeners that will be notified during
-     * any position changes.
+     * Adds position state changes listener that will be notified during animations.
      *
+     * @param listener Position listener
      * @see ViewPositionAnimator#addPositionUpdateListener(PositionUpdateListener)
      */
     public void addPositionUpdateListener(@NonNull PositionUpdateListener listener) {
@@ -139,8 +145,9 @@ public class ViewsTransitionAnimator<ID> extends ViewsCoordinator<ID> {
     }
 
     /**
-     * Removes listener added by {@link #addPositionUpdateListener(PositionUpdateListener)}.
+     * Removes position state changes listener as added by addPositionUpdateListener(...).
      *
+     * @param listener Position listener to be removed
      * @see ViewPositionAnimator#removePositionUpdateListener(PositionUpdateListener)
      */
     @SuppressWarnings("unused") // Public API
@@ -267,9 +274,7 @@ public class ViewsTransitionAnimator<ID> extends ViewsCoordinator<ID> {
         }
     }
 
-    /**
-     * Replaces old animator with new one preserving state.
-     */
+    // Replaces old animator with new one preserving state.
     private void swapAnimator(ViewPositionAnimator old, ViewPositionAnimator next) {
         final float position = old.getPosition();
         final boolean isLeaving = old.isLeaving();

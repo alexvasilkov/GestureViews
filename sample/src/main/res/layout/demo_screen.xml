@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".demo.DemoActivity">
+
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/demo_coordinator"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/demo_app_bar"
+            android:layout_width="match_parent"
+            android:layout_height="172dp"
+            android:background="@drawable/demo_top_background"
+            android:stateListAnimator="@null"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            tools:ignore="UnusedAttribute">
+
+            <android.support.design.widget.CollapsingToolbarLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:collapsedTitleGravity="start"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+                app:titleEnabled="false">
+
+                <android.support.v7.widget.Toolbar
+                    style="@style/App.Toolbar.Transparent"
+                    app:layout_collapseMode="pin" />
+
+                <FrameLayout
+                    android:layout_width="112dp"
+                    android:layout_height="112dp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="24dp"
+                    android:layout_marginLeft="48dp"
+                    android:background="@drawable/demo_circle_border"
+                    android:padding="1.5dp"
+                    app:layout_collapseMode="parallax"
+                    app:layout_collapseParallaxMultiplier="-0.5">
+
+                    <com.alexvasilkov.gestures.commons.circle.CircleImageView
+                        android:id="@+id/demo_app_bar_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/painting_02" />
+
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="112dp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="24dp"
+                    android:layout_marginLeft="174dp"
+                    android:layout_marginRight="16dp"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical"
+                    app:layout_collapseMode="parallax"
+                    app:layout_collapseParallaxMultiplier="-0.5">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/demo_headline"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/demo_subhead"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+                </LinearLayout>
+
+            </android.support.design.widget.CollapsingToolbarLayout>
+
+        </android.support.design.widget.AppBarLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/demo_grid"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:padding="@dimen/demo_list_margin"
+            android:scrollbarStyle="outsideOverlay"
+            android:scrollbars="vertical"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:listitem="@layout/demo_item_photo" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_anchor="@id/demo_app_bar"
+            app:layout_anchorGravity="bottom">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/shadow_top" />
+
+        </FrameLayout>
+
+    </android.support.design.widget.CoordinatorLayout>
+
+    <View
+        android:id="@+id/demo_full_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/window_background_dark"
+        android:visibility="invisible" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/demo_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/demo_pager_toolbar"
+        style="@style/App.Toolbar.Transparent"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/demo_pager_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_margin="16dp"
+        android:shadowColor="#000000"
+        android:shadowRadius="4"
+        android:textColor="?android:textColorPrimaryInverse"
+        android:textSize="16sp"
+        android:visibility="invisible" />
+
+    <com.alexvasilkov.gestures.commons.circle.CircleGestureImageView
+        android:id="@+id/demo_full_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible"
+        app:gest_doubleTapZoom="3"
+        app:gest_maxZoom="10" />
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/demo_full_image_toolbar"
+        style="@style/App.Toolbar.Transparent"
+        android:visibility="invisible" />
+
+</merge>

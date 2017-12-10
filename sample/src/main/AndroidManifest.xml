@@ -13,24 +13,36 @@
         android:name=".SampleApplication"
         android:allowBackup="false"
         android:icon="@drawable/ic_launcher"
-        android:label="GestureViews"
+        android:label="@string/app_name"
         android:supportsRtl="false"
         android:theme="@style/AppTheme">
 
         <activity
+            android:name=".base.StartActivity"
+            android:theme="@style/AppTheme.Start" />
+
+        <activity-alias
             android:name=".ui.base.MainActivity"
-            android:label="Gesture Views">
+            android:targetActivity=".base.StartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
+        </activity-alias>
 
         <activity
-            android:name=".ui.ex1.ImagesInPagerActivity"
-            android:label="Images in ViewPager"
-            android:theme="@style/AppTheme.Full.NoTitle.Dark">
+            android:name=".demo.DemoActivity"
+            android:theme="@style/AppTheme.Full.NoTitle" />
+
+        <activity
+            android:name=".ex.ExamplesActivity"
+            android:label="@string/examples_title" />
+
+        <activity
+            android:name=".ex.image.viewer.ImageViewerActivity"
+            android:icon="@drawable/ic_ex_image"
+            android:label="Image viewer">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -38,9 +50,9 @@
         </activity>
 
         <activity
-            android:name=".ui.ex2.LayoutsInPagerActivity"
-            android:label="Layouts in ViewPager"
-            android:theme="@style/AppTheme.FrameLayout">
+            android:name=".ex.image.control.ImageControlActivity"
+            android:icon="@drawable/ic_ex_state_control"
+            android:label="Image state control">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -48,8 +60,9 @@
         </activity>
 
         <activity
-            android:name=".ui.ex3.CustomViewActivity"
-            android:label="Custom view">
+            android:name=".ex.image.crop.ImageCropActivity"
+            android:icon="@drawable/ic_ex_crop"
+            android:label="Image cropping">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -57,8 +70,9 @@
         </activity>
 
         <activity
-            android:name=".ui.ex4.SingleImageAnimationActivity"
-            android:label="Single image animation">
+            android:name=".ex.image.pager.ViewPagerActivity"
+            android:icon="@drawable/ic_ex_pager"
+            android:label="Images in ViewPager">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -66,7 +80,63 @@
         </activity>
 
         <activity
-            android:name=".ui.ex5.ListViewToPagerActivity"
+            android:name=".ex.image.markers.ImageMarkersActivity"
+            android:icon="@drawable/ic_ex_markers"
+            android:label="Image markers overlay">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ex.image.animation.ImageAnimationActivity"
+            android:icon="@drawable/ic_ex_image_animation"
+            android:label="Image animation">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ex.image.animation.cross.ImageCrossAnimationActivity"
+            android:icon="@drawable/ic_ex_image_animation"
+            android:label="Image animation (cross-activity)">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ex.image.animation.cross.FullImageActivity"
+            android:label="New activity"
+            android:theme="@style/AppTheme.Transparent" />
+
+        <activity
+            android:name=".ex.image.animation.RoundImageAnimationActivity"
+            android:icon="@drawable/ic_ex_image_animation"
+            android:label="Circular image animation">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ex.list.recycler.RecyclerToPagerActivity"
+            android:icon="@drawable/ic_ex_list"
+            android:label="RecyclerView transitions">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ex.list.listview.ListViewToPagerActivity"
+            android:icon="@drawable/ic_ex_list"
             android:label="ListView transitions">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -75,9 +145,9 @@
         </activity>
 
         <activity
-            android:name=".ui.ex6.AdvancedAnimationDemoActivity"
-            android:label="Advanced demo"
-            android:theme="@style/AppTheme.Full.NoTitle">
+            android:name=".ex.list.complex.ComplexListV1Activity"
+            android:icon="@drawable/ic_ex_complex_list"
+            android:label="Complex list transition v1">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -85,18 +155,9 @@
         </activity>
 
         <activity
-            android:name=".ui.ex6.crop.PhotoCropActivity"
-            android:label="Rotate &amp; crop"
-            android:theme="@style/AppTheme.Full.NoTitle.Dark" />
-
-        <activity
-            android:name=".ui.ex6.crop.PhotoCropResultActivity"
-            android:label="Cropped"
-            android:theme="@style/AppTheme.Full.NoTitle.Dark" />
-
-        <activity
-            android:name=".ui.ex7.CrossActivitiesDemoActivity"
-            android:label="Cross activities animation">
+            android:name=".ex.list.complex.ComplexListV2Activity"
+            android:icon="@drawable/ic_ex_complex_list"
+            android:label="Complex list transition v2">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -104,14 +165,9 @@
         </activity>
 
         <activity
-            android:name=".ui.ex7.FullImageActivity"
-            android:label="New activity"
-            android:theme="@style/AppTheme.Transparent" />
-
-        <activity
-            android:name=".ui.ex8.ComplexListActivity"
-            android:label="Complex list animation"
-            android:theme="@style/AppTheme.Full.NoTitle">
+            android:name=".ex.layout.viewer.LayoutViewerActivity"
+            android:icon="@drawable/ic_ex_layout"
+            android:label="Layout viewer">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -119,8 +175,19 @@
         </activity>
 
         <activity
-            android:name=".ui.ex9.ImageMarkerActivity"
-            android:label="Image marker">
+            android:name=".ex.layout.pager.LayoutsInPagerActivity"
+            android:icon="@drawable/ic_ex_pager"
+            android:label="Layouts in ViewPager">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ex.custom.CustomViewActivity"
+            android:icon="@drawable/ic_ex_custom_text"
+            android:label="Custom view">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

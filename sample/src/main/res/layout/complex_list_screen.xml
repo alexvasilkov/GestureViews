@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ex.list.complex.BaseComplexListActivity">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/complex_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingBottom="16dp"
+        android:paddingTop="8dp"
+        android:scrollbarStyle="outsideOverlay"
+        android:scrollbars="vertical"
+        tools:listitem="@layout/complex_list_item_images" />
+
+    <View
+        android:id="@+id/complex_pager_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/primary_light"
+        android:visibility="invisible" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/complex_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</merge>

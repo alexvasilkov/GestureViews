@@ -1,5 +1,6 @@
 package com.alexvasilkov.gestures.views;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
@@ -25,10 +26,10 @@ import com.alexvasilkov.gestures.views.interfaces.GestureView;
 /**
  * {@link FrameLayout} implementation controlled by {@link GestureController}
  * ({@link #getController()}).
- * <p/>
+ * <p>
  * View position can be animated with {@link ViewPositionAnimator}
  * ({@link #getPositionAnimator()}).
- * <p/>
+ * <p>
  * Note: only one children is eligible in this layout.
  */
 public class GestureFrameLayout extends FrameLayout implements GestureView, AnimatorView {
@@ -57,6 +58,7 @@ public class GestureFrameLayout extends FrameLayout implements GestureView, Anim
         super(context, attrs, defStyle);
 
         controller = new GestureControllerForPager(this);
+        controller.getSettings().initFromAttributes(context, attrs);
         controller.addOnStateChangeListener(new GestureController.OnStateChangeListener() {
             @Override
             public void onStateChanged(State state) {
@@ -93,7 +95,7 @@ public class GestureFrameLayout extends FrameLayout implements GestureView, Anim
     public boolean dispatchTouchEvent(@NonNull MotionEvent event) {
         currentMotionEvent = event;
         // We should remap given event back to original coordinates
-        // so children can correctly respond to it
+        // so that children can correctly respond to it
         MotionEvent invertedEvent = applyMatrix(event, matrixInverse);
         try {
             return super.dispatchTouchEvent(invertedEvent);
@@ -102,6 +104,8 @@ public class GestureFrameLayout extends FrameLayout implements GestureView, Anim
         }
     }
 
+    // It seems to be fine to use this method instead of suggested onDescendantInvalidated(...)
+    @SuppressWarnings("deprecation")
     @Override
     public ViewParent invalidateChildInParent(int[] location, @NonNull Rect dirty) {
         // Invalidating correct rectangle
@@ -109,6 +113,7 @@ public class GestureFrameLayout extends FrameLayout implements GestureView, Anim
         return super.invalidateChildInParent(location, dirty);
     }
 
+    @SuppressLint("ClickableViewAccessibility") // performClick() will be called by controller
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
         // Passing original event to controller

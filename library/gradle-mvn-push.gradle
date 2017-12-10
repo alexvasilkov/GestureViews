@@ -18,7 +18,7 @@ apply plugin: 'maven'
 apply plugin: 'signing'
 
 def isReleaseBuild() {
-    return VERSION_NAME.contains("SNAPSHOT") == false
+    return !VERSION_NAME.contains("SNAPSHOT")
 }
 
 def getReleaseRepUrl() {
@@ -83,14 +83,6 @@ afterEvaluate { project ->
                         }
                     }
                 }
-
-                // Excluding dependency on support library
-                pom.whenConfigured { pom ->
-                    pom.dependencies = pom.dependencies.findAll { dep ->
-                        !dep.artifactId.startsWith('support-v4') &&
-                                !dep.artifactId.startsWith('recyclerview-v7')
-                    }
-                }
             }
         }
     }
@@ -100,26 +92,21 @@ afterEvaluate { project ->
         sign configurations.archives
     }
 
-    task jar(type: Jar, dependsOn: compileReleaseJavaWithJavac) {
-        from file(project.compileReleaseJavaWithJavac.destinationDir)
-        exclude '**/R.class', '**/R$*.class', '**/BuildConfig.class'
-    }
-
     task javadocs(type: Javadoc) {
         source = android.sourceSets.main.java.sourceFiles
         classpath = files(android.bootClasspath)
-        exclude "**/internal/**"
+
+        android.libraryVariants.all { variant ->
+            owner.classpath += variant.javaCompiler.classpath
+        }
+
+        exclude '**/BuildConfig.java'
+        exclude '**/R.java'
+        exclude '**/internal/**'
+
         title "${POM_NAME} ${VERSION_NAME} API"
         options {
             windowTitle "${POM_NAME} ${VERSION_NAME} API"
-        }
-
-        if (JavaVersion.current().isJava8Compatible()) {
-            allprojects {
-                tasks.withType(Javadoc) {
-                    options.addStringOption('Xdoclint:none', '-quiet')
-                }
-            }
         }
     }
 
@@ -134,15 +121,7 @@ afterEvaluate { project ->
     }
 
     artifacts {
-        archives jar
         archives sourcesJar
         archives javadocsJar
-    }
-
-    // Excluding aar artifacts from uploading
-    configurations.archives.artifacts.with { archives ->
-        for (def iter = archives.iterator(); iter.hasNext();) {
-            if (iter.next().file =~ 'aar') iter.remove();
-        }
     }
 }

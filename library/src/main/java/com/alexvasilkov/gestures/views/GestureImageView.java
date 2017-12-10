@@ -1,5 +1,6 @@
 package com.alexvasilkov.gestures.views;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -31,7 +32,7 @@ import com.alexvasilkov.gestures.views.interfaces.GestureView;
 /**
  * {@link ImageView} implementation controlled by {@link GestureController}
  * ({@link #getController()}).
- * <p/>
+ * <p>
  * View position can be animated with {@link ViewPositionAnimator}
  * ({@link #getPositionAnimator()}).
  */
@@ -57,6 +58,7 @@ public class GestureImageView extends ImageView
         super(context, attrs, defStyle);
 
         ensureControllerCreated();
+        controller.getSettings().initFromAttributes(context, attrs);
         controller.addOnStateChangeListener(new GestureController.OnStateChangeListener() {
             @Override
             public void onStateChanged(State state) {
@@ -127,6 +129,7 @@ public class GestureImageView extends ImageView
      * Crops bitmap as it is seen inside movement area: {@link Settings#setMovementArea(int, int)}.
      * Result will be delivered to provided snapshot listener.
      *
+     * @param listener Snapshot listener
      * @deprecated Use {@link #crop()} method instead.
      */
     @SuppressWarnings({ "deprecation", "unused" }) // Public API
@@ -139,7 +142,7 @@ public class GestureImageView extends ImageView
 
     /**
      * Crops bitmap as it is seen inside movement area: {@link Settings#setMovementArea(int, int)}.
-     * <p/>
+     * <p>
      * Note, that size of cropped bitmap may vary from size of movement area,
      * since we will crop part of original image at base zoom level (zoom == 1).
      *
@@ -148,9 +151,10 @@ public class GestureImageView extends ImageView
      */
     @Nullable
     public Bitmap crop() {
-        return CropUtils.crop(getDrawable(), controller.getState(), controller.getSettings());
+        return CropUtils.crop(getDrawable(), controller);
     }
 
+    @SuppressLint("ClickableViewAccessibility") // performClick() will be called by controller
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
         return controller.onTouch(this, event);
@@ -178,9 +182,12 @@ public class GestureImageView extends ImageView
         ensureControllerCreated();
 
         Settings settings = controller.getSettings();
-        int oldWidth = settings.getImageW();
-        int oldHeight = settings.getImageH();
 
+        // Saving old image size
+        float oldWidth = settings.getImageW();
+        float oldHeight = settings.getImageH();
+
+        // Setting image size
         if (drawable == null) {
             settings.setImage(0, 0);
         } else if (drawable.getIntrinsicWidth() == -1 || drawable.getIntrinsicHeight() == -1) {
@@ -189,7 +196,16 @@ public class GestureImageView extends ImageView
             settings.setImage(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
         }
 
-        if (oldWidth != settings.getImageW() || oldHeight != settings.getImageH()) {
+        // Getting new image size
+        float newWidth = settings.getImageW();
+        float newHeight = settings.getImageH();
+
+        if (newWidth > 0f && newHeight > 0f && oldWidth > 0f && oldHeight > 0f) {
+            float scaleFactor = Math.min(oldWidth / newWidth, oldHeight / newHeight);
+            controller.getStateController().setTempZoomPatch(scaleFactor);
+            controller.updateState();
+            controller.getStateController().setTempZoomPatch(0f);
+        } else {
             controller.resetState();
         }
     }

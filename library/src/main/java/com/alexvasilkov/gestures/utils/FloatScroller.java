@@ -45,7 +45,7 @@ public class FloatScroller {
     }
 
     /**
-     * Force the finished field to a particular value.<br/>
+     * Force the finished field to a particular value.<br>
      * Unlike {@link #abortAnimation()} the current value isn't set to the final value.
      *
      * @see android.widget.Scroller#forceFinished(boolean)
@@ -68,6 +68,8 @@ public class FloatScroller {
     /**
      * Starts an animation from startValue to finalValue.
      *
+     * @param startValue Start value
+     * @param finalValue Final value
      * @see android.widget.Scroller#startScroll(int, int, int, int)
      */
     public void startScroll(float startValue, float finalValue) {
@@ -83,6 +85,7 @@ public class FloatScroller {
      * Computes the current value, returning true if the animation is still active and false if the
      * animation has finished.
      *
+     * @return Computed scroll
      * @see android.widget.Scroller#computeScrollOffset()
      */
     public boolean computeScroll() {
@@ -103,8 +106,7 @@ public class FloatScroller {
     }
 
     /**
-     * Returns current state.
-     *
+     * @return Current state
      * @see android.widget.Scroller#isFinished()
      */
     public boolean isFinished() {
@@ -112,8 +114,7 @@ public class FloatScroller {
     }
 
     /**
-     * Returns starting value.
-     *
+     * @return Starting value
      * @see android.widget.Scroller#getStartX()
      */
     public float getStart() {
@@ -121,8 +122,7 @@ public class FloatScroller {
     }
 
     /**
-     * Returns final value.
-     *
+     * @return Final value
      * @see android.widget.Scroller#getFinalX()
      */
     public float getFinal() {
@@ -130,8 +130,7 @@ public class FloatScroller {
     }
 
     /**
-     * Returns the current value.
-     *
+     * @return Current value
      * @see android.widget.Scroller#getCurrX()
      */
     public float getCurr() {

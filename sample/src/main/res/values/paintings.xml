@@ -2,19 +2,19 @@
 <resources>
 
     <string-array name="paintings_authors">
-        <item>Johannes Vermeer</item>
-        <item>Pablo Picasso</item>
         <item>Vincent van Gogh</item>
-        <item>Edvard Munch</item>
-        <item>Claude Monet</item>
+        <item>Vincent van Gogh</item>
+        <item>Vincent van Gogh</item>
+        <item>Vincent van Gogh</item>
+        <item>Vincent van Gogh</item>
     </string-array>
 
     <string-array name="paintings_titles">
-        <item>The Girl with a Pearl Earring</item>
-        <item>Guernica</item>
-        <item>The Starry Night</item>
-        <item>The Scream</item>
-        <item>Water Lilies</item>
+        <item>Almond Blossom</item>
+        <item>Peach Tree in Bloom</item>
+        <item>Terrace in the Luxembourg Garden</item>
+        <item>Entrance to the Public Garden in Arles</item>
+        <item>Peasant Woman Binding Sheaves</item>
     </string-array>
 
     <array name="paintings_images">
@@ -25,12 +25,20 @@
         <item>@drawable/painting_05</item>
     </array>
 
+    <array name="paintings_thumbs">
+        <item>@drawable/painting_thumb_01</item>
+        <item>@drawable/painting_thumb_02</item>
+        <item>@drawable/painting_thumb_03</item>
+        <item>@drawable/painting_thumb_04</item>
+        <item>@drawable/painting_thumb_05</item>
+    </array>
+
     <array name="paintings_links">
-        <item>http://www.wikiart.org/en/johannes-vermeer/the-girl-with-a-pearl-earring</item>
-        <item>http://www.wikiart.org/en/pablo-picasso/guernica-1937</item>
-        <item>http://www.wikiart.org/en/vincent-van-gogh/the-starry-night-1889</item>
-        <item>http://www.wikiart.org/en/edvard-munch/the-scream-1893</item>
-        <item>http://www.wikiart.org/en/claude-monet/water-lilies-40</item>
+        <item>https://www.wikiart.org/en/vincent-van-gogh/branches-with-almond-blossom-1890</item>
+        <item>https://www.wikiart.org/en/vincent-van-gogh/peach-tree-in-bloom-in-memory-of-mauve-1888</item>
+        <item>https://www.wikiart.org/en/vincent-van-gogh/terrace-in-the-luxembourg-garden-1886</item>
+        <item>https://www.wikiart.org/en/vincent-van-gogh/entrance-to-the-public-garden-in-arles-1888</item>
+        <item>https://www.wikiart.org/en/vincent-van-gogh/peasant-woman-binding-sheaves-after-millet-1889</item>
     </array>
 
 </resources>

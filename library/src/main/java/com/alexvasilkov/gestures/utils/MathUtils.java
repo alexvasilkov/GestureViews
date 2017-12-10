@@ -15,6 +15,11 @@ public class MathUtils {
 
     /**
      * Keeps value within provided bounds.
+     *
+     * @param value Value to be restricted
+     * @param minValue Min value
+     * @param maxValue Max value
+     * @return Restricted value
      */
     public static float restrict(float value, float minValue, float maxValue) {
         return Math.max(minValue, Math.min(value, maxValue));
@@ -22,6 +27,11 @@ public class MathUtils {
 
     /**
      * Interpolates from start value to the end one by given factor (from 0 to 1).
+     *
+     * @param start Start value
+     * @param end End value
+     * @param factor Factor
+     * @return Interpolated value
      */
     public static float interpolate(float start, float end, float factor) {
         return start + (end - start) * factor;
@@ -30,6 +40,11 @@ public class MathUtils {
     /**
      * Interpolates from start rect to the end rect by given factor (from 0 to 1),
      * storing result into out rect.
+     *
+     * @param out Interpolated rectangle (output)
+     * @param start Start rectangle
+     * @param end End rectangle
+     * @param factor Factor
      */
     public static void interpolate(RectF out, RectF start, RectF end, float factor) {
         out.left = interpolate(start.left, end.left, factor);
@@ -41,6 +56,11 @@ public class MathUtils {
     /**
      * Interpolates from start state to end state by given factor (from 0 to 1),
      * storing result into out state.
+     *
+     * @param out Interpolated state (output)
+     * @param start Start state
+     * @param end End state
+     * @param factor Factor
      */
     @SuppressWarnings("WeakerAccess") // Public API
     public static void interpolate(State out, State start, State end, float factor) {
@@ -52,6 +72,15 @@ public class MathUtils {
      * storing result into out state. All operations (translation, zoom, rotation) will be
      * performed within specified pivot points, assuming start and end pivot points represent
      * same physical point on the image.
+     *
+     * @param out Interpolated state (output)
+     * @param start Start state
+     * @param startPivotX Pivot point's X coordinate in start state coordinates
+     * @param startPivotY Pivot point's Y coordinate in start state coordinates
+     * @param end End state
+     * @param endPivotX Pivot point's X coordinate in end state coordinates
+     * @param endPivotY Pivot point's Y coordinate in end state coordinates
+     * @param factor Factor
      */
     public static void interpolate(State out, State start, float startPivotX, float startPivotY,
             State end, float endPivotX, float endPivotY, float factor) {
