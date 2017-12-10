@@ -94,9 +94,6 @@ public class ZoomBounds {
             }
         } else {
             minZoom = fittingZoom;
-            if (!settings.isZoomEnabled()) {
-                maxZoom = minZoom;
-            }
         }
     }
 
