@@ -64,6 +64,14 @@ public class ExitController {
         return isScrollDetected || isZoomDetected;
     }
 
+    public void stopDetection() {
+        if (isExitDetected()) {
+            exitState = 1f;
+            updateState();
+            finishDetection();
+        }
+    }
+
     public void onUpOrCancel() {
         finishDetection();
     }

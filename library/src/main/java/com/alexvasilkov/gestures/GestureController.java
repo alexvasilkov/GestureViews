@@ -398,6 +398,7 @@ public class GestureController implements View.OnTouchListener {
 
     @SuppressWarnings("WeakerAccess") // Public API (can be overridden)
     protected void notifyStateReset() {
+        exitController.stopDetection();
         for (OnStateChangeListener listener : stateListeners) {
             listener.onStateReset(prevState, state);
         }
