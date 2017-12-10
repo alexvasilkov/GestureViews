@@ -41,8 +41,6 @@ Add dependency to your `build.gradle` file:
 
     compile 'com.alexvasilkov:gesture-views:2.4.0'
 
-Note: min SDK version for library is 9, but it was tested mainly on 15+.
-
 [Usage wiki](https://github.com/alexvasilkov/GestureViews/wiki/Usage)
 
 [Javadoc][javadoc-url]
