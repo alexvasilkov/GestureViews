@@ -1,0 +1,11 @@
+language: android
+sudo: false
+
+android:
+  components:
+    - tools
+    - build-tools-26.0.3
+    - android-27
+
+script:
+  - ./gradlew assembleDebug
