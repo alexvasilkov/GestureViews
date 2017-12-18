@@ -212,8 +212,8 @@ public class CropAreaView extends View {
                 final int width = getWidth() - getPaddingLeft() - getPaddingRight();
                 final int height = getHeight() - getPaddingTop() - getPaddingBottom();
 
-                final float realAspect = aspect == ORIGINAL_ASPECT ?
-                        settings.getImageW() / (float) settings.getImageH() : aspect;
+                final float realAspect = aspect == ORIGINAL_ASPECT
+                        ? settings.getImageW() / (float) settings.getImageH() : aspect;
 
                 // Setting movement area
                 if (realAspect > (float) width / (float) height) {

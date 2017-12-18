@@ -22,7 +22,7 @@ cache:
 
 jobs:
   include:
-  - stage: build
+  - stage: test
     script: ./gradlew assembleDebug checkstyle lintDebug
 
   - stage: deploy
