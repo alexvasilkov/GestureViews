@@ -309,8 +309,10 @@ public class ExitController {
     }
 
     private void updateState() {
-        animatorView.getPositionAnimator().setToState(controller.getState(), exitState);
-        animatorView.getPositionAnimator().setState(exitState, false, false);
+        if (canDetectExit()) {
+            animatorView.getPositionAnimator().setToState(controller.getState(), exitState);
+            animatorView.getPositionAnimator().setState(exitState, false, false);
+        }
     }
 
 }

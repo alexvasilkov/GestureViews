@@ -488,7 +488,7 @@ public class ViewPositionAnimator {
         }
 
         stopAnimation();
-        position = pos;
+        position = pos < 0f ? 0f : (pos > 1f ? 1f : pos);
         isLeaving = leaving;
         if (animate) {
             startAnimationInternal();
