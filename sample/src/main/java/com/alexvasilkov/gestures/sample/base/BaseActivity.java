@@ -49,7 +49,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (infoTextId != 0) {
             MenuItem item = menu.add(Menu.NONE, R.id.menu_info, Menu.NONE, R.string.menu_info);
             item.setIcon(R.drawable.ic_info_outline_white_24dp);
-            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         }
         return true;
     }

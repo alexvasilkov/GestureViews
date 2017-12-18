@@ -18,10 +18,6 @@
     <string name="expand_image">Tap image to expand:</string>
     <string name="button_wiki_art">WikiArt</string>
 
-    <string name="custom_view_text">
-        You can use pinch-to-zoom and double tap gestures to control font size of this text.
-    </string>
-
     <string name="menu_enable_pan">Pan</string>
     <string name="menu_enable_zoom">Zoom</string>
     <string name="menu_enable_rotation">Rotation</string>
