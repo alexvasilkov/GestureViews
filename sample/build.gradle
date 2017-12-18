@@ -1,11 +1,14 @@
 buildscript {
     dependencies {
-        classpath 'com.alexvasilkov:android-sign-release:0.8.1'
+        classpath 'com.github.triplet.gradle:play-publisher:1.2.0'
     }
 }
 
 apply plugin: 'com.android.application'
-apply plugin: 'com.alexvasilkov.sign'
+apply plugin: 'com.github.triplet.play'
+
+apply from: 'commons.gradle'
+apply from: 'release.gradle'
 
 android {
     compileSdkVersion 27
@@ -14,31 +17,16 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 16
-        versionName '2.4.0'
+
+        setupVersion '2.4.0'
+        setOutputFileName 'gesture-views'
 
         resConfigs 'en'
-    }
-
-    signingConfigs {
-        debug {
-            storeFile file('signing/debug.jks')
-        }
-        release {
-            storeFile file('signing/upload.jks')
-            storePassword System.env.UPLOAD_KEYSTORE_PWD
-            keyAlias 'upload'
-            keyPassword System.env.UPLOAD_KEYSTORE_PWD
-        }
     }
 
     buildTypes {
         debug {
             applicationIdSuffix '.debug'
-            signingConfig signingConfigs.debug
-        }
-        release {
-            signingConfig signingConfigs.release
         }
     }
 

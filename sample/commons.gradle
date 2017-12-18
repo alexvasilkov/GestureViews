@@ -1,0 +1,72 @@
+/**
+ * Sets app version name and version code.
+ *
+ * Provided that version name is in form 'X.Y.Z', these version will be parsed and version code will
+ * be generated from it as '(X * 10000 + Y * 100 + Z) * 10000 + build_number'.
+ * E.g. if version name is '1.2.3' and build number is 456 then resulting code will be: '102030456'.
+ *
+ * Build number is a total number of commits from the branch root.
+ *
+ * Should be called instead of 'versionName' / 'versionCode' within defaultConfig closure:
+ *   setupVersion 'X.Y.Z'
+ */
+ext.setupVersion = { version ->
+    def final buildNumber = getBuildNumber()
+    def final baseCode = getBaseVersionCode(version)
+
+    println "VERSION: BASE NAME = ${version}\n" +
+            "VERSION: BASE CODE = ${baseCode}\n" +
+            "VERSION: BUILD = ${buildNumber}"
+
+    android.defaultConfig.versionCode (baseCode + buildNumber)
+    android.defaultConfig.versionName version
+}
+
+ext.getBaseVersionCode = { version ->
+    // Version code has next format: XYYZZBBBB,
+    // where X is a major version, Y is minor, Z is patch and B is build number (optional).
+    // Since version code is an integer we are limited with 21.47.48.3647 (max int).
+    def (major, minor, patch) = version.tokenize('.')
+    if (major.toInteger() > 20) {
+        throw new GradleException("Major part of version name cannot be larger than 20")
+    } else if (minor.toInteger() > 99) {
+        throw new GradleException("Minor part of version name cannot be larger than 99")
+    } else if (patch.toInteger() > 99) {
+        throw new GradleException("Patch part of version name cannot be larger than 99")
+    }
+    return (major.toInteger() * 10000 + minor.toInteger() * 100 + patch.toInteger()) * 10000
+}
+
+ext.getBuildNumber = {
+    def final build
+
+    try {
+        def final buildStr = 'git rev-list --count HEAD'.execute().text.trim()
+        build = buildStr.toInteger()
+    } catch (Exception ignored) {
+        System.err.println 'Build number is not available'
+        build = 1
+    }
+
+    if (build >= 10000) {
+        throw new GradleException(
+                "Build number ($build) exceeded 10000, version code should be adjusted to fit it")
+    }
+
+    return build
+}
+
+
+/**
+ * Sets better apk file name using format: 'appName'-'buildType'-'flavor'-'versionName'.apk
+ *
+ * Should be called after call to `setupVersion`, e.g.:
+ *   setOutputFileName 'app-name'
+ */
+ext.setOutputFileName = { appName ->
+    android.applicationVariants.whenObjectAdded { variant ->
+        variant.outputs.each { output ->
+            output.outputFileName = "${appName}-${output.baseName}-${variant.versionName}.apk"
+        }
+    }
+}

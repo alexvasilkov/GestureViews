@@ -12,20 +12,19 @@ android:
   - build-tools-26.0.3
   - android-27
 
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+
 jobs:
   include:
   - stage: build
-    script: ./gradlew assembleDebug
+    script: ./gradlew assembleDebug checkstyle lintDebug
 
   - stage: deploy
     #if: branch = master
-
-    before_script:
-    - openssl aes-256-cbc -d -in sample/signing/play_account.json.enc -out sample/signing/play_account.json -k $ENCRYPT_KEY
-    - openssl aes-256-cbc -d -in sample/signing/upload.jks.enc -out sample/signing/upload.jks -k $ENCRYPT_KEY
-
-    script: ./gradlew assembleDebug
-
-    after_script:
-    - rm sample/signing/play_account.json
-    - rm sample/signing/upload.jks
+    script: ./gradlew publishSample

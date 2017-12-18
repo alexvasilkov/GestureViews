@@ -1,0 +1,86 @@
+final DIR = 'sample/signing'
+
+android {
+    playAccountConfigs {
+        config {
+            jsonFile = file('signing/play_account.json')
+        }
+    }
+
+    defaultConfig {
+        playAccountConfig = playAccountConfigs.config
+    }
+
+    signingConfigs {
+        debug {
+            storeFile file('signing/debug.jks')
+        }
+        upload {
+            storeFile file('signing/upload.jks')
+            storePassword System.env.UPLOAD_KEYSTORE_PWD ?: ''
+            keyAlias 'upload'
+            keyPassword System.env.UPLOAD_KEYSTORE_PWD ?: ''
+        }
+    }
+
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+        }
+        release {
+            signingConfig signingConfigs.upload
+        }
+    }
+}
+
+project.afterEvaluate {
+    // Setting up 'publishSample' task
+    // Note, that in order to work this task requires ENCRYPT_KEY and UPLOAD_KEYSTORE_PWD env vars
+
+    final publish = 'publishSample'
+    final pack = 'packageRelease'
+    final upload = 'publishApkRelease'
+
+    project.task publish
+    project.tasks[publish].dependsOn upload
+
+    project.tasks[pack].dependsOn 'decryptUploadKeystore'
+    project.tasks[pack].finalizedBy 'cleanUploadKeystore'
+
+    project.tasks[upload].dependsOn 'decryptPlayAccount'
+    project.tasks[upload].finalizedBy 'cleanPlayAccount'
+}
+
+task decryptUploadKeystore {
+    doFirst {
+        println 'Decrypt upload keystore'
+        ("openssl aes-256-cbc -d" +
+                " -in $DIR/upload.jks.enc" +
+                " -out $DIR/upload.jks" +
+                " -k $System.env.ENCRYPT_KEY").execute()
+    }
+}
+
+task cleanUploadKeystore {
+    doLast {
+        println 'Clean up upload keystore'
+        "rm $DIR/upload.jks".execute()
+    }
+}
+
+task decryptPlayAccount {
+    doFirst {
+        println 'Decrypt Play account'
+        ("openssl aes-256-cbc -d" +
+                " -in $DIR/play_account.json.enc" +
+                " -out $DIR/play_account.json" +
+                " -k $System.env.ENCRYPT_KEY").execute()
+    }
+}
+
+task cleanPlayAccount {
+    doLast {
+        println 'Clean up Play account'
+        "rm $DIR/play_account.json".execute()
+    }
+}
