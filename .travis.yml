@@ -27,7 +27,7 @@ jobs:
     - ./gradlew assembleDebug checkstyle lintDebug
 
   - stage: deploy
-    if: branch = master
+    if: branch = master AND type = push
     script:
-    - git fetch --unshallow # Build number may be incorrect without it
+    - git fetch --unshallow # Build number will be incorrect for shallow copy
     - ./gradlew publishSample
