@@ -2,6 +2,7 @@ GestureViews
 ============
 
 [![Maven Central][mvn-img]][mvn-url]
+[![Build Status][build-img]][build-url]
 [![Size][size-img]][size-url]
 
 ImageView and FrameLayout with gestures control and position animation.
@@ -63,6 +64,9 @@ Add dependency to your `build.gradle` file:
 
 [mvn-url]: https://maven-badges.herokuapp.com/maven-central/com.alexvasilkov/gesture-views
 [mvn-img]: https://img.shields.io/maven-central/v/com.alexvasilkov/gesture-views.svg?style=flat-square
+
+[build-url]: https://travis-ci.org/alexvasilkov/GestureViews
+[build-img]: https://img.shields.io/travis/alexvasilkov/GestureViews/master.svg?style=flat-square
 
 [size-url]: http://www.methodscount.com/?lib=com.alexvasilkov%3Agesture-views%3A2.4.0
 [size-img]: https://img.shields.io/badge/Methods%20and%20size-1098%20%7C%20130%20KB-e91e63.svg?style=flat-square

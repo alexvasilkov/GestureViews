@@ -1,11 +1,14 @@
 buildscript {
     dependencies {
-        classpath 'com.alexvasilkov:android-sign-release:0.8.1'
+        classpath 'com.github.triplet.gradle:play-publisher:1.2.0'
     }
 }
 
 apply plugin: 'com.android.application'
-apply plugin: 'com.alexvasilkov.sign'
+apply plugin: 'com.github.triplet.play'
+
+apply from: 'commons.gradle'
+apply from: 'release.gradle'
 
 android {
     compileSdkVersion 27
@@ -14,27 +17,16 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 16
-        versionName '2.4.0'
-    }
 
-    signingConfigs {
-        debug {
-            storeFile file('debug.jks')
-        }
-        release {
-            storeFile file("upload.jks")
-            keyAlias "upload"
-        }
+        setupVersion '2.4.0'
+        setOutputFileName 'gesture-views'
+
+        resConfigs 'en'
     }
 
     buildTypes {
         debug {
             applicationIdSuffix '.debug'
-            signingConfig signingConfigs.debug
-        }
-        release {
-            signingConfig signingConfigs.release
         }
     }
 
@@ -52,7 +44,7 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:27.0.2'
     implementation 'com.android.support:design:27.0.2'
 
-    implementation 'com.github.bumptech.glide:glide:4.2.0'
+    implementation 'com.github.bumptech.glide:glide:4.3.0'
 
     implementation 'com.alexvasilkov:android-commons:2.0.2'
     implementation 'com.alexvasilkov:events:1.0.0'

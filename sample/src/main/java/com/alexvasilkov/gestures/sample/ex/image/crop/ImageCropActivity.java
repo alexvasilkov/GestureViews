@@ -68,7 +68,7 @@ public class ImageCropActivity extends BaseActivity {
 
         if (resultView.getVisibility() != View.VISIBLE) {
             MenuItem crop = menu.add(Menu.NONE, R.id.menu_crop, 0, R.string.menu_crop);
-            crop.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+            crop.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
             crop.setIcon(R.drawable.ic_check_white_24dp);
         }
 
