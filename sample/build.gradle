@@ -16,15 +16,19 @@ android {
         targetSdkVersion 27
         versionCode 16
         versionName '2.4.0'
+
+        resConfigs 'en'
     }
 
     signingConfigs {
         debug {
-            storeFile file('debug.jks')
+            storeFile file('signing/debug.jks')
         }
         release {
-            storeFile file("upload.jks")
-            keyAlias "upload"
+            storeFile file('signing/upload.jks')
+            storePassword System.env.UPLOAD_KEYSTORE_PWD
+            keyAlias 'upload'
+            keyPassword System.env.UPLOAD_KEYSTORE_PWD
         }
     }
 
@@ -52,7 +56,7 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:27.0.2'
     implementation 'com.android.support:design:27.0.2'
 
-    implementation 'com.github.bumptech.glide:glide:4.2.0'
+    implementation 'com.github.bumptech.glide:glide:4.3.0'
 
     implementation 'com.alexvasilkov:android-commons:2.0.2'
     implementation 'com.alexvasilkov:events:1.0.0'
