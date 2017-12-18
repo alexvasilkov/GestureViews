@@ -27,5 +27,6 @@ jobs:
 
   - stage: deploy
     #if: branch = master
-    script: git fetch --unshallow # Build number may be incorrect without it
-    script: ./gradlew publishSample
+    script: >
+      git fetch --unshallow; # Build number may be incorrect without it
+      ./gradlew publishSample
