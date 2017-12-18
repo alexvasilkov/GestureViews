@@ -24,9 +24,9 @@ class ListItem {
     }
 
 
-    /*******************
+    /* ******************
      * Mock data
-     *******************/
+     * ******************/
 
     static List<ListItem> createItemsV1(Context context) {
         final List<ListItem> items = new ArrayList<>();

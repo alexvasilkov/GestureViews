@@ -100,8 +100,8 @@ public class ImageControlActivity extends BaseSettingsActivity {
         final PointF pivot = getPivot();
 
         // Rotating to closest next 90 degree ccw
-        float rotation = Math.round(state.getRotation()) % 90f == 0f ?
-                state.getRotation() - 90f : (float) Math.floor(state.getRotation() / 90f) * 90f;
+        float rotation = Math.round(state.getRotation()) % 90f == 0f
+                ? state.getRotation() - 90f : (float) Math.floor(state.getRotation() / 90f) * 90f;
         state.rotateTo(rotation, pivot.x, pivot.y);
 
         if (animate) {

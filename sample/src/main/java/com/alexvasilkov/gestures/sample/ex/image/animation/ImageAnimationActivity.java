@@ -49,7 +49,7 @@ public class ImageAnimationActivity extends BaseSettingsActivity {
     }
 
     /**
-     * Override this method if you want to provide slightly different layout,
+     * Override this method if you want to provide slightly different layout.
      */
     protected void initContentView() {
         setContentView(R.layout.image_animation_screen);
