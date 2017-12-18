@@ -1,3 +1,6 @@
+# Only build master branch and PRs to master branch
+if: branch = master
+
 language: android
 sudo: false
 
