@@ -27,7 +27,7 @@ jobs:
     - ./gradlew assembleDebug checkstyle lintDebug
 
   - stage: deploy
-    #if: branch = master
+    if: branch = master
     script:
     - git fetch --unshallow # Build number may be incorrect without it
     - ./gradlew publishSample
