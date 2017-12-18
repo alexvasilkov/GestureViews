@@ -23,10 +23,11 @@ cache:
 jobs:
   include:
   - stage: test
-    script: ./gradlew assembleDebug checkstyle lintDebug
+    script:
+    - ./gradlew assembleDebug checkstyle lintDebug
 
   - stage: deploy
     #if: branch = master
-    script: >
-      git fetch --unshallow; # Build number may be incorrect without it
-      ./gradlew publishSample
+    script:
+    - git fetch --unshallow # Build number may be incorrect without it
+    - ./gradlew publishSample
