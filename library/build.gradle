@@ -13,7 +13,7 @@ android {
 }
 
 dependencies {
-    compileOnly 'com.android.support:support-v4:27.0.2'
+    compileOnly 'com.android.support:support-core-ui:27.0.2'
     compileOnly 'com.android.support:recyclerview-v7:27.0.2'
 }
 
