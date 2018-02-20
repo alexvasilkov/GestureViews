@@ -1,43 +1,16 @@
-/*
- * Copyright 2013 Chris Banes
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 apply plugin: 'maven'
 apply plugin: 'signing'
 
-def isReleaseBuild() {
-    return !VERSION_NAME.contains("SNAPSHOT")
-}
+final RELEASE_REPO_URL = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+final SNAPSHOT_REPO_URL = 'https://oss.sonatype.org/content/repositories/snapshots/'
 
-def getReleaseRepUrl() {
-    return hasProperty('RELEASE_REPOSITORY_URL') ? RELEASE_REPOSITORY_URL :
-            "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-}
+final REPO_USERNAME = findProperty('NEXUS_USERNAME')
+final REPO_PASSWORD = findProperty('NEXUS_PASSWORD')
 
-def getSnapshotRepUrl() {
-    return hasProperty('SNAPSHOT_REPOSITORY_URL') ? SNAPSHOT_REPOSITORY_URL :
-            "https://oss.sonatype.org/content/repositories/snapshots/"
-}
+final SIGN_KEY_ID = findProperty('signing.alexvasilkov.keyId')
+final SIGN_PASSWORD = findProperty('signing.alexvasilkov.password')
 
-def getRepUsername() {
-    return hasProperty('NEXUS_USERNAME') ? NEXUS_USERNAME : ""
-}
-
-def getRepPassword() {
-    return hasProperty('NEXUS_PASSWORD') ? NEXUS_PASSWORD : ""
-}
+final IS_RELEASE = !VERSION_NAME.contains('SNAPSHOT')
 
 afterEvaluate { project ->
     uploadArchives {
@@ -49,11 +22,11 @@ afterEvaluate { project ->
                 pom.artifactId = POM_ARTIFACT_ID
                 pom.version = VERSION_NAME
 
-                repository(url: getReleaseRepUrl()) {
-                    authentication(userName: getRepUsername(), password: getRepPassword())
+                repository(url: RELEASE_REPO_URL) {
+                    authentication(userName: REPO_USERNAME, password: REPO_PASSWORD)
                 }
-                snapshotRepository(url: getSnapshotRepUrl()) {
-                    authentication(userName: getRepUsername(), password: getRepPassword())
+                snapshotRepository(url: SNAPSHOT_REPO_URL) {
+                    authentication(userName: REPO_USERNAME, password: REPO_PASSWORD)
                 }
 
                 pom.project {
@@ -88,8 +61,12 @@ afterEvaluate { project ->
     }
 
     signing {
-        required { isReleaseBuild() && gradle.taskGraph.hasTask("uploadArchives") }
+        required { IS_RELEASE && gradle.taskGraph.hasTask('uploadArchives') }
         sign configurations.archives
+
+        // We need to re-map singing properties to be able to mix properties for different projects
+        project.ext.'signing.keyId' = SIGN_KEY_ID
+        project.ext.'signing.password' = SIGN_PASSWORD
     }
 
     task javadocs(type: Javadoc) {
