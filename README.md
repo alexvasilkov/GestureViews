@@ -40,7 +40,7 @@ easier for developers to integrate it into their apps.
 
 Add dependency to your `build.gradle` file:
 
-    compile 'com.alexvasilkov:gesture-views:2.4.1'
+    implementation 'com.alexvasilkov:gesture-views:2.4.1'
 
 [Usage wiki](https://github.com/alexvasilkov/GestureViews/wiki/Usage)
 
