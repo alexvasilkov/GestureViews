@@ -40,7 +40,7 @@ easier for developers to integrate it into their apps.
 
 Add dependency to your `build.gradle` file:
 
-    implementation 'com.alexvasilkov:gesture-views:2.4.1'
+    implementation 'com.alexvasilkov:gesture-views:2.5.0'
 
 [Usage wiki](https://github.com/alexvasilkov/GestureViews/wiki/Usage)
 
@@ -68,7 +68,7 @@ Add dependency to your `build.gradle` file:
 [build-url]: https://travis-ci.org/alexvasilkov/GestureViews
 [build-img]: https://img.shields.io/travis/alexvasilkov/GestureViews/master.svg?style=flat-square
 
-[size-url]: http://www.methodscount.com/?lib=com.alexvasilkov%3Agesture-views%3A2.4.1
-[size-img]: https://img.shields.io/badge/Methods%20and%20size-1098%20%7C%20130%20KB-e91e63.svg?style=flat-square
+[size-url]: http://www.methodscount.com/?lib=com.alexvasilkov%3Agesture-views%3A2.5.0
+[size-img]: https://img.shields.io/badge/Methods%20and%20size-1103%20%7C%20130%20KB-e91e63.svg?style=flat-square
 
 [javadoc-url]: http://javadoc.io/doc/com.alexvasilkov/gesture-views
