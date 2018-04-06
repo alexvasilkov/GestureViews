@@ -78,6 +78,7 @@ public class GestureController implements View.OnTouchListener {
     private final ScaleGestureDetector scaleDetector;
     private final RotationGestureDetector rotateDetector;
 
+    private boolean isInterceptTouchCalled;
     private boolean isInterceptTouchDisallowed;
     private boolean isScrollDetected;
     private boolean isScaleDetected;
@@ -426,17 +427,31 @@ public class GestureController implements View.OnTouchListener {
     //  Gestures handling
     // -------------------
 
+    public boolean onInterceptTouch(@NonNull View view, @NonNull MotionEvent event) {
+        isInterceptTouchCalled = true;
+        return onTouchInternal(view, event);
+    }
+
     @SuppressLint("ClickableViewAccessibility") // performClick is called in gestures callbacks
     @Override
     public boolean onTouch(@NonNull View view, @NonNull MotionEvent event) {
+        if (!isInterceptTouchCalled) { // Preventing duplicate events
+            onTouchInternal(view, event);
+        }
+        isInterceptTouchCalled = false;
+        return settings.isEnabled();
+    }
+
+    protected boolean onTouchInternal(@NonNull View view, @NonNull MotionEvent event) {
         MotionEvent viewportEvent = MotionEvent.obtain(event);
         viewportEvent.offsetLocation(-view.getPaddingLeft(), -view.getPaddingTop());
 
         gestureDetector.setIsLongpressEnabled(view.isLongClickable());
 
         boolean result = gestureDetector.onTouchEvent(viewportEvent);
-        result |= scaleDetector.onTouchEvent(viewportEvent);
-        result |= rotateDetector.onTouchEvent(viewportEvent);
+        scaleDetector.onTouchEvent(viewportEvent);
+        rotateDetector.onTouchEvent(viewportEvent);
+        result = result || isScaleDetected || isRotationDetected;
 
         notifyStateSourceChanged();
 
@@ -503,7 +518,7 @@ public class GestureController implements View.OnTouchListener {
                 final boolean isPannable = State.compare(tmpRectF.width(), 0f) > 0
                         || State.compare(tmpRectF.height(), 0f) > 0;
 
-                if (settings.isPanEnabled() && (isPannable) || !settings.isRestrictBounds()) {
+                if (settings.isPanEnabled() && (isPannable || !settings.isRestrictBounds())) {
                     return true;
                 }
                 break;
@@ -527,7 +542,7 @@ public class GestureController implements View.OnTouchListener {
             gestureListener.onDown(event);
         }
 
-        return settings.isEnabled();
+        return false;
     }
 
     protected void onUpOrCancel(@NonNull MotionEvent event) {

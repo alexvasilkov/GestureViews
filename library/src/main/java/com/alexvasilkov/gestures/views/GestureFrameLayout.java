@@ -113,6 +113,12 @@ public class GestureFrameLayout extends FrameLayout implements GestureView, Anim
         return super.invalidateChildInParent(location, dirty);
     }
 
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        // Passing original event to controller
+        return controller.onInterceptTouch(this, currentMotionEvent);
+    }
+
     @SuppressLint("ClickableViewAccessibility") // performClick() will be called by controller
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {

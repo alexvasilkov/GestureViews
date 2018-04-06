@@ -102,8 +102,15 @@ public class GestureControllerForPager extends GestureController {
     @SuppressLint("ClickableViewAccessibility") // performClick() will be called in super class
     @Override
     public boolean onTouch(@NonNull View view, @NonNull MotionEvent event) {
+        // We need to always receive touch events to pass them to ViewPager (if provided)
+        boolean result = super.onTouch(view, event);
+        return viewPager != null || result;
+    }
+
+    @Override
+    protected boolean onTouchInternal(@NonNull View view, @NonNull MotionEvent event) {
         if (viewPager == null) {
-            return super.onTouch(view, event);
+            return super.onTouchInternal(view, event);
         } else {
             // Getting motion event in pager coordinates
             MotionEvent pagerEvent = MotionEvent.obtain(event);
@@ -111,7 +118,7 @@ public class GestureControllerForPager extends GestureController {
 
             handleTouch(pagerEvent);
 
-            boolean result = super.onTouch(view, pagerEvent);
+            boolean result = super.onTouchInternal(view, pagerEvent);
             pagerEvent.recycle();
             return result;
         }
@@ -151,8 +158,7 @@ public class GestureControllerForPager extends GestureController {
         viewPagerSkippedX = 0f;
 
         passEventToViewPager(event);
-        super.onDown(event);
-        return true;
+        return super.onDown(event);
     }
 
     @Override
