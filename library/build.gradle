@@ -2,7 +2,6 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 27
-    buildToolsVersion '26.0.3'
 
     defaultConfig {
         minSdkVersion 14
@@ -13,8 +12,8 @@ android {
 }
 
 dependencies {
-    compileOnly 'com.android.support:support-core-ui:27.0.2'
-    compileOnly 'com.android.support:recyclerview-v7:27.0.2'
+    compileOnly 'com.android.support:support-core-ui:27.1.1'
+    compileOnly 'com.android.support:recyclerview-v7:27.1.1'
 }
 
 // New version can be uploaded with './gradlew clean :library:uploadArchives'
