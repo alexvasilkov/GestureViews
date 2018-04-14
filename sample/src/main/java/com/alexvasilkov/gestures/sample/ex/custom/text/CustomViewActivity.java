@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.ex.custom;
+package com.alexvasilkov.gestures.sample.ex.custom.text;
 
 import android.os.Bundle;
 

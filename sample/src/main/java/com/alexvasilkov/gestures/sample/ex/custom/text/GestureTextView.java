@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.ex.custom;
+package com.alexvasilkov.gestures.sample.ex.custom.text;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -88,7 +88,7 @@ public class GestureTextView extends AppCompatTextView implements GestureView {
 
     protected void applyState(State state) {
         float size = origSize * state.getZoom();
-        float maxSize = origSize * controller.getSettings().getMaxZoom();
+        float maxSize = origSize * controller.getStateController().getMaxZoom(state);
         size = Math.max(origSize, Math.min(size, maxSize));
 
         // Bigger text size steps for smoother scaling
