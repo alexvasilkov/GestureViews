@@ -86,6 +86,11 @@ public class Settings {
     private boolean isPanEnabled = true;
 
     /*
+     * Whether fling (inertial motion after scroll) is enabled or not.
+     */
+    private boolean isFlingEnabled = true;
+
+    /*
      * Whether zooming is enabled or not.
      */
     private boolean isZoomEnabled = true;
@@ -163,6 +168,8 @@ public class Settings {
 
         isPanEnabled = arr.getBoolean(
                 R.styleable.GestureView_gest_panEnabled, isPanEnabled);
+        isFlingEnabled = arr.getBoolean(
+                R.styleable.GestureView_gest_flingEnabled, isFlingEnabled);
         isZoomEnabled = arr.getBoolean(
                 R.styleable.GestureView_gest_zoomEnabled, isZoomEnabled);
         isRotationEnabled = arr.getBoolean(
@@ -363,6 +370,19 @@ public class Settings {
      */
     public Settings setPanEnabled(boolean enabled) {
         isPanEnabled = enabled;
+        return this;
+    }
+
+    /**
+     * Sets whether fling (inertial motion after scroll) is enabled or not.
+     * <p>
+     * Default value is true.
+     *
+     * @param enabled Whether fling should be enabled or not
+     * @return Current settings object for calls chaining
+     */
+    public Settings setFlingEnabled(boolean enabled) {
+        isFlingEnabled = enabled;
         return this;
     }
 
@@ -583,6 +603,10 @@ public class Settings {
 
     public boolean isPanEnabled() {
         return isGesturesEnabled() && isPanEnabled;
+    }
+
+    public boolean isFlingEnabled() {
+        return isGesturesEnabled() && isFlingEnabled;
     }
 
     public boolean isZoomEnabled() {

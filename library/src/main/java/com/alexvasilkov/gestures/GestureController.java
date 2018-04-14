@@ -616,7 +616,7 @@ public class GestureController implements View.OnTouchListener {
     protected boolean onFling(@NonNull MotionEvent e1, @NonNull MotionEvent e2,
             float vx, float vy) {
 
-        if (!settings.isPanEnabled() || isAnimatingState()) {
+        if (!settings.isPanEnabled() || !settings.isFlingEnabled() || isAnimatingState()) {
             return false;
         }
 

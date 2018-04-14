@@ -29,6 +29,7 @@
             <enum name="outside" value="3" />
         </attr>
         <attr name="gest_panEnabled" format="reference|boolean" />
+        <attr name="gest_flingEnabled" format="reference|boolean" />
         <attr name="gest_zoomEnabled" format="reference|boolean" />
         <attr name="gest_rotationEnabled" format="reference|boolean" />
         <attr name="gest_restrictRotation" format="reference|boolean" />
@@ -52,6 +53,7 @@
         <attr name="gest_gravity" />
         <attr name="gest_fitMethod" />
         <attr name="gest_panEnabled" />
+        <attr name="gest_flingEnabled" />
         <attr name="gest_zoomEnabled" />
         <attr name="gest_rotationEnabled" />
         <attr name="gest_restrictRotation" />
@@ -75,6 +77,7 @@
         <attr name="gest_gravity" />
         <attr name="gest_fitMethod" />
         <attr name="gest_panEnabled" />
+        <attr name="gest_flingEnabled" />
         <attr name="gest_zoomEnabled" />
         <attr name="gest_rotationEnabled" />
         <attr name="gest_restrictRotation" />
