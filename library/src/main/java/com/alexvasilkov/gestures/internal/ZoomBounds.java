@@ -25,13 +25,14 @@ public class ZoomBounds {
     private boolean isReady;
     private float minZoom;
     private float maxZoom;
+    private float fitZoom;
 
     public void setup(State state, Settings settings) {
         isReady = settings.hasImageSize() && settings.hasViewportSize();
         if (isReady) {
             calculateZoomLevels(state, settings);
         } else {
-            minZoom = maxZoom = 1f;
+            minZoom = maxZoom = fitZoom = 1f;
         }
     }
 
@@ -39,6 +40,7 @@ public class ZoomBounds {
      * Calculates min and max zoom levels.
      */
     private void calculateZoomLevels(State state, Settings settings) {
+        minZoom = settings.getMinZoom();
         maxZoom = settings.getMaxZoom();
 
         float imageWidth = settings.getImageW();
@@ -66,35 +68,57 @@ public class ZoomBounds {
             imageHeight = tmpRectF.height();
         }
 
-        final float fittingZoom;
-
         switch (settings.getFitMethod()) {
             case HORIZONTAL:
-                fittingZoom = areaWidth / imageWidth;
+                fitZoom = areaWidth / imageWidth;
                 break;
             case VERTICAL:
-                fittingZoom = areaHeight / imageHeight;
-                break;
-            case OUTSIDE:
-                fittingZoom = Math.max(areaWidth / imageWidth, areaHeight / imageHeight);
+                fitZoom = areaHeight / imageHeight;
                 break;
             case INSIDE:
-            default:
-                fittingZoom = Math.min(areaWidth / imageWidth, areaHeight / imageHeight);
+                fitZoom = Math.min(areaWidth / imageWidth, areaHeight / imageHeight);
                 break;
+            case OUTSIDE:
+                fitZoom = Math.max(areaWidth / imageWidth, areaHeight / imageHeight);
+                break;
+            case NONE:
+            default:
+                fitZoom = minZoom > 0f ? minZoom : 1f;
         }
 
-        if (fittingZoom > maxZoom) {
+        if (minZoom <= 0f) {
+            minZoom = fitZoom;
+        }
+        if (maxZoom <= 0f) {
+            maxZoom = fitZoom;
+        }
+
+        if (fitZoom > maxZoom) {
             if (settings.isFillViewport()) {
                 // zooming to fill entire viewport
-                minZoom = maxZoom = fittingZoom;
+                maxZoom = fitZoom;
             } else {
-                // restricting min zoom
-                minZoom = maxZoom;
+                // restricting fit zoom
+                fitZoom = maxZoom;
             }
-        } else {
-            minZoom = fittingZoom;
         }
+        // Now we have: fitZoom <= maxZoom
+
+        if (minZoom > maxZoom) {
+            minZoom = maxZoom;
+        }
+        // Now we have: minZoom <= maxZoom
+
+        if (fitZoom < minZoom) {
+            if (settings.isFillViewport()) {
+                // zooming to fill entire viewport
+                minZoom = fitZoom;
+            } else {
+                // restricting fit zoom
+                fitZoom = minZoom;
+            }
+        }
+        // Now we have: minZoom <= fitZoom <= maxZoom
     }
 
 
@@ -108,6 +132,10 @@ public class ZoomBounds {
 
     public float getMaxZoom() {
         return maxZoom;
+    }
+
+    public float getFitZoom() {
+        return fitZoom;
     }
 
     public float restrict(float zoom, float extraZoom) {

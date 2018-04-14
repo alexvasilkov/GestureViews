@@ -74,7 +74,7 @@ public class StateController {
             isResetRequired = !zoomBounds.isReady();
 
             // Applying initial state
-            state.set(0f, 0f, zoomBounds.getMinZoom(), 0f);
+            state.set(0f, 0f, zoomBounds.getFitZoom(), 0f);
             GravityUtils.getImagePosition(state, settings, tmpRect);
             state.translateTo(tmpRect.left, tmpRect.top);
 
@@ -110,7 +110,7 @@ public class StateController {
      */
     State toggleMinMaxZoom(State state, float pivotX, float pivotY) {
         final ZoomBounds zoomBounds = getZoomBounds(state);
-        final float minZoom = zoomBounds.getMinZoom();
+        final float minZoom = zoomBounds.getFitZoom();
         final float maxZoom = settings.getDoubleTapZoom() > 0f
                 ? settings.getDoubleTapZoom() : zoomBounds.getMaxZoom();
 
@@ -184,13 +184,14 @@ public class StateController {
 
         ZoomBounds zoomBounds = getZoomBounds(state);
         final float minZoom = zoomBounds.getMinZoom();
+        final float maxZoom = zoomBounds.getMaxZoom();
 
         final float extraZoom = allowOverzoom ? settings.getOverzoomFactor() : 1f;
         float zoom = zoomBounds.restrict(state.getZoom(), extraZoom);
 
         // Applying elastic overzoom
         if (prevState != null) {
-            zoom = applyZoomResilience(zoom, prevState.getZoom(), extraZoom);
+            zoom = applyZoomResilience(zoom, prevState.getZoom(), minZoom, maxZoom, extraZoom);
         }
 
         if (!State.equals(zoom, state.getZoom())) {
@@ -235,20 +236,21 @@ public class StateController {
         return isStateChanged;
     }
 
-    private float applyZoomResilience(float zoom, float prevZoom, float overzoom) {
+    private float applyZoomResilience(float zoom, float prevZoom,
+            float minZoom, float maxZoom, float overzoom) {
         if (overzoom == 1f) {
             return zoom;
         }
 
-        float minZoom = this.minZoom / overzoom;
-        float maxZoom = this.maxZoom * overzoom;
+        float minZoomOver = minZoom / overzoom;
+        float maxZoomOver = maxZoom * overzoom;
 
         float resilience = 0f;
 
-        if (zoom < this.minZoom && zoom < prevZoom) {
-            resilience = (this.minZoom - zoom) / (this.minZoom - minZoom);
-        } else if (zoom > this.maxZoom && zoom > prevZoom) {
-            resilience = (zoom - this.maxZoom) / (maxZoom - this.maxZoom);
+        if (zoom < minZoom && zoom < prevZoom) {
+            resilience = (minZoom - zoom) / (minZoom - minZoomOver);
+        } else if (zoom > maxZoom && zoom > prevZoom) {
+            resilience = (zoom - maxZoom) / (maxZoomOver - maxZoom);
         }
 
         if (resilience == 0f) {
@@ -319,6 +321,15 @@ public class StateController {
     @SuppressWarnings({ "unused", "WeakerAccess" }) // Public API
     public float getMaxZoom(State state) {
         return getZoomBounds(state).getMaxZoom();
+    }
+
+    /**
+     * @param state Current state
+     * @return Zoom level which will fit the image into viewport (or min zoom level if
+     * {@link Settings#getFitMethod()} is {@link Settings.Fit#NONE}).
+     */
+    public float getFitZoom(State state) {
+        return getZoomBounds(state).getFitZoom();
     }
 
     /**

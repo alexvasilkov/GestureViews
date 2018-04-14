@@ -44,6 +44,11 @@ public class Settings {
     private int imageH;
 
     /*
+     * Min zoom level, default value is 0f, meaning min zoom will be adjusted to fit viewport.
+     */
+    private float minZoom = 0f;
+
+    /*
      * Max zoom level, default value is {@link #MAX_ZOOM}.
      */
     private float maxZoom = MAX_ZOOM;
@@ -65,8 +70,9 @@ public class Settings {
     private float overscrollDistanceY;
 
     /*
-     * If isFillViewport = true small image will be scaled to fit entire viewport
-     * even if it will require zoom level above max zoom level.
+     * If isFillViewport is true:
+     * Small images will be scaled to fit viewport even if it will require zooming above max zoom.
+     * Big images will be scaled to fit viewport even if it will require zooming below min zoom.
      */
     private boolean isFillViewport = false;
 
@@ -147,6 +153,8 @@ public class Settings {
                 R.styleable.GestureView_gest_movementAreaHeight, movementAreaH);
         isMovementAreaSpecified = movementAreaW > 0 && movementAreaH > 0;
 
+        minZoom = arr.getFloat(
+                R.styleable.GestureView_gest_minZoom, minZoom);
         maxZoom = arr.getFloat(
                 R.styleable.GestureView_gest_maxZoom, maxZoom);
         doubleTapZoom = arr.getFloat(
@@ -244,11 +252,24 @@ public class Settings {
     }
 
     /**
+     * Setting min zoom level.
+     * <p>
+     * Default value is 0.
+     *
+     * @param minZoom Min zoom level, or 0 to use zoom level which fits the image into the viewport.
+     * @return Current settings object for calls chaining
+     */
+    public Settings setMinZoom(float minZoom) {
+        this.minZoom = minZoom;
+        return this;
+    }
+
+    /**
      * Setting max zoom level.
      * <p>
      * Default value is {@link #MAX_ZOOM}.
      *
-     * @param maxZoom Max zoom level
+     * @param maxZoom Max zoom level, or 0 to use zoom level which fits the image into the viewport.
      * @return Current settings object for calls chaining
      */
     public Settings setMaxZoom(float maxZoom) {
@@ -321,8 +342,9 @@ public class Settings {
     }
 
     /**
-     * If set to true small image will be scaled to fit entire viewport (or entire movement area
-     * if it was set) even if this will require zoom level above max zoom level.
+     * If set to true small images will be scaled to fit entire viewport (or entire movement area
+     * if it was set) even if this will require zoom level above max zoom level. And big images
+     * will be scaled to fit the viewport even if it will require zooming below min zoom.
      * <p>
      * Default value is false.
      *
@@ -569,6 +591,10 @@ public class Settings {
         return imageH;
     }
 
+    public float getMinZoom() {
+        return minZoom;
+    }
+
     public float getMaxZoom() {
         return maxZoom;
     }
@@ -679,7 +705,12 @@ public class Settings {
         /**
          * Fit image width or image height inside viewport area, so the entire viewport is filled.
          */
-        OUTSIDE
+        OUTSIDE,
+
+        /**
+         * Do not fit the image into viewport area.
+         */
+        NONE
     }
 
 }

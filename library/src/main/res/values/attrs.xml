@@ -4,6 +4,7 @@
     <declare-styleable name="GestureView">
         <attr name="gest_movementAreaWidth" format="reference|dimension" />
         <attr name="gest_movementAreaHeight" format="reference|dimension" />
+        <attr name="gest_minZoom" format="reference|float" />
         <attr name="gest_maxZoom" format="reference|float" />
         <attr name="gest_doubleTapZoom" format="reference|float" />
         <attr name="gest_overzoomFactor" format="reference|float" />
@@ -44,6 +45,7 @@
     <declare-styleable name="GestureImageView">
         <attr name="gest_movementAreaWidth" />
         <attr name="gest_movementAreaHeight" />
+        <attr name="gest_minZoom" />
         <attr name="gest_maxZoom" />
         <attr name="gest_doubleTapZoom" />
         <attr name="gest_overzoomFactor" />
@@ -68,6 +70,7 @@
     <declare-styleable name="GestureFrameLayout">
         <attr name="gest_movementAreaWidth" />
         <attr name="gest_movementAreaHeight" />
+        <attr name="gest_minZoom" />
         <attr name="gest_maxZoom" />
         <attr name="gest_doubleTapZoom" />
         <attr name="gest_overzoomFactor" />

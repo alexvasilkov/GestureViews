@@ -200,7 +200,8 @@ public class GestureImageView extends ImageView
         float newWidth = settings.getImageW();
         float newHeight = settings.getImageH();
 
-        if (newWidth > 0f && newHeight > 0f && oldWidth > 0f && oldHeight > 0f) {
+        if (settings.isFillViewport() // Otherwise we can't guarantee we'll be withing min/max zoom
+                && newWidth > 0f && newHeight > 0f && oldWidth > 0f && oldHeight > 0f) {
             float scaleFactor = Math.min(oldWidth / newWidth, oldHeight / newHeight);
             controller.getStateController().setTempZoomPatch(scaleFactor);
             controller.updateState();

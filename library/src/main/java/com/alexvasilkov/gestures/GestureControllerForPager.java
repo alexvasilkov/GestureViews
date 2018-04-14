@@ -290,7 +290,7 @@ public class GestureControllerForPager extends GestureController {
             overscrollThreshold = (state.getY() - movBounds.bottom) / overscrollDist;
         }
 
-        float minZoom = getStateController().getMinZoom(state);
+        float minZoom = getStateController().getFitZoom(state);
         float zoomThreshold = minZoom == 0f ? 0f : state.getZoom() / minZoom - 1f;
 
         float pagerThreshold = Math.max(overscrollThreshold, zoomThreshold);
