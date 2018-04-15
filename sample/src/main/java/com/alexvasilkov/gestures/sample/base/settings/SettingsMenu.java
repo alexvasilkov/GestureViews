@@ -30,13 +30,9 @@ public class SettingsMenu implements SettingsController {
     @InstanceState
     private boolean isRestrictRotation = false;
     @InstanceState
-    private boolean isOverscrollXEnabled = false;
-    @InstanceState
-    private boolean isOverscrollYEnabled = false;
+    private boolean isOverscrollEnabled = false;
     @InstanceState
     private boolean isOverzoomEnabled = true;
-    @InstanceState
-    private boolean isExitEnabled = true;
     @InstanceState
     private boolean isFillViewport = true;
     @InstanceState
@@ -53,7 +49,6 @@ public class SettingsMenu implements SettingsController {
         isZoomEnabled = settings.isZoomEnabled();
         isRotationEnabled = settings.isRotationEnabled();
         isRestrictRotation = settings.isRestrictRotation();
-        isExitEnabled = settings.isExitEnabled();
         isFillViewport = settings.isFillViewport();
         fitMethod = settings.getFitMethod();
         boundsType = settings.getBoundsType();
@@ -73,10 +68,8 @@ public class SettingsMenu implements SettingsController {
         addBoolMenu(menu, isZoomEnabled, R.string.menu_enable_zoom);
         addBoolMenu(menu, isRotationEnabled, R.string.menu_enable_rotation);
         addBoolMenu(menu, isRestrictRotation, R.string.menu_restrict_rotation);
-        addBoolMenu(menu, isOverscrollXEnabled, R.string.menu_enable_overscroll_x);
-        addBoolMenu(menu, isOverscrollYEnabled, R.string.menu_enable_overscroll_y);
+        addBoolMenu(menu, isOverscrollEnabled, R.string.menu_enable_overscroll);
         addBoolMenu(menu, isOverzoomEnabled, R.string.menu_enable_overzoom);
-        addBoolMenu(menu, isExitEnabled, R.string.menu_enable_exit);
         addBoolMenu(menu, isFillViewport, R.string.menu_fill_viewport);
         addSubMenu(menu, Settings.Fit.values(), fitMethod, R.string.menu_fit_method);
         addSubMenu(menu, Settings.Bounds.values(), boundsType, R.string.menu_bounds_type);
@@ -116,17 +109,11 @@ public class SettingsMenu implements SettingsController {
             case R.string.menu_restrict_rotation:
                 isRestrictRotation = !isRestrictRotation;
                 break;
-            case R.string.menu_enable_overscroll_x:
-                isOverscrollXEnabled = !isOverscrollXEnabled;
-                break;
-            case R.string.menu_enable_overscroll_y:
-                isOverscrollYEnabled = !isOverscrollYEnabled;
+            case R.string.menu_enable_overscroll:
+                isOverscrollEnabled = !isOverscrollEnabled;
                 break;
             case R.string.menu_enable_overzoom:
                 isOverzoomEnabled = !isOverzoomEnabled;
-                break;
-            case R.string.menu_enable_exit:
-                isExitEnabled = !isExitEnabled;
                 break;
             case R.string.menu_fill_viewport:
                 isFillViewport = !isFillViewport;
@@ -156,8 +143,7 @@ public class SettingsMenu implements SettingsController {
     @Override
     public void apply(GestureView view) {
         Context context = ((View) view).getContext();
-        float overscrollX = isOverscrollXEnabled ? OVERSCROLL : 0f;
-        float overscrollY = isOverscrollYEnabled ? OVERSCROLL : 0f;
+        float overscroll = isOverscrollEnabled ? OVERSCROLL : 0f;
         float overzoom = isOverzoomEnabled ? Settings.OVERZOOM_FACTOR : 1f;
 
         view.getController().getSettings()
@@ -166,9 +152,8 @@ public class SettingsMenu implements SettingsController {
                 .setDoubleTapEnabled(isZoomEnabled)
                 .setRotationEnabled(isRotationEnabled)
                 .setRestrictRotation(isRestrictRotation)
-                .setOverscrollDistance(context, overscrollX, overscrollY)
+                .setOverscrollDistance(context, overscroll, overscroll)
                 .setOverzoomFactor(overzoom)
-                .setExitEnabled(isExitEnabled)
                 .setFillViewport(isFillViewport)
                 .setFitMethod(fitMethod)
                 .setBoundsType(boundsType)

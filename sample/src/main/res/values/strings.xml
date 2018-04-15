@@ -22,10 +22,8 @@
     <string name="menu_enable_zoom">Zoom</string>
     <string name="menu_enable_rotation">Rotation</string>
     <string name="menu_restrict_rotation">Restrict rotation</string>
-    <string name="menu_enable_overscroll_x">Overscroll X</string>
-    <string name="menu_enable_overscroll_y">Overscroll Y</string>
+    <string name="menu_enable_overscroll">Overscroll</string>
     <string name="menu_enable_overzoom">Overzoom</string>
-    <string name="menu_enable_exit">Exit gesture</string>
     <string name="menu_fill_viewport">Fill viewport</string>
     <string name="menu_fit_method">Fit method</string>
     <string name="menu_bounds_type">Bounds type</string>
