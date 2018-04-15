@@ -645,6 +645,8 @@ public class ViewPositionAnimator {
         if (toController instanceof GestureControllerForPager) {
             ((GestureControllerForPager) toController).disableViewPager(false);
         }
+
+        toController.animateKeepInBounds();
     }
 
     private void requestUpdateToState() {
