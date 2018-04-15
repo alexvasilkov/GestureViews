@@ -17,7 +17,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 27
 
-        setupVersion '2.5.0'
+        setupVersion '2.5.1'
         setOutputFileName 'gesture-views'
 
         resConfigs 'en'
@@ -43,7 +43,7 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:27.1.1'
     implementation 'com.android.support:design:27.1.1'
 
-    implementation 'com.github.bumptech.glide:glide:4.3.0'
+    implementation 'com.github.bumptech.glide:glide:4.6.1'
 
     implementation 'com.alexvasilkov:android-commons:2.0.2'
     implementation 'com.alexvasilkov:events:1.0.0'
