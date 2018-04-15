@@ -68,7 +68,7 @@ public class DemoGlideHelper {
                 .dontTransform();
 
         final RequestBuilder<Drawable> thumbRequest = Glide.with(image)
-                .load(photo.getThumbnailUrl())
+                .load(photo.getMediumUrl())
                 .apply(options);
 
         Glide.with(image)

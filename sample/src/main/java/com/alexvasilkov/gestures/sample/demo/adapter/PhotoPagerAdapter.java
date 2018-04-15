@@ -80,11 +80,6 @@ public class PhotoPagerAdapter extends RecyclePagerAdapter<PhotoPagerAdapter.Vie
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         settingsController.apply(holder.image);
 
-        // Temporary disabling touch controls
-        if (!holder.gesturesDisabled) {
-            holder.gesturesDisabled = true;
-        }
-
         holder.progress.animate().setStartDelay(PROGRESS_DELAY).alpha(1f);
 
         Photo photo = photos.get(position);
@@ -95,10 +90,6 @@ public class PhotoPagerAdapter extends RecyclePagerAdapter<PhotoPagerAdapter.Vie
             public void onSuccess() {
                 holder.progress.animate().cancel();
                 holder.progress.animate().alpha(0f);
-                // Re-enabling touch controls
-                if (holder.gesturesDisabled) {
-                    holder.gesturesDisabled = false;
-                }
             }
 
             @Override
@@ -111,11 +102,6 @@ public class PhotoPagerAdapter extends RecyclePagerAdapter<PhotoPagerAdapter.Vie
     @Override
     public void onRecycleViewHolder(@NonNull ViewHolder holder) {
         super.onRecycleViewHolder(holder);
-
-        if (holder.gesturesDisabled) {
-            holder.image.getController().getSettings().enableGestures();
-            holder.gesturesDisabled = false;
-        }
 
         DemoGlideHelper.clear(holder.image);
 
@@ -138,8 +124,6 @@ public class PhotoPagerAdapter extends RecyclePagerAdapter<PhotoPagerAdapter.Vie
     static class ViewHolder extends RecyclePagerAdapter.ViewHolder {
         final GestureImageView image;
         final View progress;
-
-        boolean gesturesDisabled;
 
         ViewHolder(ViewGroup parent) {
             super(Views.inflate(parent, R.layout.demo_item_photo_full));
