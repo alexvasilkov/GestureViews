@@ -21,51 +21,57 @@ public class ZoomBounds {
     private static final Matrix tmpMatrix = new Matrix();
     private static final RectF tmpRectF = new RectF();
 
+    private final Settings settings;
+
     // State bounds parameters
-    private boolean isReady;
     private float minZoom;
     private float maxZoom;
     private float fitZoom;
 
-    public void setup(State state, Settings settings) {
-        isReady = settings.hasImageSize() && settings.hasViewportSize();
-        if (isReady) {
-            calculateZoomLevels(state, settings);
-        } else {
-            minZoom = maxZoom = fitZoom = 1f;
-        }
+    public ZoomBounds(Settings settings) {
+        this.settings = settings;
     }
 
     /**
-     * Calculates min and max zoom levels.
+     * Calculates min, max and "fit" zoom levels for given state and according to current settings.
+     *
+     * @param state State for which to calculate zoom bounds.
+     * @return Current zoom bounds object for calls chaining.
      */
-    private void calculateZoomLevels(State state, Settings settings) {
-        minZoom = settings.getMinZoom();
-        maxZoom = settings.getMaxZoom();
-
+    public ZoomBounds set(State state) {
         float imageWidth = settings.getImageW();
         float imageHeight = settings.getImageH();
 
         float areaWidth = settings.getMovementAreaW();
         float areaHeight = settings.getMovementAreaH();
 
+        if (imageWidth == 0f || imageHeight == 0f || areaWidth == 0f || areaHeight == 0f) {
+            minZoom = maxZoom = fitZoom = 1f;
+            return this;
+        }
+
+        minZoom = settings.getMinZoom();
+        maxZoom = settings.getMaxZoom();
+
         final float rotation = state.getRotation();
 
-        if (settings.getFitMethod() == Settings.Fit.OUTSIDE) {
-            // Computing movement area size taking rotation into account. We need to inverse
-            // rotation, since it will be applied to the area, not to the image itself.
-            tmpMatrix.setRotate(-rotation);
-            tmpRectF.set(0, 0, areaWidth, areaHeight);
-            tmpMatrix.mapRect(tmpRectF);
-            areaWidth = tmpRectF.width();
-            areaHeight = tmpRectF.height();
-        } else {
-            // Computing image bounding size taking rotation into account.
-            tmpMatrix.setRotate(rotation);
-            tmpRectF.set(0, 0, imageWidth, imageHeight);
-            tmpMatrix.mapRect(tmpRectF);
-            imageWidth = tmpRectF.width();
-            imageHeight = tmpRectF.height();
+        if (!State.equals(rotation, 0f)) {
+            if (settings.getFitMethod() == Settings.Fit.OUTSIDE) {
+                // Computing movement area size taking rotation into account. We need to inverse
+                // rotation, since it will be applied to the area, not to the image itself.
+                tmpMatrix.setRotate(-rotation);
+                tmpRectF.set(0, 0, areaWidth, areaHeight);
+                tmpMatrix.mapRect(tmpRectF);
+                areaWidth = tmpRectF.width();
+                areaHeight = tmpRectF.height();
+            } else {
+                // Computing image bounding size taking rotation into account.
+                tmpMatrix.setRotate(rotation);
+                tmpRectF.set(0, 0, imageWidth, imageHeight);
+                tmpMatrix.mapRect(tmpRectF);
+                imageWidth = tmpRectF.width();
+                imageHeight = tmpRectF.height();
+            }
         }
 
         switch (settings.getFitMethod()) {
@@ -119,12 +125,9 @@ public class ZoomBounds {
             }
         }
         // Now we have: minZoom <= fitZoom <= maxZoom
+        return this;
     }
 
-
-    public boolean isReady() {
-        return isReady;
-    }
 
     public float getMinZoom() {
         return minZoom;

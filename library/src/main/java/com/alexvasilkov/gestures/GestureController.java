@@ -99,7 +99,7 @@ public class GestureController implements View.OnTouchListener {
     private final OverScroller flingScroller;
     private final FloatScroller stateScroller;
 
-    private final MovementBounds flingBounds = new MovementBounds();
+    private final MovementBounds flingBounds;
     private final State stateStart = new State();
     private final State stateEnd = new State();
 
@@ -127,6 +127,8 @@ public class GestureController implements View.OnTouchListener {
 
         flingScroller = new OverScroller(context);
         stateScroller = new FloatScroller();
+
+        flingBounds = new MovementBounds(settings);
 
         final ViewConfiguration configuration = ViewConfiguration.get(context);
         touchSlop = configuration.getScaledTouchSlop();
@@ -628,8 +630,7 @@ public class GestureController implements View.OnTouchListener {
         stopFlingAnimation();
 
         // Fling bounds including current position
-        flingBounds.setup(state, settings);
-        flingBounds.extend(state.getX(), state.getY());
+        flingBounds.set(state).extend(state.getX(), state.getY());
 
         flingScroller.fling(
                 Math.round(state.getX()), Math.round(state.getY()),

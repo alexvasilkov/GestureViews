@@ -28,19 +28,17 @@ public class StateController {
 
 
     private final Settings settings;
-    private final ZoomBounds zoomBounds = new ZoomBounds();
-    private final MovementBounds movBounds = new MovementBounds();
+    private final ZoomBounds zoomBounds;
+    private final MovementBounds movBounds;
 
     private boolean isResetRequired = true;
-
-    // FIXME: Remove next fields when getEffectiveMinZoom and getEffectiveMaxZoom are removed.
-    private float minZoom;
-    private float maxZoom;
 
     private float zoomPatch;
 
     StateController(Settings settings) {
         this.settings = settings;
+        this.zoomBounds = new ZoomBounds(settings);
+        this.movBounds = new MovementBounds(settings);
     }
 
     /**
@@ -65,19 +63,15 @@ public class StateController {
      */
     boolean updateState(State state) {
         if (isResetRequired) {
-            // We can correctly reset state only when we have both image size and viewport size
-            // but there can be a delay before we have all values properly set
-            // (waiting for layout or waiting for image to be loaded)
-            state.set(0f, 0f, 1f, 0f);
-
-            ZoomBounds zoomBounds = getZoomBounds(state);
-            isResetRequired = !zoomBounds.isReady();
-
             // Applying initial state
-            state.set(0f, 0f, zoomBounds.getFitZoom(), 0f);
+            state.set(0f, 0f, zoomBounds.set(state).getFitZoom(), 0f);
             GravityUtils.getImagePosition(state, settings, tmpRect);
             state.translateTo(tmpRect.left, tmpRect.top);
 
+            // We can correctly reset state only when we have both image size and viewport size
+            // but there can be a delay before we have all values properly set
+            // (waiting for layout or waiting for image to be loaded)
+            isResetRequired = !settings.hasImageSize() || !settings.hasViewportSize();
             return !isResetRequired;
         } else {
             // Restricts state's translation and zoom bounds, disallowing overscroll / overzoom.
@@ -109,7 +103,7 @@ public class StateController {
      * @return End state for toggle animation.
      */
     State toggleMinMaxZoom(State state, float pivotX, float pivotY) {
-        final ZoomBounds zoomBounds = getZoomBounds(state);
+        zoomBounds.set(state);
         final float minZoom = zoomBounds.getFitZoom();
         final float maxZoom = settings.getDoubleTapZoom() > 0f
                 ? settings.getDoubleTapZoom() : zoomBounds.getMaxZoom();
@@ -182,7 +176,7 @@ public class StateController {
             }
         }
 
-        ZoomBounds zoomBounds = getZoomBounds(state);
+        zoomBounds.set(state);
         final float minZoom = zoomBounds.getMinZoom();
         final float maxZoom = zoomBounds.getMaxZoom();
 
@@ -199,11 +193,11 @@ public class StateController {
             isStateChanged = true;
         }
 
-        MovementBounds bounds = getMovementBounds(state);
         float extraX = allowOverscroll ? settings.getOverscrollDistanceX() : 0f;
         float extraY = allowOverscroll ? settings.getOverscrollDistanceY() : 0f;
 
-        bounds.restrict(state.getX(), state.getY(), extraX, extraY, tmpPointF);
+        movBounds.set(state);
+        movBounds.restrict(state.getX(), state.getY(), extraX, extraY, tmpPointF);
         float newX = tmpPointF.x;
         float newY = tmpPointF.y;
 
@@ -212,7 +206,7 @@ public class StateController {
             float factor = (extraZoom * zoom / minZoom - 1f) / (extraZoom - 1f);
             factor = (float) Math.sqrt(factor);
 
-            bounds.restrict(newX, newY, tmpPointF);
+            movBounds.restrict(newX, newY, tmpPointF);
             float strictX = tmpPointF.x;
             float strictY = tmpPointF.y;
 
@@ -221,7 +215,7 @@ public class StateController {
         }
 
         if (prevState != null) {
-            bounds.getExternalBounds(tmpRectF);
+            movBounds.getExternalBounds(tmpRectF);
             newX = applyTranslationResilience(newX, prevState.getX(),
                     tmpRectF.left, tmpRectF.right, extraX);
             newY = applyTranslationResilience(newY, prevState.getY(),
@@ -289,28 +283,12 @@ public class StateController {
     }
 
 
-    private ZoomBounds getZoomBounds(State state) {
-        zoomBounds.setup(state, settings);
-
-        // FIXME: Remove next lines when getEffectiveMinZoom and getEffectiveMaxZoom are removed.
-        minZoom = zoomBounds.getMinZoom();
-        maxZoom = zoomBounds.getMaxZoom();
-
-        return zoomBounds;
-    }
-
-    private MovementBounds getMovementBounds(State state) {
-        movBounds.setup(state, settings);
-        return movBounds;
-    }
-
-
     /**
      * @param state Current state
      * @return Min zoom level as it's used by state controller.
      */
     public float getMinZoom(State state) {
-        return getZoomBounds(state).getMinZoom();
+        return zoomBounds.set(state).getMinZoom();
     }
 
     /**
@@ -320,7 +298,7 @@ public class StateController {
      */
     @SuppressWarnings({ "unused", "WeakerAccess" }) // Public API
     public float getMaxZoom(State state) {
-        return getZoomBounds(state).getMaxZoom();
+        return zoomBounds.set(state).getMaxZoom();
     }
 
     /**
@@ -329,7 +307,7 @@ public class StateController {
      * {@link Settings#getFitMethod()} is {@link Settings.Fit#NONE}).
      */
     public float getFitZoom(State state) {
-        return getZoomBounds(state).getFitZoom();
+        return zoomBounds.set(state).getFitZoom();
     }
 
     /**
@@ -341,7 +319,7 @@ public class StateController {
      * @param out Output movement area rectangle
      */
     public void getMovementArea(State state, RectF out) {
-        getMovementBounds(state).getExternalBounds(out);
+        movBounds.set(state).getExternalBounds(out);
     }
 
 
@@ -356,7 +334,7 @@ public class StateController {
     @SuppressWarnings("unused") // Public API
     @Deprecated
     public float getEffectiveMinZoom() {
-        return minZoom;
+        return zoomBounds.getMinZoom();
     }
 
     /**
@@ -366,7 +344,7 @@ public class StateController {
     @SuppressWarnings("unused") // Public API
     @Deprecated
     public float getEffectiveMaxZoom() {
-        return maxZoom;
+        return zoomBounds.getMaxZoom();
     }
 
     /**

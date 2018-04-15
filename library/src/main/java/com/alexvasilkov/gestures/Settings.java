@@ -87,6 +87,11 @@ public class Settings {
     private Fit fitMethod = Fit.INSIDE;
 
     /*
+     * Movement bounds restriction type.
+     */
+    private Bounds boundsType = Bounds.NORMAL;
+
+    /*
      * Whether panning is enabled or not.
      */
     private boolean isPanEnabled = true;
@@ -173,6 +178,10 @@ public class Settings {
         int fitMethodPos = arr.getInteger(
                 R.styleable.GestureView_gest_fitMethod, fitMethod.ordinal());
         fitMethod = Fit.values()[fitMethodPos];
+
+        int boundsTypePos = arr.getInteger(
+                R.styleable.GestureView_gest_boundsType, boundsType.ordinal());
+        boundsType = Bounds.values()[boundsTypePos];
 
         isPanEnabled = arr.getBoolean(
                 R.styleable.GestureView_gest_panEnabled, isPanEnabled);
@@ -379,6 +388,19 @@ public class Settings {
      */
     public Settings setFitMethod(@NonNull Fit fitMethod) {
         this.fitMethod = fitMethod;
+        return this;
+    }
+
+    /**
+     * Setting movement bounds restriction type.
+     * <p>
+     * Default value is {@link Settings.Bounds#NORMAL}.
+     *
+     * @param boundsType Bounds restrictions type
+     * @return Current settings object for calls chaining
+     */
+    public Settings setBoundsType(@NonNull Bounds boundsType) {
+        this.boundsType = boundsType;
         return this;
     }
 
@@ -627,6 +649,10 @@ public class Settings {
         return fitMethod;
     }
 
+    public Bounds getBoundsType() {
+        return boundsType;
+    }
+
     public boolean isPanEnabled() {
         return isGesturesEnabled() && isPanEnabled;
     }
@@ -677,6 +703,7 @@ public class Settings {
     }
 
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted") // Public API
     public boolean hasImageSize() {
         return imageW != 0 && imageH != 0;
     }
@@ -709,6 +736,36 @@ public class Settings {
 
         /**
          * Do not fit the image into viewport area.
+         */
+        NONE
+    }
+
+    public enum Bounds {
+        /**
+         * The image is moved within the movement area and always placed according to gravity
+         * if less than the area.
+         */
+        NORMAL,
+
+        /**
+         * The image is moved within the movement area and can be freely moved inside the area
+         * if less than the area.
+         */
+        INSIDE,
+
+        /**
+         * The image can be freely moved until it's completely outside of the movement area.
+         */
+        OUTSIDE,
+
+        /**
+         * The image can be freely moved until it contains a pivot point (e.g. center point if
+         * the gravity is set to {@link Gravity#CENTER}).
+         */
+        PIVOT,
+
+        /**
+         * The image can be freely moved with no restrictions.
          */
         NONE
     }
