@@ -574,10 +574,12 @@ public class GestureController implements View.OnTouchListener {
 
     @SuppressWarnings("WeakerAccess") // Public API (can be overridden)
     protected void onLongPress(@NonNull MotionEvent event) {
-        targetView.performLongClick();
+        if (settings.isEnabled()) {
+            targetView.performLongClick();
 
-        if (gestureListener != null) {
-            gestureListener.onLongPress(event);
+            if (gestureListener != null) {
+                gestureListener.onLongPress(event);
+            }
         }
     }
 
