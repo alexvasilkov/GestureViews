@@ -42,4 +42,10 @@
         page flips when panning zoomed image</li>
     </string>
 
+    <string name="info_objects_control">
+         This example demonstrates advanced gesture controller usage.
+         \n\nSingle tap selects an item on the screen. Once selected an item can be moved, scaled
+        and rotated within the bounds of the screen.
+    </string>
+
 </resources>

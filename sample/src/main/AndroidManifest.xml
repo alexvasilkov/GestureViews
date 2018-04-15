@@ -185,9 +185,19 @@
         </activity>
 
         <activity
-            android:name=".ex.custom.CustomViewActivity"
+            android:name=".ex.custom.text.CustomViewActivity"
             android:icon="@drawable/ic_ex_custom_text"
             android:label="Custom view">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ex.custom.scene.SceneActivity"
+            android:icon="@drawable/ic_ex_objects_control"
+            android:label="Objects control">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
