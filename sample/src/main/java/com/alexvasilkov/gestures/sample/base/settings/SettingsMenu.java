@@ -42,6 +42,8 @@ public class SettingsMenu implements SettingsController {
     @InstanceState
     private Settings.Fit fitMethod = Settings.Fit.INSIDE;
     @InstanceState
+    private Settings.Bounds boundsType = Settings.Bounds.NORMAL;
+    @InstanceState
     private int gravity = Gravity.CENTER;
     @InstanceState
     private boolean isSlow = false;
@@ -54,6 +56,7 @@ public class SettingsMenu implements SettingsController {
         isExitEnabled = settings.isExitEnabled();
         isFillViewport = settings.isFillViewport();
         fitMethod = settings.getFitMethod();
+        boundsType = settings.getBoundsType();
         gravity = settings.getGravity();
     }
 
@@ -76,6 +79,7 @@ public class SettingsMenu implements SettingsController {
         addBoolMenu(menu, isExitEnabled, R.string.menu_enable_exit);
         addBoolMenu(menu, isFillViewport, R.string.menu_fill_viewport);
         addSubMenu(menu, Settings.Fit.values(), fitMethod, R.string.menu_fit_method);
+        addSubMenu(menu, Settings.Bounds.values(), boundsType, R.string.menu_bounds_type);
         addSubMenu(menu, GravityType.values(), GravityType.find(gravity), R.string.menu_gravity);
         addBoolMenu(menu, isSlow, R.string.menu_enable_slow);
         addBoolMenu(menu, GestureDebug.isDrawDebugOverlay(), R.string.menu_enable_overlay);
@@ -130,6 +134,9 @@ public class SettingsMenu implements SettingsController {
             case R.string.menu_fit_method:
                 fitMethod = Settings.Fit.values()[item.getOrder()];
                 break;
+            case R.string.menu_bounds_type:
+                boundsType = Settings.Bounds.values()[item.getOrder()];
+                break;
             case R.string.menu_gravity:
                 gravity = GravityType.values()[item.getOrder()].gravity;
                 break;
@@ -164,6 +171,7 @@ public class SettingsMenu implements SettingsController {
                 .setExitEnabled(isExitEnabled)
                 .setFillViewport(isFillViewport)
                 .setFitMethod(fitMethod)
+                .setBoundsType(boundsType)
                 .setGravity(gravity)
                 .setAnimationsDuration(isSlow ? SLOW_ANIMATIONS : Settings.ANIMATIONS_DURATION);
     }
