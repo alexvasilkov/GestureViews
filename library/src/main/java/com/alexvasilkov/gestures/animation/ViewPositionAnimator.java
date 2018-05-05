@@ -276,7 +276,7 @@ public class ViewPositionAnimator {
         }
 
         // Resetting 'to' position if not animating exit already
-        if (!(isAnimating && position <= toPosition)) {
+        if (!(isAnimating && position <= toPosition) && position > 0) {
             setToState(toController.getState(), position);
         }
 
