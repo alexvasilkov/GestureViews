@@ -122,9 +122,9 @@ public class Settings {
     private boolean isDoubleTapEnabled = true;
 
     /*
-     * Whether to detect and animate exit from gesture views.
+     * Which gestures to use to detect exit.
      */
-    private boolean isExitEnabled = true;
+    private ExitType exitType = ExitType.ALL;
 
     /*
      * Counter for gestures disabling calls.
@@ -195,8 +195,8 @@ public class Settings {
                 R.styleable.GestureView_gest_restrictRotation, isRestrictRotation);
         isDoubleTapEnabled = arr.getBoolean(
                 R.styleable.GestureView_gest_doubleTapEnabled, isDoubleTapEnabled);
-        isExitEnabled = arr.getBoolean(
-                R.styleable.GestureView_gest_exitEnabled, isExitEnabled);
+        exitType = arr.getBoolean(
+                R.styleable.GestureView_gest_exitEnabled, true) ? exitType : ExitType.NONE;
         animationsDuration = arr.getInt(
                 R.styleable.GestureView_gest_animationDuration, (int) animationsDuration);
 
@@ -491,8 +491,23 @@ public class Settings {
      * @param enabled Whether exit gesture should be enabled or not
      * @return Current settings object for calls chaining
      */
+    @SuppressWarnings("unused") // Public API
     public Settings setExitEnabled(boolean enabled) {
-        isExitEnabled = enabled;
+        exitType = enabled ? ExitType.ALL : ExitType.NONE;
+        return this;
+    }
+
+    /**
+     * Sets which gestures to use to detect exit.
+     * <p>
+     * Default value is {@link ExitType#ALL}.
+     *
+     * @param type Exit type
+     * @return Current settings object for calls chaining
+     */
+    @SuppressWarnings("unused") // Public API
+    public Settings setExitType(ExitType type) {
+        exitType = type;
         return this;
     }
 
@@ -678,7 +693,11 @@ public class Settings {
     }
 
     public boolean isExitEnabled() {
-        return isGesturesEnabled() && isExitEnabled;
+        return getExitType() != ExitType.NONE;
+    }
+
+    public ExitType getExitType() {
+        return isGesturesEnabled() ? exitType : ExitType.NONE;
     }
 
     public boolean isGesturesEnabled() {
@@ -766,6 +785,28 @@ public class Settings {
 
         /**
          * The image can be freely moved with no restrictions.
+         */
+        NONE
+    }
+
+    public enum ExitType {
+        /**
+         * To detect both scroll and zoom exit gestures.
+         */
+        ALL,
+
+        /**
+         * To detect only scroll-to-exit gesture.
+         */
+        SCROLL,
+
+        /**
+         * To detect only zoom-to-exit gesture.
+         */
+        ZOOM,
+
+        /**
+         * Do not detect exit gestures.
          */
         NONE
     }

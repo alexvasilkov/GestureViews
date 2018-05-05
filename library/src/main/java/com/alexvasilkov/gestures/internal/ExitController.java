@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.alexvasilkov.gestures.GestureController;
 import com.alexvasilkov.gestures.GestureControllerForPager;
+import com.alexvasilkov.gestures.Settings.ExitType;
 import com.alexvasilkov.gestures.State;
 import com.alexvasilkov.gestures.animation.ViewPositionAnimator;
 import com.alexvasilkov.gestures.utils.GravityUtils;
@@ -86,7 +87,7 @@ public class ExitController {
         // Also, we can detect scroll only if image is zoomed out and it reached movement bounds.
 
         if (!skipScrollDetection && !isExitDetected() && canDetectExit()
-                && !isZoomInAction && !isRotationInAction && isZoomedOut() && !canScroll(dy)) {
+                && canDetectScroll() && !canScroll(dy)) {
 
             totalScrollX += dx;
             totalScrollY += dy;
@@ -166,12 +167,11 @@ public class ExitController {
         // Exit by zoom should not be detected if rotation is currently in place.
         // Also, we can detect zoom only if image is zoomed out and we are zooming out.
 
-        if (!isZoomedOut()) {
+        if (!canDetectZoom()) {
             skipZoomDetection = true;
         }
 
-        if (!skipZoomDetection && !isExitDetected() && canDetectExit() && !isRotationInAction
-                && isZoomedOut() && scaleFactor < 1f) {
+        if (!skipZoomDetection && !isExitDetected() && canDetectExit() && scaleFactor < 1f) {
 
             // Waiting until we zoomed enough to trigger exit detection
             zoomAccumulator *= scaleFactor;
@@ -234,6 +234,19 @@ public class ExitController {
         return controller.getSettings().isExitEnabled() && animatorView != null
                 && !animatorView.getPositionAnimator().isLeaving();
     }
+
+    private boolean canDetectScroll() {
+        ExitType exitType = controller.getSettings().getExitType();
+        return (exitType == ExitType.ALL || exitType == ExitType.SCROLL)
+                && !isZoomInAction && !isRotationInAction && isZoomedOut();
+    }
+
+    private boolean canDetectZoom() {
+        ExitType exitType = controller.getSettings().getExitType();
+        return (exitType == ExitType.ALL || exitType == ExitType.ZOOM)
+                && !isRotationInAction && isZoomedOut();
+    }
+
 
     private boolean canScroll(float dy) {
         if (!controller.getSettings().isRestrictBounds()) {
