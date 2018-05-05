@@ -165,7 +165,7 @@ public class GestureImageView extends ImageView
         super.onSizeChanged(width, height, oldWidth, oldHeight);
         controller.getSettings().setViewport(width - getPaddingLeft() - getPaddingRight(),
                 height - getPaddingTop() - getPaddingBottom());
-        controller.updateState();
+        controller.resetState();
     }
 
     @Override
