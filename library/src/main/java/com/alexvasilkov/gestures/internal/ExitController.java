@@ -270,7 +270,9 @@ public class ExitController {
 
             final ViewPositionAnimator animator = animatorView.getPositionAnimator();
 
-            if (!animator.isAnimating()) { // In case exit animation is already in place
+            if (!animator.isAnimating() && canDetectExit()) {
+                // Exiting or returning to initial state if the view is not yet animating
+
                 final float position = animator.getPosition();
                 final boolean isLeaving = position < EXIT_THRESHOLD;
 
