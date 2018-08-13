@@ -114,6 +114,20 @@ public class GestureFrameLayout extends FrameLayout implements GestureView, Anim
     }
 
     @Override
+    public void requestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+        super.requestDisallowInterceptTouchEvent(disallowIntercept);
+
+        if (disallowIntercept) {
+            // We should pass "cancel" touch event to make sure controller does not expect
+            // any events anymore.
+            MotionEvent cancel = MotionEvent.obtain(currentMotionEvent);
+            cancel.setAction(MotionEvent.ACTION_CANCEL);
+            controller.onInterceptTouch(this, cancel);
+            cancel.recycle();
+        }
+    }
+
+    @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         // Passing original event to controller
         return controller.onInterceptTouch(this, currentMotionEvent);

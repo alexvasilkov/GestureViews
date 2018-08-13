@@ -601,7 +601,8 @@ public class GestureController implements View.OnTouchListener {
 
             // First scroll event can stutter a bit, so we will ignore it for smoother scrolling
             if (isScrollDetected) {
-                return true;
+                // By returning false here we give children views a chance to intercept this scroll
+                return false;
             }
         }
 
@@ -886,7 +887,6 @@ public class GestureController implements View.OnTouchListener {
 
         /**
          * @param event Motion event
-         * @see GestureDetector.OnGestureListener#onDown(MotionEvent)
          */
         void onUpOrCancel(@NonNull MotionEvent event);
 

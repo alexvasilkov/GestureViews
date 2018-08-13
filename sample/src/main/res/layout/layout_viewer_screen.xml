@@ -51,6 +51,25 @@
             android:layout_margin="16dp"
             android:text="@string/random_button" />
 
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="240dp"
+            android:layout_marginBottom="16dp"
+            android:fadeScrollbars="false">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="16dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="16dp"
+                android:text="@string/random_text"
+                android:textColor="?android:textColorSecondary"
+                android:textSize="14sp" />
+
+        </ScrollView>
+
     </LinearLayout>
 
 </com.alexvasilkov.gestures.views.GestureFrameLayout>
