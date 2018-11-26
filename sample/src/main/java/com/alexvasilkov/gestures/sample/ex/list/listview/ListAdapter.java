@@ -1,7 +1,6 @@
 package com.alexvasilkov.gestures.sample.ex.list.listview;
 
 import android.graphics.Typeface;
-import androidx.annotation.NonNull;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -13,6 +12,8 @@ import com.alexvasilkov.android.commons.ui.Views;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.ex.utils.GlideHelper;
 import com.alexvasilkov.gestures.sample.ex.utils.Painting;
+
+import androidx.annotation.NonNull;
 
 class ListAdapter extends BaseAdapter {
 

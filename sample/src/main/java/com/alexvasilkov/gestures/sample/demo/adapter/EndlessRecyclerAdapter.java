@@ -1,7 +1,8 @@
 package com.alexvasilkov.gestures.sample.demo.adapter;
 
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 public abstract class EndlessRecyclerAdapter<VH extends RecyclerView.ViewHolder>
         extends RecyclerView.Adapter<VH> {

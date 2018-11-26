@@ -1,7 +1,6 @@
 package com.alexvasilkov.gestures.sample.ex.image.animation.cross;
 
 import android.os.Bundle;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -11,6 +10,8 @@ import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.base.BaseActivity;
 import com.alexvasilkov.gestures.sample.ex.utils.GlideHelper;
 import com.alexvasilkov.gestures.sample.ex.utils.Painting;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 /**
  * This example demonstrates image animation that crosses activities bounds.<br>

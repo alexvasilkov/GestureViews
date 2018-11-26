@@ -2,8 +2,6 @@ package com.alexvasilkov.gestures.sample.ex.custom.text;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatTextView;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.MotionEvent;
@@ -11,6 +9,9 @@ import android.view.MotionEvent;
 import com.alexvasilkov.gestures.GestureController;
 import com.alexvasilkov.gestures.State;
 import com.alexvasilkov.gestures.views.interfaces.GestureView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatTextView;
 
 /**
  * Sample of TextView with added gesture controls.

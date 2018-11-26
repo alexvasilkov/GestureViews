@@ -1,13 +1,14 @@
 package com.alexvasilkov.gestures.sample.ex.layout.pager;
 
 import android.os.Bundle;
-import androidx.viewpager.widget.ViewPager;
 
 import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.base.BaseSettingsActivity;
 import com.alexvasilkov.gestures.sample.ex.utils.Painting;
 import com.alexvasilkov.gestures.views.GestureFrameLayout;
+
+import androidx.viewpager.widget.ViewPager;
 
 /**
  * Simple example demonstrates usage of {@link GestureFrameLayout} within ViewPager.<br>

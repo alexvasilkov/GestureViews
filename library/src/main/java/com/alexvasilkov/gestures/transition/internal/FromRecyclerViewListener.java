@@ -1,11 +1,12 @@
 package com.alexvasilkov.gestures.transition.internal;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.RecyclerView.OnChildAttachStateChangeListener;
 import android.view.View;
 
 import com.alexvasilkov.gestures.transition.tracker.FromTracker;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView.OnChildAttachStateChangeListener;
 
 public class FromRecyclerViewListener<ID> extends FromBaseListener<RecyclerView, ID> {
 

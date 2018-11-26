@@ -1,7 +1,5 @@
 package com.alexvasilkov.gestures.sample.demo.adapter;
 
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -9,6 +7,9 @@ import com.alexvasilkov.android.commons.ui.Views;
 import com.alexvasilkov.gestures.sample.R;
 
 import java.util.List;
+
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 abstract class DefaultEndlessRecyclerAdapter<VH extends RecyclerView.ViewHolder>
         extends EndlessRecyclerAdapter<RecyclerView.ViewHolder> {

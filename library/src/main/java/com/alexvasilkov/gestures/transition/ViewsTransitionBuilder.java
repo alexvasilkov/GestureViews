@@ -1,8 +1,5 @@
 package com.alexvasilkov.gestures.transition;
 
-import androidx.annotation.NonNull;
-import androidx.viewpager.widget.ViewPager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.ListView;
 
@@ -11,6 +8,10 @@ import com.alexvasilkov.gestures.transition.internal.FromRecyclerViewListener;
 import com.alexvasilkov.gestures.transition.internal.IntoViewPagerListener;
 import com.alexvasilkov.gestures.transition.tracker.FromTracker;
 import com.alexvasilkov.gestures.transition.tracker.IntoTracker;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 /**
  * @deprecated Use {@link GestureTransitions} instead.

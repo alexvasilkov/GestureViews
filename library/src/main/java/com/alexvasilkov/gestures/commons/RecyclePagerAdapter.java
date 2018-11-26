@@ -1,14 +1,15 @@
 package com.alexvasilkov.gestures.commons;
 
-import androidx.annotation.NonNull;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.LinkedList;
 import java.util.Queue;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.PagerAdapter;
 
 /**
  * {@link PagerAdapter} implementation where each page is a regular view. Supports views recycling.

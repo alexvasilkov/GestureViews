@@ -1,10 +1,11 @@
 package com.alexvasilkov.gestures.transition;
 
-import androidx.annotation.NonNull;
 import android.view.View;
 
 import com.alexvasilkov.gestures.transition.tracker.FromTracker;
 import com.alexvasilkov.gestures.transition.tracker.IntoTracker;
+
+import androidx.annotation.NonNull;
 
 /**
  * @deprecated Use {@link GestureTransitions} class with {@link FromTracker} and

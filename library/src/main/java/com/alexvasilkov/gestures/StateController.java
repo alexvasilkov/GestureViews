@@ -4,12 +4,13 @@ import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import androidx.annotation.Nullable;
 
 import com.alexvasilkov.gestures.internal.MovementBounds;
 import com.alexvasilkov.gestures.internal.ZoomBounds;
 import com.alexvasilkov.gestures.utils.GravityUtils;
 import com.alexvasilkov.gestures.utils.MathUtils;
+
+import androidx.annotation.Nullable;
 
 /**
  * Helper class that holds reference to {@link Settings} object and controls some aspects of view

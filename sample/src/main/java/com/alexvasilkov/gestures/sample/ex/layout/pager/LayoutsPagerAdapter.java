@@ -1,8 +1,6 @@
 package com.alexvasilkov.gestures.sample.ex.layout.pager;
 
 import android.graphics.Typeface;
-import androidx.annotation.NonNull;
-import androidx.viewpager.widget.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -17,6 +15,9 @@ import com.alexvasilkov.gestures.sample.base.settings.SettingsController;
 import com.alexvasilkov.gestures.sample.ex.utils.GlideHelper;
 import com.alexvasilkov.gestures.sample.ex.utils.Painting;
 import com.alexvasilkov.gestures.views.GestureFrameLayout;
+
+import androidx.annotation.NonNull;
+import androidx.viewpager.widget.ViewPager;
 
 class LayoutsPagerAdapter extends RecyclePagerAdapter<LayoutsPagerAdapter.ViewHolder> {
 

@@ -1,9 +1,9 @@
 package com.alexvasilkov.gestures.sample.demo.utils;
 
+import java.util.List;
+
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
-
-import java.util.List;
 
 public class RecyclerAdapterHelper {
 

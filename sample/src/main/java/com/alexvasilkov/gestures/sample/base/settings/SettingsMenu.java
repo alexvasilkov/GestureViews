@@ -2,7 +2,6 @@ package com.alexvasilkov.gestures.sample.base.settings;
 
 import android.content.Context;
 import android.os.Bundle;
-import androidx.annotation.StringRes;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,6 +14,8 @@ import com.alexvasilkov.gestures.Settings;
 import com.alexvasilkov.gestures.internal.GestureDebug;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.views.interfaces.GestureView;
+
+import androidx.annotation.StringRes;
 
 public class SettingsMenu implements SettingsController {
 

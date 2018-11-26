@@ -1,12 +1,13 @@
 package com.alexvasilkov.gestures.sample.ex.image.pager;
 
 import android.os.Bundle;
-import androidx.viewpager.widget.ViewPager;
 
 import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.base.BaseSettingsActivity;
 import com.alexvasilkov.gestures.views.GestureImageView;
+
+import androidx.viewpager.widget.ViewPager;
 
 /**
  * This example demonstrates usage of {@link GestureImageView} within ViewPager.<br>

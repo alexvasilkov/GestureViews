@@ -8,8 +8,6 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
@@ -21,6 +19,9 @@ import com.alexvasilkov.gestures.views.interfaces.GestureView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
 public class SceneView extends View implements GestureView {
 

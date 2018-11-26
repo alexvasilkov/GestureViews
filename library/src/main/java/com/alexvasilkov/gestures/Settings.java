@@ -2,13 +2,14 @@ package com.alexvasilkov.gestures;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.Gravity;
 
 import com.alexvasilkov.gestures.internal.UnitsUtils;
 import com.alexvasilkov.gestures.views.interfaces.GestureView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 /**
  * Various settings needed for {@link GestureController} and for {@link StateController}.

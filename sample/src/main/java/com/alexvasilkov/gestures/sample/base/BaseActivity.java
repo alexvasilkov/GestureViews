@@ -1,11 +1,6 @@
 package com.alexvasilkov.gestures.sample.base;
 
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.StringRes;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,6 +10,12 @@ import com.alexvasilkov.android.commons.state.InstanceStateManager;
 import com.alexvasilkov.android.commons.ui.Views;
 import com.alexvasilkov.events.Events;
 import com.alexvasilkov.gestures.sample.R;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
