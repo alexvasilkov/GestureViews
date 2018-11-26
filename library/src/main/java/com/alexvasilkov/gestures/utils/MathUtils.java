@@ -2,7 +2,7 @@ package com.alexvasilkov.gestures.utils;
 
 import android.graphics.Matrix;
 import android.graphics.RectF;
-import android.support.annotation.Size;
+import androidx.annotation.Size;
 
 import com.alexvasilkov.gestures.State;
 

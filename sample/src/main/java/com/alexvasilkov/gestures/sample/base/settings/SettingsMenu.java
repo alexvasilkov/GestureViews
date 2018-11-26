@@ -2,7 +2,7 @@ package com.alexvasilkov.gestures.sample.base.settings;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.StringRes;
+import androidx.annotation.StringRes;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;

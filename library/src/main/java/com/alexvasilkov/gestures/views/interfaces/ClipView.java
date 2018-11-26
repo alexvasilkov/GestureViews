@@ -1,7 +1,7 @@
 package com.alexvasilkov.gestures.views.interfaces;
 
 import android.graphics.RectF;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 public interface ClipView {
 

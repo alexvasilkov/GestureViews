@@ -1,7 +1,7 @@
 package com.alexvasilkov.gestures.sample.ex.layout.pager;
 
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
+import androidx.viewpager.widget.ViewPager;
 
 import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
 import com.alexvasilkov.gestures.sample.R;

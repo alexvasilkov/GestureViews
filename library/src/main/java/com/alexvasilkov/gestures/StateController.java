@@ -4,7 +4,7 @@ import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import com.alexvasilkov.gestures.internal.MovementBounds;
 import com.alexvasilkov.gestures.internal.ZoomBounds;

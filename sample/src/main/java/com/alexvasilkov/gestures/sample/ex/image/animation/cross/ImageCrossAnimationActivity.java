@@ -1,7 +1,7 @@
 package com.alexvasilkov.gestures.sample.ex.image.animation.cross;
 
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.ImageView;
 

@@ -1,7 +1,7 @@
 package com.alexvasilkov.gestures.sample.ex.list.complex;
 
-import android.support.annotation.NonNull;
-import android.support.v4.view.ViewPager;
+import androidx.annotation.NonNull;
+import androidx.viewpager.widget.ViewPager;
 import android.view.ViewGroup;
 
 import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
