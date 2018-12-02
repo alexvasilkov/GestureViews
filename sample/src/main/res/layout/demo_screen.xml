@@ -7,12 +7,12 @@
     android:layout_height="match_parent"
     tools:context=".demo.DemoActivity">
 
-    <android.support.design.widget.CoordinatorLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/demo_coordinator"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.design.widget.AppBarLayout
+        <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/demo_app_bar"
             android:layout_width="match_parent"
             android:layout_height="172dp"
@@ -21,14 +21,14 @@
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             tools:ignore="UnusedAttribute">
 
-            <android.support.design.widget.CollapsingToolbarLayout
+            <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:collapsedTitleGravity="start"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
                 app:titleEnabled="false">
 
-                <android.support.v7.widget.Toolbar
+                <androidx.appcompat.widget.Toolbar
                     style="@style/App.Toolbar.Transparent"
                     app:layout_collapseMode="pin" />
 
@@ -78,11 +78,11 @@
 
                 </LinearLayout>
 
-            </android.support.design.widget.CollapsingToolbarLayout>
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
 
-        </android.support.design.widget.AppBarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/demo_grid"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -107,7 +107,7 @@
 
         </FrameLayout>
 
-    </android.support.design.widget.CoordinatorLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <View
         android:id="@+id/demo_full_background"
@@ -116,12 +116,12 @@
         android:background="@color/window_background_dark"
         android:visibility="invisible" />
 
-    <android.support.v4.view.ViewPager
+    <androidx.viewpager.widget.ViewPager
         android:id="@+id/demo_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/demo_pager_toolbar"
         style="@style/App.Toolbar.Transparent"
         android:visibility="invisible" />
@@ -146,7 +146,7 @@
         app:gest_doubleTapZoom="3"
         app:gest_maxZoom="10" />
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/demo_full_image_toolbar"
         style="@style/App.Toolbar.Transparent"
         android:visibility="invisible" />

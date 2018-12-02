@@ -8,9 +8,6 @@ import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.support.annotation.DrawableRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.ImageView;
@@ -28,6 +25,10 @@ import com.alexvasilkov.gestures.views.interfaces.AnimatorView;
 import com.alexvasilkov.gestures.views.interfaces.ClipBounds;
 import com.alexvasilkov.gestures.views.interfaces.ClipView;
 import com.alexvasilkov.gestures.views.interfaces.GestureView;
+
+import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 /**
  * {@link ImageView} implementation controlled by {@link GestureController}

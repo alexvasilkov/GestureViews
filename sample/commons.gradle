@@ -38,7 +38,7 @@ ext.getBaseVersionCode = { version ->
 }
 
 ext.getBuildNumber = {
-    def final build
+    def build
 
     try {
         def final buildStr = 'git rev-list --count HEAD'.execute().text.trim()

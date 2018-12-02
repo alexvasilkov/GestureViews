@@ -1,7 +1,6 @@
 package com.alexvasilkov.gestures.sample.ex.list.listview;
 
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.ListView;
 
@@ -13,6 +12,8 @@ import com.alexvasilkov.gestures.sample.ex.utils.Painting;
 import com.alexvasilkov.gestures.transition.GestureTransitions;
 import com.alexvasilkov.gestures.transition.ViewsTransitionAnimator;
 import com.alexvasilkov.gestures.transition.tracker.SimpleTracker;
+
+import androidx.viewpager.widget.ViewPager;
 
 /**
  * This example demonstrates images animation from ListView into ViewPager.<br>

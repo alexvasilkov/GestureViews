@@ -10,7 +10,6 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Build;
-import android.support.annotation.ColorInt;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
@@ -23,6 +22,8 @@ import com.alexvasilkov.gestures.utils.FloatScroller;
 import com.alexvasilkov.gestures.utils.GravityUtils;
 import com.alexvasilkov.gestures.utils.MathUtils;
 import com.alexvasilkov.gestures.views.GestureImageView;
+
+import androidx.annotation.ColorInt;
 
 /**
  * View to draw cropping area above {@link GestureImageView}, useful when implementing cropping.

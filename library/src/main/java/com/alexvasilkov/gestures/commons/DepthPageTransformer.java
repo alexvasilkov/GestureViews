@@ -1,7 +1,8 @@
 package com.alexvasilkov.gestures.commons;
 
-import android.support.v4.view.ViewPager;
 import android.view.View;
+
+import androidx.viewpager.widget.ViewPager;
 
 /**
  * Page transformer which will scroll previous page as usual and will scale next page with alpha.

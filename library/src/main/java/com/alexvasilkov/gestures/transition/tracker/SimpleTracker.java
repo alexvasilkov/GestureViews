@@ -1,7 +1,8 @@
 package com.alexvasilkov.gestures.transition.tracker;
 
-import android.support.annotation.NonNull;
 import android.view.View;
+
+import androidx.annotation.NonNull;
 
 /**
  * Class implementing both {@link FromTracker} and {@link IntoTracker} assuming that positions will

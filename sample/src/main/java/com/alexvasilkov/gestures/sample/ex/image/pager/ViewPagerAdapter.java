@@ -1,7 +1,5 @@
 package com.alexvasilkov.gestures.sample.ex.image.pager;
 
-import android.support.annotation.NonNull;
-import android.support.v4.view.ViewPager;
 import android.view.ViewGroup;
 
 import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
@@ -9,6 +7,9 @@ import com.alexvasilkov.gestures.sample.base.settings.SettingsController;
 import com.alexvasilkov.gestures.sample.ex.utils.GlideHelper;
 import com.alexvasilkov.gestures.sample.ex.utils.Painting;
 import com.alexvasilkov.gestures.views.GestureImageView;
+
+import androidx.annotation.NonNull;
+import androidx.viewpager.widget.ViewPager;
 
 class ViewPagerAdapter extends RecyclePagerAdapter<ViewPagerAdapter.ViewHolder> {
 

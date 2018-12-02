@@ -3,9 +3,10 @@ package com.alexvasilkov.gestures.internal.detectors;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
-import android.support.annotation.NonNull;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
+
+import androidx.annotation.NonNull;
 
 /**
  * 'Double tap and swipe' mode works bad for fast gestures. This class tries to fix this issue.

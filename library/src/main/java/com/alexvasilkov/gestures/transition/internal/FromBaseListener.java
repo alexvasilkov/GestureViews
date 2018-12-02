@@ -1,13 +1,14 @@
 package com.alexvasilkov.gestures.transition.internal;
 
 import android.graphics.Rect;
-import android.support.annotation.NonNull;
 import android.view.View;
 
 import com.alexvasilkov.gestures.animation.ViewPositionAnimator.PositionUpdateListener;
 import com.alexvasilkov.gestures.transition.ViewsTransitionAnimator;
 import com.alexvasilkov.gestures.transition.ViewsTransitionAnimator.RequestListener;
 import com.alexvasilkov.gestures.transition.tracker.FromTracker;
+
+import androidx.annotation.NonNull;
 
 abstract class FromBaseListener<P extends View, ID> extends RequestListener<ID> {
 

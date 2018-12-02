@@ -2,11 +2,12 @@ package com.alexvasilkov.gestures.sample.demo.utils;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.util.Log;
 
 import com.alexvasilkov.gestures.sample.R;
+
+import androidx.appcompat.widget.AppCompatImageView;
 
 public class AspectImageView extends AppCompatImageView {
 

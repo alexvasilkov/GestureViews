@@ -1,8 +1,6 @@
 package com.alexvasilkov.gestures.sample.ex.list.recycler;
 
 import android.graphics.Typeface;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -13,6 +11,9 @@ import com.alexvasilkov.android.commons.ui.Views;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.ex.utils.GlideHelper;
 import com.alexvasilkov.gestures.sample.ex.utils.Painting;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
 

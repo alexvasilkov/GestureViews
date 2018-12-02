@@ -1,7 +1,5 @@
 package com.alexvasilkov.gestures.sample.demo.adapter;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -14,6 +12,9 @@ import com.alexvasilkov.gestures.sample.demo.utils.RecyclerAdapterHelper;
 import com.googlecode.flickrjandroid.photos.Photo;
 
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class PhotoListAdapter extends DefaultEndlessRecyclerAdapter<PhotoListAdapter.ViewHolder> {
 
