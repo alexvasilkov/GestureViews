@@ -3,8 +3,6 @@ package com.alexvasilkov.gestures.animation;
 import android.graphics.Matrix;
 import android.graphics.Point;
 import android.graphics.RectF;
-import android.support.annotation.FloatRange;
-import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -26,6 +24,9 @@ import com.alexvasilkov.gestures.views.interfaces.GestureView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.annotation.FloatRange;
+import androidx.annotation.NonNull;
 
 /**
  * Helper class to animate views from one position on screen to another.

@@ -3,14 +3,15 @@ package com.alexvasilkov.gestures;
 import android.annotation.SuppressLint;
 import android.graphics.Matrix;
 import android.graphics.RectF;
-import android.support.annotation.NonNull;
-import android.support.v4.view.ViewPager;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.ViewConfiguration;
 
 import com.alexvasilkov.gestures.internal.detectors.RotationGestureDetector;
+
+import androidx.annotation.NonNull;
+import androidx.viewpager.widget.ViewPager;
 
 /**
  * Allows cross movement between view controlled by this {@link GestureController} and it's parent

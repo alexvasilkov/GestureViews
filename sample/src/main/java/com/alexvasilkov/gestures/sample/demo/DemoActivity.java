@@ -3,10 +3,6 @@ package com.alexvasilkov.gestures.sample.demo;
 import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -33,6 +29,11 @@ import com.alexvasilkov.gestures.views.GestureImageView;
 import com.googlecode.flickrjandroid.photos.Photo;
 
 import java.util.List;
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 /**
  * Advanced usage example that demonstrates images animation from RecyclerView into ViewPager.

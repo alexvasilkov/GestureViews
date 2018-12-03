@@ -1,8 +1,9 @@
 package com.alexvasilkov.gestures.internal;
 
 import android.os.Build;
-import android.support.annotation.NonNull;
 import android.view.View;
+
+import androidx.annotation.NonNull;
 
 public abstract class AnimationEngine implements Runnable {
 

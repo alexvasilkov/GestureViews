@@ -1,9 +1,6 @@
 package com.alexvasilkov.gestures.sample.ex.list.complex;
 
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.alexvasilkov.gestures.commons.DepthPageTransformer;
@@ -12,6 +9,10 @@ import com.alexvasilkov.gestures.sample.base.BaseSettingsActivity;
 import com.alexvasilkov.gestures.transition.ViewsTransitionAnimator;
 
 import java.util.List;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 /**
  * Base implementation of complex list examples. Subclasses should provide there own logic for
