@@ -30,6 +30,12 @@ public class State {
         return zoom;
     }
 
+    public float getScale() {
+        matrix.getValues(matrixValues);
+        // Could be Matrix.MSCALE_Y because of scale axis are equals.
+        return matrixValues[Matrix.MSCALE_X];
+    }
+
     /**
      * @return Rotation in degrees within the range [-180..180].
      */
@@ -149,7 +155,7 @@ public class State {
      * </pre>
      * See <a href="http://stackoverflow.com/questions/4361242">here</a>.
      *
-     * @param updateZoom Whether to extract zoom from matrix
+     * @param updateZoom     Whether to extract zoom from matrix
      * @param updateRotation Whether to extract rotation from matrix
      */
     private void updateFromMatrix(boolean updateZoom, boolean updateRotation) {

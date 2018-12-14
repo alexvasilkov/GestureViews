@@ -1,8 +1,10 @@
 package com.alexvasilkov.gestures.sample.ex.image.viewer;
 
+import android.graphics.PointF;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.alexvasilkov.gestures.GestureController;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.base.BaseSettingsActivity;
 import com.alexvasilkov.gestures.sample.ex.utils.GlideHelper;
@@ -33,7 +35,9 @@ public class ImageViewerActivity extends BaseSettingsActivity {
                 .setMaxZoom(6f)
                 .setDoubleTapZoom(3f);
 
-        imageViewer.setOnClickListener(view -> showToast("Single click"));
+        imageViewer.getController().setOnGestureViewTapListener(
+                (fraction, position) -> showToast(fraction + "\n" + position)
+        );
 
         imageViewer.setOnLongClickListener(view -> {
             showToast("Long click");
