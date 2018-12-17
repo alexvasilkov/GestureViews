@@ -48,6 +48,10 @@ public class MarkersOverlay extends View {
         super(context, attrs, defStyle);
     }
 
+    public List<Marker> getMarkers() {
+        return markers;
+    }
+
     public void attachToImage(GestureImageView imageView) {
         this.imageView = imageView;
 

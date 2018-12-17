@@ -286,6 +286,48 @@ public class GestureController implements View.OnTouchListener {
         this.pivotY = pivotY;
     }
 
+
+    /**
+     * Translate and zoom state to passed values.
+     * Not working with rotation.
+     * It can be used for a map purposes.
+     *
+     * @param state the state which we will modify
+     * @param x the translation X
+     * @param y the translation Y
+     * @param zoom the zoom
+     * @param useCenter add extra offset to move camera to center
+     */
+    public void translateZoomStateTo(
+            final State state,
+            final float x,
+            final float y,
+            final float zoom,
+            final boolean useCenter
+    ) {
+        final float scale = state.getScale();
+
+        // Calculate translation XY.
+        float newTranslateX = -x * scale - targetView.getPaddingLeft();
+        float newTranslateY = -y * scale - targetView.getPaddingTop();
+        // Add offset to center if enabled.
+        if (useCenter) {
+            newTranslateX += targetView.getWidth() * 0.5F;
+            newTranslateY += targetView.getHeight() * 0.5F;
+        }
+        // Calculate zoom point XY.
+        final float zoomX = x * scale + newTranslateX;
+        final float zoomY = y * scale + newTranslateY;
+
+        // Firstly translate the matrix and then zoom.
+        state.translateTo(newTranslateX, newTranslateY);
+        state.zoomTo(
+                Math.max(settings.getMinZoom(), Math.min(zoom, settings.getMaxZoom())),
+                zoomX,
+                zoomY
+        );
+    }
+
     /**
      * Animates to correct position withing the bounds.
      *

@@ -1,9 +1,14 @@
 package com.alexvasilkov.gestures.sample.ex.image.markers;
 
+import android.graphics.PointF;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Gravity;
 
+import com.alexvasilkov.gestures.GestureController;
+import com.alexvasilkov.gestures.State;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.base.BaseSettingsActivity;
 import com.alexvasilkov.gestures.sample.ex.image.markers.Marker.Mode;
@@ -45,6 +50,26 @@ public class ImageMarkersActivity extends BaseSettingsActivity {
         overlay.addMarker(createMarker(Mode.PIN, 628, 334, 0f)); // Lagos
         overlay.addMarker(createMarker(Mode.PIN, 1071, 266, 0f)); // Hong Kong
         overlay.addMarker(createMarker(Mode.STICK, 1212, 517, 180f)); // Sydney
+
+        image.getController().setOnGestureViewTapListener((fraction, position) -> {
+            final float markerOffset = 50.0F;
+            for (final Marker marker : overlay.getMarkers()) {
+                if (position.x > marker.getLocationX() - markerOffset &&
+                        position.x < marker.getLocationX() + markerOffset &&
+                        position.y > marker.getLocationY() - markerOffset &&
+                        position.y < marker.getLocationY() + markerOffset) {
+                    final State state = image.getController().getState().copy();
+                    image.getController().translateZoomStateTo(
+                            state,
+                            marker.getLocationX(),
+                            marker.getLocationY(),
+                            image.getController().getSettings().getMaxZoom(),
+                            true
+                    );
+                    image.getController().animateStateTo(state);
+                }
+            }
+        });
 
         // Applying general options
         getSettingsController().apply(image);
