@@ -1,11 +1,7 @@
-buildscript {
-    dependencies {
-        classpath 'com.github.triplet.gradle:play-publisher:1.2.0'
-    }
+plugins {
+    id 'com.android.application'
+    id 'com.github.triplet.play' version '2.2.1'
 }
-
-apply plugin: 'com.android.application'
-apply plugin: 'com.github.triplet.play'
 
 apply from: 'commons.gradle'
 apply from: 'release.gradle'
@@ -42,7 +38,7 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'com.google.android.material:material:1.0.0'
 
-    implementation 'com.github.bumptech.glide:glide:4.8.0'
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
 
     implementation 'com.alexvasilkov:android-commons:2.0.2'
     implementation 'com.alexvasilkov:events:1.0.0'

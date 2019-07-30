@@ -1,16 +1,6 @@
 final DIR = 'sample/signing'
 
 android {
-    playAccountConfigs {
-        config {
-            jsonFile = file('signing/play_account.json')
-        }
-    }
-
-    defaultConfig {
-        playAccountConfig = playAccountConfigs.config
-    }
-
     signingConfigs {
         debug {
             storeFile file('signing/debug.jks')
@@ -31,6 +21,11 @@ android {
             signingConfig signingConfigs.upload
         }
     }
+}
+
+play {
+    serviceAccountCredentials = file('signing/play_account.json')
+    track = 'alpha'
 }
 
 project.afterEvaluate {
