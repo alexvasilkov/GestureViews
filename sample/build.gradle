@@ -1,6 +1,6 @@
 plugins {
     id 'com.android.application'
-    id 'com.github.triplet.play' version '2.2.1'
+    id 'com.github.triplet.play' version '2.5.0'
 }
 
 apply from: 'commons.gradle'
@@ -13,7 +13,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 29
 
-        setupVersion '2.5.2'
+        setupVersion '2.6.0'
         setOutputFileName 'gesture-views'
 
         resConfigs 'en'
