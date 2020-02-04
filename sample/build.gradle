@@ -7,11 +7,11 @@ apply from: 'commons.gradle'
 apply from: 'release.gradle'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 28
+        targetSdkVersion 29
 
         setupVersion '2.5.2'
         setOutputFileName 'gesture-views'
@@ -34,11 +34,11 @@ android {
 dependencies {
     implementation project(':library')
 
-    implementation 'androidx.appcompat:appcompat:1.0.2'
-    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'com.google.android.material:material:1.0.0'
 
-    implementation 'com.github.bumptech.glide:glide:4.9.0'
+    implementation 'com.github.bumptech.glide:glide:4.10.0'
 
     implementation 'com.alexvasilkov:android-commons:2.0.2'
     implementation 'com.alexvasilkov:events:1.0.0'

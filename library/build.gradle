@@ -1,11 +1,13 @@
-apply plugin: 'com.android.library'
+plugins {
+    id 'com.android.library'
+}
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode VERSION_CODE.toInteger()
         versionName VERSION_NAME
     }
@@ -14,7 +16,7 @@ android {
 dependencies {
     compileOnly 'androidx.annotation:annotation:1.1.0'
     compileOnly 'androidx.viewpager:viewpager:1.0.0'
-    compileOnly 'androidx.recyclerview:recyclerview:1.0.0'
+    compileOnly 'androidx.recyclerview:recyclerview:1.1.0'
 }
 
 // New version can be uploaded with './gradlew clean :library:uploadArchives'
