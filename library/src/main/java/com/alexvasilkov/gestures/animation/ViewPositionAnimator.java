@@ -2,6 +2,7 @@ package com.alexvasilkov.gestures.animation;
 
 import android.graphics.Matrix;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.Log;
 import android.view.View;
@@ -73,6 +74,7 @@ public class ViewPositionAnimator {
     private float fromPivotY;
     private float toPivotX;
     private float toPivotY;
+    private final Rect windowRect = new Rect();
     private final RectF fromClip = new RectF();
     private final RectF toClip = new RectF();
     private final RectF fromBoundsClip = new RectF();
@@ -125,6 +127,8 @@ public class ViewPositionAnimator {
         toClipView = to instanceof ClipView ? (ClipView) to : null;
         toClipBounds = to instanceof ClipBounds ? (ClipBounds) to : null;
         animationEngine = new LocalAnimationEngine(toView);
+
+        toView.getWindowVisibleDisplayFrame(windowRect);
 
         toController = to.getController();
         toController.addOnStateChangeListener(new GestureController.OnStateChangeListener() {
@@ -544,9 +548,7 @@ public class ViewPositionAnimator {
                 toClipView.clipView(skipClip ? null : clipRectTmp, state.getRotation());
             }
             if (toClipBounds != null) {
-                // Bounds clipping should stay longer in 'From' state
-                final float boundsClipPos = clipPosition * clipPosition;
-                MathUtils.interpolate(clipRectTmp, fromBoundsClip, toBoundsClip, boundsClipPos);
+                MathUtils.interpolate(clipRectTmp, fromBoundsClip, toBoundsClip, clipPosition);
                 toClipBounds.clipBounds(skipClip ? null : clipRectTmp);
             }
         }
@@ -688,7 +690,11 @@ public class ViewPositionAnimator {
         toClip.offset(toPos.viewport.left - toPos.view.left, toPos.viewport.top - toPos.view.top);
 
         // 'To' bounds clip is entire 'To' view rect in 'To' view coordinates
-        toBoundsClip.set(0f, 0f, toPos.view.width(), toPos.view.height());
+
+        toBoundsClip.set(
+                windowRect.left - toPos.view.left, windowRect.top - toPos.view.top,
+                windowRect.right - toPos.view.left, windowRect.bottom - toPos.view.top
+        );
 
         isToUpdated = true;
 
@@ -741,15 +747,10 @@ public class ViewPositionAnimator {
         // 'From' bounds clip is a part of 'To' view which considered to be visible.
         // Meaning that if 'From' view is truncated in any direction this clipping should be
         // animated, otherwise it will look like part of 'From' view is instantly becoming visible.
-        fromBoundsClip.set(0f, 0f, toPos.view.width(), toPos.view.height());
-        fromBoundsClip.left = compareAndSetClipBound(
-                fromBoundsClip.left, fromPos.view.left, fromPos.visible.left, toPos.view.left);
-        fromBoundsClip.top = compareAndSetClipBound(
-                fromBoundsClip.top, fromPos.view.top, fromPos.visible.top, toPos.view.top);
-        fromBoundsClip.right = compareAndSetClipBound(
-                fromBoundsClip.right, fromPos.view.right, fromPos.visible.right, toPos.view.left);
-        fromBoundsClip.bottom = compareAndSetClipBound(
-                fromBoundsClip.bottom, fromPos.view.bottom, fromPos.visible.bottom, toPos.view.top);
+        fromBoundsClip.set(
+                fromPos.visible.left - toPos.view.left, fromPos.visible.top - toPos.view.top,
+                fromPos.visible.right - toPos.view.left, fromPos.visible.bottom - toPos.view.top
+        );
 
         isFromUpdated = true;
 
@@ -757,16 +758,6 @@ public class ViewPositionAnimator {
             Log.d(TAG, "'From' state updated");
         }
     }
-
-    private float compareAndSetClipBound(float origBound, int viewPos, int visiblePos, int offset) {
-        // Comparing allowing slack of 1 pixel
-        if (-1 <= viewPos - visiblePos && viewPos - visiblePos <= 1) {
-            return origBound; // View is fully visible in this direction, no extra bounds
-        } else {
-            return visiblePos - offset; // Returning 'From' view bound in 'To' view coordinates
-        }
-    }
-
 
     private class LocalAnimationEngine extends AnimationEngine {
         LocalAnimationEngine(@NonNull View view) {
