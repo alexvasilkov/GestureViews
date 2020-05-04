@@ -16,7 +16,7 @@ android:
   - android-29
 
 before_install:
-  - yes | sdkmanager "platforms;android-29"
+  - yes | sdkmanager "build-tools;29.0.3" "platforms;android-29"
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
@@ -29,10 +29,10 @@ jobs:
   include:
   - stage: test
     script:
-    - ./gradlew assembleDebug checkstyle lintDebug
+    - ./gradlew assembleDebug checkstyle lintDebug --stacktrace
 
   - stage: deploy
     if: branch = master AND type = push
     script:
     - git fetch --unshallow # Build number will be incorrect for shallow copy
-    - ./gradlew publishSample
+    - ./gradlew publishSample --stacktrace
