@@ -16,7 +16,10 @@ android:
   - android-29
 
 before_install:
+  - yes | sdkmanager --update
+  - yes | sdkmanager --licenses
   - yes | sdkmanager "build-tools;29.0.3" "platforms;android-29"
+  - sdkmanager --list | head -15
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
