@@ -1,13 +1,22 @@
 package com.alexvasilkov.gestures.animation;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.graphics.Matrix;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.os.Build;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
+
+import androidx.annotation.FloatRange;
+import androidx.annotation.NonNull;
 
 import com.alexvasilkov.gestures.GestureController;
 import com.alexvasilkov.gestures.GestureControllerForPager;
@@ -25,9 +34,6 @@ import com.alexvasilkov.gestures.views.interfaces.GestureView;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.annotation.FloatRange;
-import androidx.annotation.NonNull;
 
 /**
  * Helper class to animate views from one position on screen to another.
@@ -128,7 +134,7 @@ public class ViewPositionAnimator {
         toClipBounds = to instanceof ClipBounds ? (ClipBounds) to : null;
         animationEngine = new LocalAnimationEngine(toView);
 
-        toView.getWindowVisibleDisplayFrame(windowRect);
+        getDisplaySize(toView.getContext(), windowRect);
 
         toController = to.getController();
         toController.addOnStateChangeListener(new GestureController.OnStateChangeListener() {
@@ -689,8 +695,7 @@ public class ViewPositionAnimator {
         tmpMatrix.mapRect(toClip);
         toClip.offset(toPos.viewport.left - toPos.view.left, toPos.viewport.top - toPos.view.top);
 
-        // 'To' bounds clip is entire 'To' view rect in 'To' view coordinates
-
+        // 'To' bounds clip is entire window rect in 'To' view coordinates
         toBoundsClip.set(
                 windowRect.left - toPos.view.left, windowRect.top - toPos.view.top,
                 windowRect.right - toPos.view.left, windowRect.bottom - toPos.view.top
@@ -748,9 +753,17 @@ public class ViewPositionAnimator {
         // Meaning that if 'From' view is truncated in any direction this clipping should be
         // animated, otherwise it will look like part of 'From' view is instantly becoming visible.
         fromBoundsClip.set(
-                fromPos.visible.left - toPos.view.left, fromPos.visible.top - toPos.view.top,
-                fromPos.visible.right - toPos.view.left, fromPos.visible.bottom - toPos.view.top
+                windowRect.left - toPos.view.left, windowRect.top - toPos.view.top,
+                windowRect.right - toPos.view.left, windowRect.bottom - toPos.view.top
         );
+        fromBoundsClip.left = compareAndSetClipBound(
+                fromBoundsClip.left, fromPos.view.left, fromPos.visible.left, toPos.view.left);
+        fromBoundsClip.top = compareAndSetClipBound(
+                fromBoundsClip.top, fromPos.view.top, fromPos.visible.top, toPos.view.top);
+        fromBoundsClip.right = compareAndSetClipBound(
+                fromBoundsClip.right, fromPos.view.right, fromPos.visible.right, toPos.view.left);
+        fromBoundsClip.bottom = compareAndSetClipBound(
+                fromBoundsClip.bottom, fromPos.view.bottom, fromPos.visible.bottom, toPos.view.top);
 
         isFromUpdated = true;
 
@@ -758,6 +771,38 @@ public class ViewPositionAnimator {
             Log.d(TAG, "'From' state updated");
         }
     }
+
+    private float compareAndSetClipBound(float origBound, int viewPos, int visiblePos, int offset) {
+        // Comparing allowing slack of 1 pixel
+        if (-1 <= viewPos - visiblePos && viewPos - visiblePos <= 1) {
+            return origBound; // View is fully visible in this direction, no extra bounds
+        } else {
+            return visiblePos - offset; // Returning 'From' view bound in 'To' view coordinates
+        }
+    }
+
+
+    private static void getDisplaySize(Context context, Rect rect) {
+        WindowManager wm = getActivity(context).getWindowManager();
+        DisplayMetrics metrics = new DisplayMetrics();
+        if (Build.VERSION.SDK_INT >= 17) {
+            wm.getDefaultDisplay().getRealMetrics(metrics);
+        } else {
+            wm.getDefaultDisplay().getMetrics(metrics);
+        }
+        rect.set(0, 0, metrics.widthPixels, metrics.heightPixels);
+    }
+
+    private static Activity getActivity(Context context) {
+        while (context instanceof ContextWrapper) {
+            if (context instanceof Activity) {
+                return (Activity) context;
+            }
+            context = ((ContextWrapper) context).getBaseContext();
+        }
+        throw new IllegalArgumentException("Illegal context");
+    }
+
 
     private class LocalAnimationEngine extends AnimationEngine {
         LocalAnimationEngine(@NonNull View view) {
