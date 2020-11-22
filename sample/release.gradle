@@ -24,8 +24,8 @@ android {
 }
 
 play {
-    serviceAccountCredentials = file('signing/play_account.json')
-    track = 'alpha'
+    serviceAccountCredentials.set(file('signing/play_account.json'))
+    track.set('alpha')
 }
 
 project.afterEvaluate {
@@ -34,7 +34,7 @@ project.afterEvaluate {
 
     final publish = 'publishSample'
     final pack = 'packageRelease'
-    final upload = 'publishApkRelease'
+    final upload = 'publishReleaseApk'
 
     project.task publish
     project.tasks[publish].dependsOn upload
