@@ -8,5 +8,9 @@
 
     <item name="tag_holder" type="id" />
     <item name="tag_item" type="id" />
+    <item name="tag_insets" type="id" />
+    <item name="tag_extra_padding" type="id" />
+    <item name="tag_extra_margin" type="id" />
+    <item name="tag_extra_size" type="id" />
 
 </resources>

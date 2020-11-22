@@ -41,7 +41,7 @@
                     android:background="@drawable/demo_circle_border"
                     android:padding="1.5dp"
                     app:layout_collapseMode="parallax"
-                    app:layout_collapseParallaxMultiplier="-0.5">
+                    app:layout_collapseParallaxMultiplier="-0.8">
 
                     <com.alexvasilkov.gestures.commons.circle.CircleImageView
                         android:id="@+id/demo_app_bar_image"

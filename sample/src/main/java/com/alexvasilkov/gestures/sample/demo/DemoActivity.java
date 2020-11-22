@@ -3,9 +3,15 @@ package com.alexvasilkov.gestures.sample.demo;
 import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import com.alexvasilkov.android.commons.state.InstanceState;
 import com.alexvasilkov.android.commons.texts.SpannableBuilder;
@@ -30,11 +36,6 @@ import com.googlecode.flickrjandroid.photos.Photo;
 
 import java.util.List;
 
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
-
 /**
  * Advanced usage example that demonstrates images animation from RecyclerView into ViewPager.
  * <p>
@@ -46,7 +47,7 @@ public class DemoActivity extends BaseSettingsActivity implements PhotoListAdapt
     private static final int NO_POSITION = -1;
 
     private ViewHolder views;
-    private ViewsTransitionAnimator imageAnimator;
+    private ViewsTransitionAnimator<?> imageAnimator;
     private ViewsTransitionAnimator<Integer> listAnimator;
     private PhotoListAdapter gridAdapter;
     private PhotoPagerAdapter pagerAdapter;
@@ -112,14 +113,12 @@ public class DemoActivity extends BaseSettingsActivity implements PhotoListAdapt
      * Adjusting margins and paddings to fit translucent decor.
      */
     private void initDecorMargins() {
-        if (DecorUtils.isCanHaveTransparentDecor()) {
-            Views.getParams(views.appBar).height += DecorUtils.getStatusBarHeight(this);
-        }
-        DecorUtils.paddingForStatusBar(views.toolbar, true);
-        DecorUtils.paddingForStatusBar(views.pagerToolbar, true);
-        DecorUtils.paddingForStatusBar(views.fullImageToolbar, true);
-        DecorUtils.paddingForNavBar(views.grid);
-        DecorUtils.marginForNavBar(views.pagerTitle);
+        DecorUtils.size(views.appBar, Gravity.TOP);
+        DecorUtils.padding(views.toolbar, Gravity.TOP);
+        DecorUtils.padding(views.pagerToolbar, Gravity.TOP);
+        DecorUtils.padding(views.fullImageToolbar, Gravity.TOP);
+        DecorUtils.padding(views.grid, Gravity.BOTTOM);
+        DecorUtils.margin(views.pagerTitle, Gravity.BOTTOM);
     }
 
     /**
@@ -394,7 +393,7 @@ public class DemoActivity extends BaseSettingsActivity implements PhotoListAdapt
     /**
      * Utility class to hold all views in a single place.
      */
-    private class ViewHolder {
+    private static class ViewHolder {
         final Toolbar toolbar;
         final View appBar;
         final ImageView appBarImage;
