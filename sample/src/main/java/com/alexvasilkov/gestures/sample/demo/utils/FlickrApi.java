@@ -20,15 +20,15 @@ public class FlickrApi {
 
     private static final String API_KEY = "7f6035774a01a39f9056d6d7bde60002";
     private static final String SEARCH_QUERY = "landscape";
-    private static final String LICENCE_ID = "9"; // Public Domain Dedication (CC0)
     private static final int PER_PAGE = 30;
     private static final int MAX_PAGES = 5;
 
     private static final Set<String> photoParams = new HashSet<>();
 
     static {
+        photoParams.add("url_t");
         photoParams.add("url_m");
-        photoParams.add("url_l");
+        photoParams.add("url_h");
         photoParams.add("owner_name");
     }
 
@@ -43,8 +43,7 @@ public class FlickrApi {
         SearchParameters params = new SearchParameters();
         params.setText(SEARCH_QUERY);
         params.setSafeSearch(Flickr.SAFETYLEVEL_SAFE);
-        params.setSort(SearchParameters.RELEVANCE);
-        params.setLicense(LICENCE_ID);
+        params.setSort(SearchParameters.INTERESTINGNESS_DESC);
         params.setExtras(photoParams);
 
         boolean hasNext = hasNext();

@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="window_background">#FFFFFF</color>
-    <color name="window_background_dark">#000000</color>
+    <color name="ic_launcher_background">#2E7D32</color>
 
-    <color name="primary">#2E7D32</color>
-    <color name="primary_dark">#1B5E20</color>
-    <color name="primary_light">#e6f2e7</color>
-    <color name="accent">#F57F17</color>
-    <color name="accent_light">#f2ece6</color>
+    <color name="window_background">#ffffff</color>
+    <color name="nav_bar">#3d6d46</color>
 
-    <color name="text_secondary_light">#AAAAAA</color>
+    <color name="primary">#3d6d46</color>
+    <color name="primary_dark">#285030</color>
+    <color name="primary_light">#e8efea</color>
+    <color name="accent">#c99343</color>
+    <color name="accent_light">#efece8</color>
+    <color name="surface">@color/primary</color>
 
-    <color name="error_color">#CC3322</color>
+    <color name="demo_photo_subtitle">#bbbbbb</color>
+    <color name="error_color">#9C2619</color>
 
 </resources>

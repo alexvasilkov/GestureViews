@@ -7,7 +7,7 @@
     <string name="start_examples">@string/examples_title</string>
 
     <string name="demo_headline">Landscapes</string>
-    <string name="demo_subhead">Powered by Flickr</string>
+    <string name="demo_subhead">by Flickr</string>
     <string name="demo_reload_photos">Load photos</string>
     <string name="demo_loading_photos">Loading photos…</string>
     <string name="demo_photo_by">by</string>

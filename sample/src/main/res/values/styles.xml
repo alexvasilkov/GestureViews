@@ -9,28 +9,35 @@
         <item name="android:layout_height">?attr/actionBarSize</item>
         <item name="android:background">?attr/colorPrimary</item>
         <item name="android:minHeight">?attr/actionBarSize</item>
-        <item name="android:theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
-        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
     </style>
 
     <style name="App.Toolbar.Transparent">
         <item name="android:background">@android:color/transparent</item>
     </style>
 
-    <style name="App.Button" parent="Widget.AppCompat.Button" />
+    <style name="App.Button" parent="Widget.MaterialComponents.Button" />
 
     <style name="App.Button.Error">
-        <item name="colorButtonNormal">@color/error_color</item>
+        <item name="android:theme">@style/App.ErrorButtonTheme</item>
     </style>
 
-    <style name="App.Button.Accent">
-        <item name="android:theme">@style/App.AccentButtonTheme</item>
-        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Widget.Button.Inverse
-        </item>
+    <style name="App.Button.Primary">
+        <item name="android:minHeight">56dp</item>
     </style>
 
-    <style name="App.AccentButtonTheme">
-        <item name="colorButtonNormal">?colorAccent</item>
+    <style name="App.Button.White" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:theme">@style/App.WhiteButtonTheme</item>
+        <item name="android:minHeight">56dp</item>
+        <item name="strokeColor">@android:color/white</item>
+        <item name="strokeWidth">1.5dp</item>
+    </style>
+
+    <style name="App.WhiteButtonTheme">
+        <item name="colorPrimary">@android:color/white</item>
+    </style>
+
+    <style name="App.ErrorButtonTheme">
+        <item name="colorPrimary">@color/error_color</item>
     </style>
 
     <style name="App.ImageText">
@@ -59,6 +66,7 @@
         <item name="android:paddingLeft">12dp</item>
         <item name="android:paddingRight">12dp</item>
         <item name="android:background">?selectableItemBackgroundBorderless</item>
+        <item name="tint">?android:textColorPrimary</item>
     </style>
 
 </resources>

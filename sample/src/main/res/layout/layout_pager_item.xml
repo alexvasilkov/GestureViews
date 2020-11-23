@@ -27,13 +27,13 @@
             android:layout_margin="16dp"
             android:shadowColor="#000000"
             android:shadowRadius="4"
-            android:textColor="?android:textColorPrimaryInverse"
+            android:textColor="@android:color/white"
             android:textSize="16sp"
             tools:text="Painting name" />
 
         <Button
             android:id="@+id/frame_item_button"
-            style="@style/App.Button.Accent"
+            style="@style/App.Button.White"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"

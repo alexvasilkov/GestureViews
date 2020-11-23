@@ -17,7 +17,7 @@
         android:id="@+id/recycler_full_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/primary_light"
+        android:background="@color/window_background"
         android:visibility="invisible" />
 
     <androidx.viewpager.widget.ViewPager

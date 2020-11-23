@@ -225,7 +225,7 @@ public class DemoActivity extends BaseSettingsActivity implements PhotoListAdapt
             SpannableBuilder title = new SpannableBuilder(DemoActivity.this);
 
             title.append(photo.getTitle()).append("\n")
-                    .createStyle().setColorResId(R.color.text_secondary_light).apply()
+                    .createStyle().setColorResId(R.color.demo_photo_subtitle).apply()
                     .append(R.string.demo_photo_by).append(" ")
                     .append(photo.getOwner().getUsername());
             views.pagerTitle.setText(title.build());

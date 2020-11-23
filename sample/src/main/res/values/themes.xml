@@ -1,12 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <item name="android:windowBackground">@color/window_background</item>
 
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">@color/accent</item>
+        <item name="colorSurface">@color/surface</item>
+
+        <item name="android:navigationBarColor" tools:ignore="NewApi">@color/nav_bar</item>
+        <item name="popupTheme">@style/AppTheme.Popup</item>
+    </style>
+
+    <style name="AppTheme.Popup">
+        <item name="colorSurface">@color/window_background</item>
     </style>
 
     <style name="AppTheme.Transparent">
