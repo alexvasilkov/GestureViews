@@ -21,8 +21,8 @@ jobs:
           java-version: 1.8
 
       - name: Build and test
-        run:
-          - ./gradlew assembleDebug checkstyle lintDebug --stacktrace
+        run: |
+          ./gradlew assembleDebug checkstyle lintDebug --stacktrace
 
       - name: Piblish sample app
         if: github.event_name == 'push'
