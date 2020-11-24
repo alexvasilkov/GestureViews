@@ -25,7 +25,7 @@ allprojects {
         project.apply plugin: 'checkstyle'
 
         project.extensions.getByName('checkstyle').with {
-            toolVersion = '6.15'
+            toolVersion = '8.32'
             configFile file("${rootDir}/checkstyle.xml")
         }
 

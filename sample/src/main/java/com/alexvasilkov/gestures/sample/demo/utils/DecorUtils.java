@@ -109,7 +109,7 @@ public class DecorUtils {
         private Insets lastInsets;
 
         @Override
-        public WindowInsetsCompat onApplyWindowInsets(View v, WindowInsetsCompat insets) {
+        public WindowInsetsCompat onApplyWindowInsets(View view, WindowInsetsCompat insets) {
             lastInsets = insets.getSystemWindowInsets();
             for (InsetsListener listener : listeners) {
                 listener.applyInsets(lastInsets);

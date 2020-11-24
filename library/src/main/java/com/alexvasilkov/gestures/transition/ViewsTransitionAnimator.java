@@ -300,7 +300,9 @@ public class ViewsTransitionAnimator<ID> extends ViewsCoordinator<ID> {
 
     @NonNull
     private ViewPositionAnimator getAnimatorNonNull() {
-        if (getToView() == null) throw new NullPointerException();
+        if (getToView() == null) {
+            throw new NullPointerException();
+        }
         return getToView().getPositionAnimator();
     }
 
