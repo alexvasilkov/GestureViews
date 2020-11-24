@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.ex.image.markers;
+package com.alexvasilkov.gestures.sample.ex.other.markers;
 
 import android.content.Context;
 import android.graphics.Canvas;

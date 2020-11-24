@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.ex.image.animation;
+package com.alexvasilkov.gestures.sample.ex.animations;
 
 import android.os.Bundle;
 import android.view.View;
@@ -53,6 +53,7 @@ public class ImageAnimationActivity extends BaseSettingsActivity {
      */
     protected void initContentView() {
         setContentView(R.layout.image_animation_screen);
+        setTitle(R.string.example_image_animation);
     }
 
     @Override

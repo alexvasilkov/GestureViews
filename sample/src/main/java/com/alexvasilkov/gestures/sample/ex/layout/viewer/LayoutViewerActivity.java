@@ -26,6 +26,7 @@ public class LayoutViewerActivity extends BaseSettingsActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.layout_viewer_screen);
+        setTitle(R.string.example_layout_viewer);
 
         layout = findViewById(R.id.frame_layout);
 

@@ -10,7 +10,7 @@
         app:gest_doubleTapZoom="2"
         app:gest_maxZoom="4" />
 
-    <com.alexvasilkov.gestures.sample.ex.image.markers.MarkersOverlay
+    <com.alexvasilkov.gestures.sample.ex.other.markers.MarkersOverlay
         android:id="@+id/markers_overlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

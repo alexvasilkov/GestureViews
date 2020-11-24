@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.ex.list.recycler;
+package com.alexvasilkov.gestures.sample.ex.transitions.recycler;
 
 import android.graphics.Typeface;
 import android.view.View;

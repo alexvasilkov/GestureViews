@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.ex.image.animation.cross;
+package com.alexvasilkov.gestures.sample.ex.animations.cross;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -41,6 +41,7 @@ public class FullImageActivity extends BaseSettingsActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.image_cross_animation_to_screen);
+        setTitle(R.string.example_image_animation_cross_target);
 
         image = findViewById(R.id.single_image_to);
         background = findViewById(R.id.single_image_to_back);

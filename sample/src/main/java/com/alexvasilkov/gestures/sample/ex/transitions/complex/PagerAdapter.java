@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.ex.list.recycler;
+package com.alexvasilkov.gestures.sample.ex.transitions.complex;
 
 import android.view.ViewGroup;
 
@@ -11,21 +11,28 @@ import com.alexvasilkov.gestures.sample.ex.utils.GlideHelper;
 import com.alexvasilkov.gestures.sample.ex.utils.Painting;
 import com.alexvasilkov.gestures.views.GestureImageView;
 
+import java.util.List;
+
 class PagerAdapter extends RecyclePagerAdapter<PagerAdapter.ViewHolder> {
 
     private final ViewPager viewPager;
-    private final Painting[] paintings;
     private final SettingsController settingsController;
 
-    PagerAdapter(ViewPager pager, Painting[] paintings, SettingsController listener) {
+    private List<Painting> paintings;
+
+    PagerAdapter(ViewPager pager, SettingsController listener) {
         this.viewPager = pager;
-        this.paintings = paintings;
         this.settingsController = listener;
+    }
+
+    void setPaintings(List<Painting> paintings) {
+        this.paintings = paintings;
+        notifyDataSetChanged();
     }
 
     @Override
     public int getCount() {
-        return paintings.length;
+        return paintings == null ? 0 : paintings.size();
     }
 
     @Override
@@ -38,7 +45,7 @@ class PagerAdapter extends RecyclePagerAdapter<PagerAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         settingsController.apply(holder.image);
-        Painting painting = paintings[position];
+        Painting painting = paintings.get(position);
         GlideHelper.loadFull(holder.image, painting.imageId, painting.thumbId);
     }
 

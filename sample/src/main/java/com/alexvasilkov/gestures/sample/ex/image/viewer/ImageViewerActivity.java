@@ -23,6 +23,7 @@ public class ImageViewerActivity extends BaseSettingsActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.image_viewer_screen);
+        setTitle(R.string.example_image_viewer);
         setInfoText(R.string.info_image_viewer);
 
         // Initializing image viewer

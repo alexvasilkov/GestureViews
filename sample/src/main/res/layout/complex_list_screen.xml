@@ -2,7 +2,7 @@
 <merge
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ex.list.complex.BaseComplexListActivity">
+    tools:context=".ex.transitions.complex.BaseComplexListActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/complex_list"

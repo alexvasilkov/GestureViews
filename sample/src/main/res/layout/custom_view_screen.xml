@@ -6,7 +6,7 @@
     android:fadeScrollbars="false"
     android:fillViewport="true">
 
-    <com.alexvasilkov.gestures.sample.ex.custom.text.GestureTextView
+    <com.alexvasilkov.gestures.sample.ex.other.text.GestureTextView
         android:id="@+id/text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

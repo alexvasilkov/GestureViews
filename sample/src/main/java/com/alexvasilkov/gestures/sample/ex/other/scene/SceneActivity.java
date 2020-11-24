@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.ex.custom.scene;
+package com.alexvasilkov.gestures.sample.ex.other.scene;
 
 import android.os.Bundle;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
@@ -25,8 +25,9 @@ public class SceneActivity extends BaseActivity {
 
         scene = new SceneView(this);
         setContentView(scene);
-        getSupportActionBarNotNull().setDisplayHomeAsUpEnabled(true);
+        setTitle(R.string.example_other_objects);
         setInfoText(R.string.info_objects_control);
+        getSupportActionBarNotNull().setDisplayHomeAsUpEnabled(true);
 
         // Waiting for scene to be laid out before setting up the items
         scene.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {

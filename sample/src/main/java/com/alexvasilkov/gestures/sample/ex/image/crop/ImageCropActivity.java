@@ -32,6 +32,7 @@ public class ImageCropActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.image_crop_screen);
+        setTitle(R.string.example_image_cropping);
         getSupportActionBarNotNull().setDisplayHomeAsUpEnabled(true);
 
         imageView = findViewById(R.id.image_crop_viewer);

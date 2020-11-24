@@ -14,6 +14,32 @@
 
     <string name="examples_title">Examples</string>
 
+    <string name="example_group_image">Image</string>
+    <string name="example_image_viewer">Image viewer</string>
+    <string name="example_image_state_control">Image state control</string>
+    <string name="example_image_cropping">Image cropping</string>
+    <string name="example_images_in_pager">Images in pager</string>
+
+    <string name="example_group_image_animations">Image animations</string>
+    <string name="example_image_animation">Image animation</string>
+    <string name="example_image_animation_cross">Image animation (cross-activity)</string>
+    <string name="example_image_animation_cross_target">New activity</string>
+    <string name="example_image_animation_circular">Circular image animation</string>
+
+    <string name="example_group_list_transitions">List transitions</string>
+    <string name="example_list_transitions_1_N">List transitions: ONE to ALL</string>
+    <string name="example_list_transitions_n_N">List transitions: ANY to ALL</string>
+    <string name="example_list_transitions_n_n">List transitions: ANY to ANY</string>
+
+    <string name="example_group_layout">Layout</string>
+    <string name="example_layout_viewer">Layout viewer</string>
+    <string name="example_layouts_in_pager">Layouts in pager</string>
+
+    <string name="example_group_other">Extras</string>
+    <string name="example_other_custom">Custom text view</string>
+    <string name="example_other_markers">Markers overlay</string>
+    <string name="example_other_objects">Objects control</string>
+
     <string name="animate_changes">Animate</string>
     <string name="expand_image">Tap image to expand:</string>
     <string name="button_wiki_art">WikiArt</string>

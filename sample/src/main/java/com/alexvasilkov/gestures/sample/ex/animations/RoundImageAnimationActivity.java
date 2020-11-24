@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.ex.image.animation;
+package com.alexvasilkov.gestures.sample.ex.animations;
 
 import com.alexvasilkov.gestures.commons.circle.CircleGestureImageView;
 import com.alexvasilkov.gestures.commons.circle.CircleImageView;
@@ -13,6 +13,7 @@ public class RoundImageAnimationActivity extends ImageAnimationActivity {
     @Override
     protected void initContentView() {
         setContentView(R.layout.image_animation_round_screen);
+        setTitle(R.string.example_image_animation_circular);
     }
 
 }

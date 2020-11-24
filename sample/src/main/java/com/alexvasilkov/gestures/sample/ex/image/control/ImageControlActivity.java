@@ -35,6 +35,7 @@ public class ImageControlActivity extends BaseSettingsActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.image_control_screen);
+        setTitle(R.string.example_image_state_control);
 
         imageView = findViewById(R.id.image_control_viewer);
 

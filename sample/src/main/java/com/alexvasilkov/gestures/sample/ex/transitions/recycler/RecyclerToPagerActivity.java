@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.ex.list.recycler;
+package com.alexvasilkov.gestures.sample.ex.transitions.recycler;
 
 import android.os.Bundle;
 import android.view.View;
@@ -34,6 +34,7 @@ public class RecyclerToPagerActivity extends BaseSettingsActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.list_recycler_screen);
+        setTitle(R.string.example_list_transitions_1_N);
 
         final Painting[] paintings = Painting.list(getResources());
 

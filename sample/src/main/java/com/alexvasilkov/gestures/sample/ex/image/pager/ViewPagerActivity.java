@@ -30,6 +30,7 @@ public class ViewPagerActivity extends BaseSettingsActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.image_pager_screen);
+        setTitle(R.string.example_images_in_pager);
         setInfoText(R.string.info_image_pager);
 
         // Initializing ViewPager

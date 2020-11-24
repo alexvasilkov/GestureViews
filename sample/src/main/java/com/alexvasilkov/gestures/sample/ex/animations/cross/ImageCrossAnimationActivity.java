@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.ex.image.animation.cross;
+package com.alexvasilkov.gestures.sample.ex.animations.cross;
 
 import android.os.Bundle;
 import android.view.View;
@@ -29,6 +29,7 @@ public class ImageCrossAnimationActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.image_cross_animation_from_screen);
+        setTitle(R.string.example_image_animation_cross);
         getSupportActionBarNotNull().setDisplayHomeAsUpEnabled(true);
 
         image = findViewById(R.id.single_image_from);

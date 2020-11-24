@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.ex.custom.text;
+package com.alexvasilkov.gestures.sample.ex.other.text;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

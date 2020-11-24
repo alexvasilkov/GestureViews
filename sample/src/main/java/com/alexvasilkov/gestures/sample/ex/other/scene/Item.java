@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.ex.custom.scene;
+package com.alexvasilkov.gestures.sample.ex.other.scene;
 
 import com.alexvasilkov.gestures.State;
 

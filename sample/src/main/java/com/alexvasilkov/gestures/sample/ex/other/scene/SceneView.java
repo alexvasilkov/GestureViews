@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.ex.custom.scene;
+package com.alexvasilkov.gestures.sample.ex.other.scene;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

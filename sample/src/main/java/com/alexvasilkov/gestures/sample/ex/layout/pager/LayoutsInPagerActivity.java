@@ -31,6 +31,7 @@ public class LayoutsInPagerActivity extends BaseSettingsActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.layout_pager_screen);
+        setTitle(R.string.example_layouts_in_pager);
 
         final Painting[] paintings = Painting.list(getResources());
 

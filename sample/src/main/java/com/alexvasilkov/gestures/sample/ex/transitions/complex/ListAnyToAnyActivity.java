@@ -1,5 +1,6 @@
-package com.alexvasilkov.gestures.sample.ex.list.complex;
+package com.alexvasilkov.gestures.sample.ex.transitions.complex;
 
+import android.os.Bundle;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -7,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
+import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.transition.GestureTransitions;
 import com.alexvasilkov.gestures.transition.ViewsTransitionAnimator;
 import com.alexvasilkov.gestures.transition.tracker.FromTracker;
@@ -20,12 +22,18 @@ import java.util.Objects;
  * This example demonstrates images animation from RecyclerView to ViewPager when each list item can
  * contain from 0 to N images which should be viewed independently from other list items.
  */
-public class ComplexListV2Activity extends BaseComplexListActivity {
+public class ListAnyToAnyActivity extends BaseComplexListActivity {
 
     private List<ListItem> items;
     private ViewsTransitionAnimator<Integer> animator;
 
     private int currItemPos;
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        setTitle(R.string.example_list_transitions_n_n);
+    }
 
     @Override
     protected List<ListItem> createItems() {

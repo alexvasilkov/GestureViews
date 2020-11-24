@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.ex.custom.text;
+package com.alexvasilkov.gestures.sample.ex.other.text;
 
 import android.os.Bundle;
 
@@ -16,6 +16,7 @@ public class CustomViewActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.custom_view_screen);
+        setTitle(R.string.example_other_custom);
         getSupportActionBarNotNull().setDisplayHomeAsUpEnabled(true);
 
         final GestureTextView textView = findViewById(R.id.text_view);

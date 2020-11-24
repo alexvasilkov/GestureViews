@@ -34,160 +34,39 @@
             android:name=".ex.ExamplesActivity"
             android:label="@string/examples_title" />
 
-        <activity
-            android:name=".ex.image.viewer.ImageViewerActivity"
-            android:icon="@drawable/ic_ex_image"
-            android:label="Image viewer">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".ex.image.viewer.ImageViewerActivity" />
+
+        <activity android:name=".ex.image.control.ImageControlActivity" />
+
+        <activity android:name=".ex.image.crop.ImageCropActivity" />
+
+        <activity android:name=".ex.image.pager.ViewPagerActivity" />
+
+        <activity android:name=".ex.other.markers.ImageMarkersActivity" />
+
+        <activity android:name=".ex.animations.ImageAnimationActivity" />
+
+        <activity android:name=".ex.animations.cross.ImageCrossAnimationActivity" />
 
         <activity
-            android:name=".ex.image.control.ImageControlActivity"
-            android:icon="@drawable/ic_ex_state_control"
-            android:label="Image state control">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".ex.image.crop.ImageCropActivity"
-            android:icon="@drawable/ic_ex_crop"
-            android:label="Image cropping">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".ex.image.pager.ViewPagerActivity"
-            android:icon="@drawable/ic_ex_pager"
-            android:label="Images in ViewPager">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".ex.image.markers.ImageMarkersActivity"
-            android:icon="@drawable/ic_ex_markers"
-            android:label="Image markers overlay">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".ex.image.animation.ImageAnimationActivity"
-            android:icon="@drawable/ic_ex_image_animation"
-            android:label="Image animation">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".ex.image.animation.cross.ImageCrossAnimationActivity"
-            android:icon="@drawable/ic_ex_image_animation"
-            android:label="Image animation (cross-activity)">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".ex.image.animation.cross.FullImageActivity"
-            android:label="New activity"
+            android:name=".ex.animations.cross.FullImageActivity"
             android:theme="@style/AppTheme.Transparent" />
 
-        <activity
-            android:name=".ex.image.animation.RoundImageAnimationActivity"
-            android:icon="@drawable/ic_ex_image_animation"
-            android:label="Circular image animation">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".ex.animations.RoundImageAnimationActivity" />
 
-        <activity
-            android:name=".ex.list.recycler.RecyclerToPagerActivity"
-            android:icon="@drawable/ic_ex_list"
-            android:label="RecyclerView transitions">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".ex.transitions.recycler.RecyclerToPagerActivity" />
 
-        <activity
-            android:name=".ex.list.complex.ComplexListV1Activity"
-            android:icon="@drawable/ic_ex_complex_list"
-            android:label="Complex list transition v1">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".ex.transitions.complex.ListAnyToAllActivity" />
 
-        <activity
-            android:name=".ex.list.complex.ComplexListV2Activity"
-            android:icon="@drawable/ic_ex_complex_list"
-            android:label="Complex list transition v2">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".ex.transitions.complex.ListAnyToAnyActivity" />
 
-        <activity
-            android:name=".ex.layout.viewer.LayoutViewerActivity"
-            android:icon="@drawable/ic_ex_layout"
-            android:label="Layout viewer">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".ex.layout.viewer.LayoutViewerActivity" />
 
-        <activity
-            android:name=".ex.layout.pager.LayoutsInPagerActivity"
-            android:icon="@drawable/ic_ex_pager"
-            android:label="Layouts in ViewPager">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".ex.layout.pager.LayoutsInPagerActivity" />
 
-        <activity
-            android:name=".ex.custom.text.CustomViewActivity"
-            android:icon="@drawable/ic_ex_custom_text"
-            android:label="Custom view">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".ex.other.text.CustomViewActivity" />
 
-        <activity
-            android:name=".ex.custom.scene.SceneActivity"
-            android:icon="@drawable/ic_ex_objects_control"
-            android:label="Objects control">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".ex.other.scene.SceneActivity" />
 
     </application>
 

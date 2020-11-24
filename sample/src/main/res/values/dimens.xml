@@ -3,7 +3,6 @@
 
     <dimen name="demo_list_margin">4dp</dimen>
 
-    <dimen name="example_icon_padding">32dp</dimen>
     <dimen name="view_pager_margin">12dp</dimen>
 
 </resources>

@@ -1,4 +1,4 @@
-package com.alexvasilkov.gestures.sample.ex.list.complex;
+package com.alexvasilkov.gestures.sample.ex.transitions.complex;
 
 import android.os.Bundle;
 import android.view.View;
