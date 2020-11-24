@@ -7,11 +7,11 @@ apply from: 'commons.gradle'
 apply from: 'release.gradle'
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
 
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 29
+        minSdkVersion 23
+        targetSdkVersion 30
 
         setupVersion '2.6.0'
         setOutputFileName 'gesture-views'
