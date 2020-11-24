@@ -9,9 +9,9 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 
-import java.util.regex.Pattern;
-
 import androidx.annotation.NonNull;
+
+import java.util.regex.Pattern;
 
 /**
  * Helper class to compute and store view position used for transitions.

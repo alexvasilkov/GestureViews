@@ -3,14 +3,14 @@ package com.alexvasilkov.gestures.transition;
 import android.util.Log;
 import android.view.View;
 
-import com.alexvasilkov.gestures.animation.ViewPosition;
-import com.alexvasilkov.gestures.internal.GestureDebug;
-import com.alexvasilkov.gestures.views.interfaces.AnimatorView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
+
+import com.alexvasilkov.gestures.animation.ViewPosition;
+import com.alexvasilkov.gestures.internal.GestureDebug;
+import com.alexvasilkov.gestures.views.interfaces.AnimatorView;
 
 /**
  * Main purpose of this class is to synchronize views of same item in two different sources

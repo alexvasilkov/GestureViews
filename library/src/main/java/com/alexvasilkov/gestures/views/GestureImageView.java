@@ -12,6 +12,10 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.ImageView;
 
+import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.alexvasilkov.gestures.GestureController;
 import com.alexvasilkov.gestures.GestureControllerForPager;
 import com.alexvasilkov.gestures.Settings;
@@ -25,10 +29,6 @@ import com.alexvasilkov.gestures.views.interfaces.AnimatorView;
 import com.alexvasilkov.gestures.views.interfaces.ClipBounds;
 import com.alexvasilkov.gestures.views.interfaces.ClipView;
 import com.alexvasilkov.gestures.views.interfaces.GestureView;
-
-import androidx.annotation.DrawableRes;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 /**
  * {@link ImageView} implementation controlled by {@link GestureController}

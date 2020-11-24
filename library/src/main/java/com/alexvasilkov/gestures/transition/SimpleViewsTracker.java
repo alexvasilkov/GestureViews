@@ -1,8 +1,8 @@
 package com.alexvasilkov.gestures.transition;
 
-import com.alexvasilkov.gestures.transition.tracker.SimpleTracker;
-
 import androidx.annotation.NonNull;
+
+import com.alexvasilkov.gestures.transition.tracker.SimpleTracker;
 
 /**
  * @deprecated Use {@link GestureTransitions} class with {@link SimpleTracker} instead.

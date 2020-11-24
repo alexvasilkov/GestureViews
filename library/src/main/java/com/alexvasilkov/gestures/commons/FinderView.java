@@ -14,12 +14,12 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
 
+import androidx.annotation.ColorInt;
+
 import com.alexvasilkov.gestures.Settings;
 import com.alexvasilkov.gestures.internal.UnitsUtils;
 import com.alexvasilkov.gestures.utils.GravityUtils;
 import com.alexvasilkov.gestures.views.GestureImageView;
-
-import androidx.annotation.ColorInt;
 
 /**
  * View to draw movement area above {@link GestureImageView}, useful when implementing cropping.

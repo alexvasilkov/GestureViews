@@ -5,11 +5,11 @@ import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.Gravity;
 
-import com.alexvasilkov.gestures.internal.UnitsUtils;
-import com.alexvasilkov.gestures.views.interfaces.GestureView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.alexvasilkov.gestures.internal.UnitsUtils;
+import com.alexvasilkov.gestures.views.interfaces.GestureView;
 
 /**
  * Various settings needed for {@link GestureController} and for {@link StateController}.

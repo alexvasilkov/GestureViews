@@ -3,6 +3,8 @@ package com.alexvasilkov.gestures.sample.demo.utils;
 import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 
+import androidx.annotation.Nullable;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.load.DataSource;
@@ -16,8 +18,6 @@ import com.bumptech.glide.request.transition.NoTransition;
 import com.bumptech.glide.request.transition.Transition;
 import com.bumptech.glide.request.transition.TransitionFactory;
 import com.googlecode.flickrjandroid.photos.Photo;
-
-import androidx.annotation.Nullable;
 
 public class DemoGlideHelper {
 

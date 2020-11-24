@@ -12,6 +12,9 @@ import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+
 import com.alexvasilkov.gestures.GestureController;
 import com.alexvasilkov.gestures.Settings;
 import com.alexvasilkov.gestures.State;
@@ -19,9 +22,6 @@ import com.alexvasilkov.gestures.views.interfaces.GestureView;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 
 public class SceneView extends View implements GestureView {
 

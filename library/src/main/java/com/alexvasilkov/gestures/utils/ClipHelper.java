@@ -5,11 +5,11 @@ import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.view.View;
 
-import com.alexvasilkov.gestures.State;
-import com.alexvasilkov.gestures.views.interfaces.ClipView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.alexvasilkov.gestures.State;
+import com.alexvasilkov.gestures.views.interfaces.ClipView;
 
 /**
  * Helper class to implement view clipping (with {@link ClipView} interface).

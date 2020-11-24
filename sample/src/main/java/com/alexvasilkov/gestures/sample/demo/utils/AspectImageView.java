@@ -5,9 +5,9 @@ import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.util.Log;
 
-import com.alexvasilkov.gestures.sample.R;
-
 import androidx.appcompat.widget.AppCompatImageView;
+
+import com.alexvasilkov.gestures.sample.R;
 
 public class AspectImageView extends AppCompatImageView {
 

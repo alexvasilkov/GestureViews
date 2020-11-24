@@ -4,6 +4,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.alexvasilkov.gestures.animation.ViewPosition;
 import com.alexvasilkov.gestures.animation.ViewPositionAnimator;
 import com.alexvasilkov.gestures.animation.ViewPositionAnimator.PositionUpdateListener;
@@ -14,9 +17,6 @@ import com.alexvasilkov.gestures.views.interfaces.AnimatorView;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 /**
  * Extension of {@link ViewsCoordinator} that allows requesting {@link #enter(Object, boolean)} or

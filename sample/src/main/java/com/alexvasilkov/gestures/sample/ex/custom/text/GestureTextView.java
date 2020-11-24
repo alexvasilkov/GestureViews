@@ -6,12 +6,12 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatTextView;
+
 import com.alexvasilkov.gestures.GestureController;
 import com.alexvasilkov.gestures.State;
 import com.alexvasilkov.gestures.views.interfaces.GestureView;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatTextView;
 
 /**
  * Sample of TextView with added gesture controls.

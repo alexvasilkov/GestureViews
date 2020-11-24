@@ -2,6 +2,10 @@ package com.alexvasilkov.gestures.sample.ex.list.complex;
 
 import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
+
 import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
 import com.alexvasilkov.gestures.transition.GestureTransitions;
 import com.alexvasilkov.gestures.transition.ViewsTransitionAnimator;
@@ -11,10 +15,6 @@ import com.alexvasilkov.gestures.transition.tracker.SimpleTracker;
 
 import java.util.List;
 import java.util.Objects;
-
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
 
 /**
  * This example demonstrates images animation from RecyclerView to ViewPager when each list item can

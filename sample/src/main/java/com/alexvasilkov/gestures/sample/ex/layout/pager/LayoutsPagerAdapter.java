@@ -6,6 +6,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.viewpager.widget.ViewPager;
+
 import com.alexvasilkov.android.commons.nav.Navigate;
 import com.alexvasilkov.android.commons.texts.SpannableBuilder;
 import com.alexvasilkov.android.commons.ui.Views;
@@ -15,9 +18,6 @@ import com.alexvasilkov.gestures.sample.base.settings.SettingsController;
 import com.alexvasilkov.gestures.sample.ex.utils.GlideHelper;
 import com.alexvasilkov.gestures.sample.ex.utils.Painting;
 import com.alexvasilkov.gestures.views.GestureFrameLayout;
-
-import androidx.annotation.NonNull;
-import androidx.viewpager.widget.ViewPager;
 
 class LayoutsPagerAdapter extends RecyclePagerAdapter<LayoutsPagerAdapter.ViewHolder> {
 

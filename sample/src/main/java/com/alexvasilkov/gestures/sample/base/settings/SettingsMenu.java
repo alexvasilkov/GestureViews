@@ -8,14 +8,14 @@ import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
 
+import androidx.annotation.StringRes;
+
 import com.alexvasilkov.android.commons.state.InstanceState;
 import com.alexvasilkov.android.commons.state.InstanceStateManager;
 import com.alexvasilkov.gestures.Settings;
 import com.alexvasilkov.gestures.internal.GestureDebug;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.views.interfaces.GestureView;
-
-import androidx.annotation.StringRes;
 
 public class SettingsMenu implements SettingsController {
 

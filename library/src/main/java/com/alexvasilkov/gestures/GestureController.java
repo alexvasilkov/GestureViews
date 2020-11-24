@@ -12,6 +12,9 @@ import android.view.ViewConfiguration;
 import android.view.ViewParent;
 import android.widget.OverScroller;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.alexvasilkov.gestures.internal.AnimationEngine;
 import com.alexvasilkov.gestures.internal.ExitController;
 import com.alexvasilkov.gestures.internal.MovementBounds;
@@ -22,9 +25,6 @@ import com.alexvasilkov.gestures.utils.MathUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 /**
  * Handles touch events to update view's position state ({@link State}) based on current

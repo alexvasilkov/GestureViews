@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.FrameLayout;
 
+import androidx.annotation.NonNull;
+
 import com.alexvasilkov.gestures.GestureController;
 import com.alexvasilkov.gestures.GestureControllerForPager;
 import com.alexvasilkov.gestures.State;
@@ -21,8 +23,6 @@ import com.alexvasilkov.gestures.internal.DebugOverlay;
 import com.alexvasilkov.gestures.internal.GestureDebug;
 import com.alexvasilkov.gestures.views.interfaces.AnimatorView;
 import com.alexvasilkov.gestures.views.interfaces.GestureView;
-
-import androidx.annotation.NonNull;
 
 /**
  * {@link FrameLayout} implementation controlled by {@link GestureController}

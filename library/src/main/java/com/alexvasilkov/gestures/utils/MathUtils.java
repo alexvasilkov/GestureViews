@@ -3,9 +3,9 @@ package com.alexvasilkov.gestures.utils;
 import android.graphics.Matrix;
 import android.graphics.RectF;
 
-import com.alexvasilkov.gestures.State;
-
 import androidx.annotation.Size;
+
+import com.alexvasilkov.gestures.State;
 
 public class MathUtils {
 

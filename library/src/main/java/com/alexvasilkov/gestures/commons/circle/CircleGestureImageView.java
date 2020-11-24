@@ -12,14 +12,14 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.alexvasilkov.gestures.animation.ViewPositionAnimator.PositionUpdateListener;
 import com.alexvasilkov.gestures.internal.DebugOverlay;
 import com.alexvasilkov.gestures.internal.GestureDebug;
 import com.alexvasilkov.gestures.utils.MathUtils;
 import com.alexvasilkov.gestures.views.GestureImageView;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 public class CircleGestureImageView extends GestureImageView {
 

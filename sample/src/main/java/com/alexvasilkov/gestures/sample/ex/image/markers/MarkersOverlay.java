@@ -9,14 +9,14 @@ import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+
 import com.alexvasilkov.gestures.GestureController.OnStateChangeListener;
 import com.alexvasilkov.gestures.State;
 import com.alexvasilkov.gestures.views.GestureImageView;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.annotation.NonNull;
 
 /**
  * Special view that can draw markers on top of {@link GestureImageView} once it's attached

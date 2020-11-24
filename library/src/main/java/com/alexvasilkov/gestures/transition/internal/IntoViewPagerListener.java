@@ -3,15 +3,15 @@ package com.alexvasilkov.gestures.transition.internal;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.viewpager.widget.ViewPager;
+
 import com.alexvasilkov.gestures.animation.ViewPositionAnimator;
 import com.alexvasilkov.gestures.animation.ViewPositionAnimator.PositionUpdateListener;
 import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
 import com.alexvasilkov.gestures.transition.ViewsTransitionAnimator;
 import com.alexvasilkov.gestures.transition.tracker.IntoTracker;
 import com.alexvasilkov.gestures.views.interfaces.AnimatorView;
-
-import androidx.annotation.NonNull;
-import androidx.viewpager.widget.ViewPager;
 
 /**
  * Helper class to animate transitions into ViewPager with GestureView-driven pages.

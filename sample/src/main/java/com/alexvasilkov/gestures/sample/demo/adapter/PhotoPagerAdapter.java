@@ -3,6 +3,9 @@ package com.alexvasilkov.gestures.sample.demo.adapter;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.viewpager.widget.ViewPager;
+
 import com.alexvasilkov.android.commons.ui.Views;
 import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
 import com.alexvasilkov.gestures.sample.R;
@@ -12,9 +15,6 @@ import com.alexvasilkov.gestures.views.GestureImageView;
 import com.googlecode.flickrjandroid.photos.Photo;
 
 import java.util.List;
-
-import androidx.annotation.NonNull;
-import androidx.viewpager.widget.ViewPager;
 
 public class PhotoPagerAdapter extends RecyclePagerAdapter<PhotoPagerAdapter.ViewHolder> {
 
