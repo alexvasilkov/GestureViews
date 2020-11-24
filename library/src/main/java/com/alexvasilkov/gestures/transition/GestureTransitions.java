@@ -22,7 +22,6 @@ import com.alexvasilkov.gestures.views.interfaces.AnimatorView;
 public class GestureTransitions<ID> {
 
     // ViewsTransitionAnimator' public constructor is temporary deprecated
-    @SuppressWarnings("deprecation")
     private final ViewsTransitionAnimator<ID> animator = new ViewsTransitionAnimator<>();
 
     private GestureTransitions() {}

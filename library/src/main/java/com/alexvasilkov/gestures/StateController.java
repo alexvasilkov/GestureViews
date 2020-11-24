@@ -11,7 +11,6 @@ import androidx.annotation.Nullable;
 import com.alexvasilkov.gestures.internal.MovementBounds;
 import com.alexvasilkov.gestures.internal.ZoomBounds;
 import com.alexvasilkov.gestures.utils.GravityUtils;
-import com.alexvasilkov.gestures.utils.MathUtils;
 
 /**
  * Helper class that holds reference to {@link Settings} object and controls some aspects of view
@@ -322,114 +321,6 @@ public class StateController {
      */
     public void getMovementArea(@NonNull State state, @NonNull RectF out) {
         movBounds.set(state).getExternalBounds(out);
-    }
-
-
-    /*
-     * Deprecated methods.
-     */
-
-    /**
-     * @return Min zoom level
-     * @deprecated Use {@link #getMinZoom(State)} instead.
-     */
-    @SuppressWarnings("unused") // Public API
-    @Deprecated
-    public float getEffectiveMinZoom() {
-        return zoomBounds.getMinZoom();
-    }
-
-    /**
-     * @return Max zoom level
-     * @deprecated Use {@link #getMaxZoom(State)} instead.
-     */
-    @SuppressWarnings("unused") // Public API
-    @Deprecated
-    public float getEffectiveMaxZoom() {
-        return zoomBounds.getMaxZoom();
-    }
-
-    /**
-     * @param out Output movement area rectangle
-     * @param state Current state
-     * @deprecated User {@link #getMovementArea(State, RectF)} instead.
-     */
-    @SuppressWarnings("unused") // Public API
-    @Deprecated
-    public void getEffectiveMovementArea(RectF out, State state) {
-        getMovementArea(state, out);
-    }
-
-    /**
-     * @param value Value to be restricted
-     * @param minValue Min value
-     * @param maxValue Max value
-     * @return Restricted value
-     * @deprecated Use {@link MathUtils#restrict(float, float, float)}.
-     */
-    @SuppressWarnings("unused") // Public API
-    @Deprecated
-    public static float restrict(float value, float minValue, float maxValue) {
-        return Math.max(minValue, Math.min(value, maxValue));
-    }
-
-    /**
-     * @param out Interpolated state (output)
-     * @param start Start state
-     * @param end End state
-     * @param factor Factor
-     * @deprecated Use {@link MathUtils#interpolate(State, State, State, float)}.
-     */
-    @SuppressWarnings("unused") // Public API
-    @Deprecated
-    public static void interpolate(State out, State start, State end, float factor) {
-        MathUtils.interpolate(out, start, end, factor);
-    }
-
-    /**
-     * @param out Interpolated state (output)
-     * @param start Start state
-     * @param startPivotX Pivot point's X coordinate in start state coordinates
-     * @param startPivotY Pivot point's Y coordinate in start state coordinates
-     * @param end End state
-     * @param endPivotX Pivot point's X coordinate in end state coordinates
-     * @param endPivotY Pivot point's Y coordinate in end state coordinates
-     * @param factor Factor
-     * @deprecated Use
-     * {@link MathUtils#interpolate(State, State, float, float, State, float, float, float)}.
-     */
-    @SuppressWarnings("unused") // Public API
-    @Deprecated
-    public static void interpolate(State out, State start, float startPivotX, float startPivotY,
-            State end, float endPivotX, float endPivotY, float factor) {
-        MathUtils.interpolate(out, start, startPivotX, startPivotY,
-                end, endPivotX, endPivotY, factor);
-    }
-
-    /**
-     * @param start Start value
-     * @param end End value
-     * @param factor Factor
-     * @return Interpolated value
-     * @deprecated Use {@link MathUtils#interpolate(float, float, float)}.
-     */
-    @SuppressWarnings("unused") // Public API
-    @Deprecated
-    public static float interpolate(float start, float end, float factor) {
-        return MathUtils.interpolate(start, end, factor);
-    }
-
-    /**
-     * @param out Interpolated rectangle (output)
-     * @param start Start rectangle
-     * @param end End rectangle
-     * @param factor Factor
-     * @deprecated Use {@link MathUtils#interpolate(RectF, RectF, RectF, float)},
-     */
-    @SuppressWarnings("unused") // Public API
-    @Deprecated
-    public static void interpolate(RectF out, RectF start, RectF end, float factor) {
-        MathUtils.interpolate(out, start, end, factor);
     }
 
 }

@@ -82,6 +82,11 @@ public class DecorUtils {
         });
     }
 
+    public static void onInsetsChanged(View view, Runnable action) {
+        addListener(view, insets -> action.run());
+    }
+
+
     private static Rect getExtraInsets(View view, Insets insets, int direction, int tagId) {
         Rect oldInsets = (Rect) view.getTag(tagId);
         oldInsets = oldInsets == null ? new Rect() : oldInsets;

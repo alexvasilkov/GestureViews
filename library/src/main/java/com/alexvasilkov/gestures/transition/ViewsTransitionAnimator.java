@@ -39,12 +39,7 @@ public class ViewsTransitionAnimator<ID> extends ViewsCoordinator<ID> {
     private boolean exitRequested;
     private boolean exitWithAnimation;
 
-    /**
-     * @deprecated Use {@link GestureTransitions} instead.
-     */
-    @SuppressWarnings({ "WeakerAccess", "DeprecatedIsStillUsed" }) // Public temporary API
-    @Deprecated
-    public ViewsTransitionAnimator() {
+    ViewsTransitionAnimator() {
         addPositionUpdateListener(new PositionUpdateListener() {
             @Override
             public void onPositionUpdate(float position, boolean isLeaving) {

@@ -602,22 +602,6 @@ public class Settings {
     }
 
     /**
-     * @param restrict Whether image bounds should be restricted or not
-     * @return Current settings object for calls chaining
-     * @deprecated Use {@link #disableBounds()} and {@link #enableBounds()} methods instead.
-     */
-    @SuppressWarnings("unused") // Public API
-    @Deprecated
-    @NonNull
-    public Settings setRestrictBounds(boolean restrict) {
-        boundsDisableCount += restrict ? -1 : 1;
-        if (boundsDisableCount < 0) { // In case someone explicitly used this method during setup
-            boundsDisableCount = 0;
-        }
-        return this;
-    }
-
-    /**
      * Duration of animations.
      *
      * @param duration Animation duration in milliseconds

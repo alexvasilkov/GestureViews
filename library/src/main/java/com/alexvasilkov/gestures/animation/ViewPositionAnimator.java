@@ -386,27 +386,6 @@ public class ViewPositionAnimator {
     }
 
     /**
-     * @return Animation duration
-     * @deprecated Use {@link Settings#getAnimationsDuration()} instead.
-     */
-    @SuppressWarnings("unused") // Public API
-    @Deprecated
-    public long getDuration() {
-        return toController.getSettings().getAnimationsDuration();
-    }
-
-    /**
-     * @param duration Animation duration
-     * @deprecated Use {@link Settings#setAnimationsDuration(long)} instead.
-     */
-    @SuppressWarnings("unused") // Public API
-    @Deprecated
-    public void setDuration(long duration) {
-        toController.getSettings().setAnimationsDuration(duration);
-    }
-
-
-    /**
      * @return Target (to) position as set by {@link #setToState(State, float)}.
      * Maybe useful to determine real animation position during exit gesture.
      * <p>
@@ -427,16 +406,6 @@ public class ViewPositionAnimator {
      * {@link #getToPosition()} method.
      */
     public float getPosition() {
-        return position;
-    }
-
-    /**
-     * @return Current position
-     * @deprecated Use {@link #getPosition()} method instead.
-     */
-    @SuppressWarnings("unused") // Public API
-    @Deprecated
-    public float getPositionState() {
         return position;
     }
 
@@ -785,10 +754,13 @@ public class ViewPositionAnimator {
     }
 
 
+    @SuppressWarnings("deprecation")
     private static void getDisplaySize(Context context, Rect rect) {
         WindowManager wm = getActivity(context).getWindowManager();
         DisplayMetrics metrics = new DisplayMetrics();
-        if (Build.VERSION.SDK_INT >= 17) {
+        if (Build.VERSION.SDK_INT >= 30) {
+            context.getDisplay().getRealMetrics(metrics);
+        } else if (Build.VERSION.SDK_INT >= 17) {
             wm.getDefaultDisplay().getRealMetrics(metrics);
         } else {
             wm.getDefaultDisplay().getMetrics(metrics);

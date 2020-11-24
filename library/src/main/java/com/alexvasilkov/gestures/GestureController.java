@@ -181,18 +181,6 @@ public class GestureController implements View.OnTouchListener {
     }
 
     /**
-     * @param enabled Whether long press should be enabled or not
-     * @deprecated In order to enable long clicks you should either set
-     * {@link View#setOnLongClickListener(View.OnLongClickListener)} or use
-     * {@link View#setLongClickable(boolean)}.
-     */
-    @SuppressWarnings({ "unused", "WeakerAccess" }) // Public API
-    @Deprecated
-    public void setLongPressEnabled(boolean enabled) {
-        targetView.setLongClickable(true);
-    }
-
-    /**
      * Returns settings that can be updated.
      * <p>
      * Note: call {@link #updateState()}, {@link #resetState()} or {@link #animateKeepInBounds()}

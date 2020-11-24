@@ -130,21 +130,6 @@ public class GestureImageView extends ImageView
 
     /**
      * Crops bitmap as it is seen inside movement area: {@link Settings#setMovementArea(int, int)}.
-     * Result will be delivered to provided snapshot listener.
-     *
-     * @param listener Snapshot listener
-     * @deprecated Use {@link #crop()} method instead.
-     */
-    @SuppressWarnings({ "deprecation", "unused" }) // Public API
-    @Deprecated
-    public void getSnapshot(@NonNull OnSnapshotLoadedListener listener) {
-        if (getDrawable() != null) {
-            listener.onSnapshotLoaded(crop());
-        }
-    }
-
-    /**
-     * Crops bitmap as it is seen inside movement area: {@link Settings#setMovementArea(int, int)}.
      * <p>
      * Note, that size of cropped bitmap may vary from size of movement area,
      * since we will crop part of original image at base zoom level (zoom == 1).
@@ -226,16 +211,6 @@ public class GestureImageView extends ImageView
         } else {
             return context.getResources().getDrawable(id);
         }
-    }
-
-
-    /**
-     * @deprecated Use {@link #crop()} method instead.
-     */
-    @SuppressWarnings("WeakerAccess") // Public API
-    @Deprecated
-    public interface OnSnapshotLoadedListener {
-        void onSnapshotLoaded(@Nullable Bitmap bitmap);
     }
 
 }

@@ -3,6 +3,7 @@ package com.alexvasilkov.gestures.utils;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.RectF;
+import android.os.Build;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -45,6 +46,7 @@ public class ClipHelper implements ClipView {
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings("deprecation")
     @Override
     public void clipView(@Nullable RectF rect, float rotation) {
         if (rect == null) {
@@ -72,12 +74,16 @@ public class ClipHelper implements ClipView {
                 tmpMatrix.mapRect(clipBounds);
             }
 
-            // Invalidating only updated part (min area holding both new and old clip bounds)
-            int left = (int) Math.min(clipBounds.left, clipBoundsOld.left);
-            int top = (int) Math.min(clipBounds.top, clipBoundsOld.top);
-            int right = (int) Math.max(clipBounds.right, clipBoundsOld.right) + 1;
-            int bottom = (int) Math.max(clipBounds.bottom, clipBoundsOld.bottom) + 1;
-            view.invalidate(left, top, right, bottom);
+            if (Build.VERSION.SDK_INT >= 21) {
+                view.invalidate();
+            } else {
+                // Invalidating only updated part (min area holding both new and old clip bounds)
+                int left = (int) Math.min(clipBounds.left, clipBoundsOld.left);
+                int top = (int) Math.min(clipBounds.top, clipBoundsOld.top);
+                int right = (int) Math.max(clipBounds.right, clipBoundsOld.right) + 1;
+                int bottom = (int) Math.max(clipBounds.bottom, clipBoundsOld.bottom) + 1;
+                view.invalidate(left, top, right, bottom);
+            }
         }
     }
 

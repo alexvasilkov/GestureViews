@@ -216,8 +216,12 @@ public class DemoActivity extends BaseSettingsActivity implements PhotoListAdapt
                 showSystemUi(!isSystemUiShown());
             }
         });
-        getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(
-                visibility -> views.pagerToolbar.animate().alpha(isSystemUiShown() ? 1f : 0f));
+
+        DecorUtils.onInsetsChanged(views.pagerToolbar, () -> {
+            float alpha = isSystemUiShown() ? 1f : 0f;
+            views.pagerToolbar.animate().alpha(alpha);
+            views.pagerTitle.animate().alpha(alpha);
+        });
     }
 
     /**
@@ -286,6 +290,7 @@ public class DemoActivity extends BaseSettingsActivity implements PhotoListAdapt
     /**
      * Checks if system UI (status bar and navigation bar) is shown or we are in fullscreen mode.
      */
+    @SuppressWarnings("deprecation") // New insets controller API is not back-ported yet
     private boolean isSystemUiShown() {
         return (getWindow().getDecorView().getSystemUiVisibility()
                 & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0;
@@ -294,6 +299,7 @@ public class DemoActivity extends BaseSettingsActivity implements PhotoListAdapt
     /**
      * Shows or hides system UI (status bar and navigation bar).
      */
+    @SuppressWarnings("deprecation") // New insets controller API is not back-ported yet
     private void showSystemUi(boolean show) {
         int flags = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_FULLSCREEN
