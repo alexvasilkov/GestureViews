@@ -45,11 +45,10 @@ project.afterEvaluate {
 task decryptUploadKeystore {
     doFirst {
         println 'Decrypt upload keystore'
-        def proc = ("openssl aes-256-cbc -d" +
+        executeCommand("openssl aes-256-cbc -nopad -d" +
                 " -in $DIR/upload.jks.enc" +
                 " -out $DIR/upload.jks" +
-                " -k $System.env.ENCRYPT_KEY").execute()
-        println "Error?:\n" + proc.err.text
+                " -k $System.env.ENCRYPT_KEY")
     }
 }
 
@@ -63,11 +62,10 @@ task cleanUploadKeystore {
 task decryptPlayAccount {
     doFirst {
         println 'Decrypt Play account'
-        def proc = ("openssl aes-256-cbc -d" +
+        executeCommand("openssl aes-256-cbc -nopad -d" +
                 " -in $DIR/play_account.json.enc" +
                 " -out $DIR/play_account.json" +
-                " -k $System.env.ENCRYPT_KEY").execute()
-        println "Error?:\n" + proc.err.text
+                " -k $System.env.ENCRYPT_KEY")
     }
 }
 
@@ -75,5 +73,14 @@ task cleanPlayAccount {
     doLast {
         println 'Clean up Play account'
         "rm $DIR/play_account.json".execute()
+    }
+}
+
+private void executeCommand(String command) {
+    def proc = command.execute()
+    def error = proc.err.text
+    if (error != null && !error.isEmpty()) {
+        println "Error:\n" + error
+        throw new RuntimeException("Error running commmand",)
     }
 }
