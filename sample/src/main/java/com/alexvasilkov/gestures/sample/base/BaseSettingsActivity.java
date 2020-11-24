@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
+
 import com.alexvasilkov.gestures.Settings;
 import com.alexvasilkov.gestures.sample.base.settings.SettingsController;
 import com.alexvasilkov.gestures.sample.base.settings.SettingsMenu;
@@ -25,7 +27,7 @@ public abstract class BaseSettingsActivity extends BaseActivity {
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         settingsMenu.onSaveInstanceState(outState);
         super.onSaveInstanceState(outState);
     }

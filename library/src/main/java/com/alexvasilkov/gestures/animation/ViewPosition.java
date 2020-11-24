@@ -63,6 +63,7 @@ public class ViewPosition {
         this.image = image;
     }
 
+    @SuppressWarnings("unused") // Public API
     public void set(@NonNull ViewPosition pos) {
         this.view.set(pos.view);
         this.viewport.set(pos.viewport);

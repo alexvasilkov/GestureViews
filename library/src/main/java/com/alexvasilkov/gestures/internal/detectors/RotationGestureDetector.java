@@ -56,6 +56,7 @@ public class RotationGestureDetector {
      * @return true if the event was processed and the detector wants to receive the
      * rest of the MotionEvents in this event stream.
      */
+    @SuppressWarnings({ "UnusedReturnValue", "SameReturnValue" })
     public boolean onTouchEvent(MotionEvent event) {
 
         switch (event.getActionMasked()) {

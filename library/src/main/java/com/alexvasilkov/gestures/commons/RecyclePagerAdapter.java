@@ -39,8 +39,9 @@ public abstract class RecyclePagerAdapter<VH extends RecyclePagerAdapter.ViewHol
         return attached.get(position);
     }
 
+    @NonNull
     @Override
-    public Object instantiateItem(ViewGroup container, int position) {
+    public Object instantiateItem(@NonNull ViewGroup container, int position) {
         VH holder = cache.poll();
         if (holder == null) {
             holder = onCreateViewHolder(container);
@@ -57,7 +58,7 @@ public abstract class RecyclePagerAdapter<VH extends RecyclePagerAdapter.ViewHol
 
     @SuppressWarnings("unchecked")
     @Override
-    public void destroyItem(ViewGroup container, int position, Object object) {
+    public void destroyItem(ViewGroup container, int position, @NonNull Object object) {
         VH holder = (VH) object;
         attached.remove(position);
         container.removeView(holder.itemView);
@@ -66,13 +67,13 @@ public abstract class RecyclePagerAdapter<VH extends RecyclePagerAdapter.ViewHol
     }
 
     @Override
-    public boolean isViewFromObject(View view, Object object) {
+    public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
         ViewHolder holder = (ViewHolder) object;
         return holder.itemView == view;
     }
 
     @Override
-    public int getItemPosition(Object object) {
+    public int getItemPosition(@NonNull Object object) {
         // Forcing all views reinitialization when data set changed.
         // It should be safe because we're using views recycling logic.
         return POSITION_NONE;

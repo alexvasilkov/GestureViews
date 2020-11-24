@@ -2,6 +2,7 @@ package com.alexvasilkov.gestures.sample.demo.adapter;
 
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public abstract class EndlessRecyclerAdapter<VH extends RecyclerView.ViewHolder>
@@ -10,7 +11,7 @@ public abstract class EndlessRecyclerAdapter<VH extends RecyclerView.ViewHolder>
     private final RecyclerView.OnScrollListener scrollListener =
             new RecyclerView.OnScrollListener() {
                 @Override
-                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                     loadNextItemsIfNeeded(recyclerView);
                 }
             };
@@ -91,14 +92,14 @@ public abstract class EndlessRecyclerAdapter<VH extends RecyclerView.ViewHolder>
 
 
     @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
         recyclerView.addOnScrollListener(scrollListener);
         loadNextItemsIfNeeded(recyclerView);
     }
 
     @Override
-    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
+    public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
         super.onDetachedFromRecyclerView(recyclerView);
         recyclerView.removeOnScrollListener(scrollListener);
     }

@@ -10,6 +10,8 @@ import com.alexvasilkov.gestures.views.GestureFrameLayout;
 
 import androidx.viewpager.widget.ViewPager;
 
+import java.util.Objects;
+
 /**
  * Simple example demonstrates usage of {@link GestureFrameLayout} within ViewPager.<br>
  * Two things worth noting here:
@@ -41,7 +43,7 @@ public class LayoutsInPagerActivity extends BaseSettingsActivity {
     @Override
     protected void onSettingsChanged() {
         // Applying settings from toolbar menu, see BaseExampleActivity
-        viewPager.getAdapter().notifyDataSetChanged();
+        Objects.requireNonNull(viewPager.getAdapter()).notifyDataSetChanged();
     }
 
 }

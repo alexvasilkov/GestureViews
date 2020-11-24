@@ -281,7 +281,7 @@ public class GestureController implements View.OnTouchListener {
      * @return {@code true} if animation started, {@code false} otherwise. Animation may
      * not be started if image already withing the bounds.
      */
-    @SuppressWarnings("WeakerAccess") // Public API
+    @SuppressWarnings({ "WeakerAccess", "UnusedReturnValue" }) // Public API
     public boolean animateKeepInBounds() {
         return animateStateTo(state, true);
     }
@@ -294,6 +294,7 @@ public class GestureController implements View.OnTouchListener {
      * not be started if end state is {@code null} or equals to current state (after bounds
      * restrictions are applied).
      */
+    @SuppressWarnings("UnusedReturnValue")
     public boolean animateStateTo(@Nullable State endState) {
         return animateStateTo(endState, true);
     }
@@ -851,6 +852,7 @@ public class GestureController implements View.OnTouchListener {
     /**
      * State changes listener.
      */
+    @SuppressWarnings("unused")
     public interface OnStateChangeListener {
         void onStateChanged(State state);
 
@@ -878,7 +880,7 @@ public class GestureController implements View.OnTouchListener {
     /**
      * Listener for different touch events.
      */
-    @SuppressWarnings("WeakerAccess") // Public API
+    @SuppressWarnings({ "WeakerAccess", "EmptyMethod", "SameReturnValue", "unused" }) // Public API
     public interface OnGestureListener {
         /**
          * @param event Motion event

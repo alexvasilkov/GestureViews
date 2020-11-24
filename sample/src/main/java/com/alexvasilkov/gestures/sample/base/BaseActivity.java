@@ -34,7 +34,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         InstanceStateManager.saveInstanceState(this, outState);
         super.onSaveInstanceState(outState);
     }
@@ -57,16 +57,15 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-            case R.id.menu_info:
-                showInfoDialog();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        int itemId = item.getItemId();
+        if (itemId == android.R.id.home) {
+            onBackPressed();
+            return true;
+        } else if (itemId == R.id.menu_info) {
+            showInfoDialog();
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     @NonNull

@@ -12,6 +12,7 @@ import com.alexvasilkov.gestures.sample.ex.utils.Painting;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 
@@ -38,8 +39,9 @@ class ListAdapter extends RecyclerView.Adapter<ViewHolder> {
         return items.get(position).paintings == null ? TYPE_TEXT : TYPE_IMAGES;
     }
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         switch (viewType) {
             case TYPE_IMAGES:
                 final ImagesViewHolder holder = new ImagesViewHolder(parent);
@@ -57,7 +59,7 @@ class ListAdapter extends RecyclerView.Adapter<ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         if (holder instanceof ImagesViewHolder) {
             onBindImages((ImagesViewHolder) holder, items.get(position), position);
         } else if (holder instanceof TextViewHolder) {

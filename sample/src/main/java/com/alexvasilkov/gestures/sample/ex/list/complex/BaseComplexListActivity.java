@@ -3,16 +3,16 @@ package com.alexvasilkov.gestures.sample.ex.list.complex;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
+
 import com.alexvasilkov.gestures.commons.DepthPageTransformer;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.base.BaseSettingsActivity;
 import com.alexvasilkov.gestures.transition.ViewsTransitionAnimator;
 
 import java.util.List;
-
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
 
 /**
  * Base implementation of complex list examples. Subclasses should provide there own logic for
@@ -24,7 +24,7 @@ abstract class BaseComplexListActivity extends BaseSettingsActivity {
     private View pagerBackground;
     private PagerAdapter pagerAdapter;
 
-    private ViewsTransitionAnimator animator;
+    private ViewsTransitionAnimator<?> animator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +92,8 @@ abstract class BaseComplexListActivity extends BaseSettingsActivity {
 
     protected abstract List<ListItem> createItems();
 
-    protected abstract ViewsTransitionAnimator createAnimator(RecyclerView list, ViewPager pager);
+    protected abstract ViewsTransitionAnimator<?> createAnimator(
+            RecyclerView list, ViewPager pager);
 
     protected abstract void openImageInPager(PagerAdapter adapter, int itemPos, int imagePos);
 

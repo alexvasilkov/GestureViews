@@ -19,7 +19,7 @@ import java.util.List;
 public class PhotoListAdapter extends DefaultEndlessRecyclerAdapter<PhotoListAdapter.ViewHolder> {
 
     private final long createdAt = System.currentTimeMillis();
-    private final long noAnimationInterval = 300L;
+    private static final long noAnimationInterval = 300L;
 
     private List<Photo> photos;
     private boolean hasMore = true;

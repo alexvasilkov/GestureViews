@@ -41,7 +41,7 @@ public class MovementBounds {
     }
 
     /**
-     * Calculating bounds for {@link State#x} &amp; {@link State#y} values to keep image within
+     * Calculating bounds for x &amp; y values to keep image within
      * viewport and taking image gravity into account (see {@link Settings#setGravity(int)}).
      *
      * @param state State for which to calculate movement bounds.

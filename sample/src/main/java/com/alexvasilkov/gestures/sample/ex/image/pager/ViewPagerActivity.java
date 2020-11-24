@@ -9,6 +9,8 @@ import com.alexvasilkov.gestures.views.GestureImageView;
 
 import androidx.viewpager.widget.ViewPager;
 
+import java.util.Objects;
+
 /**
  * This example demonstrates usage of {@link GestureImageView} within ViewPager.<br>
  * Two things worth noting here:
@@ -39,7 +41,7 @@ public class ViewPagerActivity extends BaseSettingsActivity {
     @Override
     protected void onSettingsChanged() {
         // Applying settings from toolbar menu, see BaseExampleActivity
-        viewPager.getAdapter().notifyDataSetChanged();
+        Objects.requireNonNull(viewPager.getAdapter()).notifyDataSetChanged();
     }
 
 }

@@ -18,6 +18,7 @@ import androidx.viewpager.widget.ViewPager;
 /**
  * Transition animation builder.
  */
+@SuppressWarnings("unused")
 public class GestureTransitions<ID> {
 
     // ViewsTransitionAnimator' public constructor is temporary deprecated
@@ -67,7 +68,6 @@ public class GestureTransitions<ID> {
         return from(new FromListViewListener<>(listView, tracker, autoScroll));
     }
 
-    @SuppressWarnings("unused") // Public API
     public static <ID> GestureTransitions<ID> fromNone() {
         return from(new RequestListener<ID>() {
             @Override

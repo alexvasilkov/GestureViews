@@ -97,45 +97,33 @@ public class SettingsMenu implements SettingsController {
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.string.menu_enable_pan:
-                isPanEnabled = !isPanEnabled;
-                break;
-            case R.string.menu_enable_zoom:
-                isZoomEnabled = !isZoomEnabled;
-                break;
-            case R.string.menu_enable_rotation:
-                isRotationEnabled = !isRotationEnabled;
-                break;
-            case R.string.menu_restrict_rotation:
-                isRestrictRotation = !isRestrictRotation;
-                break;
-            case R.string.menu_enable_overscroll:
-                isOverscrollEnabled = !isOverscrollEnabled;
-                break;
-            case R.string.menu_enable_overzoom:
-                isOverzoomEnabled = !isOverzoomEnabled;
-                break;
-            case R.string.menu_fill_viewport:
-                isFillViewport = !isFillViewport;
-                break;
-            case R.string.menu_fit_method:
-                fitMethod = Settings.Fit.values()[item.getOrder()];
-                break;
-            case R.string.menu_bounds_type:
-                boundsType = Settings.Bounds.values()[item.getOrder()];
-                break;
-            case R.string.menu_gravity:
-                gravity = GravityType.values()[item.getOrder()].gravity;
-                break;
-            case R.string.menu_enable_slow:
-                isSlow = !isSlow;
-                break;
-            case R.string.menu_enable_overlay:
-                GestureDebug.setDrawDebugOverlay(!GestureDebug.isDrawDebugOverlay());
-                break;
-            default:
-                return false;
+        int itemId = item.getItemId();
+        if (itemId == R.string.menu_enable_pan) {
+            isPanEnabled = !isPanEnabled;
+        } else if (itemId == R.string.menu_enable_zoom) {
+            isZoomEnabled = !isZoomEnabled;
+        } else if (itemId == R.string.menu_enable_rotation) {
+            isRotationEnabled = !isRotationEnabled;
+        } else if (itemId == R.string.menu_restrict_rotation) {
+            isRestrictRotation = !isRestrictRotation;
+        } else if (itemId == R.string.menu_enable_overscroll) {
+            isOverscrollEnabled = !isOverscrollEnabled;
+        } else if (itemId == R.string.menu_enable_overzoom) {
+            isOverzoomEnabled = !isOverzoomEnabled;
+        } else if (itemId == R.string.menu_fill_viewport) {
+            isFillViewport = !isFillViewport;
+        } else if (itemId == R.string.menu_fit_method) {
+            fitMethod = Settings.Fit.values()[item.getOrder()];
+        } else if (itemId == R.string.menu_bounds_type) {
+            boundsType = Settings.Bounds.values()[item.getOrder()];
+        } else if (itemId == R.string.menu_gravity) {
+            gravity = GravityType.values()[item.getOrder()].gravity;
+        } else if (itemId == R.string.menu_enable_slow) {
+            isSlow = !isSlow;
+        } else if (itemId == R.string.menu_enable_overlay) {
+            GestureDebug.setDrawDebugOverlay(!GestureDebug.isDrawDebugOverlay());
+        } else {
+            return false;
         }
 
         return true;

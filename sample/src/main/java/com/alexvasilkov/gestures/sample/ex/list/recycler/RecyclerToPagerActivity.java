@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import java.util.Objects;
+
 /**
  * This example demonstrates images animation from {@link RecyclerView} into {@link ViewPager}.
  */
@@ -87,7 +89,7 @@ public class RecyclerToPagerActivity extends BaseSettingsActivity {
     @Override
     protected void onSettingsChanged() {
         // Applying settings from toolbar menu, see BaseExampleActivity
-        pager.getAdapter().notifyDataSetChanged();
+        Objects.requireNonNull(pager.getAdapter()).notifyDataSetChanged();
     }
 
     private void onPaintingClick(int position) {

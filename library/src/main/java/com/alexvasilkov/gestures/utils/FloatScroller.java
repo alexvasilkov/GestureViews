@@ -8,6 +8,7 @@ import android.view.animation.Interpolator;
  * A simple class that animates float values.Functionally similar to a
  * {@link android.widget.Scroller}.
  */
+@SuppressWarnings("unused")
 public class FloatScroller {
 
     private static final long DEFAULT_DURATION = 250L;
@@ -35,7 +36,6 @@ public class FloatScroller {
         interpolator = new AccelerateDecelerateInterpolator();
     }
 
-    @SuppressWarnings("unused") // Public API
     public long getDuration() {
         return duration;
     }
@@ -59,7 +59,7 @@ public class FloatScroller {
      *
      * @see android.widget.Scroller#abortAnimation()
      */
-    @SuppressWarnings({ "unused", "WeakerAccess" }) // Public API
+    @SuppressWarnings("WeakerAccess") // Public API
     public void abortAnimation() {
         finished = true;
         currValue = finalValue;

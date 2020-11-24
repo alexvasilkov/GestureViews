@@ -3,13 +3,14 @@ package com.alexvasilkov.gestures.sample.demo.adapter;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.alexvasilkov.android.commons.ui.Views;
 import com.alexvasilkov.gestures.sample.R;
 
 import java.util.List;
-
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 abstract class DefaultEndlessRecyclerAdapter<VH extends RecyclerView.ViewHolder>
         extends EndlessRecyclerAdapter<RecyclerView.ViewHolder> {
@@ -33,8 +34,12 @@ abstract class DefaultEndlessRecyclerAdapter<VH extends RecyclerView.ViewHolder>
     private boolean oldIsError;
 
 
+    @NonNull
     @Override
-    public final RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public final RecyclerView.ViewHolder onCreateViewHolder(
+            @NonNull ViewGroup parent,
+            int viewType
+    ) {
         if (viewType == EXTRA_LOADING_TYPE) {
             return new LoadingViewHolder(parent);
         } else if (viewType == EXTRA_ERROR_TYPE) {
@@ -47,14 +52,17 @@ abstract class DefaultEndlessRecyclerAdapter<VH extends RecyclerView.ViewHolder>
     protected abstract VH onCreateHolder(ViewGroup parent, int viewType);
 
     @Override
-    public final void onBindViewHolder(RecyclerView.ViewHolder holder, int position,
-            List<Object> payloads) {
+    public final void onBindViewHolder(
+            @NonNull RecyclerView.ViewHolder holder,
+            int position,
+            @NonNull List<Object> payloads
+    ) {
         onBindViewHolder(holder, position);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public final void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public final void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof LoadingViewHolder) {
             onBindLoadingView(((LoadingViewHolder) holder).loading);
         } else if (holder instanceof ErrorViewHolder) {
@@ -93,7 +101,8 @@ abstract class DefaultEndlessRecyclerAdapter<VH extends RecyclerView.ViewHolder>
         return type;
     }
 
-    @SuppressWarnings({ "UnusedParameters", "WeakerAccess" }) // Public API (may be reused)
+    @SuppressWarnings({ "UnusedParameters", "WeakerAccess", "SameReturnValue" })
+    // Public API (may be reused)
     protected int getViewType(int position) {
         return 0;
     }
@@ -134,7 +143,7 @@ abstract class DefaultEndlessRecyclerAdapter<VH extends RecyclerView.ViewHolder>
 
 
     @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
         if (recyclerView.getLayoutManager() instanceof GridLayoutManager) {
             GridLayoutManager gridManager = (GridLayoutManager) recyclerView.getLayoutManager();
@@ -145,7 +154,7 @@ abstract class DefaultEndlessRecyclerAdapter<VH extends RecyclerView.ViewHolder>
     }
 
     @Override
-    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
+    public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
         super.onDetachedFromRecyclerView(recyclerView);
         if (recyclerView.getLayoutManager() instanceof GridLayoutManager) {
             GridLayoutManager gridManager = (GridLayoutManager) recyclerView.getLayoutManager();

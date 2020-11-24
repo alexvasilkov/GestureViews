@@ -82,9 +82,9 @@ public class GestureControllerForPager extends GestureController {
      *
      * @param pager Target ViewPager
      */
+    @SuppressLint("ClickableViewAccessibility")
     public void enableScrollInViewPager(ViewPager pager) {
         viewPager = pager;
-        //noinspection all - ViewPager is not clickable, it is safe to set touch listener
         pager.setOnTouchListener(PAGER_TOUCH_LISTENER);
 
         // Disabling motion event splitting
@@ -132,15 +132,12 @@ public class GestureControllerForPager extends GestureController {
     }
 
     private void handleTouch(MotionEvent event) {
-        switch (event.getActionMasked()) {
-            case MotionEvent.ACTION_POINTER_DOWN:
-                if (event.getPointerCount() == 2) { // on first non-primary pointer
-                    // Skipping ViewPager fake dragging if we're not started dragging yet
-                    // to allow scale/rotation gestures
-                    isSkipViewPager = !hasViewPagerX();
-                }
-                break;
-            default:
+        if (event.getActionMasked() == MotionEvent.ACTION_POINTER_DOWN) {
+            if (event.getPointerCount() == 2) { // on first non-primary pointer
+                // Skipping ViewPager fake dragging if we're not started dragging yet
+                // to allow scale/rotation gestures
+                isSkipViewPager = !hasViewPagerX();
+            }
         }
     }
 
@@ -244,6 +241,7 @@ public class GestureControllerForPager extends GestureController {
     /*
      * Splits x scroll between viewpager and view.
      */
+    @SuppressWarnings("SameParameterValue")
     private float splitPagerScroll(float dx, State state, RectF movBounds) {
         if (getSettings().isPanEnabled()) {
             final float dir = Math.signum(dx);
@@ -281,6 +279,7 @@ public class GestureControllerForPager extends GestureController {
      * Skips part of pager movement to make it harder scrolling pager when image is zoomed
      * or when image is over-scrolled in y direction.
      */
+    @SuppressWarnings("SameParameterValue")
     private float skipPagerMovement(float pagerDx, State state, RectF movBounds) {
         float overscrollDist = getSettings().getOverscrollDistanceY() * OVERSCROLL_THRESHOLD_FACTOR;
 

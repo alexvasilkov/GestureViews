@@ -1,5 +1,6 @@
 package com.alexvasilkov.gestures.commons;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -165,6 +166,7 @@ public class FinderView extends View {
         update();
     }
 
+    @SuppressLint("CanvasSize")
     @SuppressWarnings("deprecation")
     @Override
     protected void onDraw(Canvas canvas) {

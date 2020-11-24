@@ -10,6 +10,7 @@ import com.alexvasilkov.gestures.transition.tracker.IntoTracker;
 import com.alexvasilkov.gestures.transition.tracker.SimpleTracker;
 
 import java.util.List;
+import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,7 +33,7 @@ public class ComplexListV2Activity extends BaseComplexListActivity {
     }
 
     @Override
-    protected ViewsTransitionAnimator createAnimator(
+    protected ViewsTransitionAnimator<?> createAnimator(
             final RecyclerView list, final ViewPager pager) {
         // Initializing images animator. It requires us to provide FromTracker and IntoTracker items
         // that are used to find images views for particular item IDs in the list and in the pager
@@ -61,7 +62,7 @@ public class ComplexListV2Activity extends BaseComplexListActivity {
             @Override
             protected View getViewAt(int imagePos) {
                 // We should return image view for a given pager position
-                PagerAdapter adapter = (PagerAdapter) pager.getAdapter();
+                PagerAdapter adapter = (PagerAdapter) Objects.requireNonNull(pager.getAdapter());
                 RecyclePagerAdapter.ViewHolder holder = adapter.getViewHolder(imagePos);
                 return holder == null ? null : PagerAdapter.getImageView(holder);
             }

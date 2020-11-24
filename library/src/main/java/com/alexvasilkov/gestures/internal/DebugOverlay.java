@@ -88,6 +88,7 @@ public class DebugOverlay {
         canvas.restore();
     }
 
+    @SuppressWarnings("SameParameterValue")
     private static void drawRect(Canvas canvas, RectF rect, int color, float stroke) {
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(stroke);

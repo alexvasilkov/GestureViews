@@ -14,6 +14,8 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
 
+import androidx.annotation.ColorInt;
+
 import com.alexvasilkov.gestures.R;
 import com.alexvasilkov.gestures.Settings;
 import com.alexvasilkov.gestures.internal.AnimationEngine;
@@ -22,8 +24,6 @@ import com.alexvasilkov.gestures.utils.FloatScroller;
 import com.alexvasilkov.gestures.utils.GravityUtils;
 import com.alexvasilkov.gestures.utils.MathUtils;
 import com.alexvasilkov.gestures.views.GestureImageView;
-
-import androidx.annotation.ColorInt;
 
 /**
  * View to draw cropping area above {@link GestureImageView}, useful when implementing cropping.
@@ -55,7 +55,7 @@ public class CropAreaView extends View {
     private static final RectF tmpRectF = new RectF();
 
     private final RectF areaRect = new RectF();
-    private float rounding = 0f;
+    private float rounding;
 
     private final RectF strokeRect = new RectF();
 

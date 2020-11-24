@@ -22,7 +22,7 @@ public class ImageAnimationActivity extends BaseSettingsActivity {
     private ImageView image;
     private GestureImageView fullImage;
     private View fullBackground;
-    private ViewsTransitionAnimator animator;
+    private ViewsTransitionAnimator<?> animator;
 
     private Painting painting;
 

@@ -2,6 +2,8 @@ package com.alexvasilkov.gestures;
 
 import android.graphics.Matrix;
 
+import androidx.annotation.NonNull;
+
 /**
  * Represents 2d transformation state.
  */
@@ -114,6 +116,7 @@ public class State {
      *
      * @param matrix Source matrix
      */
+    @SuppressWarnings("unused") // Public API
     public void set(Matrix matrix) {
         this.matrix.set(matrix);
         updateFromMatrix(true, true);
@@ -188,6 +191,7 @@ public class State {
         return result;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "{x=" + x + ",y=" + y + ",zoom=" + zoom + ",rotation=" + rotation + "}";

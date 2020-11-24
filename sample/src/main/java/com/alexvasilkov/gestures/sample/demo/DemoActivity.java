@@ -93,7 +93,7 @@ public class DemoActivity extends BaseSettingsActivity implements PhotoListAdapt
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         saveScreenState();
         super.onSaveInstanceState(outState);
         clearScreenState(); // We don't want to restore state if activity instance is not destroyed

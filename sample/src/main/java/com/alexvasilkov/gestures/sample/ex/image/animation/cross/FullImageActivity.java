@@ -26,6 +26,7 @@ public class FullImageActivity extends BaseSettingsActivity {
     private GestureImageView image;
     private View background;
 
+    @SuppressWarnings("SameParameterValue")
     static void open(Activity from, ViewPosition position, int paintingId) {
         Intent intent = new Intent(from, FullImageActivity.class);
         intent.putExtra(EXTRA_POSITION, position.pack());

@@ -2,6 +2,7 @@ package com.alexvasilkov.gestures.commons;
 
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.viewpager.widget.ViewPager;
 
 /**
@@ -15,7 +16,7 @@ public class DepthPageTransformer implements ViewPager.PageTransformer {
     private static final float MIN_SCALE = 0.75f;
 
     @Override
-    public void transformPage(View view, float position) {
+    public void transformPage(@NonNull View view, float position) {
         if (0 < position && position < 1f) {
             // Fade the page out
             view.setAlpha(1f - position);
