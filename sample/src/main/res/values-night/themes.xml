@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppThemeBase.DayNight">
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:navigationBarColor">@color/nav_bar</item>
+    </style>
+
+</resources>

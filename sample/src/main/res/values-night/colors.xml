@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="window_background">#1d221e</color>
-    <color name="nav_bar">#161a16</color>
+    <color name="window_background">#202120</color>
+    <color name="status_bar">#2d2e2d</color>
+    <color name="nav_bar">#2d2e2d</color>
 
     <color name="primary">#5da66a</color>
-    <color name="primary_dark">#161a16</color>
-    <color name="primary_light">#1a3321</color>
     <color name="accent">#e5a800</color>
-    <color name="accent_light">#33281a</color>
-    <color name="surface">#161a16</color>
+    <color name="surface">#2d2e2d</color>
+
+    <color name="item_left">#333333</color>
+    <color name="item_right">#40372d</color>
 
 </resources>

@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.alexvasilkov.gestures.sample.demo.utils.AspectImageView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/demo_list_margin"
-    android:background="@drawable/borders"
-    android:cropToPadding="true"
-    android:padding="1dp"
-    android:scaleType="centerCrop"
-    app:aspect="1"
-    tools:src="@drawable/painting_01" />
+    android:background="@drawable/demo_photo_border">
+
+    <com.alexvasilkov.gestures.sample.demo.utils.AspectImageView
+        android:id="@+id/demo_item_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:cropToPadding="true"
+        android:scaleType="centerCrop"
+        app:aspect="1"
+        tools:src="@drawable/painting_01" />
+
+</FrameLayout>

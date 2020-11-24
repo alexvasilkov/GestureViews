@@ -15,9 +15,7 @@
             android:id="@+id/demo_app_bar"
             android:layout_width="match_parent"
             android:layout_height="164dp"
-            android:background="@drawable/demo_top_background"
-            android:stateListAnimator="@null"
-            android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
+            android:background="?colorSurface"
             tools:ignore="UnusedAttribute">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
@@ -38,7 +36,7 @@
                     android:layout_marginLeft="48dp"
                     android:layout_marginBottom="24dp"
                     android:background="@drawable/demo_circle_border"
-                    android:padding="1.5dp"
+                    android:padding="2dp"
                     app:layout_collapseMode="parallax"
                     app:layout_collapseParallaxMultiplier="-0.8">
 
@@ -67,13 +65,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/demo_headline"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/demo_subhead"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Caption" />
 
                 </LinearLayout>
 
@@ -91,20 +89,6 @@
             android:scrollbars="vertical"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             tools:listitem="@layout/demo_item_photo" />
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_anchor="@id/demo_app_bar"
-            app:layout_anchorGravity="bottom">
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="8dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/shadow_top" />
-
-        </FrameLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

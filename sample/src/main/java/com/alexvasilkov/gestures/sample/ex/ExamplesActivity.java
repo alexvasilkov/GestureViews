@@ -90,8 +90,9 @@ public class ExamplesActivity extends BaseActivity {
             this.list = list;
         }
 
+        @NonNull
         @Override
-        public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
             return new ViewHolder(viewGroup);
         }
 
@@ -104,7 +105,7 @@ public class ExamplesActivity extends BaseActivity {
             // Setting tinted example icon
             Context context = ExamplesActivity.this;
             Drawable icon = DrawableCompat.wrap(viewHolder.info.loadIcon(getPackageManager()));
-            DrawableCompat.setTint(icon, ContextCompat.getColor(context, R.color.primary));
+            DrawableCompat.setTint(icon, ContextCompat.getColor(context, R.color.accent));
             int padding = getResources().getDimensionPixelSize(R.dimen.example_icon_padding);
             viewHolder.text.setCompoundDrawablePadding(padding);
             viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null);

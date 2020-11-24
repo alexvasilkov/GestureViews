@@ -1,13 +1,16 @@
 package com.alexvasilkov.gestures.sample.demo;
 
+import android.animation.ObjectAnimator;
+import android.animation.StateListAnimator;
 import android.app.Activity;
-import android.os.Build;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -35,6 +38,7 @@ import com.alexvasilkov.gestures.views.GestureImageView;
 import com.googlecode.flickrjandroid.photos.Photo;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Advanced usage example that demonstrates images animation from RecyclerView into ViewPager.
@@ -73,6 +77,8 @@ public class DemoActivity extends BaseSettingsActivity implements PhotoListAdapt
         setSupportActionBar(views.toolbar);
         getSupportActionBarNotNull().setDisplayHomeAsUpEnabled(true);
         getSupportActionBarNotNull().setDisplayShowTitleEnabled(false);
+
+        setAppBarStateListAnimator(views.appBar);
 
         initDecorMargins();
         initTopImage();
@@ -289,12 +295,9 @@ public class DemoActivity extends BaseSettingsActivity implements PhotoListAdapt
      * Shows or hides system UI (status bar and navigation bar).
      */
     private void showSystemUi(boolean show) {
-        int flags = 0;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            flags = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_IMMERSIVE;
-        }
+        int flags = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_IMMERSIVE;
 
         getWindow().getDecorView().setSystemUiVisibility(show ? 0 : flags);
     }
@@ -366,8 +369,9 @@ public class DemoActivity extends BaseSettingsActivity implements PhotoListAdapt
         }
 
         if (savedGridPosition != NO_POSITION && savedGridPosition < photos.size()) {
-            ((GridLayoutManager) views.grid.getLayoutManager())
-                    .scrollToPositionWithOffset(savedGridPosition, savedGridPositionFromTop);
+            GridLayoutManager manager =
+                    (GridLayoutManager) Objects.requireNonNull(views.grid.getLayoutManager());
+            manager.scrollToPositionWithOffset(savedGridPosition, savedGridPositionFromTop);
         }
 
         clearScreenState();
@@ -387,6 +391,22 @@ public class DemoActivity extends BaseSettingsActivity implements PhotoListAdapt
         }
 
         clearScreenState();
+    }
+
+
+    private static void setAppBarStateListAnimator(@NonNull View view) {
+        // App bar elevation animation does not work unless we set state animator ourselves
+        final StateListAnimator sla = new StateListAnimator();
+        final int[] notLifted = new int[] { -R.attr.state_lifted };
+        final int[] lifted = new int[0];
+        final long dur = 150L;
+        final float elevation = TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, 8f, view.getResources().getDisplayMetrics());
+
+        sla.addState(notLifted, ObjectAnimator.ofFloat(view, "elevation", 0f).setDuration(dur));
+        sla.addState(lifted, ObjectAnimator.ofFloat(view, "elevation", elevation).setDuration(dur));
+
+        view.setStateListAnimator(sla);
     }
 
 

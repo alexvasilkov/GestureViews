@@ -4,14 +4,15 @@
     <color name="ic_launcher_background">#2E7D32</color>
 
     <color name="window_background">#ffffff</color>
-    <color name="nav_bar">#3d6d46</color>
+    <color name="status_bar">@color/window_background</color>
+    <color name="nav_bar">#ff0000</color>
 
     <color name="primary">#3d6d46</color>
-    <color name="primary_dark">#285030</color>
-    <color name="primary_light">#e8efea</color>
-    <color name="accent">#c99343</color>
-    <color name="accent_light">#efece8</color>
-    <color name="surface">@color/primary</color>
+    <color name="accent">#c98d32</color>
+    <color name="surface">@color/window_background</color>
+
+    <color name="item_left">#f2f2f2</color>
+    <color name="item_right">#f0e1ce</color>
 
     <color name="demo_photo_subtitle">#bbbbbb</color>
     <color name="error_color">#9C2619</color>
