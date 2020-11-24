@@ -5,6 +5,7 @@ import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.alexvasilkov.gestures.internal.MovementBounds;
@@ -85,7 +86,7 @@ public class StateController {
         zoomPatch = factor;
     }
 
-    public void applyZoomPatch(State state) {
+    public void applyZoomPatch(@NonNull State state) {
         if (zoomPatch > 0f) {
             state.set(state.getX(), state.getY(), state.getZoom() * zoomPatch, state.getRotation());
         }
@@ -288,7 +289,7 @@ public class StateController {
      * @param state Current state
      * @return Min zoom level as it's used by state controller.
      */
-    public float getMinZoom(State state) {
+    public float getMinZoom(@NonNull State state) {
         return zoomBounds.set(state).getMinZoom();
     }
 
@@ -298,7 +299,7 @@ public class StateController {
      * Note, that it may be different from {@link Settings#getMaxZoom()}.
      */
     @SuppressWarnings({ "unused", "WeakerAccess" }) // Public API
-    public float getMaxZoom(State state) {
+    public float getMaxZoom(@NonNull State state) {
         return zoomBounds.set(state).getMaxZoom();
     }
 
@@ -307,7 +308,7 @@ public class StateController {
      * @return Zoom level which will fit the image into viewport (or min zoom level if
      * {@link Settings#getFitMethod()} is {@link Settings.Fit#NONE}).
      */
-    public float getFitZoom(State state) {
+    public float getFitZoom(@NonNull State state) {
         return zoomBounds.set(state).getFitZoom();
     }
 
@@ -319,7 +320,7 @@ public class StateController {
      * @param state Current state
      * @param out Output movement area rectangle
      */
-    public void getMovementArea(State state, RectF out) {
+    public void getMovementArea(@NonNull State state, @NonNull RectF out) {
         movBounds.set(state).getExternalBounds(out);
     }
 

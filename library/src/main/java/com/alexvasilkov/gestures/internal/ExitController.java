@@ -4,6 +4,8 @@ import android.graphics.Point;
 import android.graphics.RectF;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+
 import com.alexvasilkov.gestures.GestureController;
 import com.alexvasilkov.gestures.GestureControllerForPager;
 import com.alexvasilkov.gestures.Settings.ExitType;
@@ -54,7 +56,7 @@ public class ExitController {
     private float initialZoom;
 
 
-    public ExitController(View view, GestureController gestureController) {
+    public ExitController(@NonNull View view, @NonNull GestureController gestureController) {
         controller = gestureController;
         animatorView = view instanceof AnimatorView ? ((AnimatorView) view) : null;
 

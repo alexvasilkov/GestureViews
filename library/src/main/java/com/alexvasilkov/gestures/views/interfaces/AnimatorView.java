@@ -1,5 +1,7 @@
 package com.alexvasilkov.gestures.views.interfaces;
 
+import androidx.annotation.NonNull;
+
 import com.alexvasilkov.gestures.animation.ViewPositionAnimator;
 
 /**
@@ -10,6 +12,7 @@ public interface AnimatorView {
     /**
      * @return {@link ViewPositionAnimator} instance to control animation from other view position.
      */
+    @NonNull
     ViewPositionAnimator getPositionAnimator();
 
 }

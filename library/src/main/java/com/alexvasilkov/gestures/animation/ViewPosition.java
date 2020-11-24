@@ -131,6 +131,7 @@ public class ViewPosition {
         return !tmpViewRect.equals(view);
     }
 
+    @NonNull
     public static ViewPosition newInstance() {
         return new ViewPosition();
     }
@@ -142,6 +143,7 @@ public class ViewPosition {
      * @param view View for which we want to get on-screen location
      * @return View position
      */
+    @NonNull
     public static ViewPosition from(@NonNull View view) {
         ViewPosition pos = new ViewPosition();
         pos.init(view);
@@ -179,6 +181,7 @@ public class ViewPosition {
      * @return Serialized position
      * @see #unpack(String)
      */
+    @NonNull
     public String pack() {
         String viewStr = view.flattenToString();
         String viewportStr = viewport.flattenToString();
@@ -196,6 +199,7 @@ public class ViewPosition {
      * @return De-serialized position
      */
     @SuppressWarnings("unused") // Public API
+    @NonNull
     public static ViewPosition unpack(String str) {
         String[] parts = TextUtils.split(str, SPLIT_PATTERN);
         if (parts.length != 4) {

@@ -27,12 +27,14 @@ public class GestureTransitions<ID> {
 
     private GestureTransitions() {}
 
+    @NonNull
     public static <ID> GestureTransitions<ID> from(@NonNull RequestListener<ID> listener) {
         final GestureTransitions<ID> builder = new GestureTransitions<>();
         builder.animator.setFromListener(listener);
         return builder;
     }
 
+    @NonNull
     public static <ID> GestureTransitions<ID> from(@NonNull final View view) {
         return from(new RequestListener<ID>() {
             @Override
@@ -42,12 +44,14 @@ public class GestureTransitions<ID> {
         });
     }
 
+    @NonNull
     public static <ID> GestureTransitions<ID> from(
             @NonNull RecyclerView recyclerView,
             @NonNull FromTracker<ID> tracker) {
         return from(recyclerView, tracker, true);
     }
 
+    @NonNull
     public static <ID> GestureTransitions<ID> from(
             @NonNull RecyclerView recyclerView,
             @NonNull FromTracker<ID> tracker,
@@ -55,12 +59,14 @@ public class GestureTransitions<ID> {
         return from(new FromRecyclerViewListener<>(recyclerView, tracker, autoScroll));
     }
 
+    @NonNull
     public static <ID> GestureTransitions<ID> from(
             @NonNull ListView listView,
             @NonNull FromTracker<ID> tracker) {
         return from(listView, tracker, true);
     }
 
+    @NonNull
     public static <ID> GestureTransitions<ID> from(
             @NonNull ListView listView,
             @NonNull FromTracker<ID> tracker,
@@ -68,6 +74,7 @@ public class GestureTransitions<ID> {
         return from(new FromListViewListener<>(listView, tracker, autoScroll));
     }
 
+    @NonNull
     public static <ID> GestureTransitions<ID> fromNone() {
         return from(new RequestListener<ID>() {
             @Override
@@ -78,11 +85,13 @@ public class GestureTransitions<ID> {
     }
 
 
+    @NonNull
     public ViewsTransitionAnimator<ID> into(@NonNull RequestListener<ID> listener) {
         animator.setToListener(listener);
         return animator;
     }
 
+    @NonNull
     public ViewsTransitionAnimator<ID> into(@NonNull final AnimatorView view) {
         return into(new RequestListener<ID>() {
             @Override
@@ -92,6 +101,7 @@ public class GestureTransitions<ID> {
         });
     }
 
+    @NonNull
     public ViewsTransitionAnimator<ID> into(
             @NonNull ViewPager viewPager,
             @NonNull IntoTracker<ID> tracker) {

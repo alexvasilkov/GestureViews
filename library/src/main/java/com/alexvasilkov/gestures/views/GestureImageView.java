@@ -97,6 +97,7 @@ public class GestureImageView extends ImageView
     /**
      * {@inheritDoc}
      */
+    @NonNull
     @Override
     public GestureControllerForPager getController() {
         return controller;
@@ -105,6 +106,7 @@ public class GestureImageView extends ImageView
     /**
      * {@inheritDoc}
      */
+    @NonNull
     @Override
     public ViewPositionAnimator getPositionAnimator() {
         if (positionAnimator == null) {
@@ -135,7 +137,7 @@ public class GestureImageView extends ImageView
      */
     @SuppressWarnings({ "deprecation", "unused" }) // Public API
     @Deprecated
-    public void getSnapshot(OnSnapshotLoadedListener listener) {
+    public void getSnapshot(@NonNull OnSnapshotLoadedListener listener) {
         if (getDrawable() != null) {
             listener.onSnapshotLoaded(crop());
         }
@@ -211,7 +213,7 @@ public class GestureImageView extends ImageView
         }
     }
 
-    protected void applyState(State state) {
+    protected void applyState(@NonNull State state) {
         state.get(imageMatrix);
         setImageMatrix(imageMatrix);
     }
@@ -233,7 +235,7 @@ public class GestureImageView extends ImageView
     @SuppressWarnings("WeakerAccess") // Public API
     @Deprecated
     public interface OnSnapshotLoadedListener {
-        void onSnapshotLoaded(Bitmap bitmap);
+        void onSnapshotLoaded(@Nullable Bitmap bitmap);
     }
 
 }

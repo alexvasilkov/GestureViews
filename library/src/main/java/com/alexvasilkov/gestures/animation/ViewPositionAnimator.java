@@ -461,7 +461,7 @@ public class ViewPositionAnimator {
      * @param position Target ('to') position
      * @see #getToPosition()
      */
-    public void setToState(State state, @FloatRange(from = 0f, to = 1f) float position) {
+    public void setToState(@NonNull State state, @FloatRange(from = 0f, to = 1f) float position) {
         if (position <= 0) {
             throw new IllegalArgumentException("'To' position cannot be <= 0");
         }
@@ -491,8 +491,11 @@ public class ViewPositionAnimator {
      * ({@code false})
      * @param animate Whether we should start animating from given position and in given direction
      */
-    public void setState(@FloatRange(from = 0f, to = 1f) float pos,
-            boolean leaving, boolean animate) {
+    public void setState(
+            @FloatRange(from = 0f, to = 1f) float pos,
+            boolean leaving,
+            boolean animate
+    ) {
         if (!isActivated) {
             throw new IllegalStateException(
                     "You should call enter(...) before calling setState(...)");

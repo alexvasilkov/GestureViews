@@ -76,6 +76,7 @@ public class GestureFrameLayout extends FrameLayout implements GestureView, Anim
     /**
      * {@inheritDoc}
      */
+    @NonNull
     @Override
     public GestureControllerForPager getController() {
         return controller;
@@ -84,6 +85,7 @@ public class GestureFrameLayout extends FrameLayout implements GestureView, Anim
     /**
      * {@inheritDoc}
      */
+    @NonNull
     @Override
     public ViewPositionAnimator getPositionAnimator() {
         if (positionAnimator == null) {

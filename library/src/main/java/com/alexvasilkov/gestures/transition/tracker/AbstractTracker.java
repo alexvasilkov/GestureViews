@@ -3,6 +3,7 @@ package com.alexvasilkov.gestures.transition.tracker;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 interface AbstractTracker<ID> {
 
@@ -24,6 +25,7 @@ interface AbstractTracker<ID> {
      * will be automatically scrolled to needed position (as returned by
      * {@link #getPositionById(Object)}) and this method will be called again.
      */
+    @Nullable
     View getViewById(@NonNull ID id);
 
 }

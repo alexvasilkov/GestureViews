@@ -10,6 +10,8 @@ import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+
 import com.alexvasilkov.gestures.GestureController;
 import com.alexvasilkov.gestures.GestureController.StateSource;
 import com.alexvasilkov.gestures.Settings;
@@ -35,7 +37,7 @@ public class DebugOverlay {
 
     private DebugOverlay() {}
 
-    public static void drawDebug(View view, Canvas canvas) {
+    public static void drawDebug(@NonNull View view, @NonNull Canvas canvas) {
         final GestureController controller = ((GestureView) view).getController();
         final ViewPositionAnimator animator = ((AnimatorView) view).getPositionAnimator();
         final Settings settings = controller.getSettings();

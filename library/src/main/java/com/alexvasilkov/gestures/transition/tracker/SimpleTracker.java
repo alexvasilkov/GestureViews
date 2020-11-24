@@ -3,6 +3,7 @@ package com.alexvasilkov.gestures.transition.tracker;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 /**
  * Class implementing both {@link FromTracker} and {@link IntoTracker} assuming that positions will
@@ -33,6 +34,7 @@ public abstract class SimpleTracker implements FromTracker<Integer>, IntoTracker
         return getViewAt(id);
     }
 
+    @Nullable
     protected abstract View getViewAt(int position);
 
 }

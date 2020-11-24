@@ -13,6 +13,8 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
+import androidx.annotation.Nullable;
+
 public class CircleImageView extends ImageView {
 
     private static final int DEFAULT_PAINT_FLAGS = Paint.FILTER_BITMAP_FLAG | Paint.ANTI_ALIAS_FLAG;
@@ -115,6 +117,7 @@ public class CircleImageView extends ImageView {
         invalidate();
     }
 
+    @Nullable
     protected Bitmap getBitmapFromDrawable(Drawable drawable) {
         if (drawable == null) {
             return null;

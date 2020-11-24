@@ -80,6 +80,7 @@ public class ViewsCoordinator<ID> {
         toListener.onRequestView(id);
     }
 
+    @Nullable
     public ID getRequestedId() {
         return requestedId;
     }
@@ -90,6 +91,7 @@ public class ViewsCoordinator<ID> {
      * Note, that once {@link #onViewsReady(Object)} is called both this method and
      * {@link #getFromPos()} may still return null, see {@link #setFromNone(Object)}.
      */
+    @Nullable
     public View getFromView() {
         return fromView;
     }
@@ -99,6 +101,7 @@ public class ViewsCoordinator<ID> {
      * Note, that once {@link #onViewsReady(Object)} is called, both this method and
      * {@link #getFromView()} may still return null, see {@link #setFromNone(Object)}.
      */
+    @Nullable
     public ViewPosition getFromPos() {
         return fromPos;
     }
@@ -107,6 +110,7 @@ public class ViewsCoordinator<ID> {
      * @return 'To' view, if set. Will not be null once {@link #onViewsReady(Object)} is called,
      * but before new request ({@link #request(Object)}).
      */
+    @Nullable
     public AnimatorView getToView() {
         return toView;
     }

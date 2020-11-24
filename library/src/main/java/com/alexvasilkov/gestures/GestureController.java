@@ -176,7 +176,7 @@ public class GestureController implements View.OnTouchListener {
      * @see #addOnStateChangeListener(OnStateChangeListener)
      */
     @SuppressWarnings({ "unused", "WeakerAccess" }) // Public API
-    public void removeOnStateChangeListener(OnStateChangeListener listener) {
+    public void removeOnStateChangeListener(@NonNull OnStateChangeListener listener) {
         stateListeners.remove(listener);
     }
 
@@ -200,6 +200,7 @@ public class GestureController implements View.OnTouchListener {
      *
      * @return Gesture view's settings
      */
+    @NonNull
     public Settings getSettings() {
         return settings;
     }
@@ -213,6 +214,7 @@ public class GestureController implements View.OnTouchListener {
      *
      * @return Current state
      */
+    @NonNull
     public State getState() {
         return state;
     }
@@ -221,6 +223,7 @@ public class GestureController implements View.OnTouchListener {
      * @return State controller to get computed min/max zoom levels or calculate movement area
      */
     @SuppressWarnings("WeakerAccess") // Public API
+    @NonNull
     public StateController getStateController() {
         return stateController;
     }

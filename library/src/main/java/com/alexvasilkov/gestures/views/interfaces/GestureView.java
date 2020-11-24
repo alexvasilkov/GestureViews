@@ -1,5 +1,7 @@
 package com.alexvasilkov.gestures.views.interfaces;
 
+import androidx.annotation.NonNull;
+
 import com.alexvasilkov.gestures.GestureController;
 
 /**
@@ -16,6 +18,7 @@ public interface GestureView {
      *
      * @return {@link GestureController}.
      */
+    @NonNull
     GestureController getController();
 
 }

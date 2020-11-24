@@ -15,6 +15,7 @@ import android.util.TypedValue;
 import android.view.View;
 
 import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
 
 import com.alexvasilkov.gestures.R;
 import com.alexvasilkov.gestures.Settings;
@@ -186,7 +187,7 @@ public class CropAreaView extends View {
         this.aspect = aspect;
     }
 
-    public void setImageView(GestureImageView imageView) {
+    public void setImageView(@NonNull GestureImageView imageView) {
         this.imageView = imageView;
 
         // Setting required parameters

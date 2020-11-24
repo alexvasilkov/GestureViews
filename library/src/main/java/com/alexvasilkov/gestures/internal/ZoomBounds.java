@@ -3,6 +3,8 @@ package com.alexvasilkov.gestures.internal;
 import android.graphics.Matrix;
 import android.graphics.RectF;
 
+import androidx.annotation.NonNull;
+
 import com.alexvasilkov.gestures.Settings;
 import com.alexvasilkov.gestures.State;
 import com.alexvasilkov.gestures.utils.MathUtils;
@@ -28,7 +30,7 @@ public class ZoomBounds {
     private float maxZoom;
     private float fitZoom;
 
-    public ZoomBounds(Settings settings) {
+    public ZoomBounds(@NonNull Settings settings) {
         this.settings = settings;
     }
 
@@ -38,7 +40,7 @@ public class ZoomBounds {
      * @param state State for which to calculate zoom bounds.
      * @return Current zoom bounds object for calls chaining.
      */
-    public ZoomBounds set(State state) {
+    public ZoomBounds set(@NonNull State state) {
         float imageWidth = settings.getImageW();
         float imageHeight = settings.getImageH();
 

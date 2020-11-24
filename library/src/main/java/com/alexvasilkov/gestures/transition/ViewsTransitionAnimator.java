@@ -118,7 +118,7 @@ public class ViewsTransitionAnimator<ID> extends ViewsCoordinator<ID> {
                 Log.d(TAG, "Perform exit from " + getRequestedId());
             }
 
-            getToView().getPositionAnimator().exit(exitWithAnimation);
+            getAnimatorNonNull().exit(exitWithAnimation);
         }
     }
 
@@ -128,7 +128,7 @@ public class ViewsTransitionAnimator<ID> extends ViewsCoordinator<ID> {
      */
     public boolean isLeaving() {
         return exitRequested || getRequestedId() == null
-                || (isReady() && getToView().getPositionAnimator().isLeaving());
+                || (isReady() && getAnimatorNonNull().isLeaving());
     }
 
 
@@ -141,7 +141,7 @@ public class ViewsTransitionAnimator<ID> extends ViewsCoordinator<ID> {
     public void addPositionUpdateListener(@NonNull PositionUpdateListener listener) {
         listeners.add(listener);
         if (isReady()) {
-            getToView().getPositionAnimator().addPositionUpdateListener(listener);
+            getAnimatorNonNull().addPositionUpdateListener(listener);
         }
     }
 
@@ -155,7 +155,7 @@ public class ViewsTransitionAnimator<ID> extends ViewsCoordinator<ID> {
     public void removePositionUpdateListener(@NonNull PositionUpdateListener listener) {
         listeners.remove(listener);
         if (isReady()) {
-            getToView().getPositionAnimator().removePositionUpdateListener(listener);
+            getAnimatorNonNull().removePositionUpdateListener(listener);
         }
     }
 
@@ -186,11 +186,11 @@ public class ViewsTransitionAnimator<ID> extends ViewsCoordinator<ID> {
             }
 
             if (fromView != null) {
-                getToView().getPositionAnimator().update(fromView);
+                getAnimatorNonNull().update(fromView);
             } else if (fromPos != null) {
-                getToView().getPositionAnimator().update(fromPos);
+                getAnimatorNonNull().update(fromPos);
             } else {
-                getToView().getPositionAnimator().updateToNone();
+                getAnimatorNonNull().updateToNone();
             }
         }
     }
@@ -220,11 +220,11 @@ public class ViewsTransitionAnimator<ID> extends ViewsCoordinator<ID> {
             }
 
             if (getFromView() != null) {
-                getToView().getPositionAnimator().enter(getFromView(), enterWithAnimation);
+                getAnimatorNonNull().enter(getFromView(), enterWithAnimation);
             } else if (getFromPos() != null) {
-                getToView().getPositionAnimator().enter(getFromPos(), enterWithAnimation);
+                getAnimatorNonNull().enter(getFromPos(), enterWithAnimation);
             } else {
-                getToView().getPositionAnimator().enter(enterWithAnimation);
+                getAnimatorNonNull().enter(enterWithAnimation);
             }
 
             exitIfRequested();
@@ -296,6 +296,12 @@ public class ViewsTransitionAnimator<ID> extends ViewsCoordinator<ID> {
         initAnimator(next);
 
         next.setState(position, isLeaving, isAnimating);
+    }
+
+    @NonNull
+    private ViewPositionAnimator getAnimatorNonNull() {
+        if (getToView() == null) throw new NullPointerException();
+        return getToView().getPositionAnimator();
     }
 
 

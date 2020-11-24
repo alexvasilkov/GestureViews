@@ -3,6 +3,7 @@ package com.alexvasilkov.gestures;
 import android.graphics.Matrix;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 /**
  * Represents 2d transformation state.
@@ -52,7 +53,7 @@ public class State {
      *
      * @param matrix Target matrix
      */
-    public void get(Matrix matrix) {
+    public void get(@NonNull Matrix matrix) {
         matrix.set(this.matrix);
     }
 
@@ -117,12 +118,12 @@ public class State {
      * @param matrix Source matrix
      */
     @SuppressWarnings("unused") // Public API
-    public void set(Matrix matrix) {
+    public void set(@NonNull Matrix matrix) {
         this.matrix.set(matrix);
         updateFromMatrix(true, true);
     }
 
-    public void set(State other) {
+    public void set(@NonNull State other) {
         x = other.x;
         y = other.y;
         zoom = other.zoom;
@@ -130,6 +131,7 @@ public class State {
         matrix.set(other.matrix);
     }
 
+    @NonNull
     public State copy() {
         State copy = new State();
         copy.set(this);
@@ -168,7 +170,7 @@ public class State {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (this == obj) {
             return true;
         }

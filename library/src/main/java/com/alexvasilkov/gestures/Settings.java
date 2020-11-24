@@ -225,6 +225,7 @@ public class Settings {
      * @param height Viewport height
      * @return Current settings object for calls chaining
      */
+    @NonNull
     public Settings setViewport(int width, int height) {
         viewportW = width;
         viewportH = height;
@@ -239,6 +240,7 @@ public class Settings {
      * @param height Movement area height
      * @return Current settings object for calls chaining
      */
+    @NonNull
     public Settings setMovementArea(int width, int height) {
         isMovementAreaSpecified = true;
         movementAreaW = width;
@@ -255,6 +257,7 @@ public class Settings {
      * @param height Image height
      * @return Current settings object for calls chaining
      */
+    @NonNull
     public Settings setImage(int width, int height) {
         imageW = width;
         imageH = height;
@@ -269,6 +272,7 @@ public class Settings {
      * @param minZoom Min zoom level, or 0 to use zoom level which fits the image into the viewport.
      * @return Current settings object for calls chaining
      */
+    @NonNull
     public Settings setMinZoom(float minZoom) {
         this.minZoom = minZoom;
         return this;
@@ -282,6 +286,7 @@ public class Settings {
      * @param maxZoom Max zoom level, or 0 to use zoom level which fits the image into the viewport.
      * @return Current settings object for calls chaining
      */
+    @NonNull
     public Settings setMaxZoom(float maxZoom) {
         this.maxZoom = maxZoom;
         return this;
@@ -296,6 +301,7 @@ public class Settings {
      * @param doubleTapZoom Double tap zoom level
      * @return Current settings object for calls chaining
      */
+    @NonNull
     public Settings setDoubleTapZoom(float doubleTapZoom) {
         this.doubleTapZoom = doubleTapZoom;
         return this;
@@ -310,6 +316,7 @@ public class Settings {
      * @param factor Overzoom factor
      * @return Current settings object for calls chaining
      */
+    @NonNull
     public Settings setOverzoomFactor(float factor) {
         if (factor < 1f) {
             throw new IllegalArgumentException("Overzoom factor cannot be < 1");
@@ -328,6 +335,7 @@ public class Settings {
      * @param distanceY Vertical overscroll distance in pixels
      * @return Current settings object for calls chaining
      */
+    @NonNull
     public Settings setOverscrollDistance(float distanceX, float distanceY) {
         if (distanceX < 0f || distanceY < 0f) {
             throw new IllegalArgumentException("Overscroll distance cannot be < 0");
@@ -345,7 +353,12 @@ public class Settings {
      * @param distanceYDp Vertical overscroll distance in dp
      * @return Current settings object for calls chaining
      */
-    public Settings setOverscrollDistance(Context context, float distanceXDp, float distanceYDp) {
+    @NonNull
+    public Settings setOverscrollDistance(
+            @NonNull Context context,
+            float distanceXDp,
+            float distanceYDp
+    ) {
         return setOverscrollDistance(
                 UnitsUtils.toPixels(context, distanceXDp),
                 UnitsUtils.toPixels(context, distanceYDp));
@@ -361,6 +374,7 @@ public class Settings {
      * @param isFitViewport Whether image should fit viewport or not
      * @return Current settings object for calls chaining
      */
+    @NonNull
     public Settings setFillViewport(boolean isFitViewport) {
         this.isFillViewport = isFitViewport;
         return this;
@@ -374,6 +388,7 @@ public class Settings {
      * @param gravity Image gravity, one of {@link android.view.Gravity} constants
      * @return Current settings object for calls chaining
      */
+    @NonNull
     public Settings setGravity(int gravity) {
         this.gravity = gravity;
         return this;
@@ -387,6 +402,7 @@ public class Settings {
      * @param fitMethod Fit method
      * @return Current settings object for calls chaining
      */
+    @NonNull
     public Settings setFitMethod(@NonNull Fit fitMethod) {
         this.fitMethod = fitMethod;
         return this;
@@ -400,6 +416,7 @@ public class Settings {
      * @param boundsType Bounds restrictions type
      * @return Current settings object for calls chaining
      */
+    @NonNull
     public Settings setBoundsType(@NonNull Bounds boundsType) {
         this.boundsType = boundsType;
         return this;
@@ -413,6 +430,7 @@ public class Settings {
      * @param enabled Whether panning should be enabled or not
      * @return Current settings object for calls chaining
      */
+    @NonNull
     public Settings setPanEnabled(boolean enabled) {
         isPanEnabled = enabled;
         return this;
@@ -426,6 +444,7 @@ public class Settings {
      * @param enabled Whether fling should be enabled or not
      * @return Current settings object for calls chaining
      */
+    @NonNull
     public Settings setFlingEnabled(boolean enabled) {
         isFlingEnabled = enabled;
         return this;
@@ -439,6 +458,7 @@ public class Settings {
      * @param enabled Whether zooming should be enabled or not
      * @return Current settings object for calls chaining
      */
+    @NonNull
     public Settings setZoomEnabled(boolean enabled) {
         isZoomEnabled = enabled;
         return this;
@@ -452,6 +472,7 @@ public class Settings {
      * @param enabled Whether rotation should be enabled or not
      * @return Current settings object for calls chaining
      */
+    @NonNull
     public Settings setRotationEnabled(boolean enabled) {
         isRotationEnabled = enabled;
         return this;
@@ -466,6 +487,7 @@ public class Settings {
      * @param restrict Whether rotation should be restricted or not
      * @return Current settings object for calls chaining
      */
+    @NonNull
     public Settings setRestrictRotation(boolean restrict) {
         isRestrictRotation = restrict;
         return this;
@@ -479,6 +501,7 @@ public class Settings {
      * @param enabled Whether double tap should be enabled or not
      * @return Current settings object for calls chaining
      */
+    @NonNull
     public Settings setDoubleTapEnabled(boolean enabled) {
         isDoubleTapEnabled = enabled;
         return this;
@@ -493,6 +516,7 @@ public class Settings {
      * @return Current settings object for calls chaining
      */
     @SuppressWarnings("unused") // Public API
+    @NonNull
     public Settings setExitEnabled(boolean enabled) {
         exitType = enabled ? ExitType.ALL : ExitType.NONE;
         return this;
@@ -507,7 +531,8 @@ public class Settings {
      * @return Current settings object for calls chaining
      */
     @SuppressWarnings("unused") // Public API
-    public Settings setExitType(ExitType type) {
+    @NonNull
+    public Settings setExitType(@NonNull ExitType type) {
         exitType = type;
         return this;
     }
@@ -523,6 +548,7 @@ public class Settings {
      *
      * @return Current settings object for calls chaining
      */
+    @NonNull
     public Settings disableGestures() {
         gesturesDisableCount++;
         return this;
@@ -537,6 +563,7 @@ public class Settings {
      *
      * @return Current settings object for calls chaining
      */
+    @NonNull
     public Settings enableGestures() {
         gesturesDisableCount--;
         return this;
@@ -553,6 +580,7 @@ public class Settings {
      *
      * @return Current settings object for calls chaining
      */
+    @NonNull
     public Settings disableBounds() {
         boundsDisableCount++;
         return this;
@@ -567,6 +595,7 @@ public class Settings {
      *
      * @return Current settings object for calls chaining
      */
+    @NonNull
     public Settings enableBounds() {
         boundsDisableCount--;
         return this;
@@ -579,6 +608,7 @@ public class Settings {
      */
     @SuppressWarnings("unused") // Public API
     @Deprecated
+    @NonNull
     public Settings setRestrictBounds(boolean restrict) {
         boundsDisableCount += restrict ? -1 : 1;
         if (boundsDisableCount < 0) { // In case someone explicitly used this method during setup
@@ -593,6 +623,7 @@ public class Settings {
      * @param duration Animation duration in milliseconds
      * @return Current settings object for calls chaining
      */
+    @NonNull
     public Settings setAnimationsDuration(long duration) {
         if (duration < 0L) {
             throw new IllegalArgumentException("Animations duration should be >= 0");
@@ -661,10 +692,12 @@ public class Settings {
         return gravity;
     }
 
+    @NonNull
     public Fit getFitMethod() {
         return fitMethod;
     }
 
+    @NonNull
     public Bounds getBoundsType() {
         return boundsType;
     }
@@ -697,6 +730,7 @@ public class Settings {
         return getExitType() != ExitType.NONE;
     }
 
+    @NonNull
     public ExitType getExitType() {
         return isGesturesEnabled() ? exitType : ExitType.NONE;
     }

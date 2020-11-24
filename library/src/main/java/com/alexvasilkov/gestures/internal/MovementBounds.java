@@ -6,6 +6,8 @@ import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
 
+import androidx.annotation.NonNull;
+
 import com.alexvasilkov.gestures.Settings;
 import com.alexvasilkov.gestures.State;
 import com.alexvasilkov.gestures.utils.GravityUtils;
@@ -36,7 +38,7 @@ public class MovementBounds {
     private float boundsPivotX;
     private float boundsPivotY;
 
-    public MovementBounds(Settings settings) {
+    public MovementBounds(@NonNull Settings settings) {
         this.settings = settings;
     }
 
@@ -47,7 +49,7 @@ public class MovementBounds {
      * @param state State for which to calculate movement bounds.
      * @return Current movement bounds object for calls chaining.
      */
-    public MovementBounds set(State state) {
+    public MovementBounds set(@NonNull State state) {
         RectF area = tmpRectF;
         GravityUtils.getMovementAreaPosition(settings, tmpRect);
         area.set(tmpRect);
@@ -205,7 +207,7 @@ public class MovementBounds {
     }
 
 
-    public void getExternalBounds(RectF out) {
+    public void getExternalBounds(@NonNull RectF out) {
         if (boundsRotation == 0f) {
             out.set(bounds);
         } else {
@@ -223,7 +225,7 @@ public class MovementBounds {
      * @param extraY Extra area bounds (vertical)
      * @param out Output rectangle
      */
-    public void restrict(float x, float y, float extraX, float extraY, PointF out) {
+    public void restrict(float x, float y, float extraX, float extraY, @NonNull PointF out) {
         tmpPointArr[0] = x;
         tmpPointArr[1] = y;
 
@@ -248,7 +250,7 @@ public class MovementBounds {
         out.set(tmpPointArr[0], tmpPointArr[1]);
     }
 
-    public void restrict(float x, float y, PointF out) {
+    public void restrict(float x, float y, @NonNull PointF out) {
         restrict(x, y, 0f, 0f, out);
     }
 

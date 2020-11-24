@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 
@@ -35,6 +36,7 @@ public abstract class RecyclePagerAdapter<VH extends RecyclePagerAdapter.ViewHol
      * @param position Item position
      * @return View holder for given position
      */
+    @Nullable
     public VH getViewHolder(int position) {
         return attached.get(position);
     }

@@ -55,6 +55,7 @@ public class GestureTextView extends AppCompatTextView implements GestureView {
     /**
      * {@inheritDoc}
      */
+    @NonNull
     @Override
     public GestureController getController() {
         return controller;

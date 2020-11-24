@@ -6,6 +6,8 @@ import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 
+import androidx.annotation.Nullable;
+
 import com.alexvasilkov.gestures.GestureController;
 import com.alexvasilkov.gestures.Settings;
 import com.alexvasilkov.gestures.State;
@@ -22,6 +24,7 @@ public class CropUtils {
      * @return Cropped image part
      */
     @SuppressWarnings("deprecation") // We'll clean it up once deprecated method is removed
+    @Nullable
     public static Bitmap crop(Drawable drawable, GestureController controller) {
         controller.stopAllAnimations();
         controller.updateState(); // Applying state restrictions
@@ -39,6 +42,7 @@ public class CropUtils {
      */
     @SuppressWarnings("DeprecatedIsStillUsed")
     @Deprecated
+    @Nullable
     public static Bitmap crop(Drawable drawable, State state, Settings settings) {
         if (drawable == null) {
             return null;

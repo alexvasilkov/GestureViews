@@ -79,6 +79,7 @@ public class SceneView extends View implements GestureView {
         });
     }
 
+    @NonNull
     @Override
     public GestureController getController() {
         return controller;

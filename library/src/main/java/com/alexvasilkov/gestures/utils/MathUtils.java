@@ -3,6 +3,7 @@ package com.alexvasilkov.gestures.utils;
 import android.graphics.Matrix;
 import android.graphics.RectF;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Size;
 
 import com.alexvasilkov.gestures.State;
@@ -47,7 +48,12 @@ public class MathUtils {
      * @param end End rectangle
      * @param factor Factor
      */
-    public static void interpolate(RectF out, RectF start, RectF end, float factor) {
+    public static void interpolate(
+            @NonNull RectF out,
+            @NonNull RectF start,
+            @NonNull RectF end,
+            float factor
+    ) {
         out.left = interpolate(start.left, end.left, factor);
         out.top = interpolate(start.top, end.top, factor);
         out.right = interpolate(start.right, end.right, factor);
@@ -64,7 +70,12 @@ public class MathUtils {
      * @param factor Factor
      */
     @SuppressWarnings("WeakerAccess") // Public API
-    public static void interpolate(State out, State start, State end, float factor) {
+    public static void interpolate(
+            @NonNull State out,
+            @NonNull State start,
+            @NonNull State end,
+            float factor
+    ) {
         interpolate(out, start, start.getX(), start.getY(), end, end.getX(), end.getY(), factor);
     }
 
@@ -83,8 +94,16 @@ public class MathUtils {
      * @param endPivotY Pivot point's Y coordinate in end state coordinates
      * @param factor Factor
      */
-    public static void interpolate(State out, State start, float startPivotX, float startPivotY,
-            State end, float endPivotX, float endPivotY, float factor) {
+    public static void interpolate(
+            @NonNull State out,
+            @NonNull State start,
+            float startPivotX,
+            float startPivotY,
+            @NonNull State end,
+            float endPivotX,
+            float endPivotY,
+            float factor
+    ) {
         out.set(start);
 
         if (!State.equals(start.getZoom(), end.getZoom())) {
@@ -122,8 +141,11 @@ public class MathUtils {
         out.translateBy(dx, dy);
     }
 
-    public static void computeNewPosition(@Size(2) float[] point,
-            State initialState, State finalState) {
+    public static void computeNewPosition(
+            @NonNull @Size(2) float[] point,
+            @NonNull State initialState,
+            @NonNull State finalState
+    ) {
         initialState.get(tmpMatrix);
         tmpMatrix.invert(tmpMatrixInverse);
         tmpMatrixInverse.mapPoints(point);
