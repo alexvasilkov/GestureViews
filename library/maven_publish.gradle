@@ -1,0 +1,91 @@
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+task javadocs(type: Javadoc) {
+    source = android.sourceSets.main.java.sourceFiles
+    classpath = files(android.bootClasspath)
+
+    android.libraryVariants.all { variant ->
+        owner.classpath += variant.javaCompileProvider.get().classpath
+    }
+
+    exclude '**/BuildConfig.java'
+    exclude '**/R.java'
+    exclude '**/internal/**'
+
+    title "${project.ext.name} ${project.ext.version} API"
+    options {
+        windowTitle "${project.ext.name} ${project.ext.version} API"
+    }
+}
+
+task javadocsJar(type: Jar, dependsOn: javadocs) {
+    archiveClassifier.set('javadoc')
+    from javadocs.destinationDir
+}
+
+task sourcesJar(type: Jar) {
+    archiveClassifier.set('sources')
+    from android.sourceSets.main.java.sourceFiles
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+                artifact source: javadocsJar, classifier: 'javadoc'
+                artifact source: sourcesJar, classifier: 'sources'
+
+                groupId = project.ext.group
+                artifactId = project.ext.artifactId
+                version = project.ext.version
+
+                pom {
+                    name = project.ext.name
+                    description = project.ext.description
+                    packaging = 'aar'
+                    url = project.ext.github
+                    licenses {
+                        license {
+                            name = 'The Apache License, Version 2.0'
+                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = 'alexvasilkov'
+                            name = 'Alex Vasilkov'
+                        }
+                    }
+                    scm {
+                        connection = project.ext.githubScm
+                        developerConnection = project.ext.githubScm
+                        url = project.ext.github
+                    }
+                }
+            }
+        }
+        repositories {
+            maven {
+                def releasesRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+                def snapshotsRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
+                url = project.ext.version.contains('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+                credentials {
+                    username = findProperty('maven.alexvasilkov.username')
+                    password = findProperty('maven.alexvasilkov.password')
+                }
+            }
+        }
+    }
+
+    signing {
+        required { gradle.taskGraph.hasTask('publish') }
+
+        sign publishing.publications.release
+
+        // We need to re-map singing properties to be able to mix properties for different projects
+        project.ext.'signing.keyId' = findProperty('signing.alexvasilkov.keyId')
+        project.ext.'signing.password' = findProperty('signing.alexvasilkov.password')
+    }
+}

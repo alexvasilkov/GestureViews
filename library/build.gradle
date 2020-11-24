@@ -2,14 +2,21 @@ plugins {
     id 'com.android.library'
 }
 
+ext.group = 'com.alexvasilkov'
+ext.artifactId = 'gesture-views'
+ext.version = '2.6.0'
+ext.name = 'GestureViews'
+ext.description = 'ImageView and FrameLayout with gestures control and position animation'
+ext.github = 'https://github.com/alexvasilkov/GestureViews'
+ext.githubScm = 'scm:git@github.com:alexvasilkov/GestureViews.git'
+
 android {
     compileSdkVersion 30
 
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 30
-        versionCode VERSION_CODE.toInteger()
-        versionName VERSION_NAME
+        versionName project.ext.version
     }
 }
 
@@ -19,8 +26,8 @@ dependencies {
     compileOnly 'androidx.recyclerview:recyclerview:1.1.0'
 }
 
-// New version can be uploaded with './gradlew clean :library:uploadArchives'
-apply from: 'gradle-mvn-push.gradle'
+// New version can be uploaded with './gradlew clean :library:build :library:publish'
+apply from: 'maven_publish.gradle'
 
 // Count methods:
 // dx --dex --output=temp.dex classes.jar
