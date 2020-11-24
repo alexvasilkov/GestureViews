@@ -16,6 +16,7 @@ class ViewPositionHolder implements ViewTreeObserver.OnPreDrawListener {
 
     private OnViewPositionChangeListener listener;
     private View view;
+    private View.OnAttachStateChangeListener attachListener;
     private boolean isPaused;
 
     @Override
@@ -25,18 +26,42 @@ class ViewPositionHolder implements ViewTreeObserver.OnPreDrawListener {
     }
 
     void init(@NonNull View view, @NonNull OnViewPositionChangeListener listener) {
+        clear(); // Cleaning up old listeners, just in case
+
         this.view = view;
         this.listener = listener;
 
-        view.getViewTreeObserver().addOnPreDrawListener(this);
-        if (isLaidOut()) {
+        attachListener = new View.OnAttachStateChangeListener() {
+            @Override
+            public void onViewAttachedToWindow(View view) {
+                onViewAttached(view, true);
+            }
+
+            @Override
+            public void onViewDetachedFromWindow(View view) {
+                onViewAttached(view, false);
+            }
+        };
+        view.addOnAttachStateChangeListener(attachListener);
+
+        onViewAttached(view, isAttached(view));
+
+        if (isLaidOut(view)) {
             update();
+        }
+    }
+
+    private void onViewAttached(View view, boolean attached) {
+        view.getViewTreeObserver().removeOnPreDrawListener(this);
+        if (attached) {
+            view.getViewTreeObserver().addOnPreDrawListener(this);
         }
     }
 
     void clear() {
         if (view != null) {
-            view.getViewTreeObserver().removeOnPreDrawListener(this);
+            view.removeOnAttachStateChangeListener(attachListener);
+            onViewAttached(view, false);
         }
 
         pos.view.setEmpty();
@@ -44,6 +69,7 @@ class ViewPositionHolder implements ViewTreeObserver.OnPreDrawListener {
         pos.image.setEmpty();
 
         view = null;
+        attachListener = null;
         listener = null;
         isPaused = false;
     }
@@ -66,11 +92,19 @@ class ViewPositionHolder implements ViewTreeObserver.OnPreDrawListener {
         }
     }
 
-    private boolean isLaidOut() {
+    private static boolean isLaidOut(View view) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             return view.isLaidOut();
         } else {
             return view.getWidth() > 0 && view.getHeight() > 0;
+        }
+    }
+
+    private static boolean isAttached(View view) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            return view.isAttachedToWindow();
+        } else {
+            return view.getWindowToken() != null;
         }
     }
 
