@@ -45,42 +45,42 @@ project.afterEvaluate {
 task decryptUploadKeystore {
     doFirst {
         println 'Decrypt upload keystore'
-        executeCommand("openssl aes-256-cbc -nopad -d" +
-                " -in $DIR/upload.jks.enc" +
-                " -out $DIR/upload.jks" +
-                " -k $System.env.ENCRYPT_KEY")
+        decode('upload.jks')
     }
 }
 
 task cleanUploadKeystore {
     doLast {
         println 'Clean up upload keystore'
-        "rm $DIR/upload.jks".execute()
+        cleanup('upload.jks')
     }
 }
 
 task decryptPlayAccount {
     doFirst {
         println 'Decrypt Play account'
-        executeCommand("openssl aes-256-cbc -nopad -d" +
-                " -in $DIR/play_account.json.enc" +
-                " -out $DIR/play_account.json" +
-                " -k $System.env.ENCRYPT_KEY")
+        decode('play_account.json')
     }
 }
 
 task cleanPlayAccount {
     doLast {
         println 'Clean up Play account'
-        "rm $DIR/play_account.json".execute()
+        cleanup('play_account.json')
     }
 }
 
-private void executeCommand(String command) {
-    def proc = command.execute()
-    def error = proc.err.text
+private void decode(String file) {
+    def command = "openssl enc -aes-256-cbc -d -md sha512 -pbkdf2 -iter 100000 -salt" +
+            " -in $DIR/${file}.enc -out $DIR/$file -k $System.env.ENCRYPT_KEY"
+    def process = command.execute()
+    def error = process.err.text
     if (error != null && !error.isEmpty()) {
         println "Error:\n" + error
-        throw new RuntimeException("Error running commmand",)
+        throw new RuntimeException("Error deconding $file",)
     }
+}
+
+private void cleanup(String file) {
+    "rm $DIR/$file".execute()
 }
