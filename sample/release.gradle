@@ -45,10 +45,11 @@ project.afterEvaluate {
 task decryptUploadKeystore {
     doFirst {
         println 'Decrypt upload keystore'
-        ("openssl aes-256-cbc -d" +
+        def proc = ("openssl aes-256-cbc -d" +
                 " -in $DIR/upload.jks.enc" +
                 " -out $DIR/upload.jks" +
                 " -k $System.env.ENCRYPT_KEY").execute()
+        println "Error?:\n" + proc.err.text
     }
 }
 
@@ -62,10 +63,11 @@ task cleanUploadKeystore {
 task decryptPlayAccount {
     doFirst {
         println 'Decrypt Play account'
-        ("openssl aes-256-cbc -d" +
+        def proc = ("openssl aes-256-cbc -d" +
                 " -in $DIR/play_account.json.enc" +
                 " -out $DIR/play_account.json" +
                 " -k $System.env.ENCRYPT_KEY").execute()
+        println "Error?:\n" + proc.err.text
     }
 }
 
