@@ -4,7 +4,7 @@ plugins {
 
 ext.group = 'com.alexvasilkov'
 ext.artifactId = 'gesture-views'
-ext.version = '2.6.0'
+ext.version = '2.7.0'
 ext.name = 'GestureViews'
 ext.description = 'ImageView and FrameLayout with gestures control and position animation'
 ext.github = 'https://github.com/alexvasilkov/GestureViews'
@@ -26,10 +26,10 @@ dependencies {
     compileOnly 'androidx.recyclerview:recyclerview:1.1.0'
 }
 
-// New version can be uploaded with './gradlew clean :library:build :library:publish'
+// New version can be uploaded with './gradlew clean :library:publish'
 apply from: 'maven_publish.gradle'
 
 // Count methods:
 // dx --dex --output=temp.dex classes.jar
 // hexdump -s 88 -n 4 -e '1/4 "%d\n"' temp.dex
-// Where dx is placed in SDK folder, e.g. ~/Library/Android/sdk/build-tools/26.0.3/
+// Where dx is placed in SDK folder, e.g. ~/Library/Android/sdk/build-tools/30.0.2/
