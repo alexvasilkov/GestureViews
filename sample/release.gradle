@@ -33,17 +33,13 @@ project.afterEvaluate {
     // Note, that in order to work this task requires ENCRYPT_KEY and UPLOAD_KEYSTORE_PWD env vars
 
     final publish = 'publishSample'
-    final pack = 'packageRelease'
-    final upload = 'publishReleaseApk'
 
     project.task publish
-    project.tasks[publish].dependsOn upload
-
-    project.tasks[pack].dependsOn 'decryptUploadKeystore'
-    project.tasks[pack].finalizedBy 'cleanUploadKeystore'
-
-    project.tasks[upload].dependsOn 'decryptPlayAccount'
-    project.tasks[upload].finalizedBy 'cleanPlayAccount'
+    project.tasks[publish].dependsOn 'decryptUploadKeystore'
+    project.tasks[publish].dependsOn 'decryptPlayAccount'
+    project.tasks[publish].dependsOn 'publishReleaseBundle'
+    project.tasks[publish].finalizedBy 'cleanUploadKeystore'
+    project.tasks[publish].finalizedBy 'cleanPlayAccount'
 }
 
 task decryptUploadKeystore {

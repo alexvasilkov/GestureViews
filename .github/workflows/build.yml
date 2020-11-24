@@ -24,7 +24,7 @@ jobs:
         run: |
           ./gradlew assembleDebug checkstyle lintDebug --stacktrace
 
-      - name: Piblish sample app
+      - name: Publish sample app
         if: github.event_name == 'push'
         env:
           ENCRYPT_KEY: ${{ secrets.ENCRYPT_KEY }}
