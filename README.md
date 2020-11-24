@@ -69,6 +69,6 @@ Add dependency to your `build.gradle` file:
 [build-img]: https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Falexvasilkov%2FGestureViews%2Fbadge%3Fref%3Dmaster&style=flat-square
 
 [size-url]: http://www.methodscount.com/?lib=com.alexvasilkov%3Agesture-views%3A2.6.0
-[size-img]: https://img.shields.io/badge/methods%|%20size-1130%20%7C%20134%20KB-e91e63.svg?style=flat-square
+[size-img]: https://img.shields.io/badge/methods%20%7C%20size-1130%20%7C%20134%20KB-e91e63.svg?style=flat-square
 
 [javadoc-url]: http://javadoc.io/doc/com.alexvasilkov/gesture-views
