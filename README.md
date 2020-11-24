@@ -1,8 +1,8 @@
 GestureViews
 ============
 
-[![Maven Central][mvn-img]][mvn-url]
-[![Build Status][build-img]][build-url]
+[![Maven][mvn-img]][mvn-url]
+[![Build][build-img]][build-url]
 [![Size][size-img]][size-url]
 
 ImageView and FrameLayout with gestures control and position animation.
@@ -65,10 +65,10 @@ Add dependency to your `build.gradle` file:
 [mvn-url]: https://maven-badges.herokuapp.com/maven-central/com.alexvasilkov/gesture-views
 [mvn-img]: https://img.shields.io/maven-central/v/com.alexvasilkov/gesture-views.svg?style=flat-square
 
-[build-url]: https://travis-ci.org/alexvasilkov/GestureViews
-[build-img]: https://img.shields.io/travis/alexvasilkov/GestureViews/master.svg?style=flat-square
+[build-url]: https://actions-badge.atrox.dev/alexvasilkov/GestureViews/goto?ref=master
+[build-img]: https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Falexvasilkov%2FGestureViews%2Fbadge%3Fref%3Dmaster&style=flat-square
 
 [size-url]: http://www.methodscount.com/?lib=com.alexvasilkov%3Agesture-views%3A2.6.0
-[size-img]: https://img.shields.io/badge/Methods%20and%20size-1130%20%7C%20134%20KB-e91e63.svg?style=flat-square
+[size-img]: https://img.shields.io/badge/methods%|%20size-1130%20%7C%20134%20KB-e91e63.svg?style=flat-square
 
 [javadoc-url]: http://javadoc.io/doc/com.alexvasilkov/gesture-views
