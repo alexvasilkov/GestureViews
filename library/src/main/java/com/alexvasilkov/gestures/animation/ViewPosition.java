@@ -82,7 +82,7 @@ public class ViewPosition {
 
         tmpViewRect.set(view);
 
-        targetView.getLocationOnScreen(tmpLocation);
+        targetView.getLocationInWindow(tmpLocation);
 
         view.set(0, 0, targetView.getWidth(), targetView.getHeight());
         view.offset(tmpLocation[0], tmpLocation[1]);
