@@ -1,5 +1,7 @@
 package com.alexvasilkov.gestures.sample.base;
 
+import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,11 +13,13 @@ import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.alexvasilkov.android.commons.state.InstanceStateManager;
 import com.alexvasilkov.android.commons.ui.Views;
 import com.alexvasilkov.events.Events;
 import com.alexvasilkov.gestures.sample.R;
+import com.google.android.material.color.MaterialColors;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
@@ -48,9 +52,14 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (infoTextId != 0) {
+            final Context context = getSupportActionBar().getThemedContext();
+
             MenuItem item = menu.add(Menu.NONE, R.id.menu_info, Menu.NONE, R.string.menu_info);
-            item.setIcon(R.drawable.ic_info_outline_white_24dp);
             item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+
+            Drawable ic = ContextCompat.getDrawable(context, R.drawable.ic_info_outline_white_24dp);
+            ic.setTint(MaterialColors.getColor(context, R.attr.colorOnSurface, "Error"));
+            item.setIcon(ic);
         }
         return true;
     }
