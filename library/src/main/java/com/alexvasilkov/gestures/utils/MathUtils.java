@@ -68,8 +68,11 @@ public class MathUtils {
      * @param start Start state
      * @param end End state
      * @param factor Factor
+     * @deprecated Provide pivot point explicitly with
+     * {@link #interpolate(State, State, float, float, State, float, float, float)}
      */
     @SuppressWarnings("WeakerAccess") // Public API
+    @Deprecated
     public static void interpolate(
             @NonNull State out,
             @NonNull State start,
@@ -136,8 +139,8 @@ public class MathUtils {
             out.rotateTo(rotation, startPivotX, startPivotY);
         }
 
-        float dx = interpolate(0, endPivotX - startPivotX, factor);
-        float dy = interpolate(0, endPivotY - startPivotY, factor);
+        float dx = interpolate(0f, endPivotX - startPivotX, factor);
+        float dy = interpolate(0f, endPivotY - startPivotY, factor);
         out.translateBy(dx, dy);
     }
 

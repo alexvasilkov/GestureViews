@@ -1,6 +1,5 @@
 package com.alexvasilkov.gestures;
 
-import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -24,7 +23,6 @@ public class StateController {
     private static final State tmpState = new State();
     private static final Rect tmpRect = new Rect();
     private static final RectF tmpRectF = new RectF();
-    private static final Point tmpPoint = new Point();
     private static final PointF tmpPointF = new PointF();
 
 
@@ -160,11 +158,9 @@ public class StateController {
             return false;
         }
 
-        // Calculating default pivot point, if not provided
         if (Float.isNaN(pivotX) || Float.isNaN(pivotY)) {
-            GravityUtils.getDefaultPivot(settings, tmpPoint);
-            pivotX = tmpPoint.x;
-            pivotY = tmpPoint.y;
+            pivotX = state.getX();
+            pivotY = state.getY();
         }
 
         boolean isStateChanged = false;

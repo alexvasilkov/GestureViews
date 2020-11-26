@@ -2,6 +2,7 @@ package com.alexvasilkov.gestures;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.view.GestureDetector;
@@ -21,6 +22,7 @@ import com.alexvasilkov.gestures.internal.MovementBounds;
 import com.alexvasilkov.gestures.internal.detectors.RotationGestureDetector;
 import com.alexvasilkov.gestures.internal.detectors.ScaleGestureDetectorFixed;
 import com.alexvasilkov.gestures.utils.FloatScroller;
+import com.alexvasilkov.gestures.utils.GravityUtils;
 import com.alexvasilkov.gestures.utils.MathUtils;
 
 import java.util.ArrayList;
@@ -60,6 +62,7 @@ public class GestureController implements View.OnTouchListener {
 
     // Temporary objects
     private static final PointF tmpPointF = new PointF();
+    private static final Point tmpPoint = new Point();
     private static final RectF tmpRectF = new RectF();
     private static final float[] tmpPointArr = new float[2];
 
@@ -295,6 +298,15 @@ public class GestureController implements View.OnTouchListener {
             return false;
         }
 
+        stopAllAnimations();
+
+        // Ensure we have a correct pivot point
+        if (Float.isNaN(pivotX) || Float.isNaN(pivotY)) {
+            GravityUtils.getDefaultPivot(settings, tmpPoint);
+            pivotX = tmpPoint.x;
+            pivotY = tmpPoint.y;
+        }
+
         State endStateRestricted = null;
         if (keepInBounds) {
             endStateRestricted = stateController.restrictStateBoundsCopy(
@@ -308,20 +320,16 @@ public class GestureController implements View.OnTouchListener {
             return false; // Nothing to animate
         }
 
-        stopAllAnimations();
-
         isAnimatingInBounds = keepInBounds;
         stateStart.set(state);
         stateEnd.set(endStateRestricted);
 
         // Computing new position of pivot point for correct state interpolation
-        if (!Float.isNaN(pivotX) && !Float.isNaN(pivotY)) {
-            tmpPointArr[0] = pivotX;
-            tmpPointArr[1] = pivotY;
-            MathUtils.computeNewPosition(tmpPointArr, stateStart, stateEnd);
-            endPivotX = tmpPointArr[0];
-            endPivotY = tmpPointArr[1];
-        }
+        tmpPointArr[0] = pivotX;
+        tmpPointArr[1] = pivotY;
+        MathUtils.computeNewPosition(tmpPointArr, stateStart, stateEnd);
+        endPivotX = tmpPointArr[0];
+        endPivotY = tmpPointArr[1];
 
         stateScroller.setDuration(settings.getAnimationsDuration());
         stateScroller.startScroll(0f, 1f);
@@ -373,6 +381,8 @@ public class GestureController implements View.OnTouchListener {
         isAnimatingInBounds = false;
         pivotX = Float.NaN;
         pivotY = Float.NaN;
+        endPivotX = Float.NaN;
+        endPivotY = Float.NaN;
         notifyStateSourceChanged();
     }
 
@@ -812,13 +822,12 @@ public class GestureController implements View.OnTouchListener {
                 stateScroller.computeScroll();
                 float factor = stateScroller.getCurr();
 
-                if (Float.isNaN(pivotX) || Float.isNaN(pivotY)
-                        || Float.isNaN(endPivotX) || Float.isNaN(endPivotY)) {
-                    MathUtils.interpolate(state, stateStart, stateEnd, factor);
-                } else {
-                    MathUtils.interpolate(state, stateStart, pivotX, pivotY,
-                            stateEnd, endPivotX, endPivotY, factor);
-                }
+                MathUtils.interpolate(
+                        state,
+                        stateStart, pivotX, pivotY,
+                        stateEnd, endPivotX, endPivotY,
+                        factor
+                );
 
                 shouldProceed = true;
 

@@ -58,32 +58,34 @@ public class State {
     }
 
     public void translateBy(float dx, float dy) {
-        matrix.postTranslate(dx, dy);
+        matrix.postTranslate(nonNaN(dx), nonNaN(dy));
         updateFromMatrix(false, false); // only translation is changed
     }
 
     public void translateTo(float x, float y) {
-        matrix.postTranslate(-this.x + x, -this.y + y);
+        matrix.postTranslate(-this.x + nonNaN(x), -this.y + nonNaN(y));
         updateFromMatrix(false, false); // only translation is changed
     }
 
     public void zoomBy(float factor, float pivotX, float pivotY) {
-        matrix.postScale(factor, factor, pivotX, pivotY);
+        nonNaN(factor);
+        matrix.postScale(factor, factor, nonNaN(pivotX), nonNaN(pivotY));
         updateFromMatrix(true, false); // zoom & translation are changed
     }
 
     public void zoomTo(float zoom, float pivotX, float pivotY) {
-        matrix.postScale(zoom / this.zoom, zoom / this.zoom, pivotX, pivotY);
+        nonNaN(zoom);
+        matrix.postScale(zoom / this.zoom, zoom / this.zoom, nonNaN(pivotX), nonNaN(pivotY));
         updateFromMatrix(true, false); // zoom & translation are changed
     }
 
     public void rotateBy(float angle, float pivotX, float pivotY) {
-        matrix.postRotate(angle, pivotX, pivotY);
+        matrix.postRotate(nonNaN(angle), nonNaN(pivotX), nonNaN(pivotY));
         updateFromMatrix(false, true); // rotation & translation are changed
     }
 
     public void rotateTo(float angle, float pivotX, float pivotY) {
-        matrix.postRotate(-rotation + angle, pivotX, pivotY);
+        matrix.postRotate(-rotation + nonNaN(angle), nonNaN(pivotX), nonNaN(pivotY));
         updateFromMatrix(false, true); // rotation & translation are changed
     }
 
@@ -96,10 +98,10 @@ public class State {
             rotation -= 360f;
         }
 
-        this.x = x;
-        this.y = y;
-        this.zoom = zoom;
-        this.rotation = rotation;
+        this.x = nonNaN(x);
+        this.y = nonNaN(y);
+        this.zoom = nonNaN(zoom);
+        this.rotation = nonNaN(rotation);
 
         // Note, that order is vital here
         matrix.reset();
@@ -221,6 +223,13 @@ public class State {
      */
     public static int compare(float v1, float v2) {
         return v1 > v2 + EPSILON ? 1 : v1 < v2 - EPSILON ? -1 : 0;
+    }
+
+    private static float nonNaN(float value) {
+        if (Float.isNaN(value)) {
+            throw new IllegalArgumentException("Provided float is NaN");
+        }
+        return value;
     }
 
 }

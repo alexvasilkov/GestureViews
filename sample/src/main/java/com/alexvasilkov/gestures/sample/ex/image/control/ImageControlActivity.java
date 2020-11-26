@@ -1,6 +1,6 @@
 package com.alexvasilkov.gestures.sample.ex.image.control;
 
-import android.graphics.PointF;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.widget.CheckBox;
 
@@ -10,6 +10,7 @@ import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.base.BaseSettingsActivity;
 import com.alexvasilkov.gestures.sample.ex.utils.GlideHelper;
 import com.alexvasilkov.gestures.sample.ex.utils.Painting;
+import com.alexvasilkov.gestures.utils.GravityUtils;
 import com.alexvasilkov.gestures.views.GestureImageView;
 import com.alexvasilkov.gestures.views.interfaces.GestureView;
 
@@ -74,14 +75,13 @@ public class ImageControlActivity extends BaseSettingsActivity {
         }
 
         final State state = controller.getState().copy();
-        final PointF pivot = getPivot();
+        final Point pivot = getPivot();
 
         // Zooming the image in or out
         state.zoomBy(zoomIn ? 1.333f : 0.75f, pivot.x, pivot.y);
 
         if (animate) {
             // Animating state changes. Do not forget to make a state's copy prior to any changes.
-            controller.setPivot(pivot.x, pivot.y);
             controller.animateStateTo(state);
         } else {
             // Immediately applying state changes
@@ -98,7 +98,7 @@ public class ImageControlActivity extends BaseSettingsActivity {
         }
 
         final State state = controller.getState().copy();
-        final PointF pivot = getPivot();
+        final Point pivot = getPivot();
 
         // Rotating to closest next 90 degree ccw
         float rotation = Math.round(state.getRotation()) % 90f == 0f
@@ -107,7 +107,6 @@ public class ImageControlActivity extends BaseSettingsActivity {
 
         if (animate) {
             // Animating state changes. Do not forget to make a state's copy prior to any changes.
-            controller.setPivot(pivot.x, pivot.y);
             controller.animateStateTo(state);
         } else {
             // Immediately applying state changes
@@ -125,7 +124,7 @@ public class ImageControlActivity extends BaseSettingsActivity {
 
         if (animate) {
             final State state = controller.getState().copy();
-            final PointF pivot = getPivot();
+            final Point pivot = getPivot();
 
             // Restoring initial image zoom and rotation
             final float minZoom = controller.getStateController().getMinZoom(state);
@@ -133,7 +132,6 @@ public class ImageControlActivity extends BaseSettingsActivity {
             state.rotateTo(0f, pivot.x, pivot.y);
 
             // Animating state changes. Do not forget to make a state's copy prior to any changes.
-            controller.setPivot(pivot.x, pivot.y);
             controller.animateStateTo(state);
         } else {
             // Immediately resetting the state
@@ -141,11 +139,10 @@ public class ImageControlActivity extends BaseSettingsActivity {
         }
     }
 
-    private PointF getPivot() {
+    private Point getPivot() {
         // Default pivot point is a view center
-        PointF pivot = new PointF();
-        pivot.x = 0.5f * imageView.getController().getSettings().getViewportW();
-        pivot.y = 0.5f * imageView.getController().getSettings().getViewportH();
+        Point pivot = new Point();
+        GravityUtils.getDefaultPivot(imageView.getController().getSettings(), pivot);
         return pivot;
     }
 
