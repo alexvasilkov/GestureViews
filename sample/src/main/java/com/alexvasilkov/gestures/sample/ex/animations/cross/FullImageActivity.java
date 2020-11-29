@@ -46,10 +46,6 @@ public class FullImageActivity extends BaseSettingsActivity {
         image = findViewById(R.id.single_image_to);
         background = findViewById(R.id.single_image_to_back);
 
-        // Making sure image and background are invisible at first
-        image.setVisibility(View.INVISIBLE);
-        background.setVisibility(View.INVISIBLE);
-
         // Loading image. Note, that this image should already be cached in the memory to ensure
         // very fast loading. Consider using same image or its thumbnail as on prev screen.
         final int paintingId = getIntent().getIntExtra(EXTRA_PAINTING_ID, 0);
@@ -59,15 +55,12 @@ public class FullImageActivity extends BaseSettingsActivity {
         // Listening for animation state and updating our view accordingly
         image.getPositionAnimator().addPositionUpdateListener(this::applyImageAnimationState);
 
-        // Starting enter image animation only once image is drawn for the first time to prevent
-        // image blinking on activity start
-        runAfterImageDraw(() -> {
-            // Enter animation should only be played if activity is not created from saved state
-            enterFullImage(savedInstanceState == null);
+        // Enter animation should only be played if activity is not created from saved state
+        enterFullImage(savedInstanceState == null);
 
-            // Hiding original image
-            Events.create(CrossEvents.SHOW_IMAGE).param(false).post();
-        });
+        // Hiding original image only once image is drawn for the first time to prevent
+        // image blinking on activity start
+        runAfterImageDraw(() -> Events.create(CrossEvents.SHOW_IMAGE).param(false).post());
     }
 
     @Override
