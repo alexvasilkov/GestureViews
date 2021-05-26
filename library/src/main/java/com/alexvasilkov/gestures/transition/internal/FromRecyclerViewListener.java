@@ -1,5 +1,6 @@
 package com.alexvasilkov.gestures.transition.internal;
 
+import android.util.Pair;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -68,12 +69,27 @@ public class FromRecyclerViewListener<ID> extends FromBaseListener<RecyclerView,
             if (holder != null) {
                 final View view = holder.itemView;
                 offset -= isHorizontal ? view.getWidth() / 2 : view.getHeight() / 2;
+            } else {
+                // The view may not be available right away, trying to predict it's size
+                final Pair<Integer, Integer> averageSize = getAverageChildSize(list);
+                offset -= isHorizontal ? averageSize.first / 2 : averageSize.second / 2;
             }
 
             manager.scrollToPositionWithOffset(pos, offset);
         } else {
             list.scrollToPosition(pos);
         }
+    }
+
+    private Pair<Integer, Integer> getAverageChildSize(RecyclerView list) {
+        int totalW = 0;
+        int totalH = 0;
+        int size = list.getChildCount();
+        for (int i = 0; i < size; i++) {
+            totalW += list.getChildAt(i).getWidth();
+            totalH += list.getChildAt(i).getHeight();
+        }
+        return new Pair<>(totalW / size, totalH / size);
     }
 
 }
