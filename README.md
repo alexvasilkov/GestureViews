@@ -3,7 +3,6 @@ GestureViews
 
 [![Maven][mvn-img]][mvn-url]
 [![Build][build-img]][build-url]
-[![Size][size-img]][size-url]
 
 ImageView and FrameLayout with gestures control and position animation.
 
@@ -40,7 +39,7 @@ easier for developers to integrate it into their apps.
 
 Add dependency to your `build.gradle` file:
 
-    implementation 'com.alexvasilkov:gesture-views:2.7.1'
+    implementation 'com.alexvasilkov:gesture-views:2.8.0'
 
 [Usage wiki](https://github.com/alexvasilkov/GestureViews/wiki/Usage)
 
@@ -67,8 +66,5 @@ Add dependency to your `build.gradle` file:
 
 [build-url]: https://actions-badge.atrox.dev/alexvasilkov/GestureViews/goto?ref=master
 [build-img]: https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Falexvasilkov%2FGestureViews%2Fbadge%3Fref%3Dmaster&style=flat-square
-
-[size-url]: http://www.methodscount.com/?lib=com.alexvasilkov%3Agesture-views%3A2.7.1
-[size-img]: https://img.shields.io/badge/methods%20%7C%20size-1085%20%7C%20127%20KB-e91e63.svg?style=flat-square
 
 [javadoc-url]: http://javadoc.io/doc/com.alexvasilkov/gesture-views
