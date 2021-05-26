@@ -26,6 +26,8 @@ public class PhotoListAdapter extends DefaultEndlessRecyclerAdapter<PhotoListAda
 
     private final OnPhotoListener listener;
 
+    private RecyclerView recyclerView;
+
     public PhotoListAdapter(OnPhotoListener listener) {
         super();
         this.listener = listener;
@@ -90,13 +92,25 @@ public class PhotoListAdapter extends DefaultEndlessRecyclerAdapter<PhotoListAda
         listener.onPhotoClick(pos);
     }
 
-    public static ImageView getImage(RecyclerView.ViewHolder holder) {
-        if (holder instanceof ViewHolder) {
-            return ((ViewHolder) holder).image;
-        } else {
-            return null;
-        }
+
+    @Override
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        this.recyclerView = recyclerView;
     }
+
+    @Override
+    public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
+        this.recyclerView = null;
+    }
+
+    public ImageView getImage(int pos) {
+        final RecyclerView.ViewHolder holder =
+                recyclerView == null ? null : recyclerView.findViewHolderForLayoutPosition(pos);
+        return holder == null ? null : ((ViewHolder) holder).image;
+    }
+
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         final ImageView image;

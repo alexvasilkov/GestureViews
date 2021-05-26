@@ -28,6 +28,7 @@ android {
 dependencies {
     compileOnly 'androidx.annotation:annotation:1.2.0'
     compileOnly 'androidx.viewpager:viewpager:1.0.0'
+    compileOnly 'androidx.viewpager2:viewpager2:1.0.0'
     compileOnly 'androidx.recyclerview:recyclerview:1.2.0'
 }
 

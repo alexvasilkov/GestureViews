@@ -4,10 +4,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.viewpager.widget.ViewPager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.alexvasilkov.android.commons.ui.Views;
-import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
+import com.alexvasilkov.gestures.GestureController;
+import com.alexvasilkov.gestures.Settings;
+import com.alexvasilkov.gestures.State;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.base.settings.SettingsController;
 import com.alexvasilkov.gestures.sample.demo.utils.DemoGlideHelper;
@@ -16,19 +18,19 @@ import com.googlecode.flickrjandroid.photos.Photo;
 
 import java.util.List;
 
-public class PhotoPagerAdapter extends RecyclePagerAdapter<PhotoPagerAdapter.ViewHolder> {
+public class PhotoPagerAdapter extends RecyclerView.Adapter<PhotoPagerAdapter.ViewHolder> {
 
-    private static final long PROGRESS_DELAY = 300L;
+    private static final long PROGRESS_DELAY = 200L;
 
-    private final ViewPager viewPager;
     private final SettingsController settingsController;
     private List<Photo> photos;
     private ImageClickListener clickListener;
 
     private boolean activated;
 
-    public PhotoPagerAdapter(ViewPager viewPager, SettingsController listener) {
-        this.viewPager = viewPager;
+    private RecyclerView recyclerView;
+
+    public PhotoPagerAdapter(SettingsController listener) {
         this.settingsController = listener;
     }
 
@@ -59,21 +61,24 @@ public class PhotoPagerAdapter extends RecyclePagerAdapter<PhotoPagerAdapter.Vie
     }
 
     @Override
-    public int getCount() {
+    public int getItemCount() {
         return !activated || photos == null ? 0 : photos.size();
     }
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup container) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup container, int viewType) {
         final ViewHolder holder = new ViewHolder(container);
 
         holder.image.setOnClickListener(view -> onImageClick());
 
         settingsController.apply(holder.image);
 
-        holder.image.getController().enableScrollInViewPager(viewPager);
         holder.image.getPositionAnimator().addPositionUpdateListener((position, isLeaving) ->
                 holder.progress.setVisibility(position == 1f ? View.VISIBLE : View.INVISIBLE));
+
+        final GestureController controller = holder.image.getController();
+        controller.addOnStateChangeListener(new DynamicZoom(controller.getSettings()));
         return holder;
     }
 
@@ -81,7 +86,7 @@ public class PhotoPagerAdapter extends RecyclePagerAdapter<PhotoPagerAdapter.Vie
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         settingsController.apply(holder.image);
 
-        holder.progress.animate().setStartDelay(PROGRESS_DELAY).alpha(1f);
+        holder.progress.animate().setDuration(150L).setStartDelay(PROGRESS_DELAY).alpha(1f);
 
         Photo photo = photos.get(position);
 
@@ -101,9 +106,7 @@ public class PhotoPagerAdapter extends RecyclePagerAdapter<PhotoPagerAdapter.Vie
     }
 
     @Override
-    public void onRecycleViewHolder(@NonNull ViewHolder holder) {
-        super.onRecycleViewHolder(holder);
-
+    public void onViewRecycled(@NonNull ViewHolder holder) {
         DemoGlideHelper.clear(holder.image);
 
         holder.progress.animate().cancel();
@@ -118,11 +121,25 @@ public class PhotoPagerAdapter extends RecyclePagerAdapter<PhotoPagerAdapter.Vie
         }
     }
 
-    public static GestureImageView getImage(RecyclePagerAdapter.ViewHolder holder) {
-        return ((ViewHolder) holder).image;
+
+    @Override
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
+        this.recyclerView = recyclerView;
     }
 
-    static class ViewHolder extends RecyclePagerAdapter.ViewHolder {
+    @Override
+    public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
+        this.recyclerView = null;
+    }
+
+    public GestureImageView getImage(int pos) {
+        final RecyclerView.ViewHolder holder =
+                recyclerView == null ? null : recyclerView.findViewHolderForLayoutPosition(pos);
+        return holder == null ? null : ((ViewHolder) holder).image;
+    }
+
+
+    static class ViewHolder extends RecyclerView.ViewHolder {
         final GestureImageView image;
         final View progress;
 
@@ -135,6 +152,31 @@ public class PhotoPagerAdapter extends RecyclePagerAdapter<PhotoPagerAdapter.Vie
 
     public interface ImageClickListener {
         void onFullImageClick();
+    }
+
+    // Dynamically set double tap zoom level to fill the viewport
+    private static class DynamicZoom implements GestureController.OnStateChangeListener {
+        private final Settings settings;
+
+        DynamicZoom(Settings settings) {
+            this.settings = settings;
+        }
+
+        @Override
+        public void onStateChanged(State state) {
+            updateZoomLevels();
+        }
+
+        @Override
+        public void onStateReset(State oldState, State newState) {
+            updateZoomLevels();
+        }
+
+        private void updateZoomLevels() {
+            final float scaleX = ((float) settings.getViewportW()) / settings.getImageW();
+            final float scaleY = ((float) settings.getViewportH()) / settings.getImageH();
+            settings.setDoubleTapZoom(Math.max(scaleX, scaleY));
+        }
     }
 
 }

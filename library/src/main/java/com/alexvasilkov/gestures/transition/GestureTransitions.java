@@ -6,10 +6,12 @@ import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.alexvasilkov.gestures.transition.ViewsTransitionAnimator.RequestListener;
 import com.alexvasilkov.gestures.transition.internal.FromListViewListener;
 import com.alexvasilkov.gestures.transition.internal.FromRecyclerViewListener;
+import com.alexvasilkov.gestures.transition.internal.IntoViewPager2Listener;
 import com.alexvasilkov.gestures.transition.internal.IntoViewPagerListener;
 import com.alexvasilkov.gestures.transition.tracker.FromTracker;
 import com.alexvasilkov.gestures.transition.tracker.IntoTracker;
@@ -105,6 +107,13 @@ public class GestureTransitions<ID> {
             @NonNull ViewPager viewPager,
             @NonNull IntoTracker<ID> tracker) {
         return into(new IntoViewPagerListener<>(viewPager, tracker));
+    }
+
+    @NonNull
+    public ViewsTransitionAnimator<ID> into(
+            @NonNull ViewPager2 viewPager,
+            @NonNull IntoTracker<ID> tracker) {
+        return into(new IntoViewPager2Listener<>(viewPager, tracker));
     }
 
 }

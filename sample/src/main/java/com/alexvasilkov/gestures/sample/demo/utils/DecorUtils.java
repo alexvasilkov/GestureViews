@@ -70,7 +70,7 @@ public class DecorUtils {
 
     public static void size(View view, int direction) {
         addListener(view, insets -> {
-            final Rect extra = getExtraInsets(view, insets, direction, R.id.tag_extra_margin);
+            final Rect extra = getExtraInsets(view, insets, direction, R.id.tag_extra_size);
             ViewGroup.LayoutParams params = view.getLayoutParams();
             if (params.height > 0) {
                 params.height += extra.top + extra.bottom;

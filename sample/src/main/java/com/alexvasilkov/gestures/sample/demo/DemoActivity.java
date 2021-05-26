@@ -2,6 +2,7 @@ package com.alexvasilkov.gestures.sample.demo;
 
 import android.animation.ObjectAnimator;
 import android.animation.StateListAnimator;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -14,7 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.alexvasilkov.android.commons.state.InstanceState;
 import com.alexvasilkov.android.commons.texts.SpannableBuilder;
@@ -23,7 +24,6 @@ import com.alexvasilkov.events.Events;
 import com.alexvasilkov.events.Events.Failure;
 import com.alexvasilkov.events.Events.Result;
 import com.alexvasilkov.gestures.commons.DepthPageTransformer;
-import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
 import com.alexvasilkov.gestures.sample.R;
 import com.alexvasilkov.gestures.sample.base.BaseSettingsActivity;
 import com.alexvasilkov.gestures.sample.demo.adapter.EndlessRecyclerAdapter;
@@ -55,7 +55,7 @@ public class DemoActivity extends BaseSettingsActivity implements PhotoListAdapt
     private ViewsTransitionAnimator<Integer> listAnimator;
     private PhotoListAdapter gridAdapter;
     private PhotoPagerAdapter pagerAdapter;
-    private ViewPager.OnPageChangeListener pagerListener;
+    private ViewPager2.OnPageChangeCallback pagerListener;
 
     @InstanceState
     private int savedPagerPosition = NO_POSITION;
@@ -192,9 +192,9 @@ public class DemoActivity extends BaseSettingsActivity implements PhotoListAdapt
      */
     private void initPager() {
         // Setting up pager adapter
-        pagerAdapter = new PhotoPagerAdapter(views.pager, getSettingsController());
+        pagerAdapter = new PhotoPagerAdapter(getSettingsController());
 
-        pagerListener = new ViewPager.SimpleOnPageChangeListener() {
+        pagerListener = new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 onPhotoInPagerSelected(position);
@@ -202,8 +202,8 @@ public class DemoActivity extends BaseSettingsActivity implements PhotoListAdapt
         };
 
         views.pager.setAdapter(pagerAdapter);
-        views.pager.addOnPageChangeListener(pagerListener);
-        views.pager.setPageTransformer(true, new DepthPageTransformer());
+        views.pager.registerOnPageChangeCallback(pagerListener);
+        views.pager.setPageTransformer(new DepthPageTransformer());
 
         // Setting up pager toolbar
         views.pagerToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
@@ -249,20 +249,19 @@ public class DemoActivity extends BaseSettingsActivity implements PhotoListAdapt
         final SimpleTracker gridTracker = new SimpleTracker() {
             @Override
             public View getViewAt(int pos) {
-                RecyclerView.ViewHolder holder = views.grid.findViewHolderForLayoutPosition(pos);
-                return holder == null ? null : PhotoListAdapter.getImage(holder);
+                return gridAdapter.getImage(pos);
             }
         };
 
         final SimpleTracker pagerTracker = new SimpleTracker() {
             @Override
             public View getViewAt(int pos) {
-                RecyclePagerAdapter.ViewHolder holder = pagerAdapter.getViewHolder(pos);
-                return holder == null ? null : PhotoPagerAdapter.getImage(holder);
+                return pagerAdapter.getImage(pos);
             }
         };
 
-        listAnimator = GestureTransitions.from(views.grid, gridTracker)
+        listAnimator = GestureTransitions
+                .from(views.grid, gridTracker)
                 .into(views.pager, pagerTracker);
 
         // Setting up and animating image transition
@@ -324,7 +323,7 @@ public class DemoActivity extends BaseSettingsActivity implements PhotoListAdapt
 
         savedPhotoCount = gridAdapter.getCount();
 
-        savedPagerPosition = listAnimator.isLeaving() || pagerAdapter.getCount() == 0
+        savedPagerPosition = listAnimator.isLeaving() || pagerAdapter.getItemCount() == 0
                 ? NO_POSITION : views.pager.getCurrentItem();
 
         if (views.grid.getChildCount() > 0) {
@@ -400,6 +399,7 @@ public class DemoActivity extends BaseSettingsActivity implements PhotoListAdapt
     }
 
 
+    @SuppressLint("Recycle")
     private static void setAppBarStateListAnimator(@NonNull View view) {
         // App bar elevation animation does not work unless we set state animator ourselves
         final StateListAnimator sla = new StateListAnimator();
@@ -426,7 +426,7 @@ public class DemoActivity extends BaseSettingsActivity implements PhotoListAdapt
         final RecyclerView grid;
 
         final View fullBackground;
-        final ViewPager pager;
+        final ViewPager2 pager;
         final TextView pagerTitle;
         final Toolbar pagerToolbar;
         final GestureImageView fullImage;
