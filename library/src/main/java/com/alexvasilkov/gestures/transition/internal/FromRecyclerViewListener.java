@@ -82,9 +82,13 @@ public class FromRecyclerViewListener<ID> extends FromBaseListener<RecyclerView,
     }
 
     private Pair<Integer, Integer> getAverageChildSize(RecyclerView list) {
+        int size = list.getChildCount();
+        if (size == 0) {
+            return new Pair<>(0, 0);
+        }
+
         int totalW = 0;
         int totalH = 0;
-        int size = list.getChildCount();
         for (int i = 0; i < size; i++) {
             totalW += list.getChildAt(i).getWidth();
             totalH += list.getChildAt(i).getHeight();
