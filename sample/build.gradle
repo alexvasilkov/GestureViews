@@ -1,6 +1,6 @@
 plugins {
     id 'com.android.application'
-    id 'com.github.triplet.play' version '3.0.0'
+    id 'com.github.triplet.play' version '3.4.0-agp4.2'
 }
 
 apply from: 'commons.gradle'
@@ -34,11 +34,11 @@ android {
 dependencies {
     implementation project(':library')
 
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.recyclerview:recyclerview:1.1.0'
-    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'androidx.appcompat:appcompat:1.3.0'
+    implementation 'androidx.recyclerview:recyclerview:1.2.0'
+    implementation 'com.google.android.material:material:1.3.0'
 
-    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
 
     implementation 'com.alexvasilkov:android-commons:2.0.2'
     implementation 'com.alexvasilkov:events:1.0.0'

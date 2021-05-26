@@ -2,22 +2,22 @@
 buildscript {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.1'
+        classpath 'com.android.tools.build:gradle:4.2.1'
     }
 }
 
 allprojects {
     buildscript {
         repositories {
-            jcenter()
+            mavenCentral()
         }
     }
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 
     // Enabling checkstyle for all sub projects
