@@ -668,10 +668,8 @@ public class ViewPositionAnimator {
         toClip.offset(toPos.viewport.left - toPos.view.left, toPos.viewport.top - toPos.view.top);
 
         // 'To' bounds clip is entire window rect in 'To' view coordinates
-        toBoundsClip.set(
-                windowRect.left - toPos.view.left, windowRect.top - toPos.view.top,
-                windowRect.right - toPos.view.left, windowRect.bottom - toPos.view.top
-        );
+        toBoundsClip.set(windowRect);
+        toBoundsClip.offset(-toPos.view.left, -toPos.view.top);
 
         isToUpdated = true;
 

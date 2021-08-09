@@ -88,7 +88,9 @@
             android:scrollbarStyle="outsideOverlay"
             android:scrollbars="vertical"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            tools:listitem="@layout/demo_item_photo" />
+            tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            tools:listitem="@layout/demo_item_photo"
+            tools:spanCount="3" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
