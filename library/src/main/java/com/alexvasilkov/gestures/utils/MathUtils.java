@@ -1,6 +1,7 @@
 package com.alexvasilkov.gestures.utils;
 
 import android.graphics.Matrix;
+import android.graphics.Rect;
 import android.graphics.RectF;
 
 import androidx.annotation.NonNull;
@@ -12,6 +13,7 @@ public class MathUtils {
 
     private static final Matrix tmpMatrix = new Matrix();
     private static final Matrix tmpMatrixInverse = new Matrix();
+    private static final RectF tmpRect = new RectF();
 
     private MathUtils() {}
 
@@ -154,6 +156,12 @@ public class MathUtils {
         tmpMatrixInverse.mapPoints(point);
         finalState.get(tmpMatrix);
         tmpMatrix.mapPoints(point);
+    }
+
+    public static void mapIntRect(@NonNull Matrix matrix, @NonNull Rect rect) {
+        tmpRect.set(rect);
+        matrix.mapRect(tmpRect);
+        rect.set((int) tmpRect.left, (int) tmpRect.top, (int) tmpRect.right, (int) tmpRect.bottom);
     }
 
 }

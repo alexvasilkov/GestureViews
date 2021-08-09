@@ -3,13 +3,15 @@ package com.alexvasilkov.gestures.animation;
 import android.graphics.Matrix;
 import android.graphics.Point;
 import android.graphics.Rect;
-import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.alexvasilkov.gestures.utils.MathUtils;
 
 import java.util.regex.Pattern;
 
@@ -38,8 +40,6 @@ public class ViewPosition {
 
     private static final int[] tmpLocation = new int[2];
     private static final Matrix tmpMatrix = new Matrix();
-    private static final RectF tmpSrc = new RectF();
-    private static final RectF tmpDst = new RectF();
 
     private static final Rect tmpViewRect = new Rect();
 
@@ -81,17 +81,20 @@ public class ViewPosition {
             return false;
         }
 
+        tmpMatrix.setScale(getTotalScaleX(targetView), getTotalScaleY(targetView), 0f, 0f);
         tmpViewRect.set(view);
 
         targetView.getLocationInWindow(tmpLocation);
 
         view.set(0, 0, targetView.getWidth(), targetView.getHeight());
+        MathUtils.mapIntRect(tmpMatrix, view);
         view.offset(tmpLocation[0], tmpLocation[1]);
 
         viewport.set(targetView.getPaddingLeft(),
                 targetView.getPaddingTop(),
                 targetView.getWidth() - targetView.getPaddingRight(),
                 targetView.getHeight() - targetView.getPaddingBottom());
+        MathUtils.mapIntRect(tmpMatrix, viewport);
         viewport.offset(tmpLocation[0], tmpLocation[1]);
 
         boolean isVisible = targetView.getGlobalVisibleRect(visible);
@@ -115,14 +118,9 @@ public class ViewPosition {
                         drawableWidth, drawableHeight, viewport.width(), viewport.height(),
                         imageView.getImageMatrix(), tmpMatrix);
 
-                tmpSrc.set(0f, 0f, drawableWidth, drawableHeight);
-                tmpMatrix.mapRect(tmpDst, tmpSrc);
-
-                // Calculating image position on screen
-                image.left = viewport.left + (int) tmpDst.left;
-                image.top = viewport.top + (int) tmpDst.top;
-                image.right = viewport.left + (int) tmpDst.right;
-                image.bottom = viewport.top + (int) tmpDst.bottom;
+                image.set(0, 0, drawableWidth, drawableHeight);
+                MathUtils.mapIntRect(tmpMatrix, image);
+                image.offset(viewport.left, viewport.top); // Calculating image position on screen
             }
         } else {
             image.set(viewport);
@@ -130,6 +128,23 @@ public class ViewPosition {
 
         return !tmpViewRect.equals(view);
     }
+
+    private static float getTotalScaleX(@Nullable Object view) {
+        if (view instanceof View) {
+            return ((View) view).getScaleX() * getTotalScaleX(((View) view).getParent());
+        } else {
+            return 1f;
+        }
+    }
+
+    private static float getTotalScaleY(@Nullable Object view) {
+        if (view instanceof View) {
+            return ((View) view).getScaleY() * getTotalScaleY(((View) view).getParent());
+        } else {
+            return 1f;
+        }
+    }
+
 
     @NonNull
     public static ViewPosition newInstance() {
