@@ -4,7 +4,7 @@ plugins {
 
 ext.group = 'com.alexvasilkov'
 ext.artifactId = 'gesture-views'
-ext.version = '2.8.1'
+ext.version = '2.8.2'
 ext.name = 'GestureViews'
 ext.description = 'ImageView and FrameLayout with gestures control and position animation'
 ext.github = 'https://github.com/alexvasilkov/GestureViews'
