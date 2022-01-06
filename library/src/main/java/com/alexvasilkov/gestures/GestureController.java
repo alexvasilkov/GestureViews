@@ -1,7 +1,5 @@
 package com.alexvasilkov.gestures;
 
-import static java.lang.Float.isNaN;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Point;
@@ -29,6 +27,8 @@ import com.alexvasilkov.gestures.utils.MathUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.lang.Float.isNaN;
 
 /**
  * Handles touch events to update view's position state ({@link State}) based on current
