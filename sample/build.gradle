@@ -13,7 +13,7 @@ android {
         minSdkVersion 23
         targetSdkVersion 31
 
-        setupVersion '2.8.2'
+        setupVersion '2.8.3'
         setOutputFileName 'gesture-views'
 
         resConfigs 'en'

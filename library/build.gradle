@@ -4,7 +4,7 @@ plugins {
 
 ext.group = 'com.alexvasilkov'
 ext.artifactId = 'gesture-views'
-ext.version = '2.8.2'
+ext.version = '2.8.3'
 ext.name = 'GestureViews'
 ext.description = 'ImageView and FrameLayout with gestures control and position animation'
 ext.github = 'https://github.com/alexvasilkov/GestureViews'
@@ -34,8 +34,3 @@ dependencies {
 
 // New version can be uploaded with './gradlew clean :library:publish'
 apply from: 'maven_publish.gradle'
-
-// Count methods:
-// dx --dex --output=temp.dex classes.jar
-// hexdump -s 88 -n 4 -e '1/4 "%d\n"' temp.dex
-// Where dx is placed in SDK folder, e.g. ~/Library/Android/sdk/build-tools/30.0.2/

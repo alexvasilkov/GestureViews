@@ -11,7 +11,6 @@ task javadocs(type: Javadoc) {
 
     exclude '**/BuildConfig.java'
     exclude '**/R.java'
-    exclude '**/internal/**'
 
     title "${project.ext.name} ${project.ext.version} API"
     options {
