@@ -286,6 +286,8 @@ public class ViewsTransitionAnimator<ID> extends ViewsCoordinator<ID> {
             next.enter(getFromView(), false);
         } else if (getFromPos() != null) {
             next.enter(getFromPos(), false);
+        } else {
+            next.enter(false);
         }
 
         initAnimator(next);
