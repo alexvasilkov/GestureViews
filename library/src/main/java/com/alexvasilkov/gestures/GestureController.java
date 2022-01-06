@@ -1,5 +1,7 @@
 package com.alexvasilkov.gestures;
 
+import static java.lang.Float.isNaN;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Point;
@@ -301,7 +303,7 @@ public class GestureController implements View.OnTouchListener {
         stopAllAnimations();
 
         // Ensure we have a correct pivot point
-        if (Float.isNaN(pivotX) || Float.isNaN(pivotY)) {
+        if (isNaN(pivotX) || isNaN(pivotY)) {
             GravityUtils.getDefaultPivot(settings, tmpPoint);
             pivotX = tmpPoint.x;
             pivotY = tmpPoint.y;
@@ -593,6 +595,10 @@ public class GestureController implements View.OnTouchListener {
             return false;
         }
 
+        if (isNaN(dx) || isNaN(dy)) {
+            return false; // Invalid scroll, nothing we can do
+        }
+
         boolean scrollConsumed = exitController.onScroll(-dx, -dy);
         if (scrollConsumed) {
             return true;
@@ -727,6 +733,9 @@ public class GestureController implements View.OnTouchListener {
         }
 
         final float scaleFactor = detector.getScaleFactor();
+        if (isNaN(scaleFactor) || isNaN(detector.getFocusX()) || isNaN(detector.getFocusY())) {
+            return false; // Invalid scale, nothing we can do
+        }
 
         boolean scaleConsumed = exitController.onScale(scaleFactor);
         if (scaleConsumed) {

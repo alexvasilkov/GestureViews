@@ -161,13 +161,13 @@ public class State {
      */
     private void updateFromMatrix(boolean updateZoom, boolean updateRotation) {
         matrix.getValues(matrixValues);
-        x = matrixValues[2];
-        y = matrixValues[5];
+        x = nonNaN(matrixValues[2]);
+        y = nonNaN(matrixValues[5]);
         if (updateZoom) {
-            zoom = (float) Math.hypot(matrixValues[1], matrixValues[4]);
+            zoom = nonNaN((float) Math.hypot(matrixValues[1], matrixValues[4]));
         }
         if (updateRotation) {
-            rotation = (float) Math.toDegrees(Math.atan2(matrixValues[3], matrixValues[4]));
+            rotation = nonNaN((float) Math.toDegrees(Math.atan2(matrixValues[3], matrixValues[4])));
         }
     }
 

@@ -198,7 +198,7 @@ public class StateController {
         float newX = tmpPointF.x;
         float newY = tmpPointF.y;
 
-        if (zoom < minZoom) {
+        if (zoom < minZoom && extraZoom > 1f) {
             // Decreasing overscroll if zooming less than minimum zoom
             float factor = (extraZoom * zoom / minZoom - 1f) / (extraZoom - 1f);
             factor = (float) Math.sqrt(factor);
