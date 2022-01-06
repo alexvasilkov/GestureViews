@@ -11,11 +11,11 @@ ext.github = 'https://github.com/alexvasilkov/GestureViews'
 ext.githubScm = 'scm:git@github.com:alexvasilkov/GestureViews.git'
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 30
+        targetSdkVersion 31
         versionName project.ext.version
     }
 
@@ -26,7 +26,7 @@ android {
 }
 
 dependencies {
-    compileOnly 'androidx.annotation:annotation:1.2.0'
+    compileOnly 'androidx.annotation:annotation:1.3.0'
     compileOnly 'androidx.viewpager:viewpager:1.0.0'
     compileOnly 'androidx.viewpager2:viewpager2:1.0.0'
     compileOnly 'androidx.recyclerview:recyclerview:1.2.1'
