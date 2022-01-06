@@ -18,6 +18,7 @@
 
         <activity-alias
             android:name=".ui.base.MainActivity"
+            android:exported="true"
             android:targetActivity=".base.StartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
