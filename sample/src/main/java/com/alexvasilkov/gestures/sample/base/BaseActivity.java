@@ -14,6 +14,9 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.alexvasilkov.android.commons.state.InstanceStateManager;
 import com.alexvasilkov.android.commons.ui.Views;
@@ -23,12 +26,23 @@ import com.google.android.material.color.MaterialColors;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
+    protected boolean edgeToEdge = false;
+
     private int infoTextId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         InstanceStateManager.restoreInstanceState(this, savedInstanceState);
+
+        if (!edgeToEdge) {
+            View rootView = findViewById(android.R.id.content);
+            ViewCompat.setOnApplyWindowInsetsListener(rootView, (v, insets) -> {
+                Insets bars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+                v.setPadding(bars.left, bars.top, bars.right, bars.bottom);
+                return WindowInsetsCompat.CONSUMED;
+            });
+        }
     }
 
     @Override
@@ -58,7 +72,8 @@ public abstract class BaseActivity extends AppCompatActivity {
             item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
             Drawable ic = ContextCompat.getDrawable(context, R.drawable.ic_info_outline_white_24dp);
-            ic.setTint(MaterialColors.getColor(context, R.attr.colorOnSurface, "Error"));
+            int colorId = com.google.android.material.R.attr.colorOnSurface;
+            ic.setTint(MaterialColors.getColor(context, colorId, "Error"));
             item.setIcon(ic);
         }
         return true;

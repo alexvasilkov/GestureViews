@@ -68,6 +68,7 @@ public class DemoActivity extends BaseSettingsActivity implements PhotoListAdapt
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        edgeToEdge = true;
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.demo_screen);
@@ -403,7 +404,7 @@ public class DemoActivity extends BaseSettingsActivity implements PhotoListAdapt
     private static void setAppBarStateListAnimator(@NonNull View view) {
         // App bar elevation animation does not work unless we set state animator ourselves
         final StateListAnimator sla = new StateListAnimator();
-        final int[] notLifted = new int[] { -R.attr.state_lifted };
+        final int[] notLifted = new int[] { -com.google.android.material.R.attr.state_lifted };
         final int[] lifted = new int[0];
         final long dur = 150L;
         final float elevation = TypedValue.applyDimension(

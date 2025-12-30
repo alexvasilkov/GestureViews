@@ -1,49 +1,58 @@
 plugins {
     id 'com.android.application'
-    id 'com.github.triplet.play' version '3.7.0'
 }
 
-apply from: 'commons.gradle'
-apply from: 'release.gradle'
-
 android {
-    compileSdkVersion 31
-
-    defaultConfig {
-        minSdkVersion 23
-        targetSdkVersion 31
-
-        setupVersion '2.8.3'
-        setOutputFileName 'gesture-views'
-
-        resConfigs 'en'
-    }
-
-    buildTypes {
-        debug {
-            applicationIdSuffix '.debug'
-        }
-    }
+    namespace = 'com.alexvasilkov.gestures.sample'
+    compileSdkVersion 36
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        minSdkVersion 23
+        targetSdkVersion 36
+
+        applicationId 'com.alexvasilkov.gestures.sample'
+        versionName '2.8.3'
+        versionCode 1
+
+        resConfigs 'en'
+    }
+
+    buildFeatures {
+        buildConfig true
+    }
+
+    signingConfigs {
+        debug {
+            storeFile file('debug.jks')
+        }
+    }
+
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+            applicationIdSuffix '.debug'
+        }
     }
 }
 
 dependencies {
     implementation project(':library')
 
-    implementation 'androidx.appcompat:appcompat:1.4.0'
-    implementation 'androidx.recyclerview:recyclerview:1.2.1'
-    implementation 'androidx.viewpager2:viewpager2:1.0.0'
-    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'androidx.appcompat:appcompat:1.7.1'
+    implementation 'androidx.recyclerview:recyclerview:1.4.0'
+    implementation 'androidx.viewpager2:viewpager2:1.1.0'
+    implementation 'com.google.android.material:material:1.13.0'
 
-    implementation 'com.github.bumptech.glide:glide:4.12.0'
+    implementation 'com.github.bumptech.glide:glide:5.0.5'
 
     implementation 'com.alexvasilkov:android-commons:2.0.2'
     implementation 'com.alexvasilkov:events:1.0.0'
 
     implementation 'com.googlecode.flickrj-android:flickrj-android:2.1.0'
-    implementation 'org.slf4j:slf4j-android:1.7.7' // Required by Flickr library
+    implementation 'org.slf4j:slf4j-android:1.7.36' // Required by Flickr library
 }

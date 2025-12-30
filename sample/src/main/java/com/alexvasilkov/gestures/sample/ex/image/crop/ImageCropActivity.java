@@ -79,7 +79,8 @@ public class ImageCropActivity extends BaseActivity {
             crop.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
             Drawable ic = ContextCompat.getDrawable(context, R.drawable.ic_check_white_24dp);
-            ic.setTint(MaterialColors.getColor(context, R.attr.colorOnSurface, "Error"));
+            int colorId = com.google.android.material.R.attr.colorOnSurface;
+            ic.setTint(MaterialColors.getColor(context, colorId, "Error"));
             crop.setIcon(ic);
         }
 
