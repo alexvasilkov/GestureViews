@@ -1,31 +1,13 @@
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
-task javadocs(type: Javadoc) {
-    source = android.sourceSets.main.java.sourceFiles
-    classpath = files(android.bootClasspath)
-
-    android.libraryVariants.all { variant ->
-        owner.classpath += variant.javaCompileProvider.get().classpath
-    }
-
+tasks.withType(Javadoc).configureEach {
     exclude '**/BuildConfig.java'
     exclude '**/R.java'
 
-    title "${project.ext.name} ${project.ext.version} API"
     options {
         windowTitle "${project.ext.name} ${project.ext.version} API"
     }
-}
-
-task javadocsJar(type: Jar, dependsOn: javadocs) {
-    archiveClassifier.set('javadoc')
-    from javadocs.destinationDir
-}
-
-task sourcesJar(type: Jar) {
-    archiveClassifier.set('sources')
-    from android.sourceSets.main.java.sourceFiles
 }
 
 afterEvaluate {
@@ -33,8 +15,6 @@ afterEvaluate {
         publications {
             release(MavenPublication) {
                 from components.release
-                artifact source: javadocsJar, classifier: 'javadoc'
-                artifact source: sourcesJar, classifier: 'sources'
 
                 groupId = project.ext.group
                 artifactId = project.ext.artifactId
@@ -67,8 +47,16 @@ afterEvaluate {
         }
         repositories {
             maven {
-                def releasesRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
-                def snapshotsRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
+                // Uncomment for manual release process:
+                // Build with ./gradlew :library:publishAllPublicationsToTestRepoRepository
+                // Create a zip archive inside the test-repo folder: zip -r bundle.zip com/
+                // Upload it manually to https://central.sonatype.com/publishing
+                // maven {
+                //     name = "testRepo"
+                //     url = layout.buildDirectory.dir("test-repo")
+                // }
+                def releasesRepoUrl = 'https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/'
+                def snapshotsRepoUrl = 'https://central.sonatype.com/repository/maven-snapshots/'
                 url = project.ext.version.contains('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
                 credentials {
                     username = findProperty('maven.alexvasilkov.username')

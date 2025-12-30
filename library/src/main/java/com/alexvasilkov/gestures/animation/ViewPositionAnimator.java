@@ -748,7 +748,7 @@ public class ViewPositionAnimator {
         }
     }
 
-
+    @SuppressWarnings({"deprecation", "RedundantSuppression"})
     private static void getDisplaySize(Context context, Rect rect) {
         WindowManager wm = getActivity(context).getWindowManager();
         DisplayMetrics metrics = new DisplayMetrics();
