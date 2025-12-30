@@ -79,7 +79,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     /**
-     * @return true if the child handled the back press, false to let the default system back happen.
+     * @return true if the child handled the back press.
      */
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     protected boolean onBackPressedInternal() {

@@ -116,7 +116,8 @@ public class DecorUtils {
 
         @NonNull
         @Override
-        public WindowInsetsCompat onApplyWindowInsets(@NonNull View view, WindowInsetsCompat insets) {
+        public WindowInsetsCompat onApplyWindowInsets(
+                @NonNull View view, WindowInsetsCompat insets) {
             lastInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             for (InsetsListener listener : listeners) {
                 listener.applyInsets(lastInsets);
