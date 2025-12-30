@@ -6,8 +6,6 @@ import androidx.annotation.NonNull;
 
 public abstract class AnimationEngine implements Runnable {
 
-    private static final long FRAME_TIME = 10L;
-
     private final View view;
     private final Fps fps;
 
@@ -36,7 +34,7 @@ public abstract class AnimationEngine implements Runnable {
 
     private void scheduleNextStep() {
         view.removeCallbacks(this);
-        view.postOnAnimationDelayed(this, FRAME_TIME);
+        view.postOnAnimation(this);
     }
 
     public void start() {
