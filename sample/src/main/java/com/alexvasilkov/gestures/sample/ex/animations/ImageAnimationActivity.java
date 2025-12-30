@@ -57,12 +57,13 @@ public class ImageAnimationActivity extends BaseSettingsActivity {
     }
 
     @Override
-    public void onBackPressed() {
+    protected boolean onBackPressedInternal() {
         // We should leave full image mode instead of closing the screen
         if (!animator.isLeaving()) {
             animator.exit(true);
+            return true;
         } else {
-            super.onBackPressed();
+            return super.onBackPressedInternal();
         }
     }
 

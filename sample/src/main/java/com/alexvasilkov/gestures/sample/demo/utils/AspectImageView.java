@@ -25,9 +25,9 @@ public class AspectImageView extends AppCompatImageView {
     public AspectImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        TypedArray arr = context.obtainStyledAttributes(attrs, new int[] { R.attr.aspect });
-        aspect = arr.getFloat(0, aspect);
-        arr.recycle();
+        try (TypedArray arr = context.obtainStyledAttributes(attrs, new int[]{R.attr.aspect})) {
+            aspect = arr.getFloat(0, aspect);
+        }
     }
 
     @Override

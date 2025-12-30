@@ -101,13 +101,15 @@ public class DemoActivity extends BaseSettingsActivity implements PhotoListAdapt
     }
 
     @Override
-    public void onBackPressed() {
+    protected boolean onBackPressedInternal() {
         if (!listAnimator.isLeaving()) {
             listAnimator.exit(true); // Exiting from full pager
+            return true;
         } else if (!imageAnimator.isLeaving()) {
             imageAnimator.exit(true); // Exiting from full top image
+            return true;
         } else {
-            super.onBackPressed();
+            return super.onBackPressedInternal();
         }
     }
 
@@ -133,7 +135,7 @@ public class DemoActivity extends BaseSettingsActivity implements PhotoListAdapt
      */
     private void initTopImage() {
         views.fullImageToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
-        views.fullImageToolbar.setNavigationOnClickListener(view -> onBackPressed());
+        views.fullImageToolbar.setNavigationOnClickListener(view -> sendBackPress());
 
         imageAnimator = GestureTransitions.from(views.appBarImage).into(views.fullImage);
 
@@ -208,7 +210,7 @@ public class DemoActivity extends BaseSettingsActivity implements PhotoListAdapt
 
         // Setting up pager toolbar
         views.pagerToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
-        views.pagerToolbar.setNavigationOnClickListener(view -> onBackPressed());
+        views.pagerToolbar.setNavigationOnClickListener(view -> sendBackPress());
 
         // Enabling immersive mode by clicking on full screen image
         pagerAdapter.setImageClickListener(() -> {
@@ -290,7 +292,6 @@ public class DemoActivity extends BaseSettingsActivity implements PhotoListAdapt
     /**
      * Checks if system UI (status bar and navigation bar) is shown or we are in fullscreen mode.
      */
-    @SuppressWarnings("deprecation") // New insets controller API is not back-ported yet
     private boolean isSystemUiShown() {
         return (getWindow().getDecorView().getSystemUiVisibility()
                 & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0;
@@ -299,7 +300,6 @@ public class DemoActivity extends BaseSettingsActivity implements PhotoListAdapt
     /**
      * Shows or hides system UI (status bar and navigation bar).
      */
-    @SuppressWarnings("deprecation") // New insets controller API is not back-ported yet
     private void showSystemUi(boolean show) {
         int flags = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_FULLSCREEN

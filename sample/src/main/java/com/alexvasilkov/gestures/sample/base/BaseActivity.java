@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBar;
@@ -23,6 +24,8 @@ import com.alexvasilkov.android.commons.ui.Views;
 import com.alexvasilkov.events.Events;
 import com.alexvasilkov.gestures.sample.R;
 import com.google.android.material.color.MaterialColors;
+
+import java.util.Objects;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
@@ -43,6 +46,18 @@ public abstract class BaseActivity extends AppCompatActivity {
                 return WindowInsetsCompat.CONSUMED;
             });
         }
+
+        OnBackPressedCallback internalBackPressedCallback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (!onBackPressedInternal()) {
+                    setEnabled(false); // Temporarily disable to avoid recursion
+                    getOnBackPressedDispatcher().onBackPressed();
+                    setEnabled(true);
+                }
+            }
+        };
+        getOnBackPressedDispatcher().addCallback(this, internalBackPressedCallback);
     }
 
     @Override
@@ -63,15 +78,28 @@ public abstract class BaseActivity extends AppCompatActivity {
         Events.unregister(this);
     }
 
+    /**
+     * @return true if the child handled the back press, false to let the default system back happen.
+     */
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    protected boolean onBackPressedInternal() {
+        return false;
+    }
+
+    protected void sendBackPress() {
+        getOnBackPressedDispatcher().onBackPressed();
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (infoTextId != 0) {
-            final Context context = getSupportActionBar().getThemedContext();
+            final Context context = getSupportActionBarNotNull().getThemedContext();
 
             MenuItem item = menu.add(Menu.NONE, R.id.menu_info, Menu.NONE, R.string.menu_info);
             item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
             Drawable ic = ContextCompat.getDrawable(context, R.drawable.ic_info_outline_white_24dp);
+            Objects.requireNonNull(ic);
             int colorId = com.google.android.material.R.attr.colorOnSurface;
             ic.setTint(MaterialColors.getColor(context, colorId, "Error"));
             item.setIcon(ic);
@@ -83,7 +111,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
         if (itemId == android.R.id.home) {
-            onBackPressed();
+            sendBackPress();
             return true;
         } else if (itemId == R.id.menu_info) {
             showInfoDialog();

@@ -64,12 +64,13 @@ public class FullImageActivity extends BaseSettingsActivity {
     }
 
     @Override
-    public void onBackPressed() {
+    protected boolean onBackPressedInternal() {
         // We should leave full image mode instead of finishing this activity,
         // activity itself should only be finished in the end of the "exit" animation.
         if (!image.getPositionAnimator().isLeaving()) {
             image.getPositionAnimator().exit(true);
         }
+        return true;
     }
 
     @Override

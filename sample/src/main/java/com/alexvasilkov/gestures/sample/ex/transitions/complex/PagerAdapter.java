@@ -13,7 +13,7 @@ import com.alexvasilkov.gestures.views.GestureImageView;
 
 import java.util.List;
 
-class PagerAdapter extends RecyclePagerAdapter<PagerAdapter.ViewHolder> {
+public class PagerAdapter extends RecyclePagerAdapter<PagerAdapter.ViewHolder> {
 
     private final ViewPager viewPager;
     private final SettingsController settingsController;
@@ -54,7 +54,7 @@ class PagerAdapter extends RecyclePagerAdapter<PagerAdapter.ViewHolder> {
     }
 
 
-    static class ViewHolder extends RecyclePagerAdapter.ViewHolder {
+    public static class ViewHolder extends RecyclePagerAdapter.ViewHolder {
         final GestureImageView image;
 
         ViewHolder(ViewGroup container) {

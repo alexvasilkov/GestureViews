@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.alexvasilkov.gestures.animation.ViewPositionAnimator;
-import com.alexvasilkov.gestures.animation.ViewPositionAnimator.PositionUpdateListener;
 import com.alexvasilkov.gestures.transition.ViewsTransitionAnimator;
 import com.alexvasilkov.gestures.transition.tracker.IntoTracker;
 import com.alexvasilkov.gestures.views.interfaces.AnimatorView;
@@ -34,18 +33,15 @@ public class IntoViewPager2Listener<ID> extends ViewsTransitionAnimator.RequestL
     protected void initAnimator(ViewsTransitionAnimator<ID> animator) {
         super.initAnimator(animator);
 
-        animator.addPositionUpdateListener(new PositionUpdateListener() {
-            @Override
-            public void onPositionUpdate(float pos, boolean isLeaving) {
-                if (pos == 1f && isLeaving && getAnimator().getRequestedId() != null) {
-                    if (preventExit) {
-                        skipExit();
-                    }
-                    switchToCurrentPage();
+        animator.addPositionUpdateListener((pos, isLeaving) -> {
+            if (pos == 1f && isLeaving && getAnimator().getRequestedId() != null) {
+                if (preventExit) {
+                    skipExit();
                 }
-
-                viewPager.setVisibility(pos == 0f && isLeaving ? View.INVISIBLE : View.VISIBLE);
+                switchToCurrentPage();
             }
+
+            viewPager.setVisibility(pos == 0f && isLeaving ? View.INVISIBLE : View.VISIBLE);
         });
     }
 

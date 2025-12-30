@@ -1,6 +1,5 @@
 package com.alexvasilkov.gestures.internal;
 
-import android.os.Build;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -37,11 +36,7 @@ public abstract class AnimationEngine implements Runnable {
 
     private void scheduleNextStep() {
         view.removeCallbacks(this);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            view.postOnAnimationDelayed(this, FRAME_TIME);
-        } else {
-            view.postDelayed(this, FRAME_TIME);
-        }
+        view.postOnAnimationDelayed(this, FRAME_TIME);
     }
 
     public void start() {

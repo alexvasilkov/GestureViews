@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.MarginLayoutParams;
 
+import androidx.annotation.NonNull;
 import androidx.core.graphics.Insets;
 import androidx.core.view.OnApplyWindowInsetsListener;
 import androidx.core.view.ViewCompat;
@@ -113,13 +114,16 @@ public class DecorUtils {
         private final List<InsetsListener> listeners = new ArrayList<>();
         private Insets lastInsets;
 
+        @NonNull
         @Override
-        public WindowInsetsCompat onApplyWindowInsets(View view, WindowInsetsCompat insets) {
-            lastInsets = insets.getSystemWindowInsets();
+        public WindowInsetsCompat onApplyWindowInsets(@NonNull View view, WindowInsetsCompat insets) {
+            lastInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             for (InsetsListener listener : listeners) {
                 listener.applyInsets(lastInsets);
             }
-            return insets.consumeStableInsets();
+            return new WindowInsetsCompat.Builder(insets)
+                    .setInsets(WindowInsetsCompat.Type.systemBars(), Insets.NONE)
+                    .build();
         }
 
         void addListener(InsetsListener listener) {

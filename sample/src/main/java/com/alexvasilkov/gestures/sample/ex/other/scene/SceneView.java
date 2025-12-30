@@ -103,7 +103,7 @@ public class SceneView extends View implements GestureView {
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
+    protected void onDraw(@NonNull Canvas canvas) {
         super.onDraw(canvas);
 
         canvas.save();

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-class ListItem {
+public class ListItem {
 
     final String text;
     final List<Painting> paintings;
