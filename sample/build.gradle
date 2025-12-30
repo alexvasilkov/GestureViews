@@ -16,7 +16,7 @@ android {
         targetSdkVersion 36
 
         applicationId 'com.alexvasilkov.gestures.sample'
-        versionName '2.8.3'
+        versionName '2.9.0'
         versionCode 1
 
         resConfigs 'en'
