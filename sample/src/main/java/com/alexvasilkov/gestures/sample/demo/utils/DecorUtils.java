@@ -11,6 +11,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.OnApplyWindowInsetsListener;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsCompat.Type;
 
 import com.alexvasilkov.gestures.sample.R;
 
@@ -87,7 +88,6 @@ public class DecorUtils {
         addListener(view, insets -> action.run());
     }
 
-
     private static Rect getExtraInsets(View view, Insets insets, int direction, int tagId) {
         Rect oldInsets = (Rect) view.getTag(tagId);
         oldInsets = oldInsets == null ? new Rect() : oldInsets;
@@ -109,7 +109,6 @@ public class DecorUtils {
         );
     }
 
-
     private static class ApplyInsetsListener implements OnApplyWindowInsetsListener {
         private final List<InsetsListener> listeners = new ArrayList<>();
         private Insets lastInsets;
@@ -118,13 +117,12 @@ public class DecorUtils {
         @Override
         public WindowInsetsCompat onApplyWindowInsets(
                 @NonNull View view, WindowInsetsCompat insets) {
-            lastInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            int types = Type.statusBars() | Type.navigationBars() | Type.displayCutout();
+            lastInsets = insets.getInsetsIgnoringVisibility(types);
             for (InsetsListener listener : listeners) {
                 listener.applyInsets(lastInsets);
             }
-            return new WindowInsetsCompat.Builder(insets)
-                    .setInsets(WindowInsetsCompat.Type.systemBars(), Insets.NONE)
-                    .build();
+            return new WindowInsetsCompat.Builder(insets).setInsets(types, Insets.NONE).build();
         }
 
         void addListener(InsetsListener listener) {
