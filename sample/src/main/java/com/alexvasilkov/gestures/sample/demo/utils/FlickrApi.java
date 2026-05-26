@@ -34,6 +34,7 @@ public class FlickrApi {
 
     private static final List<Photo> photos = new ArrayList<>();
     private static final List<PhotoList> pages = new ArrayList<>();
+    private static final Set<String> photoIds = new HashSet<>(); // To skip cross-page duplicates
 
     private FlickrApi() {}
 
@@ -52,7 +53,11 @@ public class FlickrApi {
         while (photos.size() < count && hasNext) {
             final PhotoList loaded = flickrPhotos.search(params, PER_PAGE, pages.size() + 1);
             pages.add(loaded);
-            photos.addAll(loaded);
+            for (Photo photo : loaded) {
+                if (photoIds.add(photo.getId())) {
+                    photos.add(photo);
+                }
+            }
 
             hasNext = hasNext();
         }
