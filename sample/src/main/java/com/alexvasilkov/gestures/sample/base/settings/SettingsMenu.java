@@ -87,13 +87,13 @@ public class SettingsMenu implements SettingsController {
 
     private <T> void addSubMenu(Menu menu, T[] items, T selected, @StringRes int titleId) {
         SubMenu sub = menu.addSubMenu(titleId);
-        sub.setGroupCheckable(Menu.NONE, true, true);
 
         for (int i = 0; i < items.length; i++) {
             MenuItem item = sub.add(Menu.NONE, titleId, i, items[i].toString());
-            item.setCheckable(true);
             item.setChecked(items[i] == selected);
         }
+
+        sub.setGroupCheckable(Menu.NONE, true, true);
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
