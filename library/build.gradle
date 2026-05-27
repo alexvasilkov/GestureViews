@@ -1,14 +1,11 @@
+import com.vanniktech.maven.publish.AndroidSingleVariantLibrary
+
 plugins {
     id 'com.android.library'
+    id 'com.vanniktech.maven.publish'
 }
 
-ext.group = 'com.alexvasilkov'
-ext.artifactId = 'gesture-views'
-ext.version = '2.9.0'
-ext.name = 'GestureViews'
-ext.description = 'ImageView and FrameLayout with gestures control and position animation'
-ext.github = 'https://github.com/alexvasilkov/GestureViews'
-ext.githubScm = 'scm:git@github.com:alexvasilkov/GestureViews.git'
+def libVersion = '2.9.0'
 
 android {
     namespace = 'com.alexvasilkov.gestures'
@@ -22,14 +19,7 @@ android {
     defaultConfig {
         minSdkVersion 23
         targetSdkVersion 36
-        versionName project.ext.version
-    }
-
-    publishing {
-        singleVariant('release') {
-            withSourcesJar()
-            withJavadocJar()
-        }
+        versionName libVersion
     }
 }
 
@@ -40,5 +30,46 @@ dependencies {
     compileOnly 'androidx.recyclerview:recyclerview:1.4.0'
 }
 
-// New version can be uploaded with './gradlew clean :library:publish'
-apply from: 'maven_publish.gradle'
+tasks.withType(Javadoc).configureEach {
+    exclude '**/BuildConfig.java'
+    exclude '**/R.java'
+
+    options {
+        windowTitle "GestureViews $libVersion API"
+    }
+}
+
+// Publish with library/publish.sh (manual release), or add --release to auto-release.
+// Secrets (Maven Central token + GPG key) for the plugin come from env vars set by publish.sh:
+// ORG_GRADLE_PROJECT_mavenCentralUsername/Password and signingInMemoryKey/KeyId/KeyPassword.
+mavenPublishing {
+    configure(new AndroidSingleVariantLibrary('release', true, true))
+
+    publishToMavenCentral(false) // false = manual release
+    signAllPublications() // Uses the in-memory key
+
+    coordinates('com.alexvasilkov', 'gesture-views', libVersion)
+
+    pom {
+        name = 'GestureViews'
+        description = 'ImageView and FrameLayout with gestures control and position animation'
+        url = 'https://github.com/alexvasilkov/GestureViews'
+        licenses {
+            license {
+                name = 'The Apache License, Version 2.0'
+                url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+            }
+        }
+        developers {
+            developer {
+                id = 'alexvasilkov'
+                name = 'Alex Vasilkov'
+            }
+        }
+        scm {
+            connection = 'scm:git@github.com:alexvasilkov/GestureViews.git'
+            developerConnection = 'scm:git@github.com:alexvasilkov/GestureViews.git'
+            url = 'https://github.com/alexvasilkov/GestureViews'
+        }
+    }
+}
