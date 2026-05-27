@@ -16,7 +16,7 @@ android {
     targetSdk = 37
 
     applicationId = "com.alexvasilkov.gestures.sample"
-    versionName = "2.9.0"
+    versionName = "2.10.0"
     versionCode = 1
 
     @Suppress("DEPRECATION") // Suggested alternative is marked "Unstable"...

@@ -7,7 +7,7 @@ plugins {
   id("com.vanniktech.maven.publish")
 }
 
-val libVersion = "2.9.0"
+val libVersion = "2.10.0"
 
 android {
   namespace = "com.alexvasilkov.gestures"
