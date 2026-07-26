@@ -188,10 +188,10 @@ public class State {
 
     @Override
     public int hashCode() {
-        int result = (x != +0.0f ? Float.floatToIntBits(x) : 0);
-        result = 31 * result + (y != +0.0f ? Float.floatToIntBits(y) : 0);
-        result = 31 * result + (zoom != +0.0f ? Float.floatToIntBits(zoom) : 0);
-        result = 31 * result + (rotation != +0.0f ? Float.floatToIntBits(rotation) : 0);
+        int result = (x != 0.0f ? Float.floatToIntBits(x) : 0);
+        result = 31 * result + (y != 0.0f ? Float.floatToIntBits(y) : 0);
+        result = 31 * result + (zoom != 0.0f ? Float.floatToIntBits(zoom) : 0);
+        result = 31 * result + (rotation != 0.0f ? Float.floatToIntBits(rotation) : 0);
         return result;
     }
 

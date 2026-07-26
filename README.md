@@ -2,7 +2,6 @@ GestureViews
 ============
 
 [![Maven][mvn-img]][mvn-url]
-[![Build][build-img]][build-url]
 
 ImageView and FrameLayout with gestures control and position animation.
 
@@ -23,12 +22,6 @@ easier for developers to integrate it into their apps.
 - Custom state animation (animating position, zoom, rotation).
 - Supports both ImageView and FrameLayout out of the box, also supports [custom views](https://github.com/alexvasilkov/GestureViews/wiki/Custom-views).
 
-#### Sample app ####
-
-<a href="http://play.google.com/store/apps/details?id=com.alexvasilkov.gestures.sample">
-  <img alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/apps/en-play-badge-border.png" height="64" />
-</a>
-
 #### Demo video ####
 
 [YouTube](https://youtu.be/KDJj08qN7n4)
@@ -39,7 +32,7 @@ easier for developers to integrate it into their apps.
 
 Add dependency to your `build.gradle` file:
 
-    implementation 'com.alexvasilkov:gesture-views:2.8.3'
+    implementation 'com.alexvasilkov:gesture-views:2.10.0'
 
 [Usage wiki](https://github.com/alexvasilkov/GestureViews/wiki/Usage)
 
@@ -63,8 +56,5 @@ Add dependency to your `build.gradle` file:
 
 [mvn-url]: https://maven-badges.herokuapp.com/maven-central/com.alexvasilkov/gesture-views
 [mvn-img]: https://img.shields.io/maven-central/v/com.alexvasilkov/gesture-views.svg?style=flat-square
-
-[build-url]: https://actions-badge.atrox.dev/alexvasilkov/GestureViews/goto?ref=master
-[build-img]: https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Falexvasilkov%2FGestureViews%2Fbadge%3Fref%3Dmaster&style=flat-square
 
 [javadoc-url]: http://javadoc.io/doc/com.alexvasilkov/gesture-views

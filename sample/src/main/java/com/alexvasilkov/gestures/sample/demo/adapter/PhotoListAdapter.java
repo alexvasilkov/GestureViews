@@ -112,7 +112,7 @@ public class PhotoListAdapter extends DefaultEndlessRecyclerAdapter<PhotoListAda
     }
 
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         final ImageView image;
 
         ViewHolder(ViewGroup parent) {

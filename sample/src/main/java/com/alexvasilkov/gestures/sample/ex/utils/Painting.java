@@ -22,6 +22,7 @@ public class Painting {
     }
 
 
+    @SuppressWarnings("resource")
     public static Painting[] list(Resources res) {
         final String[] authors = res.getStringArray(R.array.paintings_authors);
         final String[] titles = res.getStringArray(R.array.paintings_titles);

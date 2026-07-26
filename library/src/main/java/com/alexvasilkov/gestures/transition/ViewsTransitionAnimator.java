@@ -40,12 +40,9 @@ public class ViewsTransitionAnimator<ID> extends ViewsCoordinator<ID> {
     private boolean exitWithAnimation;
 
     ViewsTransitionAnimator() {
-        addPositionUpdateListener(new PositionUpdateListener() {
-            @Override
-            public void onPositionUpdate(float position, boolean isLeaving) {
-                if (position == 0f && isLeaving) {
-                    cleanupRequest();
-                }
+        addPositionUpdateListener((position, isLeaving) -> {
+            if (position == 0f && isLeaving) {
+                cleanupRequest();
             }
         });
     }

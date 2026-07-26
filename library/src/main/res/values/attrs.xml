@@ -44,6 +44,7 @@
         <attr name="gest_restrictRotation" format="reference|boolean" />
         <attr name="gest_doubleTapEnabled" format="reference|boolean" />
         <attr name="gest_exitEnabled" format="reference|boolean" />
+        <attr name="gest_exitMinZoom" format="reference|float" />
         <attr name="gest_animationDuration" format="reference|integer" />
         <attr name="gest_disableGestures" format="reference|boolean" />
         <attr name="gest_disableBounds" format="reference|boolean" />
@@ -70,6 +71,7 @@
         <attr name="gest_restrictRotation" />
         <attr name="gest_doubleTapEnabled" />
         <attr name="gest_exitEnabled" />
+        <attr name="gest_exitMinZoom" />
         <attr name="gest_animationDuration" />
         <attr name="gest_disableGestures" />
         <attr name="gest_disableBounds" />
@@ -96,6 +98,7 @@
         <attr name="gest_restrictRotation" />
         <attr name="gest_doubleTapEnabled" />
         <attr name="gest_exitEnabled" />
+        <attr name="gest_exitMinZoom" />
         <attr name="gest_animationDuration" />
         <attr name="gest_disableGestures" />
         <attr name="gest_disableBounds" />

@@ -9,7 +9,6 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
@@ -96,19 +95,18 @@ public class CropAreaView extends View {
         final float defaultBorderWidth =
                 UnitsUtils.toPixels(getContext(), TypedValue.COMPLEX_UNIT_DIP, BORDER_WIDTH_DP);
 
-        TypedArray arr = context.obtainStyledAttributes(attrs, R.styleable.CropAreaView);
-        backColor = arr.getColor(R.styleable.CropAreaView_gest_backgroundColor, BACK_COLOR);
-        borderColor = arr.getColor(R.styleable.CropAreaView_gest_borderColor, BORDER_COLOR);
-        borderWidth = arr.getDimension(R.styleable.CropAreaView_gest_borderWidth,
-                defaultBorderWidth);
-        horizontalRules = arr.getInt(R.styleable.CropAreaView_gest_rulesHorizontal, 0);
-        verticalRules = arr.getInt(R.styleable.CropAreaView_gest_rulesVertical, 0);
-        rulesWidth = arr.getDimension(R.styleable.CropAreaView_gest_rulesWidth, 0f);
-        boolean rounded = arr.getBoolean(R.styleable.CropAreaView_gest_rounded, false);
-        aspect = arr.getFloat(R.styleable.CropAreaView_gest_aspect, NO_ASPECT);
-        arr.recycle();
-
-        rounding = endRounding = rounded ? 1f : 0f;
+        try (TypedArray arr = context.obtainStyledAttributes(attrs, R.styleable.CropAreaView)) {
+            backColor = arr.getColor(R.styleable.CropAreaView_gest_backgroundColor, BACK_COLOR);
+            borderColor = arr.getColor(R.styleable.CropAreaView_gest_borderColor, BORDER_COLOR);
+            borderWidth = arr.getDimension(R.styleable.CropAreaView_gest_borderWidth,
+                    defaultBorderWidth);
+            horizontalRules = arr.getInt(R.styleable.CropAreaView_gest_rulesHorizontal, 0);
+            verticalRules = arr.getInt(R.styleable.CropAreaView_gest_rulesVertical, 0);
+            rulesWidth = arr.getDimension(R.styleable.CropAreaView_gest_rulesWidth, 0f);
+            boolean rounded = arr.getBoolean(R.styleable.CropAreaView_gest_rounded, false);
+            rounding = endRounding = rounded ? 1f : 0f;
+            aspect = arr.getFloat(R.styleable.CropAreaView_gest_aspect, NO_ASPECT);
+        }
     }
 
     /**
@@ -297,7 +295,7 @@ public class CropAreaView extends View {
 
 
     @Override
-    protected void onDraw(Canvas canvas) {
+    protected void onDraw(@NonNull Canvas canvas) {
         // Preview does not support offscreen drawing, so we'll always draw a rect hole
         if (rounding == 0f || isInEditMode()) {
             drawRectHole(canvas);
@@ -331,18 +329,12 @@ public class CropAreaView extends View {
     }
 
     // If cropping area is rounded we have to use off-screen buffer to punch a hole
-    @SuppressWarnings("deprecation")
     private void drawRoundedHole(Canvas canvas) {
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(backColor);
 
         // Punching hole in background color requires offscreen drawing
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            canvas.saveLayer(0, 0, canvas.getWidth(), canvas.getHeight(), null);
-        } else {
-            canvas.saveLayer(0, 0, canvas.getWidth(), canvas.getHeight(), null, 0);
-        }
-
+        canvas.saveLayer(0, 0, canvas.getWidth(), canvas.getHeight(), null);
         canvas.drawPaint(paint);
 
         final float rx = rounding * 0.5f * areaRect.width();

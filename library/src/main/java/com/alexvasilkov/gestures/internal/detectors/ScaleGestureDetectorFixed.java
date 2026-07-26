@@ -1,8 +1,6 @@
 package com.alexvasilkov.gestures.internal.detectors;
 
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.os.Build;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 
@@ -46,11 +44,9 @@ public class ScaleGestureDetectorFixed extends ScaleGestureDetector {
         return result;
     }
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
+    // Indirectly determine double tap mode
     private boolean isInDoubleTapMode() {
-        // Indirectly determine double tap mode
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
-                && isQuickScaleEnabled() && getCurrentSpan() == getCurrentSpanY();
+        return isQuickScaleEnabled() && getCurrentSpan() == getCurrentSpanY();
     }
 
     @Override

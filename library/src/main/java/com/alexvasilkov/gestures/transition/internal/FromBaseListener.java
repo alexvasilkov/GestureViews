@@ -5,7 +5,6 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
-import com.alexvasilkov.gestures.animation.ViewPositionAnimator.PositionUpdateListener;
 import com.alexvasilkov.gestures.transition.ViewsTransitionAnimator;
 import com.alexvasilkov.gestures.transition.ViewsTransitionAnimator.RequestListener;
 import com.alexvasilkov.gestures.transition.tracker.FromTracker;
@@ -36,12 +35,9 @@ abstract class FromBaseListener<P extends View, ID> extends RequestListener<ID> 
     protected void initAnimator(ViewsTransitionAnimator<ID> animator) {
         super.initAnimator(animator);
 
-        animator.addPositionUpdateListener(new PositionUpdateListener() {
-            @Override
-            public void onPositionUpdate(float pos, boolean isLeaving) {
-                parentView.setVisibility(pos == 1f && !isLeaving ? View.INVISIBLE : View.VISIBLE);
-                isFullyOpened = pos == 1f;
-            }
+        animator.addPositionUpdateListener((pos, isLeaving) -> {
+            parentView.setVisibility(pos == 1f && !isLeaving ? View.INVISIBLE : View.VISIBLE);
+            isFullyOpened = pos == 1f;
         });
     }
 

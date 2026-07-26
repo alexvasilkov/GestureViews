@@ -53,11 +53,12 @@ abstract class BaseComplexListActivity extends BaseSettingsActivity {
     }
 
     @Override
-    public void onBackPressed() {
+    protected boolean onBackPressedInternal() {
         if (!animator.isLeaving()) {
             animator.exit(true);
+            return true;
         } else {
-            super.onBackPressed();
+            return super.onBackPressedInternal();
         }
     }
 

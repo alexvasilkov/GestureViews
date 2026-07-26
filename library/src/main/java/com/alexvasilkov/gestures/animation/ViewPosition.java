@@ -226,7 +226,7 @@ public class ViewPosition {
         Rect visible = Rect.unflattenFromString(parts[2]);
         Rect image = Rect.unflattenFromString(parts[3]);
 
-        if (view == null || viewport == null || image == null) {
+        if (view == null || viewport == null || visible == null || image == null) {
             throw new IllegalArgumentException("Wrong ViewPosition string: " + str);
         }
 

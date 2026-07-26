@@ -160,18 +160,15 @@ public class ViewPositionAnimator {
             }
         });
 
-        toPosHolder.init(toView, new ViewPositionHolder.OnViewPositionChangeListener() {
-            @Override
-            public void onViewPositionChanged(@NonNull ViewPosition position) {
-                if (GestureDebug.isDebugAnimator()) {
-                    Log.d(TAG, "'To' view position updated: " + position.pack());
-                }
-
-                toPos = position;
-                requestUpdateToState();
-                requestUpdateFromState(); // Depends on 'to' position
-                applyCurrentPosition();
+        toPosHolder.init(toView, position -> {
+            if (GestureDebug.isDebugAnimator()) {
+                Log.d(TAG, "'To' view position updated: " + position.pack());
             }
+
+            toPos = position;
+            requestUpdateToState();
+            requestUpdateFromState(); // Depends on 'to' position
+            applyCurrentPosition();
         });
 
         // Position updates are paused by default, until animation is started
@@ -751,17 +748,14 @@ public class ViewPositionAnimator {
         }
     }
 
-
-    @SuppressWarnings("deprecation")
+    @SuppressWarnings({"deprecation", "RedundantSuppression"})
     private static void getDisplaySize(Context context, Rect rect) {
         WindowManager wm = getActivity(context).getWindowManager();
         DisplayMetrics metrics = new DisplayMetrics();
         if (Build.VERSION.SDK_INT >= 30) {
             context.getDisplay().getRealMetrics(metrics);
-        } else if (Build.VERSION.SDK_INT >= 17) {
-            wm.getDefaultDisplay().getRealMetrics(metrics);
         } else {
-            wm.getDefaultDisplay().getMetrics(metrics);
+            wm.getDefaultDisplay().getRealMetrics(metrics);
         }
         rect.set(0, 0, metrics.widthPixels, metrics.heightPixels);
     }

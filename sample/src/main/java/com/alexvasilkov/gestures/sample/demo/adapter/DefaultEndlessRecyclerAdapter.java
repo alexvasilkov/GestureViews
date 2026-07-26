@@ -101,7 +101,7 @@ abstract class DefaultEndlessRecyclerAdapter<VH extends RecyclerView.ViewHolder>
         return type;
     }
 
-    @SuppressWarnings({ "UnusedParameters", "WeakerAccess", "SameReturnValue" })
+    @SuppressWarnings({ "unused", "WeakerAccess", "SameReturnValue" })
     // Public API (may be reused)
     protected int getViewType(int position) {
         return 0;

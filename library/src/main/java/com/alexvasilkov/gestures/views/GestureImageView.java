@@ -15,7 +15,6 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.ImageView;
 
-import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -161,7 +160,7 @@ public class GestureImageView extends ImageView
 
     @Override
     public void setImageResource(int resId) {
-        setImageDrawable(getDrawable(getContext(), resId));
+        setImageDrawable(getContext().getDrawable(resId));
     }
 
     @Override
@@ -230,16 +229,6 @@ public class GestureImageView extends ImageView
     protected void applyState(@NonNull State state) {
         state.get(imageMatrix);
         setImageMatrix(imageMatrix);
-    }
-
-
-    @SuppressWarnings("deprecation")
-    private static Drawable getDrawable(Context context, @DrawableRes int id) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            return context.getDrawable(id);
-        } else {
-            return context.getResources().getDrawable(id);
-        }
     }
 
 }

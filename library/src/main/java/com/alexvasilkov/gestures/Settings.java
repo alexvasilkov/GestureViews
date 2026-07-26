@@ -22,6 +22,7 @@ public class Settings {
 
     public static final float MAX_ZOOM = 2f;
     public static final float OVERZOOM_FACTOR = 2f;
+    public static final float EXIT_MIN_ZOOM = 0.6f;
     public static final long ANIMATIONS_DURATION = 200L;
 
     /*
@@ -128,6 +129,11 @@ public class Settings {
     private ExitType exitType = ExitType.ALL;
 
     /*
+     * Min zoom level the view is scaled down to while being scrolled away to exit.
+     */
+    private float exitMinZoom = EXIT_MIN_ZOOM;
+
+    /*
      * Counter for gestures disabling calls.
      */
     private int gesturesDisableCount;
@@ -151,69 +157,69 @@ public class Settings {
             return;
         }
 
-        TypedArray arr = context.obtainStyledAttributes(attrs, R.styleable.GestureView);
+        try (TypedArray arr = context.obtainStyledAttributes(attrs, R.styleable.GestureView)) {
+            movementAreaW = arr.getDimensionPixelSize(
+                    R.styleable.GestureView_gest_movementAreaWidth, movementAreaW);
+            movementAreaH = arr.getDimensionPixelSize(
+                    R.styleable.GestureView_gest_movementAreaHeight, movementAreaH);
+            isMovementAreaSpecified = movementAreaW > 0 && movementAreaH > 0;
 
-        movementAreaW = arr.getDimensionPixelSize(
-                R.styleable.GestureView_gest_movementAreaWidth, movementAreaW);
-        movementAreaH = arr.getDimensionPixelSize(
-                R.styleable.GestureView_gest_movementAreaHeight, movementAreaH);
-        isMovementAreaSpecified = movementAreaW > 0 && movementAreaH > 0;
+            minZoom = arr.getFloat(
+                    R.styleable.GestureView_gest_minZoom, minZoom);
+            maxZoom = arr.getFloat(
+                    R.styleable.GestureView_gest_maxZoom, maxZoom);
+            doubleTapZoom = arr.getFloat(
+                    R.styleable.GestureView_gest_doubleTapZoom, doubleTapZoom);
+            overzoomFactor = arr.getFloat(
+                    R.styleable.GestureView_gest_overzoomFactor, overzoomFactor);
+            overscrollDistanceX = arr.getDimension(
+                    R.styleable.GestureView_gest_overscrollX, overscrollDistanceX);
+            overscrollDistanceY = arr.getDimension(
+                    R.styleable.GestureView_gest_overscrollY, overscrollDistanceY);
+            isFillViewport = arr.getBoolean(
+                    R.styleable.GestureView_gest_fillViewport, isFillViewport);
+            gravity = arr.getInt(
+                    R.styleable.GestureView_gest_gravity, gravity);
 
-        minZoom = arr.getFloat(
-                R.styleable.GestureView_gest_minZoom, minZoom);
-        maxZoom = arr.getFloat(
-                R.styleable.GestureView_gest_maxZoom, maxZoom);
-        doubleTapZoom = arr.getFloat(
-                R.styleable.GestureView_gest_doubleTapZoom, doubleTapZoom);
-        overzoomFactor = arr.getFloat(
-                R.styleable.GestureView_gest_overzoomFactor, overzoomFactor);
-        overscrollDistanceX = arr.getDimension(
-                R.styleable.GestureView_gest_overscrollX, overscrollDistanceX);
-        overscrollDistanceY = arr.getDimension(
-                R.styleable.GestureView_gest_overscrollY, overscrollDistanceY);
-        isFillViewport = arr.getBoolean(
-                R.styleable.GestureView_gest_fillViewport, isFillViewport);
-        gravity = arr.getInt(
-                R.styleable.GestureView_gest_gravity, gravity);
+            int fitMethodPos = arr.getInteger(
+                    R.styleable.GestureView_gest_fitMethod, fitMethod.ordinal());
+            fitMethod = Fit.values()[fitMethodPos];
 
-        int fitMethodPos = arr.getInteger(
-                R.styleable.GestureView_gest_fitMethod, fitMethod.ordinal());
-        fitMethod = Fit.values()[fitMethodPos];
+            int boundsTypePos = arr.getInteger(
+                    R.styleable.GestureView_gest_boundsType, boundsType.ordinal());
+            boundsType = Bounds.values()[boundsTypePos];
 
-        int boundsTypePos = arr.getInteger(
-                R.styleable.GestureView_gest_boundsType, boundsType.ordinal());
-        boundsType = Bounds.values()[boundsTypePos];
+            isPanEnabled = arr.getBoolean(
+                    R.styleable.GestureView_gest_panEnabled, isPanEnabled);
+            isFlingEnabled = arr.getBoolean(
+                    R.styleable.GestureView_gest_flingEnabled, isFlingEnabled);
+            isZoomEnabled = arr.getBoolean(
+                    R.styleable.GestureView_gest_zoomEnabled, isZoomEnabled);
+            isRotationEnabled = arr.getBoolean(
+                    R.styleable.GestureView_gest_rotationEnabled, isRotationEnabled);
+            isRestrictRotation = arr.getBoolean(
+                    R.styleable.GestureView_gest_restrictRotation, isRestrictRotation);
+            isDoubleTapEnabled = arr.getBoolean(
+                    R.styleable.GestureView_gest_doubleTapEnabled, isDoubleTapEnabled);
+            exitType = arr.getBoolean(
+                    R.styleable.GestureView_gest_exitEnabled, true) ? exitType : ExitType.NONE;
+            exitMinZoom = arr.getFloat(
+                    R.styleable.GestureView_gest_exitMinZoom, exitMinZoom);
+            animationsDuration = arr.getInt(
+                    R.styleable.GestureView_gest_animationDuration, (int) animationsDuration);
 
-        isPanEnabled = arr.getBoolean(
-                R.styleable.GestureView_gest_panEnabled, isPanEnabled);
-        isFlingEnabled = arr.getBoolean(
-                R.styleable.GestureView_gest_flingEnabled, isFlingEnabled);
-        isZoomEnabled = arr.getBoolean(
-                R.styleable.GestureView_gest_zoomEnabled, isZoomEnabled);
-        isRotationEnabled = arr.getBoolean(
-                R.styleable.GestureView_gest_rotationEnabled, isRotationEnabled);
-        isRestrictRotation = arr.getBoolean(
-                R.styleable.GestureView_gest_restrictRotation, isRestrictRotation);
-        isDoubleTapEnabled = arr.getBoolean(
-                R.styleable.GestureView_gest_doubleTapEnabled, isDoubleTapEnabled);
-        exitType = arr.getBoolean(
-                R.styleable.GestureView_gest_exitEnabled, true) ? exitType : ExitType.NONE;
-        animationsDuration = arr.getInt(
-                R.styleable.GestureView_gest_animationDuration, (int) animationsDuration);
+            boolean disableGestures = arr.getBoolean(
+                    R.styleable.GestureView_gest_disableGestures, false);
+            if (disableGestures) {
+                disableGestures();
+            }
 
-        boolean disableGestures = arr.getBoolean(
-                R.styleable.GestureView_gest_disableGestures, false);
-        if (disableGestures) {
-            disableGestures();
+            boolean disableBounds = arr.getBoolean(
+                    R.styleable.GestureView_gest_disableBounds, false);
+            if (disableBounds) {
+                disableBounds();
+            }
         }
-
-        boolean disableBounds = arr.getBoolean(
-                R.styleable.GestureView_gest_disableBounds, false);
-        if (disableBounds) {
-            disableBounds();
-        }
-
-        arr.recycle();
     }
 
     /**
@@ -538,6 +544,25 @@ public class Settings {
     }
 
     /**
+     * Sets min zoom level, relative to the initial zoom, that the view is scaled down to while
+     * being scrolled away to exit. Use 1f to disable zooming out during scroll-to-exit gesture.
+     * <p>
+     * Default value is {@link #EXIT_MIN_ZOOM}.
+     *
+     * @param zoom Exit min zoom, within (0, 1] range
+     * @return Current settings object for calls chaining
+     */
+    @SuppressWarnings("unused") // Public API
+    @NonNull
+    public Settings setExitMinZoom(float zoom) {
+        if (zoom <= 0f || zoom > 1f) {
+            throw new IllegalArgumentException("Exit min zoom should be within (0, 1] range");
+        }
+        exitMinZoom = zoom;
+        return this;
+    }
+
+    /**
      * Disable all gestures.<br>
      * Calls to this method are counted, so if you called it N times
      * you should call {@link #enableGestures()} N times to re-enable all gestures.
@@ -717,6 +742,10 @@ public class Settings {
     @NonNull
     public ExitType getExitType() {
         return isGesturesEnabled() ? exitType : ExitType.NONE;
+    }
+
+    public float getExitMinZoom() {
+        return exitMinZoom;
     }
 
     public boolean isGesturesEnabled() {

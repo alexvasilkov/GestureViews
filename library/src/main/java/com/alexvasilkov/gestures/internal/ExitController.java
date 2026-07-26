@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 
 import com.alexvasilkov.gestures.GestureController;
 import com.alexvasilkov.gestures.GestureControllerForPager;
+import com.alexvasilkov.gestures.Settings;
 import com.alexvasilkov.gestures.Settings.ExitType;
 import com.alexvasilkov.gestures.State;
 import com.alexvasilkov.gestures.animation.ViewPositionAnimator;
@@ -49,6 +50,7 @@ public class ExitController {
 
     private float totalScrollX;
     private float totalScrollY;
+    private float scrolledY;
     private float zoomAccumulator = 1f;
 
     private float scrollDirection;
@@ -86,7 +88,9 @@ public class ExitController {
      */
     public boolean onScroll(float dx, float dy) {
         // Exit by scroll should not be detected if zoom or rotation is currently in place.
-        // Also, we can detect scroll only if image is zoomed out and it reached movement bounds.
+        // Also, we can detect scroll only if image is zoomed out, and it reached movement bounds.
+        State state = controller.getState();
+        Settings settings = controller.getSettings();
 
         if (!skipScrollDetection && !isExitDetected() && canDetectExit()
                 && canDetectScroll() && !canScroll(dy)) {
@@ -97,7 +101,8 @@ public class ExitController {
             // Waiting until we scrolled enough to trigger exit detection or to skip it
             if (Math.abs(totalScrollY) > scrollThresholdScaled) {
                 isScrollDetected = true;
-                initialY = controller.getState().getY();
+                initialY = state.getY();
+                initialZoom = state.getZoom();
                 startDetection();
             } else if (Math.abs(totalScrollX) > scrollThresholdScaled) {
                 skipScrollDetection = true;
@@ -115,20 +120,27 @@ public class ExitController {
                 dy *= exitState / EXIT_THRESHOLD;
             }
 
-            // Updating exit state depending on the amount scrolled in relation to total space
-            final float total = scrollDirection * SCROLL_FACTOR * Math.max(
-                    controller.getSettings().getMovementAreaW(),
-                    controller.getSettings().getMovementAreaH());
+            scrolledY += dy;
 
-            exitState = 1f - (controller.getState().getY() + dy - initialY) / total;
+            // Updating exit state depending on the amount scrolled in relation to total space
+            final float total = scrollDirection * SCROLL_FACTOR
+                    * Math.max(settings.getMovementAreaW(), settings.getMovementAreaH());
+
+            exitState = 1f - scrolledY / total;
             exitState = MathUtils.restrict(exitState, MIN_EXIT_STATE, 1f);
 
+            GravityUtils.getDefaultPivot(settings, tmpPivot);
+
             if (exitState == 1f) {
-                // Scrolling to initial position
-                controller.getState().translateTo(controller.getState().getX(), initialY);
+                // Scrolling and zooming back to initial position
+                state.zoomTo(initialZoom, tmpPivot.x, tmpPivot.y);
+                state.translateTo(state.getX(), initialY);
             } else {
-                // Applying scrolled distance
-                controller.getState().translateBy(0f, dy);
+                // Zooming out a bit while scrolling away, using default pivot point
+                final float minZoom = settings.getExitMinZoom();
+                final float zoom = initialZoom * (minZoom + (1f - minZoom) * exitState);
+                state.zoomTo(zoom, tmpPivot.x, tmpPivot.y);
+                state.translateTo(state.getX(), initialY + scrolledY);
             }
 
             updateState();
@@ -322,6 +334,7 @@ public class ExitController {
         scrollDirection = 0f;
         totalScrollX = 0f;
         totalScrollY = 0f;
+        scrolledY = 0f;
         zoomAccumulator = 1f;
     }
 
