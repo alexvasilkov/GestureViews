@@ -2,11 +2,15 @@ package com.alexvasilkov.gestures.views;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.RectF;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.ImageView;
@@ -162,8 +166,34 @@ public class GestureImageView extends ImageView
     @Override
     public void setImageDrawable(Drawable drawable) {
         super.setImageDrawable(drawable);
+        setImage(drawable);
+    }
 
-        // Method setImageDrawable can be called from super constructor,
+    @Override
+    public void setImageBitmap(Bitmap bm) {
+        super.setImageBitmap(bm);
+        Resources resources = getResources(); // Get Resources object (e.g., in an Activity)
+        Drawable drawable = new BitmapDrawable(resources, bm);
+        setImage(drawable);
+    }
+
+    @Override
+    public void setImageURI(@Nullable Uri uri) {
+        super.setImageURI(uri);
+        Drawable drawable = getDrawable();
+        if (drawable instanceof BitmapDrawable) {
+            BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+            Bitmap bitmap = bitmapDrawable.getBitmap();
+            Resources resources = getResources(); // Get Resources object (e.g., in an Activity)
+            drawable = new BitmapDrawable(resources, bitmap);
+            setImage(drawable);
+        } else {
+            setImage(drawable);
+        }
+    }
+
+    private void setImage(Drawable drawable) {
+        // Method setImageDrawable + setImageBitmap + setImageURI can be called from super constructor,
         // so we have to ensure controller instance is created at this point.
         ensureControllerCreated();
 
