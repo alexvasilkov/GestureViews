@@ -91,10 +91,11 @@ public class State {
 
     public void set(float x, float y, float zoom, float rotation) {
         // Keeping rotation within the range [-180..180]
-        while (rotation < -180f) {
+        rotation %= 360f;
+        if (rotation < -180f) {
             rotation += 360f;
         }
-        while (rotation > 180f) {
+        if (rotation > 180f) {
             rotation -= 360f;
         }
 
